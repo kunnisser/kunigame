@@ -1,0 +1,13 @@
+#忽略所有文件
+/*
+
+!/kuni
+!/.babelrc
+!/.eslintrc.js
+!/.gitignore
+!/package.json
+!/package-lock.json
+!/README.md
+!/webpack.common.js
+!/webpack.dev.js
+!/webpack.prod.js
