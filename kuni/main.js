@@ -1,12 +1,6 @@
-import * as PIXI from 'pixi.js';
-
-window.PX = PIXI;
-
-const view = document.getElementById('view');
-
-const app = new PIXI.Application({
+import boot from './lib/boot';
+boot();
+new KN.Game({
 	width: 1200,
-	height: 800,
+	height: 800
 });
-
-view.appendChild(app.view);
