@@ -1,7 +1,7 @@
 #忽略所有文件
 /*
 
-!/kuni
+!/kuni/
 !/.babelrc
 !/.eslintrc.js
 !/.gitignore
