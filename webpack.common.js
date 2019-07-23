@@ -15,8 +15,14 @@ module.exports = {
 	},
 	output: {
 		path: __dirname + '/output/kuni',
-		publicPath: '',
+		publicPath: '/kuni/',
 		filename: '[name]-[chunkhash].js'
+	},
+	resolve: {
+		extensions: ['.js', '.json'],
+		alias: {
+			'@':  path.join(__dirname, '/kuni')
+		}
 	},
 	module: {
 		rules: [
@@ -26,14 +32,23 @@ module.exports = {
 				use: {
 					loader: 'babel-loader'
 				}
+			},
+			{
+				test: /pixi\.js$/,
+				use: {
+					loader: 'expose-loader?PIXI'
+				}
+			},
+			{
+				test: /\.(png|jpg)$/,
+				use: {
+					loader: 'url-loader',
+					options: {
+						name: 'assets/images/[name].[ext]'
+					}
+				}
 			}
-			// {
-			// 	test: /pixi\.js$/,
-			// 	use: {
-			// 		loader: 'expose-loader?PIXI'
-			// 	}
-			// }
-			// {
+						// {
 			// 	test: /phaser-arcade-physics\.js$/,
 			// 	use: {
 			// 		loader: 'expose-loader?Phaser'
