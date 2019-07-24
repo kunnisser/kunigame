@@ -19,9 +19,10 @@ class KnFactory {
 		return new KnGroup(key, parent);
 	}
 
-	image = (key, parent) => {
+	image = (key, parent, align) => {
 		const texture = utils.TextureCache[key];
 		const sprite = new Sprite(texture);
+		align && sprite.anchor.set(...align);
 		parent || (parent = this.game.world);
 		return parent.addChild(sprite), sprite;
 	}

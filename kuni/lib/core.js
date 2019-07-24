@@ -15,7 +15,9 @@ export default class Game {
 		// 设置游戏画布基本尺寸
 		this.config = {
 			width: config.width,
-			height: parseInt(config.width / config.ratio)
+			height: parseInt(config.width / config.ratio),
+			half_w: config.width * 0.5,
+			half_h: parseInt(config.width / config.ratio) * 0.5
 		}
 
 		this.app = new Application({

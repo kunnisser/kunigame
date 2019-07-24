@@ -5,9 +5,13 @@ class Loading extends KnScene{
 	constructor (game, key, boot) {
 		super(game, key, boot);
 		this.game = game;
+		this.loadingTypes = new Map([
+			['bar', this.generateBar],
+			['circle', this.generateCircle],
+			['sprite', this.generateSprite]
+		]);
 		this.boot();
 		this.preloader();
-		this.create();
 		this.update();
 		this.dev();
 	}
@@ -26,13 +30,27 @@ class Loading extends KnScene{
 
 	preloader () {
 		KnLoader.preloader.load(() => {
-			const bg = this.game.add.image('Preloader_Background0000');
-			bg.width = this.game.config.width;
-			bg.height = this.game.config.height;
+			this.create();
 		});
 	}
 
-	create () {}
+	create () {
+		this.bg = this.game.add.image('Preloader_Background0000', this);
+		this.bg.width = this.game.config.width;
+		this.bg.height = this.game.config.height;
+		this.loadingTypes.get('bar').call(this);
+	}
+
+	generateBar () {
+		const outBar = this.game.add.image('Preloader_Back0000', this, [0.5, 0.5]);
+		outBar.scale.set(0.6);
+		outBar.position.set(this.game.config.half_w, this.game.config.half_h);
+
+		const innerBar = this.game.add.image('Preloader_Front0000', this, [0.5, 0.5]);
+		innerBar.scale.set(0.6);
+		innerBar.angle = -90;
+		innerBar.position.set(this.game.config.half_w, this.game.config.half_h);
+	}
 
 	update () {
 		this.ticker = this.game.add.ticker();
