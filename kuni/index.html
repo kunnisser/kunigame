@@ -13,7 +13,9 @@
     <meta name="apple-mobile-web-app-title" content="酷尼Game" />
     <style>
         *{margin: 0; padding: 0;}
-        body{ margin: 0; background-color: #f2f2f2;}
+        html, body{ margin: 0; background-color: #f2f2f2; position: relative; width: 100%; height: 100%; overflow: hidden;}
+        #view {position: absolute; top: 0; left: 0; bottom: 0; right: 0; overflow: hidden; display: flex; align-items: center; background-color: #000;}
+        #view canvas{display: block; margin: 0 auto;}
     </style>
 </head>
 <body>

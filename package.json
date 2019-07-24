@@ -48,6 +48,7 @@
     "current-device": "^0.8.0",
     "js-cookie": "^2.2.0",
     "jsbridge": "^1.0.10",
+    "json-loader": "^0.5.7",
     "lodash": "^4.17.15",
     "phaser": "^2.6.2",
     "pixi.js": "^5.0.0",

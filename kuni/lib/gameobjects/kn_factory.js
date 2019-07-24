@@ -8,6 +8,7 @@
 
 import KnSceneManager from '@/lib/gameobjects/kn_scene_manager';
 import KnGroup from '@/lib/gameobjects/kn_group';
+import {Sprite, Texture, utils, Ticker} from 'pixi.js';
 
 class KnFactory {
 	constructor (game) {
@@ -16,6 +17,20 @@ class KnFactory {
 
 	group (key, parent) {
 		return new KnGroup(key, parent);
+	}
+
+	image = (key, parent) => {
+		const texture = utils.TextureCache[key];
+		const sprite = new Sprite(texture);
+		parent || (parent = this.game.world);
+		return parent.addChild(sprite), sprite;
+	}
+
+	ticker = () => {
+		const ticker = new Ticker();
+		ticker.autoStart = false;
+		ticker.stop();
+		return ticker;
 	}
 
 }

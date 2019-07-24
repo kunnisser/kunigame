@@ -1,17 +1,13 @@
 import * as dat from 'dat.gui';
 
-class GUI extends dat {
+class GUI extends dat.GUI {
 	constructor () {
 		super();
-		this.initial();
 	}
 
-	initial () {
+	loading (text) {
 		this.add(text, 'message', ['test', 'chrome', 'firefox']);
-		this.add(text, 'speed', {
-			stop： 0，
-			slow: 10,
-			fast: 50
-		});
 	}
 }
+
+export default GUI;

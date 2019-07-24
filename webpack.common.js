@@ -47,6 +47,15 @@ module.exports = {
 						name: 'assets/images/[name].[ext]'
 					}
 				}
+			},
+			{
+				test: /\.json$/,
+				use: {
+					loader: 'json-loader',
+					options: {
+						name: 'assets/data/[name].[ext]'
+					}
+				}
 			}
 						// {
 			// 	test: /phaser-arcade-physics\.js$/,
