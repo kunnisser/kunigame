@@ -8,15 +8,19 @@
 
 import KnSceneManager from '@/lib/gameobjects/kn_scene_manager';
 import KnGroup from '@/lib/gameobjects/kn_group';
+import KnGraphics from '@/lib/gameobjects/kn_graphics';
 import {Sprite, Texture, utils, Ticker} from 'pixi.js';
 
 class KnFactory {
 	constructor (game) {
 		this.game = game;
+
+		// 添加graphics实例
+		this.graphics = new KnGraphics(game);
 	}
 
 	group (key, parent) {
-		return new KnGroup(key, parent);
+		return new KnGroup(this.game, key, parent);
 	}
 
 	image = (key, parent, align) => {
