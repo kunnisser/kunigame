@@ -21,7 +21,7 @@ class Loading extends KnScene{
 
 	dev () {
 		const dat = {
-			'加载类型': '进度条加载'
+			'加载类型': 'progress'
 		}
 		const gui = this.game.gui.add(dat, '加载类型', ['progress', 'circle', 'sprite']);
 		this.game.stats.showPanel(0);
@@ -77,7 +77,7 @@ class Loading extends KnScene{
 
 	// 圆环加载
 	generateCircle () {
-		const text = this.game.add.text('123', {fontSize: 32, fill: 0xffffff}, [0.5, 0.5]);
+		const text = this.game.add.text('我爱北京天安门', {fontSize: 32, fill: 0xffffff}, [0.5, 0.5]);
 		this.addChild(text);
 	}
 
