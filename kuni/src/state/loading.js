@@ -62,7 +62,7 @@ class Loading extends KnScene{
 		this.addChild(this.maskClip);
 		innerBar.mask = this.maskClip;
 
-		// 这里定义帧刷新事件 
+		// 这里定义帧刷新事件
 		const cb = (delta) => {
 			this.duration -= delta;
 			if (this.duration <= 0) {
@@ -71,13 +71,14 @@ class Loading extends KnScene{
 			}
 			this.maskClip.y = (this.duration / DISTANCE) * this.maskClip.height;
 		};
-		
+
 		this.update(cb);
 	}
 
 	// 圆环加载
 	generateCircle () {
-		console.log(this);
+		const text = this.game.add.text('123', {fontSize: 32, fill: 0xffffff}, [0.5, 0.5]);
+		this.addChild(text);
 	}
 
 	update (cb) {

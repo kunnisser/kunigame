@@ -9,6 +9,7 @@
 import KnSceneManager from '@/lib/gameobjects/kn_scene_manager';
 import KnGroup from '@/lib/gameobjects/kn_group';
 import KnGraphics from '@/lib/gameobjects/kn_graphics';
+import KnText from '@/lib/gameobjects/kn_text';
 import {Sprite, Texture, utils, Ticker} from 'pixi.js';
 
 class KnFactory {
@@ -36,6 +37,11 @@ class KnFactory {
 		ticker.autoStart = false;
 		ticker.stop();
 		return ticker;
+	}
+
+	text (content, style, anchor) {
+		const text = new KnText(this.game, ...arguments);
+		return text;
 	}
 
 }
