@@ -1,7 +1,7 @@
 import KnScene from '@/lib/gameobjects/kn_scene';
 import KnLoader from '@/lib/loader/kn_loader';
 
-const DISTANCE = 200;
+let DISTANCE = 200;
 
 class Loading extends KnScene{
 	constructor (game, key, boot) {
@@ -32,7 +32,8 @@ class Loading extends KnScene{
 	}
 
 	boot () {
-		KnLoader.preloader.add('./assets/data/preloader.json');
+		KnLoader.preloader.add('./assets/data/preloader.json')
+			.add('./assets/data/loadingrun.json');
 	}
 
 	preloader () {
@@ -79,6 +80,34 @@ class Loading extends KnScene{
 	generateCircle () {
 		const text = this.game.add.text('我爱北京天安门', {fontSize: 32, fill: 0xffffff}, [0.5, 0.5]);
 		this.addChild(text);
+	}
+
+	// 动画加载
+	generateSprite () {
+		const frames = [];
+		for (let i = 1, l = 4; i < l; i ++){
+			const val = i < 5 ? `0${i}` : i;
+			frames.push(this.game.add.texture(`loadingrun_${val}.png`));
+		}
+		const anmi = this.game.add.animation(frames, 0.24);
+		anmi.scale.set(0.35);
+		anmi.anchor.set(0.5);
+		anmi.play();
+		this.addChild(anmi);
+		const startX = -this.game.config.half_w + anmi.width;
+		anmi.x = startX;
+		// 这里定义帧刷新事件
+		let duration = 400;
+		const cb = (delta) => {
+			duration -= delta;
+			if (duration <= 0) {
+				duration = 400;
+				anmi.x = startX;
+			}
+			anmi.x += 1;
+		};
+
+		this.update(cb);
 	}
 
 	update (cb) {

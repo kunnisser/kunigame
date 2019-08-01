@@ -10,7 +10,7 @@ import KnSceneManager from '@/lib/gameobjects/kn_scene_manager';
 import KnGroup from '@/lib/gameobjects/kn_group';
 import KnGraphics from '@/lib/gameobjects/kn_graphics';
 import KnText from '@/lib/gameobjects/kn_text';
-import {Sprite, Texture, utils, Ticker} from 'pixi.js';
+import {Sprite, Texture, AnimatedSprite, utils, Ticker} from 'pixi.js';
 
 class KnFactory {
 	constructor (game) {
@@ -30,6 +30,16 @@ class KnFactory {
 		align && sprite.anchor.set(...align);
 		parent || (parent = this.game.world);
 		return parent.addChild(sprite), sprite;
+	}
+
+	texture (key) {
+		return Texture.from(key);
+	}
+
+	animation (frames, speed) {
+		const anim = new AnimatedSprite(frames);
+		anim.animationSpeed = speed || 0.5;
+		return anim;
 	}
 
 	ticker = () => {
