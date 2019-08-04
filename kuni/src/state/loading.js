@@ -8,8 +8,8 @@ class Loading extends KnScene{
 		super(game, key, boot);
 		this.game = game;
 		this.loadingTypes = new Map([
-			['progress', this.generateBar],
-			['circle', this.generateCircle],
+			['mask', this.generateBar],
+			['particle', this.generateCircle],
 			['sprite', this.generateSprite]
 		]);
 		this.ticker = null;
@@ -22,8 +22,8 @@ class Loading extends KnScene{
 		this.defaultGui = 'sprite';
 		const dat = {
 			'加载类型': this.defaultGui
-		}
-		const gui = this.game.gui.add(dat, '加载类型', ['progress', 'circle', 'sprite']);
+		};
+		const gui = this.game.gui.add(dat, '加载类型', ['mask', 'particle', 'sprite']);
 		this.game.stats.showPanel(0);
 		gui.onChange((v) => {
 			this.reset();
