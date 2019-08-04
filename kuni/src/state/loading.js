@@ -13,15 +13,15 @@ class Loading extends KnScene{
 			['sprite', this.generateSprite]
 		]);
 		this.ticker = null;
-		this.duration = DISTANCE;
 		this.boot();
 		this.preloader();
 		this.dev();
 	}
 
 	dev () {
+		this.defaultGui = 'sprite';
 		const dat = {
-			'加载类型': 'progress'
+			'加载类型': this.defaultGui
 		}
 		const gui = this.game.gui.add(dat, '加载类型', ['progress', 'circle', 'sprite']);
 		this.game.stats.showPanel(0);
@@ -32,6 +32,9 @@ class Loading extends KnScene{
 	}
 
 	boot () {
+		const tmpText = this.game.add.text('loading...', {fontFamily: 'GrilledCheeseBTNToasted', fontSize: '12px'}, [0.5, 0.5]);
+		this.addChild(tmpText);
+		this.removeChild(tmpText);
 		KnLoader.preloader.add('./assets/data/preloader.json')
 			.add('./assets/data/loadingrun.json');
 	}
@@ -48,7 +51,8 @@ class Loading extends KnScene{
 		this.bg.width = this.game.config.width;
 		this.bg.height = this.game.config.height;
 		this.bg.anchor.set(0.5);
-		this.loadingTypes.get('progress').call(this);
+		this.drawStage = this.game.add.graphics;
+		this.loadingTypes.get(this.defaultGui).call(this);
 	}
 
 	// 进度条加载
@@ -58,19 +62,31 @@ class Loading extends KnScene{
 		const innerBar = this.game.add.image('Preloader_Front0000', this, [0.5, 0.5]);
 		innerBar.scale.set(0.4); 
 		innerBar.angle = -90;
-		this.maskClip = this.game.add.graphics.generateRect(0x000000, [0, 0, innerBar.height + 2, innerBar.width], !0);
-		this.maskClip.y = this.maskClip.height;
-		this.addChild(this.maskClip);
-		innerBar.mask = this.maskClip;
+		const maskClip = this.drawStage.generateRect(0x000000, [0, 0, innerBar.height + 2, innerBar.width], !0);
+		maskClip.y = maskClip.height;
+		this.addChild(maskClip);
+		innerBar.mask = maskClip;
 
+		// 绘制加载文字
+		const loadingText = this.game.add.text('0 %', {
+			fontFamily: 'GrilledCheeseBTNToasted',
+			fontSize: '14px',
+			fill: 0x2c92e0
+		}, [0.5, 0.5]);
+		loadingText.y = innerBar.y + 10;
+		this.addChild(loadingText);
+		let percent = 0;
+		let duration = DISTANCE;
 		// 这里定义帧刷新事件
 		const cb = (delta) => {
-			this.duration -= delta;
-			if (this.duration <= 0) {
-				this.duration = DISTANCE;
-				this.maskClip.y = this.maskClip.height;
+			duration -= delta;
+			if (duration <= 0) {
+				duration = DISTANCE;
+				maskClip.y = maskClip.height;
 			}
-			this.maskClip.y = (this.duration / DISTANCE) * this.maskClip.height;
+			percent = parseInt((DISTANCE - duration) * 100 / DISTANCE)
+			loadingText.text = `${percent} %`;
+			maskClip.y = (duration / DISTANCE) * maskClip.height;
 		};
 
 		this.update(cb);
@@ -96,15 +112,34 @@ class Loading extends KnScene{
 		this.addChild(anmi);
 		const startX = -this.game.config.half_w + anmi.width;
 		anmi.x = startX;
+
+		// 绘制加载条
+		this.loadingGp = this.game.add.group('sprite_loading', this);
+		const loadingbar = this.drawStage.generateRect(0x337ab7, [0, 0, this.game.config.half_w + anmi.width, 10, 5], !0);
+		loadingbar.y = anmi.height * 0.5 - 20;
+		this.loadingGp.addChild(loadingbar);
+
+		// 绘制加载文字
+		const loadingText = this.game.add.text('0 %', {
+			fontFamily: 'GrilledCheeseBTNToasted',
+			fontSize: '18px',
+			fill: 0xffffff
+		}, [0.5, 0.5]);
+		loadingText.y = loadingbar.y + 40;
+		this.loadingGp.addChild(loadingText);
+
 		// 这里定义帧刷新事件
-		let duration = 400;
+		let duration = 480;
+		let percent = 0;
 		const cb = (delta) => {
 			duration -= delta;
 			if (duration <= 0) {
-				duration = 400;
+				duration = 480;
 				anmi.x = startX;
 			}
 			anmi.x += 1;
+			percent = parseInt((480 - duration) / 4.8)
+			loadingText.text = `${percent} %`;
 		};
 
 		this.update(cb);
@@ -129,6 +164,14 @@ class Loading extends KnScene{
 			this.ticker = null;
 		}
 		if (this.children.length > 1) {
+
+			// 清除grahpics 画布
+			this.drawStage.clear();
+
+			// 清空对象MASK
+			this.children[2] && (this.children[2].mask = null);
+
+			// 清除group子对象
 			this.removeChildren(1, this.children.length);
 		}
 	}
