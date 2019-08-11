@@ -19,7 +19,7 @@ class Loading extends KnScene{
 	}
 
 	dev () {
-		this.defaultGui = 'sprite';
+		this.defaultGui = 'particle';
 		const dat = {
 			'加载类型': this.defaultGui
 		};
@@ -36,7 +36,8 @@ class Loading extends KnScene{
 		this.addChild(tmpText);
 		this.removeChild(tmpText);
 		KnLoader.preloader.add('./assets/data/preloader.json')
-			.add('./assets/data/loadingrun.json');
+			.add('./assets/data/loadingrun.json')
+			.add('blue', './assets/images/blue.png');
 	}
 
 	preloader () {
@@ -94,8 +95,8 @@ class Loading extends KnScene{
 
 	// 圆环加载
 	generateCircle () {
-		const text = this.game.add.text('我爱北京天安门', {fontSize: 32, fill: 0xffffff}, [0.5, 0.5]);
-		this.addChild(text);
+		const emitter = this.game.add.emitter(10, 'blue');
+		this.addChild(emitter);
 	}
 
 	// 动画加载
