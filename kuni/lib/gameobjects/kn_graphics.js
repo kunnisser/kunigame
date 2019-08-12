@@ -12,7 +12,11 @@ class KnGraphics extends Graphics {
 
 		// 锚点居中
 		anchor && (points[0] -= points[2] * 0.5, points[1] -= points[3] * 0.5);
-		this.drawRect(...points);
+		if (points.length === 5) {
+			this.drawRoundedRect(...points);
+		} else {
+			this.drawRect(...points);
+		}
 		this.endFill();
 		return this;
 	}
