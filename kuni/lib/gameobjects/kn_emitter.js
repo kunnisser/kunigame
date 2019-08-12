@@ -19,7 +19,7 @@ class KnEmitter extends ParticleContainer {
 	}
 
 	shoot (num, leftBound, rightBound, y) {
-
+		console.log(num);
 	}
 }
 
