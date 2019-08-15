@@ -2,13 +2,16 @@
 
 import {ParticleContainer, utils, Sprite} from 'pixi.js';
 class KnEmitter extends ParticleContainer {
-	constructor (quality, key) {
+	public particles: Array<Sprite>;
+	public constructor (quality: number, key: string) {
 		super();
-		this.create(...arguments);
-		this.particles = [];
+		this.particles= [];
+		let args:IArguments = arguments;
+		args
+		this.create(quality, key);
 	}
 
-	create (quality, key) {
+	public create (quality: number, key: string) {
 		const texture = utils.TextureCache[key];
 		for (let i = 0; i < quality; i++) {
 			let sprite = new Sprite(texture);
@@ -18,7 +21,7 @@ class KnEmitter extends ParticleContainer {
 		}
 	}
 
-	shoot (num, leftBound, rightBound, y) {
+	public shoot (num: number, leftBound: number, rightBound: number, y: number) {
 		console.log(num);
 	}
 }

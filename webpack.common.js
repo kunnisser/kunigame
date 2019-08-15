@@ -34,6 +34,13 @@ module.exports = {
 				}
 			},
 			{
+				test: /\.ts$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'ts-loader'
+				}
+			},
+			{
 				test: /pixi\.js$/,
 				use: {
 					loader: 'expose-loader?PIXI'

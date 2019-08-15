@@ -11,6 +11,8 @@
   "author": "kunnisser",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^12.7.2",
+    "@types/pixi.js": "^4.8.8",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.3",
     "babel-loader": "^7.1.4",
@@ -34,6 +36,8 @@
     "raw-loader": "^0.5.1",
     "stats-js": "^1.0.1",
     "transform-runtime": "0.0.0",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3",
     "url-loader": "^1.0.1",
     "vconsole": "^3.3.0",
     "webpack": "^4.1.1",
