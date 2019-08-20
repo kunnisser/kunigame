@@ -1,8 +1,12 @@
 /* 场景基础类 */
 
 import {Container} from 'pixi.js';
+
 class KnScene extends Container{
-	constructor (game, key, boot) {
+	public game: any;
+	public id: string;
+	isBoot: boolean;
+	constructor (game: object, key: string, boot: boolean) {
 		super();
 		this.game = game;
 		this.id = key;
@@ -17,23 +21,23 @@ class KnScene extends Container{
 		this.height = world.height;
 		world.addChild(this);
 		if (this.isBoot) {
-			this.enter(this);
+			this.enter();
 		}
 	}
 
 	// 进入场景
-	enter (scene) {
-		scene.visible = !0;
+	enter () {
+		this.visible = !0;
 	}
 
 	// 离开场景
-	exit (scene) {
-		scene.visible = !1;
+	exit () {
+		this.visible = !1;
 	}
 
 	// 删除场景
-	remove (scene) {
-		this.game.world.removeChild(scene);
+	remove () {
+		this.game.world.removeChild(this);
 	}
 }
 

@@ -1,13 +1,31 @@
-import * as dat from 'dat.gui';
+import dat from 'dat.gui';
 import Stats from 'stats-js';
-import KnFactory from '@/lib/gameobjects/kn_factory.js';
-import KnLoader from '@/lib/loader/kn_loader';
-import KnSceneManager from '@/lib/gameobjects/kn_scene_manager';
+import KnFactory from 'kuni/lib/gameobjects/kn_factory';
+import KnLoader from 'ts@/lib/loader/kn_loader';
+import KnSceneManager from 'ts@/lib/gameobjects/kn_scene_manager';
 import {Application, settings, SCALE_MODES} from 'pixi.js';
-import {debounce} from '@/lib/utils/common';
+import {debounce} from 'ts@/lib/utils/common';
+
+interface EnterProps {
+	width: number,
+	ratio: number
+}
 
 export default class Game {
-	constructor (config) {
+	public view?: HTMLElement | null;
+	public dpr: number;
+	public config: {
+		width: number;
+		height: number;
+		half_w: number;
+		half_h: number;
+	}
+	public world: PIXI.Container;
+	public sceneManager: KnSceneManager;
+	public app: Application;
+	public loader: KnLoader;
+	public add: KnFactory;
+	constructor (config: EnterProps) {
 		const view = document.getElementById('view');
 		this.view = view;
 		this.dpr = window.devicePixelRatio;
@@ -15,9 +33,9 @@ export default class Game {
 		// 设置游戏画布基本尺寸
 		this.config = {
 			width: config.width,
-			height: parseInt(config.width / config.ratio),
+			height: config.width / config.ratio,
 			half_w: config.width * 0.5,
-			half_h: parseInt(config.width / config.ratio) * 0.5
+			half_h: config.width / config.ratio * 0.5
 		}
 
 		this.app = new Application({
@@ -65,13 +83,13 @@ export default class Game {
 		}
 	}
 
-	resizeStage (view, config) {
+	resizeStage (view: Element, config: EnterProps) {
 		const RATIO = config.ratio;
-		let SCREEN_WIDTH = window.getComputedStyle(view).width;
-		let SCREEN_HEIGHT = window.getComputedStyle(view).height;
+		let SCREEN_WIDTH: number | string = window.getComputedStyle(view).width;
+		let SCREEN_HEIGHT: number | string = window.getComputedStyle(view).height;
 		SCREEN_WIDTH = SCREEN_WIDTH.substr(0, SCREEN_WIDTH.length - 2);
 		SCREEN_HEIGHT = SCREEN_HEIGHT.substr(0, SCREEN_HEIGHT.length - 2);
-		const Cur_Ratio = SCREEN_WIDTH / SCREEN_HEIGHT;
+		const Cur_Ratio: number = SCREEN_WIDTH / SCREEN_HEIGHT;
 		let size = null;
 		if (Cur_Ratio > RATIO) {
 			size = {

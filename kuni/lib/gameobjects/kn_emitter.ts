@@ -1,3 +1,10 @@
+/*
+ * @Author: kunnisser 
+ * @Date: 2019-08-17 23:46:59 
+ * @Last Modified by: kunnisser
+ * @Last Modified time: 2019-08-18 16:02:56
+ */
+
 /* 粒子发射器类 */
 
 import {ParticleContainer, utils, Sprite} from 'pixi.js';

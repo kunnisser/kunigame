@@ -6,26 +6,28 @@
 * @param {Core} game - 当前运行的游戏实例的引用	
 */
 
-import KnSceneManager from '@/lib/gameobjects/kn_scene_manager';
-import KnGroup from '@/lib/gameobjects/kn_group';
-import KnGraphics from '@/lib/gameobjects/kn_graphics';
-import KnText from '@/lib/gameobjects/kn_text';
-import KnEmitter from '@/lib/gameobjects/kn_emitter';
+import KnGroup from 'ts@/lib/gameobjects/kn_group';
+import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
+import KnText from 'ts@/lib/gameobjects/kn_text';
+import KnEmitter from 'ts@/lib/gameobjects/kn_emitter';
+import Game from 'ts@/lib/core';
 import {Sprite, Texture, AnimatedSprite, utils, Ticker} from 'pixi.js';
 
 class KnFactory {
-	constructor (game) {
+	public game: Game;
+	public graphics: KnGraphics;
+	constructor (game: Game) {
 		this.game = game;
 
 		// 添加graphics实例
 		this.graphics = new KnGraphics(game);
 	}
 
-	group (key, parent) {
+	group (key: string, parent: PIXI.Container) {
 		return new KnGroup(this.game, key, parent);
 	}
 
-	image = (key, parent, align) => {
+	image = (key: string, parent: PIXI.Container, align: Array<number>) => {
 		const texture = utils.TextureCache[key];
 		const sprite = new Sprite(texture);
 		align && sprite.anchor.set(...align);
@@ -37,14 +39,14 @@ class KnFactory {
 		return Texture.from(key);
 	}
 
-	animation (frames, speed) {
+	animation (frames: Array<PIXI.Texture>, speed: number) {
 		const anim = new AnimatedSprite(frames);
 		anim.animationSpeed = speed || 0.5;
 		return anim;
 	}
 
-	emitter (quality, key) {
-		return new KnEmitter(...arguments);
+	emitter (quality: number, key: string) {
+		return new KnEmitter(...arguments as unknown as [number, string]);
 	}
 
 	ticker = () => {
@@ -54,8 +56,8 @@ class KnFactory {
 		return ticker;
 	}
 
-	text (content, style, anchor) {
-		const text = new KnText(this.game, ...arguments);
+	text (content: string, style: object, anchor: boolean) {
+		const text = new KnText(this.game, ...arguments as unknown as [string, object, boolean]);
 		return text;
 	}
 
