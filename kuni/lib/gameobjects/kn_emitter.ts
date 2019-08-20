@@ -1,6 +1,7 @@
 /* 粒子发射器类 */
 
 import {ParticleContainer, utils, Sprite} from 'pixi.js';
+
 class KnEmitter extends ParticleContainer {
 	public particles: Array<Sprite>;
 	public constructor (quality: number, key: string) {

@@ -5,13 +5,15 @@
  */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlguin = require('fork-ts-checker-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 // const phaserModule = path.join(__dirname, '/node_modules/phaser/');
 // const phaser = path.join(phaserModule, 'build/custom/phaser-arcade-physics.js');
 // const pixi = path.join(phaserModule, 'build/custom/pixi.js');
 
 module.exports = {
 	entry: {
-		index: ['./kuni/main.js']
+		index: ['./kuni/main.ts']
 	},
 	output: {
 		path: __dirname + '/output/kuni',
@@ -19,10 +21,13 @@ module.exports = {
 		filename: '[name]-[chunkhash].js'
 	},
 	resolve: {
-		extensions: ['.js', '.json'],
+		extensions: ['.js', '.json', '.ts'],
 		alias: {
 			'@':  path.join(__dirname, '/kuni')
-		}
+		},
+		plugins: [new TsconfigPathsPlugin({
+			configFile: 'tsconfig.json'
+		})]
 	},
 	module: {
 		rules: [
@@ -35,9 +40,12 @@ module.exports = {
 			},
 			{
 				test: /\.ts$/,
-				exclude: /node_modules/,
+				include: path.join(__dirname, '/kuni'),
 				use: {
-					loader: 'ts-loader'
+					loader: 'ts-loader',
+					options: {
+						transpileOnly: true
+					}
 				}
 			},
 			{
@@ -75,6 +83,11 @@ module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: './kuni/index.html'
+		}),
+		new ForkTsCheckerWebpackPlguin({
+			async: false,
+			watch: path.join(__dirname, '/kuni/'),
+			tsconfig: 'tsconfig.json'
 		})
 	]
 };

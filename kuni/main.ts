@@ -1,5 +1,5 @@
 import Game from './lib/core.js';
-import Loading from '@/src/state/loading';
+import Loading from 'ak/src/state/loading';
 
 const game = new Game({
 	width: 750,
