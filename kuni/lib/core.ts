@@ -1,6 +1,6 @@
 import dat from 'dat.gui';
-import Stats from 'stats-js';
-import KnFactory from 'kuni/lib/gameobjects/kn_factory';
+import * as Stats from 'stats-js';
+import KnFactory from 'ts@/lib/gameobjects/kn_factory';
 import KnLoader from 'ts@/lib/loader/kn_loader';
 import KnSceneManager from 'ts@/lib/gameobjects/kn_scene_manager';
 import {Application, settings, SCALE_MODES} from 'pixi.js';
@@ -12,6 +12,8 @@ interface EnterProps {
 }
 
 export default class Game {
+	public gui: any;
+	public stats: any;
 	public view?: HTMLElement | null;
 	public dpr: number;
 	public config: {
@@ -87,8 +89,8 @@ export default class Game {
 		const RATIO = config.ratio;
 		let SCREEN_WIDTH: number | string = window.getComputedStyle(view).width;
 		let SCREEN_HEIGHT: number | string = window.getComputedStyle(view).height;
-		SCREEN_WIDTH = SCREEN_WIDTH.substr(0, SCREEN_WIDTH.length - 2);
-		SCREEN_HEIGHT = SCREEN_HEIGHT.substr(0, SCREEN_HEIGHT.length - 2);
+		SCREEN_WIDTH = +SCREEN_WIDTH.substr(0, SCREEN_WIDTH.length - 2);
+		SCREEN_HEIGHT = +SCREEN_HEIGHT.substr(0, SCREEN_HEIGHT.length - 2);
 		const Cur_Ratio: number = SCREEN_WIDTH / SCREEN_HEIGHT;
 		let size = null;
 		if (Cur_Ratio > RATIO) {

@@ -1,4 +1,4 @@
-import Game from './lib/core.js';
+import Game from 'ts@/lib/core';
 import Loading from 'ts@/src/state/loading';
 
 const game = new Game({

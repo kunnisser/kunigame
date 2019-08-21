@@ -1,10 +1,18 @@
-import KnScene from '@/lib/gameobjects/kn_scene';
-import KnLoader from '@/lib/loader/kn_loader';
+import KnScene from 'ts@/lib/gameobjects/kn_scene';
+import KnLoader from 'ts@/lib/loader/kn_loader';
+import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
+import Game from 'ts@/lib/core';
 
-let DISTANCE = 200;
+const DISTANCE: number = 200;
 
 class Loading extends KnScene{
-	constructor (game, key, boot) {
+	public loadingTypes: Map<string, Function>;
+	public ticker: PIXI.Ticker;
+	public loadingGp: PIXI.Container;
+	defaultGui: string;
+	bg: PIXI.Sprite;
+	drawStage: KnGraphics;
+	constructor (game: Game, key: string, boot: boolean) {
 		super(game, key, boot);
 		this.game = game;
 		this.loadingTypes = new Map([
@@ -25,7 +33,7 @@ class Loading extends KnScene{
 		};
 		const gui = this.game.gui.add(dat, '加载类型', ['mask', 'particle', 'sprite']);
 		this.game.stats.showPanel(0);
-		gui.onChange((v) => {
+		gui.onChange((v: string) => {
 			this.reset();
 			this.loadingTypes.get(v).call(this);
 		});
@@ -79,13 +87,14 @@ class Loading extends KnScene{
 		let percent = 0;
 		let duration = DISTANCE;
 		// 这里定义帧刷新事件
-		const cb = (delta) => {
+		const cb = (delta: number) => {
 			duration -= delta;
 			if (duration <= 0) {
 				duration = DISTANCE;
 				maskClip.y = maskClip.height;
 			}
-			percent = parseInt((DISTANCE - duration) * 100 / DISTANCE)
+			percent = (DISTANCE - duration) * 100 / DISTANCE
+			percent = +percent.toFixed(0);
 			loadingText.text = `${percent} %`;
 			maskClip.y = (duration / DISTANCE) * maskClip.height;
 		};
@@ -132,21 +141,22 @@ class Loading extends KnScene{
 		// 这里定义帧刷新事件
 		let duration = 480;
 		let percent = 0;
-		const cb = (delta) => {
+		const cb = (delta: number) => {
 			duration -= delta;
 			if (duration <= 0) {
 				duration = 480;
 				anmi.x = startX;
 			}
 			anmi.x += 1;
-			percent = parseInt((480 - duration) / 4.8)
+			percent = (480 - duration) / 4.8;
+			percent = +percent.toFixed(0);
 			loadingText.text = `${percent} %`;
 		};
 
 		this.update(cb);
 	}
 
-	update (cb) {
+	update (cb: Function) {
 
 		// 创建刷新器
 		this.ticker = this.game.add.ticker();

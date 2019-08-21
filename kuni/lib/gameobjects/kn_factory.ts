@@ -56,8 +56,8 @@ class KnFactory {
 		return ticker;
 	}
 
-	text (content: string, style: object, anchor: boolean) {
-		const text = new KnText(this.game, ...arguments as unknown as [string, object, boolean]);
+	text (content: string, style: object, anchor: Array<number>) {
+		const text = new KnText(this.game, content, style, anchor);
 		return text;
 	}
 

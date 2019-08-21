@@ -1,5 +1,5 @@
-declare function Stats (): object;
+// declare function Stats (): any;
 
-declare module "stats-js" {
-    export = Stats;
-}
+// declare module "stats-js" {
+//     export = Stats;
+// }

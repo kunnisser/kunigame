@@ -1,6 +1,6 @@
 const debounce = {
 	tick: null,
-	handler: (next) => {
+	handler: (next: Function) => {
 		if (debounce.tick) {
 			clearTimeout(debounce.tick);
 		}
