@@ -1,3 +1,10 @@
+/*
+ * @Author: kunnisser 
+ * @Date: 2019-08-31 15:01:05 
+ * @Last Modified by: kunnisser
+ * @Last Modified time: 2019-09-01 00:57:23
+ */
+
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
 import KnLoader from 'ts@/lib/loader/kn_loader';
 import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
@@ -5,14 +12,14 @@ import Game from 'ts@/lib/core';
 
 const DISTANCE: number = 200;
 
-class Loading extends KnScene{
+class Loading extends KnScene {
 	public loadingTypes: Map<string, Function>;
 	public ticker: PIXI.Ticker;
 	public loadingGp: PIXI.Container;
 	defaultGui: string;
 	bg: PIXI.Sprite;
 	drawStage: KnGraphics;
-	constructor (game: Game, key: string, boot: boolean) {
+	constructor(game: Game, key: string, boot: boolean) {
 		super(game, key, boot);
 		this.game = game;
 		this.loadingTypes = new Map([
@@ -26,7 +33,7 @@ class Loading extends KnScene{
 		this.dev();
 	}
 
-	dev () {
+	dev() {
 		this.defaultGui = 'particle';
 		const dat = {
 			'加载类型': this.defaultGui
@@ -39,8 +46,8 @@ class Loading extends KnScene{
 		});
 	}
 
-	boot () {
-		const tmpText = this.game.add.text('loading...', {fontFamily: 'GrilledCheeseBTNToasted', fontSize: '12px'}, [0.5, 0.5]);
+	boot() {
+		const tmpText = this.game.add.text('loading...', { fontFamily: 'GrilledCheeseBTNToasted', fontSize: '12px' }, [0.5, 0.5]);
 		this.addChild(tmpText);
 		this.removeChild(tmpText);
 		KnLoader.preloader.add('./assets/data/preloader.json')
@@ -48,13 +55,13 @@ class Loading extends KnScene{
 			.add('blue', './assets/images/blue.png');
 	}
 
-	preloader () {
+	preloader() {
 		KnLoader.preloader.load(() => {
 			this.create();
 		});
 	}
 
-	create () {
+	create() {
 		this.position.set(this.game.config.half_w, this.game.config.half_h);
 		this.bg = this.game.add.image('Preloader_Background0000', this);
 		this.bg.width = this.game.config.width;
@@ -65,11 +72,11 @@ class Loading extends KnScene{
 	}
 
 	// 进度条加载
-	generateBar () {		
+	generateBar() {
 		const outBar = this.game.add.image('Preloader_Back0000', this, [0.5, 0.5]);
 		outBar.scale.set(0.4);
 		const innerBar = this.game.add.image('Preloader_Front0000', this, [0.5, 0.5]);
-		innerBar.scale.set(0.4); 
+		innerBar.scale.set(0.4);
 		innerBar.angle = -90;
 		const maskClip = this.drawStage.generateRect(0x000000, [0, 0, innerBar.height + 2, innerBar.width], !0);
 		maskClip.y = maskClip.height;
@@ -86,6 +93,7 @@ class Loading extends KnScene{
 		this.addChild(loadingText);
 		let percent = 0;
 		let duration = DISTANCE;
+
 		// 这里定义帧刷新事件
 		const cb = (delta: number) => {
 			duration -= delta;
@@ -102,16 +110,17 @@ class Loading extends KnScene{
 		this.update(cb);
 	}
 
-	// 圆环加载
-	generateCircle () {
+	// 粒子加载
+	generateCircle() {
 		const emitter = this.game.add.emitter(10, 'blue');
 		this.addChild(emitter);
+		emitter.shoot();
 	}
 
 	// 动画加载
-	generateSprite () {
+	generateSprite() {
 		const frames = [];
-		for (let i = 1, l = 4; i < l; i ++){
+		for (let i = 1, l = 4; i < l; i++) {
 			const val = i < 5 ? `0${i}` : i;
 			frames.push(this.game.add.texture(`loadingrun_${val}.png`));
 		}
@@ -156,7 +165,7 @@ class Loading extends KnScene{
 		this.update(cb);
 	}
 
-	update (cb: Function) {
+	update(cb: Function) {
 
 		// 创建刷新器
 		this.ticker = this.game.add.ticker();
@@ -169,7 +178,7 @@ class Loading extends KnScene{
 		this.ticker.start();
 	}
 
-	reset () {
+	reset() {
 		if (this.ticker) {
 			this.ticker.stop();
 			this.ticker = null;
