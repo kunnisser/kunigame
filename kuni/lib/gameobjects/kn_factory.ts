@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-01 01:53:33
+ * @Last Modified time: 2019-09-15 21:33:20
  */
 
 /*
@@ -47,7 +47,7 @@ class KnFactory {
 	}
 
 	animation(frames: Array<PIXI.Texture>, speed: number) {
-		const anim = new AnimatedSprite(frames);
+		const anim: AnimatedSprite = new AnimatedSprite(frames);
 		anim.animationSpeed = speed || 0.5;
 		return anim;
 	}

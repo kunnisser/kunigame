@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-01 00:57:23
+ * @Last Modified time: 2019-09-15 01:13:55
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -16,6 +16,7 @@ class Loading extends KnScene {
 	public loadingTypes: Map<string, Function>;
 	public ticker: PIXI.Ticker;
 	public loadingGp: PIXI.Container;
+	public autoDisplay: Boolean;
 	defaultGui: string;
 	bg: PIXI.Sprite;
 	drawStage: KnGraphics;
@@ -27,10 +28,10 @@ class Loading extends KnScene {
 			['particle', this.generateCircle],
 			['sprite', this.generateSprite]
 		]);
+		this.autoDisplay = boot;
 		this.ticker = null;
 		this.boot();
 		this.preloader();
-		this.dev();
 	}
 
 	dev() {
@@ -56,8 +57,11 @@ class Loading extends KnScene {
 	}
 
 	preloader() {
-		KnLoader.preloader.load(() => {
+
+		// 资源准备完成，执行后续代码
+		this.autoDisplay && KnLoader.preloader.load(() => {
 			this.create();
+			this.dev();
 		});
 	}
 
