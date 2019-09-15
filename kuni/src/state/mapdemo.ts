@@ -2,26 +2,26 @@
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-15 22:48:37
+ * @Last Modified time: 2019-09-15 22:50:44
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
 import Game from 'ts@/lib/core';
 import TileMap from 'ts@/lib/gameobjects/kn_tilemap';
-import {Rectangle, AnimatedSprite} from 'pixi.js';
+import { Rectangle, AnimatedSprite } from 'pixi.js';
 import KnLoader from 'ts@/lib/loader/kn_loader';
 class MapDemo extends KnScene {
-  constructor (game: Game, key: string, boot: boolean) {
+  constructor(game: Game, key: string, boot: boolean) {
     super(game, key, boot);
     this.game = game;
     this.initialWorld();
   }
 
-  initialWorld () {
+  initialWorld() {
     KnLoader.preloader
-    .add('worldmap', './assets/data/worldmap.json')
-    .add('world', './assets/images/maptiles.png')
-    .add('./assets/data/boy.json');
+      .add('worldmap', './assets/data/worldmap.json')
+      .add('world', './assets/images/maptiles.png')
+      .add('./assets/data/boy.json');
     KnLoader.preloader.load((loader, resources) => {
       const staticWorldTexture = resources.world.texture;
       let textures = [];
@@ -39,18 +39,18 @@ class MapDemo extends KnScene {
     });
   }
 
-  initialBoy () {
+  initialBoy() {
     const frames = {
       down: [],
       up: [],
       left: [],
       right: []
     };
-		for (let i = 0, l = 4; i < l; i++) {
+    for (let i = 0, l = 4; i < l; i++) {
       frames.down.push(this.game.add.texture(`down0${i}.png`));
       frames.left.push(this.game.add.texture(`left0${i}.png`));
-			frames.up.push(this.game.add.texture(`up0${i}.png`));
-			frames.right.push(this.game.add.texture(`right0${i}.png`));
+      frames.up.push(this.game.add.texture(`up0${i}.png`));
+      frames.right.push(this.game.add.texture(`right0${i}.png`));
     }
     const boy: AnimatedSprite = this.game.add.animation(frames.down, 0.2);
     boy.width = 24;
@@ -66,8 +66,8 @@ class MapDemo extends KnScene {
     });
   }
 
-  astar () {
-    
+  astar() {
+
   }
 }
 
