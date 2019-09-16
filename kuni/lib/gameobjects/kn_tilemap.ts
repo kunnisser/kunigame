@@ -6,13 +6,15 @@ class TileMap extends PIXI['tilemap'].CompositeRectTileLayer{
   public alias: Object;
   public textures: Array<PIXI.Texture>;
   public size: number;
+  public tileWidth: number;
   public mapData: Array<number>;
   position: any;
-  constructor (zindex: Number, textures: Array<PIXI.Texture>, alias: Object) {
+  constructor (zindex: Number, textures: Array<PIXI.Texture>, alias: Object, size: number, tileWidth: number) {
     super(0, textures);
     this.alias = alias;
     this.textures = textures;
-    this.size = 32;
+    this.size = size;
+    this.tileWidth = tileWidth;
     this.mapData = [];
     this.buildTilemap();
     return this;
@@ -26,7 +28,7 @@ class TileMap extends PIXI['tilemap'].CompositeRectTileLayer{
 
     // 遍历data数据，根据layer数据中的类型下标添加对应的texture。
     for (let md of this.mapData) {
-      this.addFrame(textures[md - 1], this.size * (index % 32), this.size * Math.floor(index / 32));
+      this.addFrame(textures[md - 1], this.size * (index % this.tileWidth), this.size * ~~(index / this.tileWidth));
       index += 1;
     }
   }

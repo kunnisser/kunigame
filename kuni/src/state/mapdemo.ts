@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-09-16 18:09:15
+ * @Last Modified by: kunnisser
+ * @Last Modified time: 2019-09-16 23:17:17
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -10,7 +10,8 @@ import Game from 'ts@/lib/core';
 import TileMap from 'ts@/lib/gameobjects/kn_tilemap';
 import { Rectangle, AnimatedSprite } from 'pixi.js';
 import KnLoader from 'ts@/lib/loader/kn_loader';
-import {Linear} from 'gsap';
+import { Linear } from 'gsap';
+import {Graphics} from 'pixi.js';
 
 interface Point {
   pointer: Array<number>,
@@ -23,6 +24,7 @@ interface Point {
 class MapDemo extends KnScene {
   public tilemap: TileMap;
   public road: Number;
+  public boy: AnimatedSprite;
   constructor(game: Game, key: string, boot: boolean) {
     super(game, key, boot);
     this.game = game;
@@ -38,17 +40,53 @@ class MapDemo extends KnScene {
     KnLoader.preloader.load((loader, resources) => {
       const staticWorldTexture = resources.world.texture;
       let textures = [];
+
+      // 定义瓷砖尺寸
+      let tiledSize = 32;
+      let tileWidth = 32,
+      tileHeight = 32;
       for (var i = 0, l = 4; i < l; i++) {
-        const rectangle = new Rectangle(i * 32, 0, 32, 32);
+        const rectangle = new Rectangle(i * tiledSize, 0, tiledSize, tiledSize);
         const texture = staticWorldTexture.clone();
         texture.frame = rectangle;
         textures.push(texture);
       }
       const aliasData = loader.resources.worldmap.data;
-      this.tilemap = new TileMap(0, textures, aliasData);
+      this.tilemap = new TileMap(0, textures, aliasData, tiledSize, tileWidth);
       this.tilemap.position.set(0, 0);
       this.addChild(this.tilemap);
       this.initialBoy();
+      this.tilemap.interactive = true;
+      const layer = new Graphics();
+      layer.beginFill(0x1099bb, 1);
+      layer.drawRect(0, 0, tileWidth * tiledSize, tileHeight * tiledSize);
+      layer.endFill();
+      this.tilemap.addChild(layer);
+      this.tilemap.on('pointerdown', (e) => {
+        const pos = e.data.global;
+        console.log(~~(pos.x / tiledSize));
+        console.log(~~(pos.y / tiledSize));
+        const start: Point = {
+          pointer: [4, 2],
+          F: 0,
+          G: 0,
+          H: 0,
+          D: 0,
+          prev: null
+        };
+        const end = {
+          pointer: [~~(pos.x / tiledSize), ~~(pos.y / tiledSize)]
+        };
+        const paths = this.astar(start, end);
+        const timeline = this.game.add.tweenline();
+        for (let ps of paths) {
+          timeline.to(this.boy, 0.25, {
+            x: (ps.pointer[0] + 0.5) * this.tilemap.size,
+            y: (ps.pointer[1] + 0.5) * this.tilemap.size,
+            ease: Linear.easeNone
+          });
+        }
+      });
     });
   }
 
@@ -65,36 +103,19 @@ class MapDemo extends KnScene {
       frames.up.push(this.game.add.texture(`up0${i}.png`));
       frames.right.push(this.game.add.texture(`right0${i}.png`));
     }
-    const boy: AnimatedSprite = this.game.add.animation(frames.down, 0.2);
-    boy.width = 24;
-    boy.height = 32;
-    const start: Point = {
-      pointer: [4, 2],
-      F: 0,
-      G: 0,
-      H: 0,
-      D: 0,
-      prev: null
-    };
-    const end = {
-      pointer: [8, 2]
-    };
-    boy.position.set((start.pointer[0] + 0.5) * this.tilemap.size, (start.pointer[1] + 0.5) * this.tilemap.size);
-    boy.anchor.set(0.5);
-    this.addChild(boy);
-    boy.textures = frames.right;
-    boy.play();
-    const paths = this.astar(start, end);
-    const timeline = this.game.add.tweenline();
-    for (let ps of paths) {
-      timeline.to(boy, 0.25, {
-        x: (ps.pointer[0] + 0.5) * this.tilemap.size,
-         y: (ps.pointer[1] + 0.5) * this.tilemap.size,
-         ease: Linear.easeNone
-        });
-    }
+    this.boy = this.game.add.animation(frames.down, 0.2);
+    this.boy.width = 24;
+    this.boy.height = 32;
+    this.boy.position.set(144, 80);
+    this.boy.anchor.set(0.5);
+    this.addChild(this.boy);
+    this.boy.textures = frames.right;
   }
 
+  // 点击
+
+
+  // A*寻路
   astar(start, end) {
     let findFlag: Boolean = true;
     let opens = [], closed = [];
@@ -119,7 +140,7 @@ class MapDemo extends KnScene {
       // 获取当前
       let rounds = this.getRound(this.tilemap.size, cur);
       for (let rd of rounds) {
-        
+
         // 存在于open,close数组以及元素为障碍物则排除。
         if (this.isExistList(opens, rd) || this.isExistList(closed, rd) || this.isobstacle(rd)) {
           continue;
@@ -163,7 +184,7 @@ class MapDemo extends KnScene {
       }
 
       cur = oMinF;
-      
+
       // 将最小F值的open存入closed
       if (!this.isExistList(closed, cur)) {
         closed.push(cur);
