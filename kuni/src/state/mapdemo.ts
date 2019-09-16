@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-09-16 17:43:32
+ * @Last Modified time: 2019-09-16 18:09:15
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -10,6 +10,7 @@ import Game from 'ts@/lib/core';
 import TileMap from 'ts@/lib/gameobjects/kn_tilemap';
 import { Rectangle, AnimatedSprite } from 'pixi.js';
 import KnLoader from 'ts@/lib/loader/kn_loader';
+import {Linear} from 'gsap';
 
 interface Point {
   pointer: Array<number>,
@@ -86,7 +87,11 @@ class MapDemo extends KnScene {
     const paths = this.astar(start, end);
     const timeline = this.game.add.tweenline();
     for (let ps of paths) {
-      timeline.to(boy, 1, {x: ps.pointer[0] * this.tilemap.size, y: ps.pointer[1] * this.tilemap.size});
+      timeline.to(boy, 0.25, {
+        x: (ps.pointer[0] + 0.5) * this.tilemap.size,
+         y: (ps.pointer[1] + 0.5) * this.tilemap.size,
+         ease: Linear.easeNone
+        });
     }
   }
 

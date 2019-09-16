@@ -1,10 +1,10 @@
-import * as Timeline from 'gsap/TimelineMax';
+import {TimelineMax} from 'gsap';
 class Tween {
     constructor() {
     }
 
     static addTimeline() {
-        return new Timeline.TimelineMax();
+        return new TimelineMax();
     }
 }
 
