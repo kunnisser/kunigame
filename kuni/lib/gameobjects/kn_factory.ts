@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
- * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-15 21:33:20
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-09-16 17:37:44
  */
 
 /*
@@ -18,6 +18,7 @@ import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
 import KnText from 'ts@/lib/gameobjects/kn_text';
 import KnEmitter from 'ts@/lib/gameobjects/kn_emitter';
 import Game from 'ts@/lib/core';
+import knTween from 'ts@/lib/gameobjects/kn_tween';
 import { Sprite, Texture, AnimatedSprite, utils, Ticker } from 'pixi.js';
 
 class KnFactory {
@@ -54,6 +55,15 @@ class KnFactory {
 
 	emitter(quality: number, key: string) {
 		return new KnEmitter(quality, key);
+	}
+
+	// tween(obj, delay, options) {
+	// 	const args: IArguments = arguments;
+	// 	return knTween.generateTween(args);
+	// }
+
+	tweenline () {
+		return knTween.addTimeline();
 	}
 
 	ticker = () => {
