@@ -8,6 +8,7 @@ import {debounce} from 'ts@/lib/utils/common';
 
 interface EnterProps {
 	width: number,
+	height?: number,
 	ratio: number
 }
 
@@ -115,5 +116,7 @@ export default class Game {
 
         // 游戏容器适配
 		this.world.scale.set(size.width / config.width);
+		this.world['half_w'] = size.width * 0.5;
+		this.world['half_h'] = size.height * 0.5;
 	}
 }

@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-09-16 17:37:44
+ * @Last Modified time: 2019-09-17 13:22:03
  */
 
 /*
@@ -62,8 +62,8 @@ class KnFactory {
 	// 	return knTween.generateTween(args);
 	// }
 
-	tweenline () {
-		return knTween.addTimeline();
+	tweenline (vars: object) {
+		return knTween.addTimeline(vars);
 	}
 
 	ticker = () => {
