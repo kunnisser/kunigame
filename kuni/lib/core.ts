@@ -3,8 +3,8 @@ import * as Stats from 'stats-js';
 import KnFactory from 'ts@/lib/gameobjects/kn_factory';
 import KnLoader from 'ts@/lib/loader/kn_loader';
 import KnSceneManager from 'ts@/lib/gameobjects/kn_scene_manager';
-import {Application, settings, SCALE_MODES} from 'pixi.js';
-import {debounce} from 'ts@/lib/utils/common';
+import { Application, settings, SCALE_MODES } from 'pixi.js';
+import { debounce } from 'ts@/lib/utils/common';
 
 interface EnterProps {
 	width: number,
@@ -17,6 +17,12 @@ export default class Game {
 	public stats: any;
 	public view?: HTMLElement | null;
 	public dpr: number;
+	public camera: {
+		width?: number,
+		height?: number,
+		half_w?: number,
+		half_h?: number
+	};
 	public config: {
 		width: number;
 		height: number;
@@ -28,11 +34,11 @@ export default class Game {
 	public app: Application;
 	public loader: KnLoader;
 	public add: KnFactory;
-	constructor (config: EnterProps) {
+	constructor(config: EnterProps) {
 		const view = document.getElementById('view');
 		this.view = view;
 		this.dpr = window.devicePixelRatio;
-
+		this.camera = {};
 		// 设置游戏画布基本尺寸
 		this.config = {
 			width: config.width,
@@ -86,7 +92,7 @@ export default class Game {
 		}
 	}
 
-	resizeStage (view: Element, config: EnterProps) {
+	resizeStage(view: Element, config: EnterProps) {
 		const RATIO = config.ratio;
 		let SCREEN_WIDTH: number | string = window.getComputedStyle(view).width;
 		let SCREEN_HEIGHT: number | string = window.getComputedStyle(view).height;
@@ -112,11 +118,15 @@ export default class Game {
 		// 屏幕适配
 		this.app.renderer.autoResize = true;
 		this.app.renderer.resize(size.width, size.height);
-        settings.SCALE_MODE = SCALE_MODES.NEAREST;
+		settings.SCALE_MODE = SCALE_MODES.NEAREST;
 
-        // 游戏容器适配
+		// 游戏容器适配
 		this.world.scale.set(size.width / config.width);
-		this.world['half_w'] = size.width * 0.5;
-		this.world['half_h'] = size.height * 0.5;
+
+		// 镜头尺寸设置
+		this.camera.width = size.width;
+		this.camera.height = size.height;
+		this.camera.half_w = size.width * 0.5;
+		this.camera.half_h = size.height * 0.5;
 	}
 }

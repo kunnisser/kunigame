@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-17 18:40:20
+ * @Last Modified time: 2019-09-17 23:08:26
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -82,13 +82,13 @@ class MapDemo extends KnScene {
           D: 0,
           prev: null
         };
-        console.log(this.transformPointer(pos.x, pos.y, tileWidth, true));
+
         const end = {
-          pointer: this.transformPointer(pos.x, pos.y, tileWidth, true)
+          pointer: this.transformPointer(pos.x, pos.y, tileWidth)
         };
 
-        // 点击障碍物无法移动
-        if (this.isobstacle(end.pointer)) {
+        // 点击障碍物无法移动或NPC自身
+        if (this.isobstacle(end.pointer) || this.isPointerOverlap(start, end)) {
           return;
         }
 
@@ -117,14 +117,24 @@ class MapDemo extends KnScene {
 
       // camera镜头移动
       this.update(() => {
-        const globalOffsetX = this.boy.x - this.game.world.half_w;
-        const globalOffsetY = this.boy.y - this.game.world.half_h;
-        const offsetX = globalOffsetX > 0 ? globalOffsetX : 0;
-        let offsetY = 0;
-        if (globalOffsetY > 0) {
-         offsetY = globalOffsetY;
+        const globalOffsetX = this.boy.x - this.game.camera.half_w;
+        const globalOffsetY = this.boy.y - this.game.camera.half_h;
+        const limitX = this.tilemap.width - this.game.camera.width / this.game.world.scale.x,
+        limitY = this.tilemap.height - this.game.camera.height / this.game.world.scale.y;
+        if (globalOffsetX >= 0 && globalOffsetX < limitX) {
+          this.pivot.x = globalOffsetX;
+        } else if (globalOffsetX >= limitX) {
+          this.pivot.x = limitX;
+        } else {
+          this.pivot.x = 0;
         }
-        this.pivot.set(offsetX, offsetY);
+        if (globalOffsetY >= 0 && globalOffsetY < limitY) {
+          this.pivot.y = globalOffsetY;
+        } else if (globalOffsetY >= limitY) {
+          this.pivot.y = limitY;
+        } else {
+          this.pivot.y = 0;
+        }
       });
     });
   }
@@ -171,22 +181,25 @@ class MapDemo extends KnScene {
     role.play();
   }
 
-  // 点击坐标转换
-  transformPointer(x: number, y: number, tileWidth: number, scaleAble?: boolean) {
-    if (scaleAble) {
-      return [~~(x / (tileWidth * this.game.world.scale.x)), ~~(y / (tileWidth * this.game.world.scale.x))];
-    } else {
-      return [~~(x / tileWidth), ~~(y / tileWidth)];
-    }
+  // 坐标重叠
+  isPointerOverlap (start, end) {
+    return start.pointer[0] === end.pointer[0] && start.pointer[1] === end.pointer[1];
   }
 
+
+  // 点击坐标转换
+  transformPointer(x: number, y: number, tileWidth: number) {
+    const mapX = x / this.game.world.scale.x + this.pivot.x,
+     mapY = y / this.game.world.scale.y + this.pivot.y;
+    return [~~(mapX / tileWidth), ~~(mapY / tileWidth)];
+  }
 
   // A*寻路
   astar(start: Point, end: Point) {
     let findFlag: Boolean = true;
     let opens = [], closed = [];
     closed.push(start);
-    let cur = start;
+    let cur = start;    
 
     // 节点相邻
     if (Math.abs(start.pointer[0] - end.pointer[0]) + Math.abs(start.pointer[1] - end.pointer[1]) === 1) {
