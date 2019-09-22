@@ -64,6 +64,8 @@ class MapDemo extends KnScene {
       layer.drawRect(0, 0, tileWidth * tiledSize, tileHeight * tiledSize);
       layer.endFill();
       layer.interactive = true;
+      console.log(layer);
+      console.log(this.game.camera.width);
       this.tilemap.addChild(layer);
       this.boy['timeline'] = this.game.add.tweenline({
         onComplete: () => {
@@ -117,8 +119,8 @@ class MapDemo extends KnScene {
 
       // camera镜头移动
       this.update(() => {
-        const globalOffsetX = this.boy.x - this.game.camera.half_w;
-        const globalOffsetY = this.boy.y - this.game.camera.half_h;
+        const globalOffsetX = this.boy.x - this.game.camera.half_w / this.game.world.scale.x;
+        const globalOffsetY = this.boy.y - this.game.camera.half_h / this.game.world.scale.y;
         const limitX = this.tilemap.width - this.game.camera.width / this.game.world.scale.x,
         limitY = this.tilemap.height - this.game.camera.height / this.game.world.scale.y;
         if (globalOffsetX >= 0 && globalOffsetX < limitX) {
