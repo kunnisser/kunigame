@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-17 23:08:26
+ * @Last Modified time: 2019-09-24 22:34:18
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -45,9 +45,10 @@ class MapDemo extends KnScene {
       let textures = [];
 
       // 定义瓷砖尺寸
-      let tiledSize = 32;
-      let tileWidth = 32,
-        tileHeight = 32;
+      const tiledSize = 32;
+      const tileWidth = 32, tileHeight = 32;
+      const limitX = tiledSize * tileWidth - (this.game.camera.width / this.game.world.scale.x),
+        limitY = tiledSize * tileHeight - (this.game.camera.height / this.game.world.scale.y);
       for (var i = 0, l = 4; i < l; i++) {
         const rectangle = new Rectangle(i * tiledSize, 0, tiledSize, tiledSize);
         const texture = staticWorldTexture.clone();
@@ -56,16 +57,14 @@ class MapDemo extends KnScene {
       }
       const aliasData = loader.resources.worldmap.data;
       this.tilemap = new TileMap(0, textures, aliasData, tiledSize);
-      this.tilemap.position.set(0, 0);
+      this.tilemap.pivot.set(0, 0);
       this.addChild(this.tilemap);
       this.initialBoy();
       const layer = new Graphics();
       layer.beginFill(0x1099bb, 1);
-      layer.drawRect(0, 0, tileWidth * tiledSize, tileHeight * tiledSize);
+      layer.drawRect(0, 0, this.game.camera.width, this.game.camera.height);
       layer.endFill();
       layer.interactive = true;
-      console.log(layer);
-      console.log(this.game.camera.width);
       this.tilemap.addChild(layer);
       this.boy['timeline'] = this.game.add.tweenline({
         onComplete: () => {
@@ -109,7 +108,7 @@ class MapDemo extends KnScene {
 
             // 更新boy的地图坐标
             this.boy['pointer'] = path;
-            
+
             // 每一格方向判断
             const nextPoint = paths[index + 1] || end;
             this.setRolesDirect(this.boy, path, nextPoint.pointer);
@@ -121,8 +120,6 @@ class MapDemo extends KnScene {
       this.update(() => {
         const globalOffsetX = this.boy.x - this.game.camera.half_w / this.game.world.scale.x;
         const globalOffsetY = this.boy.y - this.game.camera.half_h / this.game.world.scale.y;
-        const limitX = this.tilemap.width - this.game.camera.width / this.game.world.scale.x,
-        limitY = this.tilemap.height - this.game.camera.height / this.game.world.scale.y;
         if (globalOffsetX >= 0 && globalOffsetX < limitX) {
           this.pivot.x = globalOffsetX;
         } else if (globalOffsetX >= limitX) {
@@ -184,7 +181,7 @@ class MapDemo extends KnScene {
   }
 
   // 坐标重叠
-  isPointerOverlap (start, end) {
+  isPointerOverlap(start, end) {
     return start.pointer[0] === end.pointer[0] && start.pointer[1] === end.pointer[1];
   }
 
@@ -192,7 +189,7 @@ class MapDemo extends KnScene {
   // 点击坐标转换
   transformPointer(x: number, y: number, tileWidth: number) {
     const mapX = x / this.game.world.scale.x + this.pivot.x,
-     mapY = y / this.game.world.scale.y + this.pivot.y;
+      mapY = y / this.game.world.scale.y + this.pivot.y;
     return [~~(mapX / tileWidth), ~~(mapY / tileWidth)];
   }
 
@@ -201,7 +198,7 @@ class MapDemo extends KnScene {
     let findFlag: Boolean = true;
     let opens = [], closed = [];
     closed.push(start);
-    let cur = start;    
+    let cur = start;
 
     // 节点相邻
     if (Math.abs(start.pointer[0] - end.pointer[0]) + Math.abs(start.pointer[1] - end.pointer[1]) === 1) {
@@ -348,16 +345,16 @@ class MapDemo extends KnScene {
 
   update(cb: Function) {
 
-		// 创建刷新器
-		this.ticker = this.game.add.ticker();
-		this.ticker.add((delta) => {
-			this.game.stats.begin();
-			cb(delta);
-			this.game.app.renderer.render(this.game.world);
-			this.game.stats.end();
-		});
-		this.ticker.start();
-	}
+    // 创建刷新器
+    this.ticker = this.game.add.ticker();
+    this.ticker.add((delta) => {
+      this.game.stats.begin();
+      cb(delta);
+      this.game.app.renderer.render(this.game.world);
+      this.game.stats.end();
+    });
+    this.ticker.start();
+  }
 }
 
 export default MapDemo;
