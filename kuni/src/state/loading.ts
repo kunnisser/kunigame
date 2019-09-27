@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
- * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-15 01:13:55
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-09-27 17:49:30
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -26,16 +26,15 @@ class Loading extends KnScene {
 		this.loadingTypes = new Map([
 			['mask', this.generateBar],
 			['particle', this.generateCircle],
-			['sprite', this.generateSprite]
+			['sprite', this.generateSprite],
 		]);
 		this.autoDisplay = boot;
 		this.ticker = null;
-		this.boot();
-		this.preloader();
+		this.autoDisplay && this.initialWorld();
 	}
 
 	dev() {
-		this.defaultGui = 'particle';
+		this.defaultGui = 'mask';
 		const dat = {
 			'加载类型': this.defaultGui
 		};
@@ -47,21 +46,18 @@ class Loading extends KnScene {
 		});
 	}
 
-	boot() {
+	initialWorld() {
 		const tmpText = this.game.add.text('loading...', { fontFamily: 'GrilledCheeseBTNToasted', fontSize: '12px' }, [0.5, 0.5]);
 		this.addChild(tmpText);
 		this.removeChild(tmpText);
 		KnLoader.preloader.add('./assets/data/preloader.json')
 			.add('./assets/data/loadingrun.json')
 			.add('blue', './assets/images/blue.png');
-	}
-
-	preloader() {
-
+			
 		// 资源准备完成，执行后续代码
-		this.autoDisplay && KnLoader.preloader.load(() => {
-			this.create();
+		KnLoader.preloader.load(() => {
 			this.dev();
+			this.create();
 		});
 	}
 
@@ -71,7 +67,7 @@ class Loading extends KnScene {
 		this.bg.width = this.game.config.width;
 		this.bg.height = this.game.config.height;
 		this.bg.anchor.set(0.5);
-		this.drawStage = this.game.add.graphics;
+		this.drawStage = this.game.add.graphics();
 		this.loadingTypes.get(this.defaultGui).call(this);
 	}
 
