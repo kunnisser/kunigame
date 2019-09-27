@@ -9,7 +9,7 @@ class KnGraphics extends Graphics {
 
 	// 绘制矩形
 	generateRect (color: number, points: Array<number>, anchor: boolean) {
-		this.beginFill(color);
+		this.beginFill(color, 1);
 	
 		// 锚点居中
 		anchor && (points[0] -= points[2] * 0.5, points[1] -= points[3] * 0.5);

@@ -23,12 +23,8 @@ import { Sprite, Texture, AnimatedSprite, utils, Ticker } from 'pixi.js';
 
 class KnFactory {
 	public game: Game;
-	public graphics: KnGraphics;
 	constructor(game: Game) {
 		this.game = game;
-
-		// 添加graphics实例
-		this.graphics = new KnGraphics(game);
 	}
 
 	group(key: string, parent: PIXI.Container) {
@@ -56,11 +52,10 @@ class KnFactory {
 	emitter(quality: number, key: string) {
 		return new KnEmitter(quality, key);
 	}
-
-	// tween(obj, delay, options) {
-	// 	const args: IArguments = arguments;
-	// 	return knTween.generateTween(args);
-	// }
+	// 添加graphics实例
+	graphics () {
+		return new KnGraphics(this.game);
+	}
 
 	tweenline (vars: object) {
 		return knTween.addTimeline(vars);

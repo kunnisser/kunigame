@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
- * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-24 22:34:18
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-09-27 16:04:51
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -10,21 +10,30 @@ import Game from 'ts@/lib/core';
 import TileMap from 'ts@/lib/gameobjects/kn_tilemap';
 import { Rectangle, AnimatedSprite, Ticker } from 'pixi.js';
 import KnLoader from 'ts@/lib/loader/kn_loader';
-import { Linear } from 'gsap';
-import { Graphics } from 'pixi.js';
 
-interface Point {
+interface Path {
   pointer: Array<number>,
   F?: number,
   G?: number,
   H?: number,
   D?: number, // 当前点到open数组中元素的距离
-  prev?: Point
+  prev?: Path
 }
+
+class Role extends AnimatedSprite {
+  timeline: any;
+  tweening: boolean; // 是否出现新的运动指令
+  pointer: Array<number>;
+  paths: Array<Path>;
+  start: Path;
+  end: Path;
+  step: number; // 角色行走步数
+}
+
 class MapDemo extends KnScene {
   public tilemap: TileMap;
   public road: Number;
-  public boy: AnimatedSprite;
+  public boy: Role;
   public ticker: Ticker;
   constructor(game: Game, key: string, boot: boolean) {
     super(game, key, boot);
@@ -60,22 +69,16 @@ class MapDemo extends KnScene {
       this.tilemap.pivot.set(0, 0);
       this.addChild(this.tilemap);
       this.initialBoy();
-      const layer = new Graphics();
-      layer.beginFill(0x1099bb, 1);
-      layer.drawRect(0, 0, this.game.camera.width, this.game.camera.height);
-      layer.endFill();
+      const layer = this.game.add.graphics().generateRect(0x1099bb, [0, 0, this.game.camera.width, this.game.camera.height], !1);
       layer.interactive = true;
       this.tilemap.addChild(layer);
-      this.boy['timeline'] = this.game.add.tweenline({
-        onComplete: () => {
-          this.boy.stop();
-        }
-      });
+      this.boy.timeline = this.game.add.tweenline();
+      this.boy.paths = [];
 
       // 监听点击
       layer.on('pointerdown', (e) => {
         const pos = e.data.global;
-        const start: Point = {
+        const start: Path = {
           pointer: this.boy['pointer'],
           F: 0,
           G: 0,
@@ -93,49 +96,70 @@ class MapDemo extends KnScene {
           return;
         }
 
-        const paths = this.astar(start, end);
-        this.boy['timeline'] && this.boy['timeline'].clear();
-
-        // 第一步方向判断
-        this.setRolesDirect(this.boy, start.pointer, paths[0].pointer);
-        for (let index = 0, len = paths.length; index < len; index++) {
-          const path = paths[index].pointer;
-          this.boy['timeline'].to(this.boy, 0.25, {
-            x: (path[0] + 0.5) * tileWidth,
-            y: (path[1] + 0.5) * tileHeight,
-            ease: Linear.easeNone
-          }).addCallback(() => {
-
-            // 更新boy的地图坐标
-            this.boy['pointer'] = path;
-
-            // 每一格方向判断
-            const nextPoint = paths[index + 1] || end;
-            this.setRolesDirect(this.boy, path, nextPoint.pointer);
-          });
+        // 設置路徑
+        if (this.boy.paths.length) {
+          start.pointer = this.boy['goingPointer'];
         }
+        this.boy.paths = this.astar(start, end);
+        this.boy.start = start;
+        this.boy.end = end;
+        this.boy.step = 0;
       });
 
-      // camera镜头移动
+      // 幀刷新
       this.update(() => {
-        const globalOffsetX = this.boy.x - this.game.camera.half_w / this.game.world.scale.x;
-        const globalOffsetY = this.boy.y - this.game.camera.half_h / this.game.world.scale.y;
-        if (globalOffsetX >= 0 && globalOffsetX < limitX) {
-          this.pivot.x = globalOffsetX;
-        } else if (globalOffsetX >= limitX) {
-          this.pivot.x = limitX;
-        } else {
-          this.pivot.x = 0;
+        if (!this.boy.tweening && this.boy.paths.length) {
+          this.boy.tweening = true;
+          this.roleRunning(this.boy, tileWidth, tileHeight);
         }
-        if (globalOffsetY >= 0 && globalOffsetY < limitY) {
-          this.pivot.y = globalOffsetY;
-        } else if (globalOffsetY >= limitY) {
-          this.pivot.y = limitY;
-        } else {
-          this.pivot.y = 0;
-        }
+        this.cameraUpdate(limitX, limitY);
       });
     });
+  }
+
+  roleRunning(role: Role, tileWidth: number, tileHeight: number) {
+
+    // 每一格方向判断
+    this.setRolesDirect(this.boy, role.start.pointer, role.paths[this.boy.step].pointer);
+    const pointer = role.paths[this.boy.step].pointer;
+    this.boy['timeline'].clear();
+    this.boy['timeline'].to(this.boy, 0.25, {
+      x: (pointer[0] + 0.5) * tileWidth,
+      y: (pointer[1] + 0.5) * tileHeight,
+      ease: this.boy['timeline'].linear.easeNone
+    }).call(() => {
+      if (this.boy.step === role.paths.length) {
+        role.paths = [];
+      }
+
+      const nextPath = role.paths[this.boy.step] || role.end;
+
+      // 更新boy的地图坐标
+      this.boy.pointer = pointer;
+      this.boy['goingPointer'] = nextPath.pointer;
+      this.boy.stop();
+      this.boy.tweening = false;
+    });
+    this.boy.step += 1;
+  }
+  cameraUpdate(limitX, limitY) {
+    // 镜头更新
+    const globalOffsetX = this.boy.x - this.game.camera.half_w / this.game.world.scale.x;
+    const globalOffsetY = this.boy.y - this.game.camera.half_h / this.game.world.scale.y;
+    if (globalOffsetX >= 0 && globalOffsetX < limitX) {
+      this.pivot.x = globalOffsetX;
+    } else if (globalOffsetX >= limitX) {
+      this.pivot.x = limitX;
+    } else {
+      this.pivot.x = 0;
+    }
+    if (globalOffsetY >= 0 && globalOffsetY < limitY) {
+      this.pivot.y = globalOffsetY;
+    } else if (globalOffsetY >= limitY) {
+      this.pivot.y = limitY;
+    } else {
+      this.pivot.y = 0;
+    }
   }
 
   initialBoy() {
@@ -181,7 +205,7 @@ class MapDemo extends KnScene {
   }
 
   // 坐标重叠
-  isPointerOverlap(start, end) {
+  isPointerOverlap(start: Path, end: Path) {
     return start.pointer[0] === end.pointer[0] && start.pointer[1] === end.pointer[1];
   }
 
@@ -194,7 +218,7 @@ class MapDemo extends KnScene {
   }
 
   // A*寻路
-  astar(start: Point, end: Point) {
+  astar(start: Path, end: Path) {
     let findFlag: Boolean = true;
     let opens = [], closed = [];
     closed.push(start);
@@ -225,7 +249,7 @@ class MapDemo extends KnScene {
         } else if (!this.isExistList(closed, rd) && !this.isobstacle(rd)) {
 
           // 满足移动的条件则构造Pointer
-          let p: Point = {
+          let p: Path = {
             pointer: rd,
             G: cur.G + 1,
             F: 0,
@@ -295,7 +319,7 @@ class MapDemo extends KnScene {
   }
 
   // 获取周边OPEN
-  getRound(size: number, cur: Point) {
+  getRound(size: number, cur: Path) {
     let rounds = [];
 
     // 向上检索
@@ -322,7 +346,7 @@ class MapDemo extends KnScene {
   }
 
   // 检测是否在list中已存在
-  isExistList(list: Array<Point>, cur) {
+  isExistList(list: Array<Path>, cur) {
     for (let l of list) {
       if (cur.pointer) {
         if (l.pointer[0] === cur.pointer[0] && l.pointer[1] === cur.pointer[1]) {
@@ -338,7 +362,7 @@ class MapDemo extends KnScene {
   }
 
   // 判断是否为障碍
-  isobstacle(pointer) {
+  isobstacle(pointer: Array<number>) {
     const index = pointer[0] + this.tilemap.size * pointer[1];
     return this.tilemap.mapData[index] !== this.road;
   }
