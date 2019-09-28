@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-09-27 17:16:17
+ * @Last Modified by: kunnisser
+ * @Last Modified time: 2019-09-27 23:13:38
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -41,10 +41,10 @@ class MapDemo extends KnScene {
     this.road = 1;
     this.ticker = null;
     this.pivot.set(0, 0);
-		boot && this.initialWorld();
+		boot && this.boot();
   }
 
-  initialWorld() {
+  boot() {
     KnLoader.preloader
       .add('worldmap', './assets/data/worldmap.json')
       .add('world', './assets/images/maptiles.png')

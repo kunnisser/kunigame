@@ -8,6 +8,6 @@ const game = new Game({
 	ratio: 2
 });
 
-game.sceneManager.addScene('home', Home, !0);
-game.sceneManager.addScene('loading', Loading, !1);
-game.sceneManager.addScene('mapdemo', MapDemo, !1);
+game.sceneManager.addScene('home', Home);
+game.sceneManager.addScene('loading', Loading);
+game.sceneManager.addScene('mapdemo', MapDemo);

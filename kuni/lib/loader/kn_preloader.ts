@@ -2,8 +2,12 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-27 23:15:05
+ * @Last Modified time: 2019-09-28 22:49:00
  */
+
+/** 
+ * 场景切换资源加载
+*/
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
 import KnLoader from 'ts@/lib/loader/kn_loader';
@@ -12,7 +16,7 @@ import Game from 'ts@/lib/core';
 
 const DISTANCE: number = 200;
 
-class Loading extends KnScene {
+class Preloader extends KnScene {
 	public loadingTypes: Map<string, Function>;
 	public ticker: PIXI.Ticker;
 	public loadingGp: PIXI.Container;
@@ -23,39 +27,16 @@ class Loading extends KnScene {
 	constructor(game: Game, key: string, boot: boolean) {
 		super(game, key, boot);
 		this.game = game;
-		this.loadingTypes = new Map([
-			['mask', this.generateBar],
-			['particle', this.generateCircle],
-			['sprite', this.generateSprite],
-		]);
-		this.autoDisplay = boot;
 		this.ticker = null;
-	}
-
-	dev() {
-		this.defaultGui = 'mask';
-		const dat = {
-			'加载类型': this.defaultGui
-		};
-		const gui = this.game.gui.add(dat, '加载类型', ['mask', 'particle', 'sprite']);
-		this.game.stats.showPanel(0);
-		gui.onChange((v: string) => {
-			this.reset();
-			this.loadingTypes.get(v).call(this);
-		});
 	}
 
 	boot() {
 		const tmpText = this.game.add.text('loading...', { fontFamily: 'GrilledCheeseBTNToasted', fontSize: '12px' }, [0.5, 0.5]);
 		this.addChild(tmpText);
 		this.removeChild(tmpText);
-		KnLoader.preloader.add('./assets/data/preloader.json')
-			.add('./assets/data/loadingrun.json')
-			.add('blue', './assets/images/blue.png');
-			
+		KnLoader.preloader.add('./assets/data/preloader.json');			
 		// 资源准备完成，执行后续代码
 		KnLoader.preloader.load(() => {
-			this.dev();
 			this.create();
 		});
 	}
@@ -66,9 +47,14 @@ class Loading extends KnScene {
 		this.bg.width = this.game.config.width;
 		this.bg.height = this.game.config.height;
 		this.bg.anchor.set(0.5);
-		this.drawStage = this.game.add.graphics();
-		this.loadingTypes.get(this.defaultGui).call(this);
-	}
+    this.drawStage = this.game.add.graphics();
+    this.generateBar();
+  }
+  
+  // 进行游戏资源场景加载
+  preloader () {
+    this.game.add.loader
+  }
 
 	// 进度条加载
 	generateBar() {
@@ -109,61 +95,6 @@ class Loading extends KnScene {
 		this.update(cb);
 	}
 
-	// 粒子加载
-	generateCircle() {
-		const emitter = this.game.add.emitter(10, 'blue');
-		this.addChild(emitter);
-		emitter.shoot();
-	}
-
-	// 动画加载
-	generateSprite() {
-		const frames = [];
-		for (let i = 1, l = 4; i < l; i++) {
-			const val = i < 5 ? `0${i}` : i;
-			frames.push(this.game.add.texture(`loadingrun_${val}.png`));
-		}
-		const anmi = this.game.add.animation(frames, 0.24);
-		anmi.scale.set(0.35);
-		anmi.anchor.set(0.5);
-		anmi.play();
-		this.addChild(anmi);
-		const startX = -this.game.config.half_w + anmi.width;
-		anmi.x = startX;
-
-		// 绘制加载条
-		this.loadingGp = this.game.add.group('sprite_loading', this);
-		const loadingbar = this.drawStage.generateRect(0x337ab7, [0, 0, this.game.config.half_w + anmi.width, 10, 5], !0);
-		loadingbar.y = anmi.height * 0.5 - 20;
-		this.loadingGp.addChild(loadingbar);
-
-		// 绘制加载文字
-		const loadingText = this.game.add.text('0 %', {
-			fontFamily: 'GrilledCheeseBTNToasted',
-			fontSize: '18px',
-			fill: 0xffffff
-		}, [0.5, 0.5]);
-		loadingText.y = loadingbar.y + 40;
-		this.loadingGp.addChild(loadingText);
-
-		// 这里定义帧刷新事件
-		let duration = 480;
-		let percent = 0;
-		const cb = (delta: number) => {
-			duration -= delta;
-			if (duration <= 0) {
-				duration = 480;
-				anmi.x = startX;
-			}
-			anmi.x += 1;
-			percent = (480 - duration) / 4.8;
-			percent = +percent.toFixed(0);
-			loadingText.text = `${percent} %`;
-		};
-
-		this.update(cb);
-	}
-
 	update(cb: Function) {
 
 		// 创建刷新器
@@ -196,4 +127,4 @@ class Loading extends KnScene {
 	}
 }
 
-export default Loading;
+export default Preloader;

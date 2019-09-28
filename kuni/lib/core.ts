@@ -2,9 +2,11 @@ import dat from 'dat.gui';
 import * as Stats from 'stats-js';
 import KnFactory from 'ts@/lib/gameobjects/kn_factory';
 import KnLoader from 'ts@/lib/loader/kn_loader';
+import KnPreloader from 'ts@/lib/loader/kn_preloader';
 import KnSceneManager from 'ts@/lib/gameobjects/kn_scene_manager';
 import { Application, settings, SCALE_MODES } from 'pixi.js';
 import { debounce } from 'ts@/lib/utils/common';
+import KnScene from './gameobjects/kn_scene';
 
 interface EnterProps {
 	width: number,
@@ -17,6 +19,7 @@ export default class Game {
 	public stats: any;
 	public view?: HTMLElement | null;
 	public dpr: number;
+	public preloader: KnScene;
 	public camera: {
 		width?: number,
 		height?: number,
@@ -90,8 +93,11 @@ export default class Game {
 				this.resizeStage(view, config);
 			});
 		}
+
+		this.preload();
 	}
 
+	// 重置画布尺寸
 	resizeStage(view: Element, config: EnterProps) {
 		const RATIO = config.ratio;
 		let SCREEN_WIDTH: number | string = window.getComputedStyle(view).width;
@@ -128,5 +134,10 @@ export default class Game {
 		this.camera.height = size.height;
 		this.camera.half_w = size.width * 0.5;
 		this.camera.half_h = size.height * 0.5;
+	}
+
+	// 初始化资源加载器
+	preload() {
+		this.preloader = new KnPreloader(this, 'global_preloader', !0);
 	}
 }

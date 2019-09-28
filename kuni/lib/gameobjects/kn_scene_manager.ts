@@ -10,7 +10,7 @@ class KnSceneManager {
 	}
 
 	// 用户自定义添加场景对象
-	addScene (id: string, Stage: any, boot: boolean) {
+	addScene (id: string, Stage: any, boot?: boolean) {
 		const stage = new Stage(this.game, id, boot);
 		this.scenes.push(stage);
 	}
