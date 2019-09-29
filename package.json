@@ -47,6 +47,7 @@
     "webpack-merge": "^3.0.0"
   },
   "dependencies": {
+    "@pixi/canvas-graphics": "^5.1.5",
     "axios": "^0.18.0",
     "copy-webpack-plugin": "^4.5.2",
     "crypto-js": "^3.1.9-1",

@@ -1,12 +1,11 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-09-29 17:47:03
+ * @Last Modified by: kunnisser
+ * @Last Modified time: 2019-09-29 21:59:13
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
-import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
 import Game from 'ts@/lib/core';
 
 const DISTANCE: number = 200;
@@ -18,7 +17,6 @@ class Loading extends KnScene {
 	public autoDisplay: Boolean;
 	defaultGui: string;
 	bg: PIXI.Sprite;
-	drawStage: KnGraphics;
 	constructor(game: Game, key: string, boot: boolean) {
 		super(game, key, boot);
 		this.game = game;

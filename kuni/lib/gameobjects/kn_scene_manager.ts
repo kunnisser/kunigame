@@ -35,7 +35,7 @@ class KnSceneManager {
 			console.log(to.id, '已缓存');
 			to.enter();
 		} else if (to.id === 'global_preloader'){
-			console.log('初次加载');
+			console.log('home加载');
 			this.game.loader.add('preloader', to.resouces['preloader']).load(() => {
 				to.enter();
 			})

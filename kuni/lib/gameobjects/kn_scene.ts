@@ -1,6 +1,7 @@
 /* 场景基础类 */
 
 import { Container } from 'pixi.js';
+import KnGraphics from './kn_graphics';
 
 class KnScene extends Container {
 	public game: any;
@@ -10,6 +11,7 @@ class KnScene extends Container {
 	public isCached: boolean;
 	public loader: PIXI.Loader;
 	public dat?: any;
+	public drawStage: KnGraphics;
 	constructor(game: object, key: string, boot?: boolean) {
 		super();
 		this.game = game;
@@ -36,6 +38,8 @@ class KnScene extends Container {
 	// 离开场景
 	exit() {
 		this.visible = !1;
+		this.drawStage && this.drawStage.clear();
+		this.removeChildren(0, this.children.length);
 	}
 
 	// 构建场景
@@ -45,7 +49,7 @@ class KnScene extends Container {
 	boot(target?: KnScene) { }
 
 	// 刷新场景
-	update(delta: number, options?: object) { }
+	update(delta: number, options?: object) {}
 
 	// 删除场景
 	remove() {

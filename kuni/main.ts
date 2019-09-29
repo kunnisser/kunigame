@@ -18,7 +18,7 @@ game.sceneManager.changeScene(null, game.preloader);
 const dat = new GuiScene();
 const gui = game.gui;
 const folder = gui.addFolder('场景');
-const currentScene = game.currentScene;
+let currentScene = null;
 
 // 场景切换
 const loadingTypes = new Map([
@@ -27,5 +27,6 @@ const loadingTypes = new Map([
 	['mapdemo', () => game.sceneManager.changeScene(currentScene, map)]
 ]);const selector = folder.add(dat, '场景选择', ['home', 'loading', 'mapdemo']);
 selector.onChange((v: string) => {
+	currentScene = game.currentScene;
 	loadingTypes.get(v)();
 });

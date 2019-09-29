@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-09-29 17:07:49
+ * @Last Modified by: kunnisser
+ * @Last Modified time: 2019-09-29 22:08:56
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -40,6 +40,7 @@ class MapDemo extends KnScene {
     this.road = 1;
     this.ticker = null;
     this.pivot.set(0, 0);
+    this.drawStage = this.game.add.graphics();
     this.resouces = {
       'worldmap': './assets/data/worldmap.json',
       'world': './assets/images/maptiles.png',
@@ -67,7 +68,7 @@ class MapDemo extends KnScene {
       this.tilemap.pivot.set(0, 0);
       this.addChild(this.tilemap);
       this.initialBoy();
-      const layer = this.game.add.graphics().generateRect(0x1099bb, [0, 0, this.game.camera.width, this.game.camera.height], !1);
+      const layer = this.drawStage.generateRect(0x1099bb, [0, 0, this.game.camera.width, this.game.camera.height], !1);
       layer.interactive = true;
       this.tilemap.addChild(layer);
       this.boy.timeline = this.game.add.tweenline();
