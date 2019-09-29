@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
- * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-28 22:49:00
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-09-29 17:34:54
  */
 
 /** 
@@ -10,51 +10,68 @@
 */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
-import KnLoader from 'ts@/lib/loader/kn_loader';
 import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
 import Game from 'ts@/lib/core';
 
-const DISTANCE: number = 200;
+// const DISTANCE: number = 200;
 
 class Preloader extends KnScene {
 	public loadingTypes: Map<string, Function>;
 	public ticker: PIXI.Ticker;
 	public loadingGp: PIXI.Container;
 	public autoDisplay: Boolean;
+	public maskClip: KnGraphics;
+	public loadingText: PIXI.Text;
 	defaultGui: string;
 	bg: PIXI.Sprite;
 	drawStage: KnGraphics;
 	constructor(game: Game, key: string, boot: boolean) {
 		super(game, key, boot);
 		this.game = game;
-		this.ticker = null;
+		this.resouces = {'preloader': './assets/data/preloader.json'};
 	}
 
-	boot() {
-		const tmpText = this.game.add.text('loading...', { fontFamily: 'GrilledCheeseBTNToasted', fontSize: '12px' }, [0.5, 0.5]);
-		this.addChild(tmpText);
-		this.removeChild(tmpText);
-		KnLoader.preloader.add('./assets/data/preloader.json');			
-		// 资源准备完成，执行后续代码
-		KnLoader.preloader.load(() => {
-			this.create();
+	boot(target: KnScene) {
+		this.create();
+		target || (target = this.game.sceneManager.scenes[1]);
+		this.loadScene(target.resouces).on('progress', this.loadingHandler).load((loader) => {
+
+			// 资源加载完成，进入目标场景
+			target.isCached = true;
+			target.loader = loader;
+			this.game.sceneManager.changeScene(this, target);
 		});
 	}
 
 	create() {
+		const tmpText = this.game.add.text('loading...', { fontFamily: 'GrilledCheeseBTNToasted', fontSize: '12px' }, [0.5, 0.5]);
+		this.addChild(tmpText);
+		this.removeChild(tmpText);
 		this.position.set(this.game.config.half_w, this.game.config.half_h);
 		this.bg = this.game.add.image('Preloader_Background0000', this);
 		this.bg.width = this.game.config.width;
 		this.bg.height = this.game.config.height;
 		this.bg.anchor.set(0.5);
-    this.drawStage = this.game.add.graphics();
-    this.generateBar();
-  }
-  
-  // 进行游戏资源场景加载
-  preloader () {
-    this.game.add.loader
-  }
+		this.drawStage = this.game.add.graphics();
+		this.generateBar();
+	}
+
+	// 进行游戏资源场景加载
+	loadScene(resouces: Object) {
+		const keys = Object.keys(resouces);
+		const loader = this.game.loader;
+		for (let key of keys) {
+			loader.add(key, resouces[key]);
+		}
+		return loader;
+	}
+
+	// progress更新
+	loadingHandler = (e) => {
+		const percent = e.progress.toFixed(0);
+		this.loadingText.text = `${percent} %`;
+		this.maskClip.y = (percent / 100) * this.maskClip.height;
+	}
 
 	// 进度条加载
 	generateBar() {
@@ -67,64 +84,18 @@ class Preloader extends KnScene {
 		maskClip.y = maskClip.height;
 		this.addChild(maskClip);
 		innerBar.mask = maskClip;
+		this.maskClip = maskClip;
 
 		// 绘制加载文字
-		const loadingText = this.game.add.text('0 %', {
+		this.loadingText = this.game.add.text('0 %', {
 			fontFamily: 'GrilledCheeseBTNToasted',
 			fontSize: '14px',
 			fill: 0x2c92e0
 		}, [0.5, 0.5]);
-		loadingText.y = innerBar.y + 10;
-		this.addChild(loadingText);
-		let percent = 0;
-		let duration = DISTANCE;
-
-		// 这里定义帧刷新事件
-		const cb = (delta: number) => {
-			duration -= delta;
-			if (duration <= 0) {
-				duration = DISTANCE;
-				maskClip.y = maskClip.height;
-			}
-			percent = (DISTANCE - duration) * 100 / DISTANCE
-			percent = +percent.toFixed(0);
-			loadingText.text = `${percent} %`;
-			maskClip.y = (duration / DISTANCE) * maskClip.height;
-		};
-
-		this.update(cb);
+		this.loadingText.y = innerBar.y + 10;
+		this.addChild(this.loadingText);
 	}
 
-	update(cb: Function) {
-
-		// 创建刷新器
-		this.ticker = this.game.add.ticker();
-		this.ticker.add((delta) => {
-			this.game.stats.begin();
-			cb(delta);
-			this.game.app.renderer.render(this.game.world);
-			this.game.stats.end();
-		});
-		this.ticker.start();
-	}
-
-	reset() {
-		if (this.ticker) {
-			this.ticker.stop();
-			this.ticker = null;
-		}
-		if (this.children.length > 1) {
-
-			// 清除grahpics 画布
-			this.drawStage.clear();
-
-			// 清空对象MASK
-			this.children[2] && (this.children[2].mask = null);
-
-			// 清除group子对象
-			this.removeChildren(1, this.children.length);
-		}
-	}
 }
 
 export default Preloader;

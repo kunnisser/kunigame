@@ -13,11 +13,37 @@ class KnSceneManager {
 	addScene (id: string, Stage: any, boot?: boolean) {
 		const stage = new Stage(this.game, id, boot);
 		this.scenes.push(stage);
+		return stage;
 	}
 
-	changeScene (from: KnScene, to: KnScene) {
-		from.exit();
-		to.enter();
+	changeScene (from: KnScene | null, to: KnScene) {
+		if (from) {
+			// 去除特殊的dat.gui
+			from.dat && this.game.gui.remove(from.dat);
+			from.exit();
+		}
+		this.dispatchScene(to);
+		this.game.currentScene = to;
+	}
+
+	dispatchScene (to: KnScene) {
+		/** 1.目标场景已缓存 
+		 *  2. 若为加载器场景无需重复进入加载器
+		 *  3. 目标场景未缓存进入加载器
+		 * */ 
+		if (to.isCached || !to.resouces) {
+			console.log(to.id, '已缓存');
+			to.enter();
+		} else if (to.id === 'global_preloader'){
+			console.log('初次加载');
+			this.game.loader.add('preloader', to.resouces['preloader']).load(() => {
+				to.enter();
+			})
+		} else {
+			// 首次进入场景且场景有资源需要加载，则会自动进入preloader场景
+			console.log('首次进入', to.id);
+			this.game.preloader.enter(to);
+		}
 	}
 
 }

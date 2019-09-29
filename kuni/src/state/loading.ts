@@ -1,12 +1,11 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
- * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-27 23:15:05
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-09-29 17:47:03
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
-import KnLoader from 'ts@/lib/loader/kn_loader';
 import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
 import Game from 'ts@/lib/core';
 
@@ -33,31 +32,28 @@ class Loading extends KnScene {
 	}
 
 	dev() {
+		if (this.game.gui.__controllers[0] && this.game.gui.__controllers[0].property === '加载类型') {
+			return;
+		}
+
 		this.defaultGui = 'mask';
 		const dat = {
 			'加载类型': this.defaultGui
 		};
-		const gui = this.game.gui.add(dat, '加载类型', ['mask', 'particle', 'sprite']);
-		this.game.stats.showPanel(0);
-		gui.onChange((v: string) => {
+		this.dat = this.game.gui.add(dat, '加载类型', ['mask', 'particle', 'sprite']);
+		this.dat.onChange((v: string) => {
 			this.reset();
 			this.loadingTypes.get(v).call(this);
 		});
+		this.loadingTypes.get(this.defaultGui).call(this);
 	}
 
 	boot() {
 		const tmpText = this.game.add.text('loading...', { fontFamily: 'GrilledCheeseBTNToasted', fontSize: '12px' }, [0.5, 0.5]);
 		this.addChild(tmpText);
 		this.removeChild(tmpText);
-		KnLoader.preloader.add('./assets/data/preloader.json')
-			.add('./assets/data/loadingrun.json')
-			.add('blue', './assets/images/blue.png');
-			
-		// 资源准备完成，执行后续代码
-		KnLoader.preloader.load(() => {
-			this.dev();
-			this.create();
-		});
+		this.create();
+		this.dev();
 	}
 
 	create() {
@@ -67,7 +63,6 @@ class Loading extends KnScene {
 		this.bg.height = this.game.config.height;
 		this.bg.anchor.set(0.5);
 		this.drawStage = this.game.add.graphics();
-		this.loadingTypes.get(this.defaultGui).call(this);
 	}
 
 	// 进度条加载
@@ -94,7 +89,7 @@ class Loading extends KnScene {
 		let duration = DISTANCE;
 
 		// 这里定义帧刷新事件
-		const cb = (delta: number) => {
+		this.update = (delta: number) => {
 			duration -= delta;
 			if (duration <= 0) {
 				duration = DISTANCE;
@@ -105,8 +100,6 @@ class Loading extends KnScene {
 			loadingText.text = `${percent} %`;
 			maskClip.y = (duration / DISTANCE) * maskClip.height;
 		};
-
-		this.update(cb);
 	}
 
 	// 粒子加载
@@ -149,7 +142,8 @@ class Loading extends KnScene {
 		// 这里定义帧刷新事件
 		let duration = 480;
 		let percent = 0;
-		const cb = (delta: number) => {
+
+		this.update = (delta) => {
 			duration -= delta;
 			if (duration <= 0) {
 				duration = 480;
@@ -160,28 +154,9 @@ class Loading extends KnScene {
 			percent = +percent.toFixed(0);
 			loadingText.text = `${percent} %`;
 		};
-
-		this.update(cb);
-	}
-
-	update(cb: Function) {
-
-		// 创建刷新器
-		this.ticker = this.game.add.ticker();
-		this.ticker.add((delta) => {
-			this.game.stats.begin();
-			cb(delta);
-			this.game.app.renderer.render(this.game.world);
-			this.game.stats.end();
-		});
-		this.ticker.start();
 	}
 
 	reset() {
-		if (this.ticker) {
-			this.ticker.stop();
-			this.ticker = null;
-		}
 		if (this.children.length > 1) {
 
 			// 清除grahpics 画布

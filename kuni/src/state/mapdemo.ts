@@ -1,15 +1,14 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
- * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-27 23:13:38
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-09-29 17:07:49
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
 import Game from 'ts@/lib/core';
 import TileMap from 'ts@/lib/gameobjects/kn_tilemap';
 import { Rectangle, AnimatedSprite, Ticker } from 'pixi.js';
-import KnLoader from 'ts@/lib/loader/kn_loader';
 
 interface Path {
   pointer: Array<number>,
@@ -41,16 +40,15 @@ class MapDemo extends KnScene {
     this.road = 1;
     this.ticker = null;
     this.pivot.set(0, 0);
-		boot && this.boot();
+    this.resouces = {
+      'worldmap': './assets/data/worldmap.json',
+      'world': './assets/images/maptiles.png',
+      'boy': './assets/data/boy.json'
+    };
   }
 
   boot() {
-    KnLoader.preloader
-      .add('worldmap', './assets/data/worldmap.json')
-      .add('world', './assets/images/maptiles.png')
-      .add('./assets/data/boy.json');
-    KnLoader.preloader.load((loader, resources) => {
-      const staticWorldTexture = resources.world.texture;
+      const staticWorldTexture = this.loader.resources.world.texture;
       let textures = [];
 
       // 定义瓷砖尺寸
@@ -64,7 +62,7 @@ class MapDemo extends KnScene {
         texture.frame = rectangle;
         textures.push(texture);
       }
-      const aliasData = loader.resources.worldmap.data;
+      const aliasData = this.loader.resources.worldmap.data;
       this.tilemap = new TileMap(0, textures, aliasData, tiledSize);
       this.tilemap.pivot.set(0, 0);
       this.addChild(this.tilemap);
@@ -107,14 +105,13 @@ class MapDemo extends KnScene {
       });
 
       // 幀刷新
-      this.update(() => {
+      this.update = () => {
         if (!this.boy.tweening && this.boy.paths.length) {
           this.boy.tweening = true;
           this.roleRunning(this.boy, tileWidth, tileHeight);
         }
         this.cameraUpdate(limitX, limitY);
-      });
-    });
+      };
   }
 
   roleRunning(role: Role, tileWidth: number, tileHeight: number) {
@@ -142,6 +139,7 @@ class MapDemo extends KnScene {
     });
     this.boy.step += 1;
   }
+
   cameraUpdate(limitX, limitY) {
     // 镜头更新
     const globalOffsetX = this.boy.x - this.game.camera.half_w / this.game.world.scale.x;
@@ -365,19 +363,6 @@ class MapDemo extends KnScene {
   isobstacle(pointer: Array<number>) {
     const index = pointer[0] + this.tilemap.size * pointer[1];
     return this.tilemap.mapData[index] !== this.road;
-  }
-
-  update(cb: Function) {
-
-    // 创建刷新器
-    this.ticker = this.game.add.ticker();
-    this.ticker.add((delta) => {
-      this.game.stats.begin();
-      cb(delta);
-      this.game.app.renderer.render(this.game.world);
-      this.game.stats.end();
-    });
-    this.ticker.start();
   }
 }
 

@@ -2,11 +2,11 @@ import dat from 'dat.gui';
 import * as Stats from 'stats-js';
 import KnFactory from 'ts@/lib/gameobjects/kn_factory';
 import KnLoader from 'ts@/lib/loader/kn_loader';
-import KnPreloader from 'ts@/lib/loader/kn_preloader';
 import KnSceneManager from 'ts@/lib/gameobjects/kn_scene_manager';
 import { Application, settings, SCALE_MODES } from 'pixi.js';
 import { debounce } from 'ts@/lib/utils/common';
 import KnScene from './gameobjects/kn_scene';
+import KnPreloader from 'ts@/lib/loader/kn_preloader';
 
 interface EnterProps {
 	width: number,
@@ -20,6 +20,7 @@ export default class Game {
 	public view?: HTMLElement | null;
 	public dpr: number;
 	public preloader: KnScene;
+	public ticker: PIXI.Ticker;
 	public camera: {
 		width?: number,
 		height?: number,
@@ -37,6 +38,7 @@ export default class Game {
 	public app: Application;
 	public loader: KnLoader;
 	public add: KnFactory;
+	public currentScene: KnScene; // 当前场景
 	constructor(config: EnterProps) {
 		const view = document.getElementById('view');
 		this.view = view;
@@ -94,7 +96,11 @@ export default class Game {
 			});
 		}
 
-		this.preload();
+		this.preloader = this.sceneManager.addScene('global_preloader', KnPreloader);
+		this.refresh();
+
+		// performance & runtime
+		this.stats.showPanel(0);
 	}
 
 	// 重置画布尺寸
@@ -136,8 +142,17 @@ export default class Game {
 		this.camera.half_h = size.height * 0.5;
 	}
 
-	// 初始化资源加载器
-	preload() {
-		this.preloader = new KnPreloader(this, 'global_preloader', !0);
+	refresh () {
+		// 创建刷新器
+		this.ticker = this.add.ticker();
+		this.ticker.add((delta) => {
+			this.stats.begin();
+			for (let scene of this.sceneManager.scenes) {
+				scene.visible && scene.update(delta);
+			}
+			this.app.renderer.render(this.world);
+			this.stats.end();
+		});
+		this.ticker.start();
 	}
 }
