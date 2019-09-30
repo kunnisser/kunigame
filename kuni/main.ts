@@ -3,6 +3,7 @@ import Home from 'ts@/src/state/home';
 import Loading from 'ts@/src/state/loading';
 import MapDemo from 'ts@/src/state/mapdemo';
 import { GuiScene } from 'ts@/lib/utils/gui';
+import KnTranstion from 'ts@/lib/gameui/kn_transtion';
 
 const game = new Game({
 	width: 750,
@@ -14,6 +15,9 @@ const loading = game.sceneManager.addScene('loading', Loading);
 const map = game.sceneManager.addScene('mapdemo', MapDemo);
 
 game.sceneManager.changeScene(null, game.preloader);
+
+// 定义全局场景切换
+game.overlay = new KnTranstion(game);
 
 const dat = new GuiScene();
 const gui = game.gui;
@@ -27,6 +31,7 @@ const loadingTypes = new Map([
 	['mapdemo', () => game.sceneManager.changeScene(currentScene, map)]
 ]);const selector = folder.add(dat, '场景选择', ['home', 'loading', 'mapdemo']);
 selector.onChange((v: string) => {
-	currentScene = game.currentScene;
-	loadingTypes.get(v)();
+	game.overlay.tranScene();
+	// currentScene = game.currentScene;
+	// loadingTypes.get(v)();
 });

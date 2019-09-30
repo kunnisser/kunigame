@@ -1,11 +1,14 @@
-import {TimelineLite, Linear} from 'gsap';
+import {TimelineLite, Linear, Power2 } from 'gsap';
 
-class Tween {
-    static addTimeline(vars: object) {
-        const timeline = new TimelineLite(vars);
-        timeline.linear = Linear;
-        return timeline;
+class knTweenLine extends TimelineLite {
+    public linear: Function;
+    public cubic: Function;
+    constructor (vars) {
+        super(vars);
+        this.linear = Linear;
+        this.cubic = Power2;
     }
+
 }
 
-export default Tween;
+export {knTweenLine};

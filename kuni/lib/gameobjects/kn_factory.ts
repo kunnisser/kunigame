@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-09-17 13:22:03
+ * @Last Modified time: 2019-09-30 15:52:03
  */
 
 /*
@@ -18,7 +18,7 @@ import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
 import KnText from 'ts@/lib/gameobjects/kn_text';
 import KnEmitter from 'ts@/lib/gameobjects/kn_emitter';
 import Game from 'ts@/lib/core';
-import knTween from 'ts@/lib/gameobjects/kn_tween';
+import {knTweenLine} from 'ts@/lib/gameobjects/kn_tween';
 import { Sprite, Texture, AnimatedSprite, utils, Ticker } from 'pixi.js';
 
 class KnFactory {
@@ -31,8 +31,8 @@ class KnFactory {
 		return new KnGroup(this.game, key, parent);
 	}
 
-	image = (key: string, parent: PIXI.Container, align: Array<number>) => {
-		const texture = utils.TextureCache[key];
+	image = (key: any, parent: PIXI.Container, align?: Array<number>) => {
+		const texture = Object.prototype.toString.call(key) === '[object String]' ? utils.TextureCache[key] : key;
 		const sprite = new Sprite(texture);
 		align && sprite.anchor.set(...align);
 		parent || (parent = this.game.world);
@@ -57,8 +57,8 @@ class KnFactory {
 		return new KnGraphics(this.game);
 	}
 
-	tweenline (vars: object) {
-		return knTween.addTimeline(vars);
+	tweenline (vars?: object) {
+		return new knTweenLine(vars);
 	}
 
 	ticker = () => {

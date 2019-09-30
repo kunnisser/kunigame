@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
- * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-29 22:08:56
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-09-30 16:27:04
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -142,6 +142,7 @@ class MapDemo extends KnScene {
   }
 
   cameraUpdate(limitX, limitY) {
+    
     // 镜头更新
     const globalOffsetX = this.boy.x - this.game.camera.half_w / this.game.world.scale.x;
     const globalOffsetY = this.boy.y - this.game.camera.half_h / this.game.world.scale.y;

@@ -7,6 +7,7 @@ import { Application, settings, SCALE_MODES } from 'pixi.js';
 import { debounce } from 'ts@/lib/utils/common';
 import KnScene from './gameobjects/kn_scene';
 import KnPreloader from 'ts@/lib/loader/kn_preloader';
+import KnTranstion from 'ts@/lib/gameui/kn_transtion';
 
 interface EnterProps {
 	width: number,
@@ -39,6 +40,7 @@ export default class Game {
 	public loader: KnLoader;
 	public add: KnFactory;
 	public currentScene: KnScene; // 当前场景
+	public overlay: KnTranstion; // 转场遮罩
 	constructor(config: EnterProps) {
 		const view = document.getElementById('view');
 		this.view = view;
@@ -96,6 +98,7 @@ export default class Game {
 			});
 		}
 
+		// 定义全局场景loading
 		this.preloader = this.sceneManager.addScene('global_preloader', KnPreloader);
 		this.refresh();
 

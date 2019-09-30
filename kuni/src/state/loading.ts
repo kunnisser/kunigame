@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
- * @Last Modified by: kunnisser
- * @Last Modified time: 2019-09-29 21:59:13
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-09-30 16:48:48
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -14,7 +14,6 @@ class Loading extends KnScene {
 	public loadingTypes: Map<string, Function>;
 	public ticker: PIXI.Ticker;
 	public loadingGp: PIXI.Container;
-	public autoDisplay: Boolean;
 	defaultGui: string;
 	bg: PIXI.Sprite;
 	constructor(game: Game, key: string, boot: boolean) {
@@ -25,8 +24,9 @@ class Loading extends KnScene {
 			['particle', this.generateCircle],
 			['sprite', this.generateSprite],
 		]);
-		this.autoDisplay = boot;
-		this.ticker = null;
+		this.resouces = {
+			blue: './assets/images/blue.png'
+		  };
 	}
 
 	dev() {

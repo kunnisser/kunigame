@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-09-29 17:34:54
+ * @Last Modified time: 2019-09-30 16:02:56
  */
 
 /** 
@@ -12,8 +12,6 @@
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
 import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
 import Game from 'ts@/lib/core';
-
-// const DISTANCE: number = 200;
 
 class Preloader extends KnScene {
 	public loadingTypes: Map<string, Function>;
@@ -34,13 +32,17 @@ class Preloader extends KnScene {
 	boot(target: KnScene) {
 		this.create();
 		target || (target = this.game.sceneManager.scenes[1]);
-		this.loadScene(target.resouces).on('progress', this.loadingHandler).load((loader) => {
+		if (target.resouces) {
+			this.loadScene(target.resouces).on('progress', this.loadingHandler).load((loader) => {
 
 			// 资源加载完成，进入目标场景
 			target.isCached = true;
 			target.loader = loader;
 			this.game.sceneManager.changeScene(this, target);
 		});
+	} else {
+		this.game.sceneManager.changeScene(this, target);
+	}
 	}
 
 	create() {
