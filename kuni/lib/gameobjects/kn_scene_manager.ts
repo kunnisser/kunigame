@@ -41,7 +41,13 @@ class KnSceneManager {
 			console.log(to.id, '已缓存');
 			to.enter();
 		} else if (to.id === 'global_preloader'){
-			this.game.loader.add('preloader', to.resouces['preloader']).load(() => {
+			let globalLoader = this.game.loader;
+			
+			// 全局loading界面的资源加载
+			for (let key of Object.keys(to.resouces)) {
+				globalLoader = globalLoader.add(key, to.resouces[key]);
+			}
+			globalLoader.load(() => {
 				console.log('首次home加载');
 				const homeScene = this.game.sceneManager.scenes[1];
 				to.enter(homeScene, !0);

@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-09-30 16:49:05
+ * @Last Modified by: kunnisser
+ * @Last Modified time: 2019-10-01 23:11:29
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -22,7 +22,7 @@ class Home extends KnScene {
     this.game = game;
     this.clouds = [];
     this.resouces = {
-      			run: './assets/data/loadingrun.json'
+      'bg002': './assets/images/bg002.jpg'
     };
   }
 
@@ -31,8 +31,15 @@ class Home extends KnScene {
   }
 
   create() {
+    this.generateBackground();
     this.initClouds();
     this.initText();
+  }
+
+  generateBackground() {
+    const bg = this.game.add.image('bg002', this);
+    bg.width = this.game.config.width;
+    bg.height = this.game.config.height;
   }
 
   initClouds() {

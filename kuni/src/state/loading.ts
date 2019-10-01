@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-09-30 16:48:48
+ * @Last Modified by: kunnisser
+ * @Last Modified time: 2019-10-01 23:20:42
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -25,7 +25,8 @@ class Loading extends KnScene {
 			['sprite', this.generateSprite],
 		]);
 		this.resouces = {
-			blue: './assets/images/blue.png'
+			'preloader': './assets/data/preloader.json',
+			'blue': './assets/images/blue.png'
 		  };
 	}
 

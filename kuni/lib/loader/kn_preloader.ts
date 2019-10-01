@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-01 18:42:33
+ * @Last Modified time: 2019-10-01 23:45:55
  */
 
 /** 
@@ -12,21 +12,26 @@
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
 import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
 import Game from 'ts@/lib/core';
+import { AnimatedSprite } from 'pixi.js';
 
 class Preloader extends KnScene {
 	public loadingTypes: Map<string, Function>;
 	public ticker: PIXI.Ticker;
 	public loadingGp: PIXI.Container;
 	public autoDisplay: Boolean;
-	public maskClip: KnGraphics;
+	public anmi: AnimatedSprite;
 	public loadingText: PIXI.Text;
+	public loadingbar: KnGraphics;
 	defaultGui: string;
 	bg: PIXI.Sprite;
 	drawStage: KnGraphics;
 	constructor(game: Game, key: string, boot: boolean) {
 		super(game, key, boot);
 		this.game = game;
-		this.resouces = { 'preloader': './assets/data/preloader.json' };
+		this.resouces = {
+			'bg001': './assets/images/bg001.jpg',
+			'run': './assets/data/loadingrun.json'
+		};
 	}
 
 	boot(target: KnScene) {
@@ -49,12 +54,12 @@ class Preloader extends KnScene {
 		this.addChild(tmpText);
 		this.removeChild(tmpText);
 		this.position.set(this.game.config.half_w, this.game.config.half_h);
-		this.bg = this.game.add.image('Preloader_Background0000', this);
+		this.bg = this.game.add.image('bg001', this);
 		this.bg.width = this.game.config.width;
 		this.bg.height = this.game.config.height;
 		this.bg.anchor.set(0.5);
 		this.drawStage = this.game.add.graphics();
-		this.generateBar();
+		this.generateSprite();
 	}
 
 	// 进行游戏资源场景加载
@@ -70,31 +75,41 @@ class Preloader extends KnScene {
 	// progress更新
 	loadingHandler = (e) => {
 		const percent = e.progress.toFixed(0);
+		const distance = percent / 100 - 0.5;
+		this.anmi.x = this.loadingbar.width * distance;
 		this.loadingText.text = `${percent} %`;
-		this.maskClip.y = (percent / 100) * this.maskClip.height;
 	}
 
-	// 进度条加载
-	generateBar() {
-		const outBar = this.game.add.image('Preloader_Back0000', this, [0.5, 0.5]);
-		outBar.scale.set(0.4);
-		const innerBar = this.game.add.image('Preloader_Front0000', this, [0.5, 0.5]);
-		innerBar.scale.set(0.4);
-		innerBar.angle = -90;
-		const maskClip = this.drawStage.generateRect(0x000000, [0, 0, innerBar.height + 2, innerBar.width], !0);
-		maskClip.y = maskClip.height;
-		this.addChild(maskClip);
-		innerBar.mask = maskClip;
-		this.maskClip = maskClip;
+	// 动画加载
+	generateSprite() {
+		const frames = [];
+		for (let i = 1, l = 4; i < l; i++) {
+			const val = i < 5 ? `0${i}` : i;
+			frames.push(this.game.add.texture(`loadingrun_${val}.png`));
+		}
+		this.anmi = this.game.add.animation(frames, 0.24);
+		this.anmi.scale.set(0.25);
+		this.anmi.anchor.set(0.5);
+		this.anmi.play();
+		this.addChild(this.anmi);
+		const startX = -this.game.config.half_w + this.anmi.width;
+		this.anmi.x = startX;
+		this.anmi.y = 100;
+
+		// 绘制加载条
+		this.loadingGp = this.game.add.group('sprite_loading', this);
+		this.loadingbar = this.drawStage.generateRect(0xd10311, [0, 0, this.game.config.half_w + this.anmi.width, 8, 4], !0);
+		this.loadingbar.y = this.anmi.y + this.anmi.height * 0.5 - 14;
+		this.loadingGp.addChild(this.loadingbar);
 
 		// 绘制加载文字
 		this.loadingText = this.game.add.text('0 %', {
 			fontFamily: 'GrilledCheeseBTNToasted',
-			fontSize: '14px',
-			fill: 0x2c92e0
+			fontSize: '12px',
+			fill: 0xffffff
 		}, [0.5, 0.5]);
-		this.loadingText.y = innerBar.y + 10;
-		this.addChild(this.loadingText);
+		this.loadingText.y = this.loadingbar.y;
+		this.loadingGp.addChild(this.loadingText);
 	}
 
 }
