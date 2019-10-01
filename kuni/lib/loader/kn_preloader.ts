@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-09-30 16:02:56
+ * @Last Modified by: kunnisser
+ * @Last Modified time: 2019-10-01 18:42:33
  */
 
 /** 
@@ -26,23 +26,22 @@ class Preloader extends KnScene {
 	constructor(game: Game, key: string, boot: boolean) {
 		super(game, key, boot);
 		this.game = game;
-		this.resouces = {'preloader': './assets/data/preloader.json'};
+		this.resouces = { 'preloader': './assets/data/preloader.json' };
 	}
 
 	boot(target: KnScene) {
 		this.create();
-		target || (target = this.game.sceneManager.scenes[1]);
 		if (target.resouces) {
 			this.loadScene(target.resouces).on('progress', this.loadingHandler).load((loader) => {
 
-			// 资源加载完成，进入目标场景
-			target.isCached = true;
-			target.loader = loader;
+				// 资源加载完成，进入目标场景
+				target.isCached = true;
+				target.loader = loader;
+				this.game.sceneManager.changeScene(this, target);
+			});
+		} else {
 			this.game.sceneManager.changeScene(this, target);
-		});
-	} else {
-		this.game.sceneManager.changeScene(this, target);
-	}
+		}
 	}
 
 	create() {

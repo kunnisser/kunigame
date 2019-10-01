@@ -30,9 +30,10 @@ class KnScene extends Container {
 	}
 
 	// 进入场景
-	enter(target?: KnScene) {
+	enter(target?: KnScene, isFirstLoad?: Boolean) {
 		this.visible = !0;
 		this.boot(target);
+		isFirstLoad || this.game.overlay.entryScene();
 	}
 
 	// 离开场景

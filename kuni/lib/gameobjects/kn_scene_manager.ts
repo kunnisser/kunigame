@@ -20,13 +20,19 @@ class KnSceneManager {
 		if (from) {
 			// 去除特殊的dat.gui
 			from.dat && this.game.gui.remove(from.dat);
-			from.exit();
+			this.game.overlay.leaveScene(() => {
+				from.exit();
+				this.dispatchScene(to);
+				this.game.currentScene = to;
+			});
+		} else {
+			this.dispatchScene(to);
+			this.game.currentScene = to;
 		}
-		this.dispatchScene(to);
-		this.game.currentScene = to;
 	}
 
 	dispatchScene (to: KnScene) {
+		
 		/** 1.目标场景已缓存 
 		 *  2. 若为加载器场景无需重复进入加载器
 		 *  3. 目标场景未缓存进入加载器
@@ -35,9 +41,10 @@ class KnSceneManager {
 			console.log(to.id, '已缓存');
 			to.enter();
 		} else if (to.id === 'global_preloader'){
-			console.log('home加载');
 			this.game.loader.add('preloader', to.resouces['preloader']).load(() => {
-				to.enter();
+				console.log('首次home加载');
+				const homeScene = this.game.sceneManager.scenes[1];
+				to.enter(homeScene, !0);
 			})
 		} else {
 			// 首次进入场景且场景有资源需要加载，则会自动进入preloader场景
