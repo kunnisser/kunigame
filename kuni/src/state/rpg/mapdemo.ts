@@ -68,9 +68,12 @@ class MapDemo extends KnScene {
       this.tilemap.pivot.set(0, 0);
       this.addChild(this.tilemap);
       this.initialBoy();
-      const layer = this.drawStage.generateRect(0x1099bb, [0, 0, this.game.camera.width, this.game.camera.height], !1);
+      const layer: any = this.drawStage.generateRect(0x1099bb, [0, 0, this.game.camera.width, this.game.camera.height], !1);
       layer.interactive = true;
+      layer._events.pointerdown = [];
       this.tilemap.addChild(layer);
+
+      // 生成tween的时间线
       this.boy.timeline = this.game.add.tweenline();
       this.boy.paths = [];
 
@@ -85,11 +88,9 @@ class MapDemo extends KnScene {
           D: 0,
           prev: null
         };
-
         const end = {
           pointer: this.transformPointer(pos.x, pos.y, tileWidth)
         };
-        
         this.boy.step = 0;
 
         // 之前的路径惯性续行(当首次tween没有结束，goingpointer还生成，则使用后者)

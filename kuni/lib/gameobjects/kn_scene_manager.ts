@@ -53,6 +53,7 @@ class KnSceneManager {
 				to.enter(homeScene, !0);
 			})
 		} else {
+			
 			// 首次进入场景且场景有资源需要加载，则会自动进入preloader场景
 			console.log('首次进入', to.id);
 			this.game.preloader.enter(to);
