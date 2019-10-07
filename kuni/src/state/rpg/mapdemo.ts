@@ -89,20 +89,24 @@ class MapDemo extends KnScene {
         const end = {
           pointer: this.transformPointer(pos.x, pos.y, tileWidth)
         };
+        
+        this.boy.step = 0;
+
+        // 之前的路径惯性续行(当首次tween没有结束，goingpointer还生成，则使用后者)
+        if (this.boy.paths.length) {
+          start.pointer = this.boy['goingPointer'] || this.boy.paths[this.boy.step].pointer;
+        }
 
         // 点击障碍物无法移动或NPC自身
         if (this.isobstacle(end.pointer) || this.isPointerOverlap(start, end)) {
+          this.boy.paths = [];
           return;
         }
 
         // 設置路徑
-        if (this.boy.paths.length) {
-          start.pointer = this.boy['goingPointer'];
-        }
         this.boy.paths = this.astar(start, end);
         this.boy.start = start;
         this.boy.end = end;
-        this.boy.step = 0;
       });
 
       // 幀刷新
@@ -118,27 +122,32 @@ class MapDemo extends KnScene {
   roleRunning(role: Role, tileWidth: number, tileHeight: number) {
 
     // 每一格方向判断
-    this.setRolesDirect(this.boy, role.start.pointer, role.paths[this.boy.step].pointer);
-    const pointer = role.paths[this.boy.step].pointer;
-    this.boy['timeline'].clear();
-    this.boy['timeline'].to(this.boy, 0.25, {
+    const pointer = role.paths[role.step].pointer;
+    this.setRolesDirect(role, role.start.pointer, pointer);
+    
+    // 将要去的路径作为参考路径用来做下一次方向判断
+    role.start.pointer = pointer;
+    role['timeline'].clear();
+    role['timeline'].to(role, 0.25, {
       x: (pointer[0] + 0.5) * tileWidth,
       y: (pointer[1] + 0.5) * tileHeight,
-      ease: this.boy['timeline'].linear.easeNone
+      ease: role['timeline'].linear.easeNone
     }).call(() => {
-      if (this.boy.step === role.paths.length) {
-        role.paths = [];
-      }
-
       const nextPath = role.paths[this.boy.step] || role.end;
 
       // 更新boy的地图坐标
-      this.boy.pointer = pointer;
-      this.boy['goingPointer'] = nextPath.pointer;
-      this.boy.stop();
-      this.boy.tweening = false;
+      role.pointer = pointer;
+      role['goingPointer'] = nextPath.pointer;
+      role.stop();
+      role.tweening = false;
+
+      // 当行走至路径终点时
+      if (role.step === role.paths.length) {
+        role.paths = [];
+        role['goingPointer'] = null;
+      }
     });
-    this.boy.step += 1;
+    role.step += 1;
   }
 
   cameraUpdate(limitX, limitY) {
@@ -223,7 +232,6 @@ class MapDemo extends KnScene {
     let opens = [], closed = [];
     closed.push(start);
     let cur = start;
-
     // 节点相邻
     if (Math.abs(start.pointer[0] - end.pointer[0]) + Math.abs(start.pointer[1] - end.pointer[1]) === 1) {
       closed.push(end);

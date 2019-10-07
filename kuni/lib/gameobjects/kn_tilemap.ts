@@ -7,6 +7,7 @@ class TileMap extends PIXI['tilemap'].CompositeRectTileLayer{
   public textures: Array<PIXI.Texture>;
   public size: number;
   public mapData: Array<number>;
+  public mapWall: Number; // 为墙体的瓷砖类型
   position: any;
   constructor (zindex: Number, textures: Array<PIXI.Texture>, alias: Object, size: number) {
     super(0, textures);
@@ -15,6 +16,7 @@ class TileMap extends PIXI['tilemap'].CompositeRectTileLayer{
     this.size = size;
     this.mapData = [];
     this.buildTilemap();
+    this.mapWall = 3;
     return this;
   }
 
@@ -29,6 +31,22 @@ class TileMap extends PIXI['tilemap'].CompositeRectTileLayer{
       this.addFrame(textures[md - 1], this.size * (index % this.size), this.size * ~~(index / this.size));
       index += 1;
     }
+  }
+
+  // 获取多维地图数据
+  public generateMulteMapData () {
+
+  }
+
+  // 细胞自动机
+  public randomMapGenerator () {
+    for (let [index, md] of this.mapData.entries()) {
+      this.checkNeighborWalls(index, md);
+    }
+  }
+
+  public checkNeighborWalls (index: number, md: number) {
+
   }
 }
 

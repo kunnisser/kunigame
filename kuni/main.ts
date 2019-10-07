@@ -1,7 +1,7 @@
 import Game from 'ts@/lib/core';
 import Home from 'ts@/src/state/home';
 import Loading from 'ts@/src/state/loading';
-import MapDemo from 'ts@/src/state/mapdemo';
+import MapDemo from 'ts@/src/state/rpg/mapdemo';
 import { GuiScene } from 'ts@/lib/utils/gui';
 import KnTranstion from 'ts@/lib/gameui/kn_transtion';
 
