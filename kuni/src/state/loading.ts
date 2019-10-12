@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-01 23:20:42
+ * @Last Modified time: 2019-10-12 23:19:09
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';

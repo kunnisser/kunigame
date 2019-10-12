@@ -14,10 +14,6 @@ const home = game.sceneManager.addScene('home', Home);
 const loading = game.sceneManager.addScene('loading', Loading);
 const map = game.sceneManager.addScene('mapdemo', MapDemo);
 
-// 定义全局Mask
-game.overlay = new KnTranstion(game);
-game.sceneManager.changeScene(null, game.preloader);
-
 const dat = new GuiScene();
 const gui = game.gui;
 const folder = gui.addFolder('场景');
@@ -33,3 +29,7 @@ selector.onChange((v: string) => {
 	currentScene = game.currentScene;
 	loadingTypes.get(v)();
 });
+
+// 定义全局Mask
+game.overlay = new KnTranstion(game);
+game.sceneManager.changeScene(null, game.preloader);

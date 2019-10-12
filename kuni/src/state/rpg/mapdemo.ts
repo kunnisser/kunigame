@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-12 22:34:29
+ * @Last Modified time: 2019-10-12 23:29:02
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -48,77 +48,91 @@ class MapDemo extends KnScene {
     };
   }
 
-  boot() {
-      const staticWorldTexture = this.loader.resources.world.texture;
-      let textures = [];
-
-      // 定义瓷砖尺寸
-      const tiledSizeX = 32;
-      const tiledSizeY = 32;
-      const tileWidth = 32, tileHeight = 32;
-      const limitX = tiledSizeX * tileWidth - (this.game.camera.width / this.game.world.scale.x),
-        limitY = tiledSizeY * tileHeight - (this.game.camera.height / this.game.world.scale.y);
-      for (var i = 0, l = 4; i < l; i++) {
-        const rectangle = new Rectangle(i * tileWidth, 0, tileWidth, tileHeight);
-        const texture = staticWorldTexture.clone();
-        texture.frame = rectangle;
-        textures.push(texture);
+  dev() {
+    if (this.game.gui.__controllers[0] && this.game.gui.__controllers[0].property === '随机生成地牢') {
+      return;
+    }
+    const dat = {
+      '随机生成地牢': () => {
+        this.boot();
       }
-      const aliasData = this.loader.resources.worldmap.data;
-      this.tilemap = new TileMap(0, textures, aliasData, {tiledSizeX, tiledSizeY, tileWidth, tileHeight});
-      this.tilemap.pivot.set(0, 0);
-      this.addChild(this.tilemap);
-      this.initialBoy();
-      const layer: any = this.drawStage.generateRect(0x1099bb, [0, 0, this.game.camera.width, this.game.camera.height], !1);
-      layer.interactive = true;
-      layer._events.pointerdown = [];
-      this.tilemap.addChild(layer);
+    };
+    this.dat = this.game.gui.add(dat, '随机生成地牢');
+  }
 
-      // 生成tween的时间线
-      this.boy.timeline = this.game.add.tweenline();
-      this.boy.paths = [];
+  boot() {
+    this.dev();
+    this.reset();
+    const staticWorldTexture = this.loader.resources.world.texture;
+    let textures = [];
 
-      // 监听点击
-      layer.on('pointerdown', (e) => {
-        const pos = e.data.global;
-        const start: Path = {
-          pointer: this.boy['pointer'],
-          F: 0,
-          G: 0,
-          H: 0,
-          D: 0,
-          prev: null
-        };
-        const end = {
-          pointer: this.transformPointer(pos.x, pos.y, tileWidth)
-        };
-        this.boy.step = 0;
+    // 定义瓷砖尺寸
+    const tiledSizeX = 32;
+    const tiledSizeY = 32;
+    const tileWidth = 32, tileHeight = 32;
+    const limitX = tiledSizeX * tileWidth - (this.game.camera.width / this.game.world.scale.x),
+      limitY = tiledSizeY * tileHeight - (this.game.camera.height / this.game.world.scale.y);
+    for (var i = 0, l = 4; i < l; i++) {
+      const rectangle = new Rectangle(i * tileWidth, 0, tileWidth, tileHeight);
+      const texture = staticWorldTexture.clone();
+      texture.frame = rectangle;
+      textures.push(texture);
+    }
+    const aliasData = this.loader.resources.worldmap.data;
+    this.tilemap = new TileMap(0, textures, aliasData, { tiledSizeX, tiledSizeY, tileWidth, tileHeight });
+    this.tilemap.pivot.set(0, 0);
+    this.addChild(this.tilemap);
+    this.initialBoy();
+    const layer: any = this.drawStage.generateRect(0x1099bb, [0, 0, this.game.camera.width, this.game.camera.height], !1);
+    layer.interactive = true;
+    layer._events.pointerdown = [];
+    this.tilemap.addChild(layer);
 
-        // 之前的路径惯性续行(当首次tween没有结束，goingpointer还生成，则使用后者)
-        if (this.boy.paths.length) {
-          start.pointer = this.boy['goingPointer'] || this.boy.paths[this.boy.step].pointer;
-        }
+    // 生成tween的时间线
+    this.boy.timeline = this.game.add.tweenline();
+    this.boy.paths = [];
 
-        // 点击障碍物无法移动或NPC自身
-        if (this.isobstacle(end.pointer) || this.isPointerOverlap(start, end)) {
-          this.boy.paths = [];
-          return;
-        }
-
-        // 設置路徑
-        this.boy.paths = this.astar(start, end);
-        this.boy.start = start;
-        this.boy.end = end;
-      });
-
-      // 幀刷新
-      this.update = () => {
-        if (!this.boy.tweening && this.boy.paths.length) {
-          this.boy.tweening = true;
-          this.roleRunning(this.boy, tileWidth, tileHeight);
-        }
-        this.cameraUpdate(limitX, limitY);
+    // 监听点击
+    layer.on('pointerdown', (e) => {
+      const pos = e.data.global;
+      const start: Path = {
+        pointer: this.boy['pointer'],
+        F: 0,
+        G: 0,
+        H: 0,
+        D: 0,
+        prev: null
       };
+      const end = {
+        pointer: this.transformPointer(pos.x, pos.y, tileWidth)
+      };
+      this.boy.step = 0;
+
+      // 之前的路径惯性续行(当首次tween没有结束，goingpointer还生成，则使用后者)
+      if (this.boy.paths.length) {
+        start.pointer = this.boy['goingPointer'] || this.boy.paths[this.boy.step].pointer;
+      }
+
+      // 点击障碍物无法移动或NPC自身
+      if (this.isobstacle(end.pointer) || this.isPointerOverlap(start, end)) {
+        this.boy.paths = [];
+        return;
+      }
+
+      // 設置路徑
+      this.boy.paths = this.astar(start, end);
+      this.boy.start = start;
+      this.boy.end = end;
+    });
+
+    // 幀刷新
+    this.update = () => {
+      if (!this.boy.tweening && this.boy.paths.length) {
+        this.boy.tweening = true;
+        this.roleRunning(this.boy, tileWidth, tileHeight);
+      }
+      this.cameraUpdate(limitX, limitY);
+    };
   }
 
   roleRunning(role: Role, tileWidth: number, tileHeight: number) {
@@ -126,7 +140,7 @@ class MapDemo extends KnScene {
     // 每一格方向判断
     const pointer = role.paths[role.step].pointer;
     this.setRolesDirect(role, role.start.pointer, pointer);
-    
+
     // 将要去的路径作为参考路径用来做下一次方向判断
     role.start.pointer = pointer;
     role['timeline'].clear();
@@ -153,7 +167,7 @@ class MapDemo extends KnScene {
   }
 
   cameraUpdate(limitX, limitY) {
-    
+
     // 镜头更新
     const globalOffsetX = this.boy.x - this.game.camera.half_w / this.game.world.scale.x;
     const globalOffsetY = this.boy.y - this.game.camera.half_h / this.game.world.scale.y;
@@ -375,6 +389,20 @@ class MapDemo extends KnScene {
   isobstacle(pointer: Array<number>) {
     const index = pointer[0] + this.tilemap.size_x * pointer[1];
     return this.tilemap.mapData[index] !== this.road;
+  }
+
+  reset() {
+    if (this.children.length > 1) {
+
+      // 清除grahpics 画布
+      this.drawStage.clear();
+
+      // // 清空对象MASK
+      // this.children[2] && (this.children[2].mask = null);
+
+      // 清除group子对象
+      this.removeChildren(1, this.children.length);
+    }
   }
 }
 
