@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-09-30 16:27:04
+ * @Last Modified by: kunnisser
+ * @Last Modified time: 2019-10-12 22:34:29
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -53,18 +53,19 @@ class MapDemo extends KnScene {
       let textures = [];
 
       // 定义瓷砖尺寸
-      const tiledSize = 32;
+      const tiledSizeX = 32;
+      const tiledSizeY = 32;
       const tileWidth = 32, tileHeight = 32;
-      const limitX = tiledSize * tileWidth - (this.game.camera.width / this.game.world.scale.x),
-        limitY = tiledSize * tileHeight - (this.game.camera.height / this.game.world.scale.y);
+      const limitX = tiledSizeX * tileWidth - (this.game.camera.width / this.game.world.scale.x),
+        limitY = tiledSizeY * tileHeight - (this.game.camera.height / this.game.world.scale.y);
       for (var i = 0, l = 4; i < l; i++) {
-        const rectangle = new Rectangle(i * tiledSize, 0, tiledSize, tiledSize);
+        const rectangle = new Rectangle(i * tileWidth, 0, tileWidth, tileHeight);
         const texture = staticWorldTexture.clone();
         texture.frame = rectangle;
         textures.push(texture);
       }
       const aliasData = this.loader.resources.worldmap.data;
-      this.tilemap = new TileMap(0, textures, aliasData, tiledSize);
+      this.tilemap = new TileMap(0, textures, aliasData, {tiledSizeX, tiledSizeY, tileWidth, tileHeight});
       this.tilemap.pivot.set(0, 0);
       this.addChild(this.tilemap);
       this.initialBoy();
@@ -188,11 +189,11 @@ class MapDemo extends KnScene {
     this.boy = this.game.add.animation(frames.down, 0.2);
     this.boy.width = 24;
     this.boy.height = 32;
-    this.boy.position.set(144, 80);
     this.boy.anchor.set(0.5);
 
     // 设定人物初始坐标
-    this.boy['pointer'] = [4, 2];
+    this.boy['pointer'] = [16, 16];
+    this.boy.position.set(32 * this.boy.pointer[0] + 16, 32 * this.boy.pointer[1] + 16);
     this.addChild(this.boy);
     this.boy['frames'] = frames;
 
@@ -249,7 +250,7 @@ class MapDemo extends KnScene {
     while (findFlag && cur) {
 
       // 获取当前
-      let rounds = this.getRound(this.tilemap.size, cur);
+      let rounds = this.getRound(this.tilemap.size_x, this.tilemap.size_y, cur);
       for (let rd of rounds) {
 
         // 存在于open,close数组以及元素为障碍物则排除。
@@ -328,7 +329,7 @@ class MapDemo extends KnScene {
   }
 
   // 获取周边OPEN
-  getRound(size: number, cur: Path) {
+  getRound(size_x: number, size_y: number, cur: Path) {
     let rounds = [];
 
     // 向上检索
@@ -342,12 +343,12 @@ class MapDemo extends KnScene {
     }
 
     // 向下检索
-    if (cur.pointer[1] + 1 < size) {
+    if (cur.pointer[1] + 1 < size_y) {
       rounds.push([cur.pointer[0], cur.pointer[1] + 1]);
     }
 
     // 向右检索
-    if (cur.pointer[0] + 1 < size) {
+    if (cur.pointer[0] + 1 < size_x) {
       rounds.push([cur.pointer[0] + 1, cur.pointer[1]]);
     }
 
@@ -372,7 +373,7 @@ class MapDemo extends KnScene {
 
   // 判断是否为障碍
   isobstacle(pointer: Array<number>) {
-    const index = pointer[0] + this.tilemap.size * pointer[1];
+    const index = pointer[0] + this.tilemap.size_x * pointer[1];
     return this.tilemap.mapData[index] !== this.road;
   }
 }
