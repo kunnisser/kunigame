@@ -30,7 +30,7 @@ class Preloader extends KnScene {
 		this.game = game;
 		this.resouces = {
 			'bg001': './assets/images/bg001.jpg',
-			'run': './assets/data/loadingrun.json'
+			'run': './assets/data/loadingrun.json',
 		};
 	}
 

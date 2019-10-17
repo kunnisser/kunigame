@@ -8,6 +8,7 @@ import { debounce } from 'ts@/lib/utils/common';
 import KnScene from './gameobjects/kn_scene';
 import KnPreloader from 'ts@/lib/loader/kn_preloader';
 import KnTranstion from 'ts@/lib/gameui/kn_transtion';
+import KnCursor from './gameui/kn_cursor';
 
 interface EnterProps {
 	width: number,
@@ -41,6 +42,7 @@ export default class Game {
 	public add: KnFactory;
 	public currentScene: KnScene; // 当前场景
 	public overlay: KnTranstion; // 转场遮罩
+	public cursor: KnCursor; // 游戏光标
 	constructor(config: EnterProps) {
 		const view = document.getElementById('view');
 		this.view = view;
@@ -88,6 +90,9 @@ export default class Game {
 
 		// 初始化渲染器
 		this.app.renderer.render(this.world);
+
+		// 初始化光标
+		this.cursor = new KnCursor(this, this.world);
 
 		// 页面尺寸改变
 		window.onresize = () => {

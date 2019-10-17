@@ -49,8 +49,8 @@ class KnFactory {
 		return anim;
 	}
 
-	emitter(quality: number, key: string) {
-		return new KnEmitter(quality, key);
+	emitter(game: Game, quality: number, key: string) {
+		return new KnEmitter(game, quality, key);
 	}
 	// 添加graphics实例
 	graphics () {

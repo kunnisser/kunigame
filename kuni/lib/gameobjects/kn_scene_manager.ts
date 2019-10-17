@@ -49,7 +49,7 @@ class KnSceneManager {
 			}
 			globalLoader.load(() => {
 				console.log('首次home加载');
-				const homeScene = this.game.sceneManager.scenes[1];
+				const homeScene = this.game.sceneManager.scenes[4];
 				to.enter(homeScene, !0);
 			})
 		} else {
