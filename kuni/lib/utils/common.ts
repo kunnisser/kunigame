@@ -10,6 +10,13 @@ const debounce = {
 	}
 };
 
+const math: IMath = {
+	rdirect () {
+		return Math.random() * 100 < 50 ? 1 : -1;
+	}
+}
+
 export {
-	debounce
+	debounce,
+	math
 }

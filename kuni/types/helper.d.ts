@@ -1,5 +1,4 @@
-// declare function Stats (): any;
 
-// declare module "stats-js" {
-//     export = Stats;
-// }
+interface IMath {
+	rdirect: Function
+}

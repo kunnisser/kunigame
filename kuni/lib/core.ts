@@ -4,7 +4,7 @@ import KnFactory from 'ts@/lib/gameobjects/kn_factory';
 import KnLoader from 'ts@/lib/loader/kn_loader';
 import KnSceneManager from 'ts@/lib/gameobjects/kn_scene_manager';
 import { Application, settings, SCALE_MODES } from 'pixi.js';
-import { debounce } from 'ts@/lib/utils/common';
+import { debounce, math } from 'ts@/lib/utils/common';
 import KnScene from './gameobjects/kn_scene';
 import KnPreloader from 'ts@/lib/loader/kn_preloader';
 import KnTranstion from 'ts@/lib/gameui/kn_transtion';
@@ -23,6 +23,7 @@ export default class Game {
 	public dpr: number;
 	public preloader: KnScene;
 	public ticker: PIXI.Ticker;
+	public math: IMath;
 	public camera: {
 		width?: number,
 		height?: number,
@@ -78,6 +79,9 @@ export default class Game {
 
 		// 初始化画布
 		this.world = this.app.stage;
+
+		// 载入相关math方法
+		this.math = math;
 
 		// 适配幕布
 		this.resizeStage(view, config);

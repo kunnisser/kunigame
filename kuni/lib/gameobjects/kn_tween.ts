@@ -1,4 +1,4 @@
-import {TimelineLite, Linear, Power2 } from 'gsap';
+import {TimelineLite, TweenMax, Linear, Power2 } from 'gsap';
 
 class knTweenLine extends TimelineLite {
     public linear: Function;
@@ -8,7 +8,17 @@ class knTweenLine extends TimelineLite {
         this.linear = Linear;
         this.cubic = Power2;
     }
-
 }
 
-export {knTweenLine};
+class KnTween {
+    public linear: Function;
+    public cubic: Function;   
+    public instance: TweenMax;
+    constructor () {
+        this.linear = Linear;
+        this.cubic = Power2;
+        this.instance = TweenMax;
+    }
+}
+
+export {knTweenLine, KnTween};
