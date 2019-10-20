@@ -88,6 +88,8 @@ class CursorDemo extends KnScene {
   addMark() {
     this.mark = this.game.add.image('mark', this, [0.5, 0.5]);
     this.mark.visible = !1;
+    this.mark.width = 32 / this.game.world.scale.x;
+    this.mark.height = 32 / this.game.world.scale.x;
   }
 
   addWeapon() {
@@ -125,7 +127,7 @@ class CursorDemo extends KnScene {
     this.emitter.throtting -= 2;
     if (this.emitter.throtting < 0) {
       const particle = this.emitter.shoot();
-      particle.x = this.weapon.x + this.game.math.rdirect() * Math.random() * this.weapon.width * 10;
+      particle.x = this.weapon.x + this.game.math.rdirect() * ~~(Math.random() * 10) * this.weapon.width ;
       particle.y = this.weapon.y;
       this.tween.instance.to(particle, 1.6, {
         y: particle.y + this.game.math.rdirect() * Math.random() * this.weapon.height,

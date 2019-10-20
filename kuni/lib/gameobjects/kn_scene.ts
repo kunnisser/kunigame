@@ -32,7 +32,7 @@ class KnScene extends Container {
 	// 进入场景
 	enter(target?: KnScene, isFirstLoad?: Boolean) {
 		this.visible = !0;
-		this.boot(target);
+		this.boot(target, isFirstLoad);
 		isFirstLoad || this.game.overlay.entryScene();
 	}
 
@@ -47,7 +47,7 @@ class KnScene extends Container {
 	create() {}
 
 	// 激活
-	boot(target?: KnScene) { }
+	boot(target?: KnScene, isFirstLoad?: Boolean) { }
 
 	// 刷新场景
 	update(delta: number, options?: object) {}

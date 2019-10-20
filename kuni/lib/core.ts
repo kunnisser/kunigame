@@ -160,11 +160,10 @@ export default class Game {
 		this.ticker.add((delta) => {
 			this.stats.begin();
 			for (let scene of this.sceneManager.scenes) {
-				scene.visible && scene.update(delta);
+				scene.visible && scene.update && scene.update(delta);
 			}
-			this.app.renderer.render(this.world);
 			this.stats.end();
 		});
-		this.ticker.start();
+		this.ticker.autoStart = false;
 	}
 }

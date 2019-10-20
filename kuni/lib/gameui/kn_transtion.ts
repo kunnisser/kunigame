@@ -44,25 +44,22 @@ class KnTransition {
 	}
 
 	leaveScene(leaveCb: Function) {
-		const leaveTween: any = this.game.add.tweenline({
-			onComplete: () => {
-				leaveCb();
-				console.log('step1');
-			}
-		});
+		const leaveTween: any = this.game.add.tween();
 		this.overlay.visible = !0;
-		leaveTween.to(this.overlay, 0.64, {
-			alpha: 1,
-			ease: leaveTween.cubic.easeOut
-		});
+		setTimeout(() => {
+			leaveTween.instance.to(this.overlay, 0.34, {
+				alpha: 1,
+				ease: leaveTween.cubic.easeOut,
+				onComplete: () => {
+					leaveCb();
+				}
+				}
+			);
+		}, 0);
 	}
 
 	entryScene() {
-		const entryTween: any = this.game.add.tweenline({
-			onComplete: () => {
-				this.maskReset();
-			}
-		});
+		const entryTween: any = this.game.add.tween();
 		this.overlayReset();
 		this.mask.visible = !0;
 		this.game.world.mask = this.mask;
@@ -70,13 +67,18 @@ class KnTransition {
 		// 重置mask尺寸
 		this.renderMask(0);
 		const progress = {x: 0};
-		entryTween.to(progress, 0.64, {
-			x: this.game.config.width,
-			ease: entryTween.cubic.easeIn,
-			onUpdate: () => {
-				this.renderMask(progress.x);
-			}
-		});
+		setTimeout(() => {
+			entryTween.instance.to(progress, 0.34, {
+				x: this.game.config.width,
+				ease: entryTween.cubic.easeIn,
+				onUpdate: () => {
+					this.renderMask(progress.x);
+				},
+				onComplete: () => {
+					this.maskReset();
+				}
+			});
+		}, 0);
 	}
 }
 

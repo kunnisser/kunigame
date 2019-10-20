@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-17 23:46:59 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-19 21:26:27
+ * @Last Modified time: 2019-10-20 17:17:22
  */
 
 /* 粒子发射器类 */
@@ -24,7 +24,6 @@ class KnEmitter extends ParticleContainer {
 	public tween: any; // 动画对象
 	static throtting = 4; // 频率常量
 	public shooting = !1; // 默认粒子发射状态关闭
-	public particlePool: Array<Sprite> = []; // 粒子对象池
 	public constructor(game: Game, quality: number, key: string) {
 		super(quality, ParticleConfig);
 		this.game = game;
@@ -41,10 +40,7 @@ class KnEmitter extends ParticleContainer {
 			sprite.anchor.set(0.5);
 			sprite.scale.set(0.5);
 
-			// 不要把spirte 放到组里， 建一个数组维护， sprite 的初始xy和emitter相同就行
-			this.particlePool.push(sprite);
-
-			// 添加到父层组中
+			// 添加到组中
 			this.addChild(sprite);
 			if (quality === 1) {
 				return sprite;
@@ -55,7 +51,7 @@ class KnEmitter extends ParticleContainer {
 
 	public getParticle() {
 		let bootParticle: any = null;
-		bootParticle = this.particlePool.find((particle) => {
+		bootParticle = this.children.find((particle) => {
 			return particle.alpha === 0;
 		});
 		return bootParticle || this.create(1, this.key);

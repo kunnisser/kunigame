@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-01 23:45:55
+ * @Last Modified time: 2019-10-20 16:28:39
  */
 
 /** 
@@ -34,7 +34,7 @@ class Preloader extends KnScene {
 		};
 	}
 
-	boot(target: KnScene) {
+	boot(target: KnScene, isFirstLoad?: Boolean) {
 		this.create();
 		if (target.resouces) {
 			this.loadScene(target.resouces).on('progress', this.loadingHandler).load((loader) => {
