@@ -60,7 +60,7 @@ export default class Game {
 		this.app = new Application({
 			width: this.config.width,
 			height: this.config.height,
-			antialias: !0,
+			antialias: !1,
 			transparent: !0,
 			resolution: this.dpr
 		});

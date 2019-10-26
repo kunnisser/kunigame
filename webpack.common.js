@@ -23,7 +23,7 @@ module.exports = {
 	resolve: {
 		extensions: ['.js', '.json', '.ts'],
 		alias: {
-			'@':  path.join(__dirname, '/kuni')
+			'@': path.join(__dirname, '/kuni')
 		},
 		plugins: [new TsconfigPathsPlugin({
 			configFile: 'tsconfig.json'
@@ -71,8 +71,8 @@ module.exports = {
 						name: 'assets/data/[name].[ext]'
 					}
 				}
-			}
-						// {
+			},
+			// {
 			// 	test: /phaser-arcade-physics\.js$/,
 			// 	use: {
 			// 		loader: 'expose-loader?Phaser'

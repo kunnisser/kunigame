@@ -1,6 +1,7 @@
 import KnScene from "ts@/lib/gameobjects/kn_scene";
 import Game from "ts@/lib/core";
 import KnEmitter from "ts@/lib/gameobjects/kn_emitter";
+import { GodrayFilter } from 'ts@/src/filter/godray/index';
 
 class Environment extends KnScene {
   public game: Game;
@@ -14,7 +15,10 @@ class Environment extends KnScene {
     this.resouces = {
       'rain': './assets/images/rain.png',
       'snow': './assets/images/snow.png',
-      'envBg': './assets/images/env_bg.png'
+      'envBg': './assets/images/env_bg.png',
+      'perlin': './assets/shader/frag/perlin.frag',
+      'godray': './assets/shader/frag/godray.frag',
+      'vertex': './assets/shader/vertex/default.vert'
     }
   }
 
@@ -34,7 +38,7 @@ class Environment extends KnScene {
     const dat = {
       '环境效果': '下雨'
     },
-      datArr = ['下雨', '下雪'];
+      datArr = ['下雨', '下雪', '阳光'];
     this.dat = this.game.gui.add(dat, '环境效果', datArr);
     this.dat.onChange((v: string) => {
       this.shootType = datArr.indexOf(v) + 1;
@@ -42,14 +46,29 @@ class Environment extends KnScene {
     });
   }
 
-  toggleEnv(type) {
-    this.emitter.destroy();
-    if (type === 1) {
-      this.generateRains();
-    } else {
-      this.generateSnows();
+  toggleEnv(type: number) {
+    this.emitter && this.emitter.destroy();
+    this.filters = [];
+    switch (type) {
+      case 1:
+        this.generateRains();
+        break;
+      case 2:
+        this.generateSnows();
+        break;
+      case 3:
+        this.addFilter();
+        break;
+      default:
+        this.generateRains();
+        break;
     }
-  } 
+  }
+
+  addFilter() {
+    this.emitter = null;
+    this.filters = [new GodrayFilter(this.loader)];
+  }
 
   addBackground() {
     const bg = this.game.add.image('envBg', this);
@@ -75,7 +94,7 @@ class Environment extends KnScene {
     this.emitter.throtting -= 2;
     if (this.emitter.throtting < 0) {
       const particle = this.emitter.shoot();
-      particle.x = Math.random() * this.game.config.width ;
+      particle.x = Math.random() * this.game.config.width;
       particle.y = 0;
       this.tween.instance.to(particle, 1.6, {
         x: particle.x + 100,
@@ -91,7 +110,7 @@ class Environment extends KnScene {
     this.emitter.throtting -= 2;
     if (this.emitter.throtting < 0) {
       const particle = this.emitter.shoot();
-      particle.x = Math.random() * this.game.config.width ;
+      particle.x = Math.random() * this.game.config.width;
       particle.y = 0;
       this.tween.instance.to(particle, 2.4, {
         x: particle.x + this.game.math.rdirect() * 100,
@@ -111,6 +130,10 @@ class Environment extends KnScene {
       } else {
         this.rangeShoot_snow();
       }
+    }
+    if (this.filters && this.filters[0]) {
+      this.filters[0]['time'] += 0.01;
+      this.filters[0]['time'] > 10 && (this.filters[0]['time'] = 0);
     }
   }
 }

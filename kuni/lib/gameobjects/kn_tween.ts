@@ -10,10 +10,10 @@ class knTweenLine extends TimelineLite {
     }
 }
 
-class KnTween {
+class KnTween{
     public linear: Function;
     public cubic: Function;   
-    public instance: TweenMax;
+    public instance: any;
     constructor () {
         this.linear = Linear;
         this.cubic = Power2;
