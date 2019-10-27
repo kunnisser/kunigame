@@ -2,6 +2,7 @@ import KnScene from "ts@/lib/gameobjects/kn_scene";
 import Game from "ts@/lib/core";
 import KnEmitter from "ts@/lib/gameobjects/kn_emitter";
 import { GodrayFilter } from 'ts@/src/filter/godray/index';
+import { GlowFilter } from 'ts@/src/filter/glow/index';
 
 class Environment extends KnScene {
   public game: Game;
@@ -16,8 +17,10 @@ class Environment extends KnScene {
       'rain': './assets/images/rain.png',
       'snow': './assets/images/snow.png',
       'envBg': './assets/images/env_bg.png',
+      'staff': './assets/images/titleWeapon_02.png',
       'perlin': './assets/shader/frag/perlin.frag',
       'godray': './assets/shader/frag/godray.frag',
+      'glow': './assets/shader/frag/glow.frag',
       'vertex': './assets/shader/vertex/default.vert'
     }
   }
@@ -25,6 +28,7 @@ class Environment extends KnScene {
   boot() {
     this.tween = this.game.add.tween();
     this.addBackground();
+    this.addStaff();
     this.generateRains();
     this.dev();
     this.game.ticker.start();
@@ -74,6 +78,14 @@ class Environment extends KnScene {
     const bg = this.game.add.image('envBg', this);
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
+  }
+
+  // 添加法杖武器
+  addStaff() {
+    const staff = this.game.add.image('staff', this);
+    staff.scale.set(0.2);
+    staff.position.set(this.game.config.half_w, this.game.config.half_h);
+    staff.filters = [new GlowFilter(this.loader)];
   }
 
   // 粒子加载
@@ -130,10 +142,6 @@ class Environment extends KnScene {
       } else {
         this.rangeShoot_snow();
       }
-    }
-    if (this.filters && this.filters[0]) {
-      this.filters[0]['time'] += 0.01;
-      this.filters[0]['time'] > 10 && (this.filters[0]['time'] = 0);
     }
   }
 }

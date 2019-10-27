@@ -2,13 +2,14 @@
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-12 23:29:02
+ * @Last Modified time: 2019-10-27 22:24:57
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
 import Game from 'ts@/lib/core';
 import TileMap from 'ts@/lib/gameobjects/kn_tilemap';
 import { Rectangle, AnimatedSprite, Ticker } from 'pixi.js';
+import {LightmapFilter} from 'ts@/src/filter/lightmap';
 
 interface Path {
   pointer: Array<number>,
@@ -44,7 +45,9 @@ class MapDemo extends KnScene {
     this.resouces = {
       'worldmap': './assets/data/worldmap.json',
       'world': './assets/images/maptiles.png',
-      'boy': './assets/data/boy.json'
+      'boy': './assets/data/boy.json',
+      'lightmap': './assets/images/lightmap.png',
+      'lightmap_frag': './assets/shader/frag/lightmap.frag',
     };
   }
 
@@ -83,6 +86,11 @@ class MapDemo extends KnScene {
     this.tilemap.pivot.set(0, 0);
     this.addChild(this.tilemap);
     this.initialBoy();
+    
+    // 加入lightmap
+    this.addDarkLight();
+
+    // 定义地图layer用于点击
     const layer: any = this.drawStage.generateRect(0x1099bb, [0, 0, this.game.camera.width, this.game.camera.height], !1);
     layer.interactive = true;
     layer._events.pointerdown = [];
@@ -164,6 +172,10 @@ class MapDemo extends KnScene {
       }
     });
     role.step += 1;
+  }
+
+  addDarkLight() {
+    this.filters = [new LightmapFilter(this.loader)];
   }
 
   cameraUpdate(limitX, limitY) {

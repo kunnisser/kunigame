@@ -1,5 +1,17 @@
-import {Filter, Loader} from 'pixi.js';
-import {Point, DEG_TO_RAD} from 'pixi.js';
+/*
+ * @Author: kunnisser 
+ * @Date: 2019-08-31 15:01:05 
+ * @Last Modified by: kunnisser
+ * @Last Modified time: 2019-10-27 20:46:53
+ */
+
+/*
+*  -- 定义阳光着色器Filter --
+*  @animate: time
+*/
+
+import { Filter, Loader } from 'pixi.js';
+import { Point, DEG_TO_RAD } from 'pixi.js';
 
 class GodrayFilter extends Filter {
     public _angleLight: Point;
@@ -9,14 +21,14 @@ class GodrayFilter extends Filter {
     constructor(loader: Loader) {
         super(loader.resources.vertex.data,
             loader.resources.godray.data.replace('${perlin}',
-            loader.resources.perlin.data),
+                loader.resources.perlin.data),
             {
                 time: 0.0
             });
 
         this.uniforms.dimensions = new Float32Array(2);
 
-       const options = {
+        const options = {
             angle: 30,
             gain: 0.5,
             lacunarity: 2.5,
@@ -34,8 +46,8 @@ class GodrayFilter extends Filter {
         this.time = options.time;
     }
 
-    apply (filterManager, input, output, clear) {
-        const {width, height} = input.filterFrame;
+    apply(filterManager, input, output, clear) {
+        const { width, height } = input.filterFrame;
 
         this.uniforms.light = this.parallel ? this._angleLight : this.center;
 
@@ -43,6 +55,7 @@ class GodrayFilter extends Filter {
         this.uniforms.dimensions[0] = width;
         this.uniforms.dimensions[1] = height;
         this.uniforms.aspect = height / width;
+        this.time += 0.01;
         this.uniforms.time = this.time;
 
         filterManager.applyFilter(this, input, output, clear);
