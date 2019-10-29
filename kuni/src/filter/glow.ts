@@ -2,8 +2,9 @@ import {Filter} from 'pixi.js';
 import {utils} from 'pixi.js';
 
 class GlowFilter extends Filter {
-
-    constructor(loader, distance = 20, outerStrength = 2, innerStrength = 0, color = 0xd10311, quality = 0.1) {
+    public delta: number;
+    public direct: number;
+    constructor(loader, distance = 10, outerStrength = 4, innerStrength = 1, color = 0xd10311, quality = 0.8) {
         super(loader.resources.vertex.data, loader.resources.glow.data
             .replace(/%QUALITY_DIST%/gi, '' + (1 / quality / distance).toFixed(7))
             .replace(/%DIST%/gi, '' + distance.toFixed(7)));
@@ -13,6 +14,17 @@ class GlowFilter extends Filter {
         this.color = color;
         this.outerStrength = outerStrength;
         this.innerStrength = innerStrength;
+        this.delta = 0;
+        this.direct = 1;
+    }
+
+    apply(filterManager, input, output, clear) {
+        this.delta >= 4 && (this.direct = -1);
+        this.delta <= 0 && (this.direct = 1);
+        this.delta += 0.04 * this.direct;
+        this.outerStrength = this.delta;
+        // draw the filter...
+        filterManager.applyFilter(this, input, output, clear);
     }
 
     get color() {

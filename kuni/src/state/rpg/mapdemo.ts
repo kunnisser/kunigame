@@ -2,14 +2,14 @@
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-27 22:24:57
+ * @Last Modified time: 2019-10-28 23:03:59
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
 import Game from 'ts@/lib/core';
 import TileMap from 'ts@/lib/gameobjects/kn_tilemap';
-import { Rectangle, AnimatedSprite, Ticker } from 'pixi.js';
-import {LightmapFilter} from 'ts@/src/filter/lightmap';
+import { Rectangle, AnimatedSprite, Ticker, Sprite } from 'pixi.js';
+// import {LightmapFilter} from 'ts@/src/filter/lightmap';
 
 interface Path {
   pointer: Array<number>,
@@ -35,6 +35,8 @@ class MapDemo extends KnScene {
   public road: Number;
   public boy: Role;
   public ticker: Ticker;
+  public darkCamera: Sprite;
+  public alphaLight: Sprite;
   constructor(game: Game, key: string, boot: boolean) {
     super(game, key, boot);
     this.game = game;
@@ -139,6 +141,7 @@ class MapDemo extends KnScene {
         this.boy.tweening = true;
         this.roleRunning(this.boy, tileWidth, tileHeight);
       }
+      this.alphaLight.position.set(this.boy.x, this.boy.y);
       this.cameraUpdate(limitX, limitY);
     };
   }
@@ -175,7 +178,25 @@ class MapDemo extends KnScene {
   }
 
   addDarkLight() {
-    this.filters = [new LightmapFilter(this.loader)];
+    // this.filters = [new LightmapFilter(this.loader)];
+    // const blackRect = this.game.add.graphics().generateRect(0xffffff, [0, 0, 1, 1]);
+		// this.darkCamera = this.game.add.image(this.game.app.renderer.generateTexture(blackRect, 1, window.devicePixelRatio), this);
+		// this.darkCamera.width = thiss.game.config.width;
+    // this.darkCamera.height = this.game.config.height / 2;
+    // this.darkCamera.blendMode = PIXI.BLEND_MODES.ERASE;
+    const alphaLight = this.game.add.image('lightmap', this, [0.5, 0.5]);
+    alphaLight.position.set(this.boy.x, this.boy.y);
+    alphaLight.scale.set(1, 0.6);
+    this.mask = alphaLight;
+    const tween = this.game.add.tween();
+    tween.instance.to(alphaLight.scale, 0.64, {
+      x: 1.02,
+      y: 0.58,
+      repeat: 1000,
+      ease: tween.cubic.easeOut,
+      yoyo: true,
+    });
+    this.alphaLight = alphaLight;
   }
 
   cameraUpdate(limitX, limitY) {

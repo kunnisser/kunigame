@@ -44,7 +44,7 @@ class Home extends KnScene {
 
   initClouds() {
     this.clouds = [];
-    let limit = 900;
+    let limit = 780;
     const radius = 2;
     const drawStage = this.game.add.graphics();
     while (limit > 0) {
@@ -93,7 +93,7 @@ class Home extends KnScene {
   }
 
   initText() {
-    let currentText = new PIXI.Text("❤️酷尼游戏❤️", {
+    let currentText = new PIXI.Text("❤酷尼游戏", {
       fontFamily: "Arial",
       fontSize: 100,
       fill: 0xffffff,
@@ -123,12 +123,14 @@ class Home extends KnScene {
       }
     }
     this.textPixels.forEach((o, i) => {
-      this.clouds[i]['targetX'] =
-        o['x'] + this.game.config.half_w - currentText.width * 0.5;
-      this.clouds[i]['targetY'] =
-        o['y'] + this.game.config.half_h - currentText.height * 0.5;
-      this.clouds[i]['targetV'] = Math.random() * 0.05 + 0.05;
-      this.clouds[i]['targetA'] = 1;
+      if (this.clouds[i]) {
+        this.clouds[i]['targetX'] =
+          o['x'] + this.game.config.half_w - currentText.width * 0.5;
+        this.clouds[i]['targetY'] =
+          o['y'] + this.game.config.half_h - currentText.height * 0.5;
+        this.clouds[i]['targetV'] = Math.random() * 0.05 + 0.05;
+        this.clouds[i]['targetA'] = 1;
+      }
     });
   }
 
