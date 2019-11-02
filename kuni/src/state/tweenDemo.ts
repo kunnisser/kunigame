@@ -16,6 +16,9 @@ class TweenDemo extends KnScene {
       'staff': './assets/images/titleWeapon_02.png',
       'glow': './assets/shader/frag/glow.frag',
       'vertex': './assets/shader/vertex/default.vert',
+      'pumpkin': './assets/images/pumpkin.png',
+      'cannikin': './assets/images/cannikin.png',
+      'start': './assets/images/start.png'
     }
   }
 
@@ -35,7 +38,7 @@ class TweenDemo extends KnScene {
     const dat = {
       '缓动模式': '均匀'
     },
-      datArr = ['均匀'];
+      datArr = ['均匀', '正弦', '定时弹动', '摇摆'];
     this.dat = this.game.gui.add(dat, '缓动模式', datArr);
     this.dat.onChange((v: string) => {
       this.shootType = datArr.indexOf(v) + 1;
@@ -44,9 +47,22 @@ class TweenDemo extends KnScene {
   }
 
   toggleEnv(type: number) {
-    this.filters = [];
+    this.reset();
     switch (type) {
+      case 1:
+        this.addStaff();
+        break;
+      case 2:
+        this.addPumpkin();
+        break;
+      case 3:
+        this.addCannikin();
+        break;
+      case 4:
+        this.addStart();
+        break;
       default:
+        this.addStaff();
         break;
     }
   }
@@ -57,14 +73,43 @@ class TweenDemo extends KnScene {
     bg.height = this.game.config.height;
   }
 
+  // 居中构建添加
+  addSprite(spritekey: string) {
+    const demo = this.game.add.image(spritekey, this, [0.5, 0.5]);
+    demo.position.set(this.game.config.half_w, this.game.config.half_h);
+    return demo;
+  }
+
   // 添加法杖武器
   addStaff() {
-    const staff = this.game.add.image('staff', this, [0.5, 0.5]);
+    const staff = this.addSprite('staff');
     staff.scale.set(0.2);
-    staff.position.set(this.game.config.half_w, this.game.config.half_h);
     staff.filters = [new GlowFilter(this.loader)];
     staff.angle = 0;
     this.easeTween(staff);
+  }
+
+  // 添加南瓜
+  addPumpkin() {
+    const pumpkin = this.addSprite('pumpkin');
+    pumpkin.filters = [new GlowFilter(this.loader, 0xffffff)];
+    pumpkin.angle = -2;
+    this.sineTween(pumpkin);
+  }
+
+  // 增加木桶
+  addCannikin() {
+    const cannikin = this.addSprite('cannikin');
+    this.bounceTween(cannikin);
+    this.fallingTween(cannikin);
+  }
+
+  // 增加开始按钮
+  addStart() {
+    const start = this.game.add.button('start', 'cannikin', this, [0.5, 0.5]);
+    start.position.set(this.game.config.half_w, this.game.config.half_h);
+    start.scale.set(0.36);
+    this.angleTween(start);
   }
 
   easeTween(staff: Sprite) {
@@ -75,6 +120,79 @@ class TweenDemo extends KnScene {
       repeat: -1,
       yoyo: true
     });
+  }
+
+  fallingTween(sprite: Sprite) {
+    const tween: any = this.game.add.tween();
+    tween.instance.to(sprite, 1, {
+      y: sprite.y + 100,
+      ease: tween.bounce.easeOut
+    });
+  }
+
+  sineTween(pumpkin: Sprite) {
+    const tween: any = this.game.add.tween();
+    tween.instance.to(pumpkin.scale, 0.5, {
+      y: 0.95,
+      ease: tween.sine.easeInOut,
+      repeat: -1,
+      yoyo: true
+    });
+    tween.instance.to(pumpkin, 1, {
+      angle: Math.abs(pumpkin.angle),
+      ease: tween.sine.easeInOut,
+      repeat: -1,
+      yoyo: true
+    });
+  }
+
+  bounceTween(cannikin: Sprite) {
+    const tween: any = this.game.add.tween();
+    const test = tween.instance.to(cannikin.scale, 0.16, {
+      delay: 1.2,
+      y: 0.95,
+      x: 1.15,
+      ease: tween.cubic.easeInOut,
+      repeat: 3,
+      yoyo: true,
+      onComplete: () => {
+        test.restart(true);
+      }
+    })
+  }
+
+  angleTween(start: Sprite) {
+    const tween: any = this.game.add.tween();
+    const angle = -8;
+    start.angle = 0;
+    const angleTween = tween.instance.to(start, 0.16, 
+    {
+      delay: 1.2,
+      angle: Math.abs(angle),
+      ease: tween.sine.easeInOut,
+      startAt: {
+        angle: angle
+      },
+      repeat: 2,
+      yoyo: true,
+      onComplete: () => {
+        tween.instance.to(start, 0.16, {
+          angle: 0,
+          ease: tween.sine.easeInOut,
+          onComplete: () => {
+            angleTween.restart(true);
+          }
+        });
+      }
+    });
+  }
+
+  reset() {
+    if (this.children.length > 1) {
+
+      // 清除group子对象
+      this.removeChildren(1, this.children.length);
+    }
   }
 }
 

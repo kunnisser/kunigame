@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-19 22:25:09
+ * @Last Modified time: 2019-11-02 23:43:49
  */
 
 /*
@@ -37,6 +37,34 @@ class KnFactory {
 		align && sprite.anchor.set(...align);
 		parent || (parent = this.game.world);
 		return parent.addChild(sprite), sprite;
+	}
+
+	button = (key: any, switchKey: any, parent: PIXI.Container, align?: Array<number>) => {
+		const btn: any = this.image(key, parent, align);
+		btn.interactive = !0;
+		btn['next'] = null;
+		btn.status = 'on';
+		const [texture, swtichTexture] = [
+			btn.texture, 
+			Object.prototype.toString.call(switchKey) === '[object String]' ? utils.TextureCache[switchKey] : switchKey
+		];
+		btn.on('pointerdown', () => {
+			btn.blendMode = PIXI.BLEND_MODES.ADD;
+		});
+		btn.on('pointerup', (e: Event) => {
+			btn.blendMode = PIXI.BLEND_MODES.NORMAL;
+			if (switchKey) {
+				if (btn.status === 'on') {
+					btn.status = 'off';
+					btn.texture = swtichTexture;
+				} else {
+					btn.status = 'on';
+					btn.texture = texture;
+				}
+			}
+			btn.next && btn.next(e);
+		});
+		return btn;
 	}
 
 	texture(key) {

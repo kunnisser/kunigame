@@ -1,10 +1,10 @@
-import {Filter} from 'pixi.js';
-import {utils} from 'pixi.js';
+import { Filter } from 'pixi.js';
+import { utils } from 'pixi.js';
 
 class GlowFilter extends Filter {
     public delta: number;
     public direct: number;
-    constructor(loader, distance = 10, outerStrength = 4, innerStrength = 1, color = 0xd10311, quality = 0.8) {
+    constructor(loader, color = 0xd10311, outerStrength = 4, innerStrength = 1, quality = 0.6, distance = 10) {
         super(loader.resources.vertex.data, loader.resources.glow.data
             .replace(/%QUALITY_DIST%/gi, '' + (1 / quality / distance).toFixed(7))
             .replace(/%DIST%/gi, '' + distance.toFixed(7)));
@@ -32,7 +32,7 @@ class GlowFilter extends Filter {
     }
 
     set color(value) {
-      utils.hex2rgb(value, this.uniforms.glowColor);
+        utils.hex2rgb(value, this.uniforms.glowColor);
     }
 
     get distance() {
