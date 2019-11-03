@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-11-02 23:43:49
+ * @Last Modified time: 2019-11-03 21:51:45
  */
 
 /*
@@ -49,7 +49,10 @@ class KnFactory {
 			Object.prototype.toString.call(switchKey) === '[object String]' ? utils.TextureCache[switchKey] : switchKey
 		];
 		btn.on('pointerdown', () => {
-			btn.blendMode = PIXI.BLEND_MODES.ADD;
+			btn.blendMode = PIXI.BLEND_MODES.ADD_NPM;
+		});
+		btn.on('pointerupoutside', () => {
+			btn.blendMode = PIXI.BLEND_MODES.NORMAL;
 		});
 		btn.on('pointerup', (e: Event) => {
 			btn.blendMode = PIXI.BLEND_MODES.NORMAL;
@@ -83,6 +86,11 @@ class KnFactory {
 	// 添加graphics实例
 	graphics() {
 		return new KnGraphics(this.game);
+	}
+
+	// 添加点坐标
+	pointer(x: number = 0, y: number = 0) {
+		return new PIXI.Point(x, y);
 	}
 
 	tweenline(vars?: object) {

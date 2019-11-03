@@ -53,7 +53,7 @@ class KnSceneManager {
 			globalLoader.load(() => {
 
 				// 首次加载的to 为 preloader
-				const homeScene = this.game.sceneManager.scenes[6];
+				const homeScene = this.game.sceneManager.scenes[7];
 				
 				// 进入preloader中
 				to.enter(homeScene, !0);

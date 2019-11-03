@@ -1,6 +1,6 @@
 class GuiScene {
 	constructor () {
-		this['场景选择'] = 'tweendemo';
+		this['场景选择'] = 'uidemo';
 	}
 }
 

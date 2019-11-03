@@ -7,6 +7,7 @@ import KnTranstion from 'ts@/lib/gameui/kn_transtion';
 import CursorDemo from 'ts@/src/state/cursorDemo';
 import Environment from 'ts@/src/state/environment';
 import TweenDemo from 'ts@/src/state/tweenDemo';
+import UIDemo from 'ts@/src/state/uiDemo';
 
 const game = new Game({
 	width: 750,
@@ -19,6 +20,7 @@ const map = game.sceneManager.addScene('mapdemo', MapDemo);
 const cursor = game.sceneManager.addScene('cursordemo', CursorDemo);
 const env = game.sceneManager.addScene('envdemo', Environment);
 const tweenDemo = game.sceneManager.addScene('tweendemo', TweenDemo);
+const uiDemo = game.sceneManager.addScene('uidemo', UIDemo);
 
 const dat = new GuiScene();
 const gui = game.gui;
@@ -32,10 +34,11 @@ const loadingTypes = new Map([
 	['mapdemo', () => game.sceneManager.changeScene(currentScene, map)],
 	['cursordemo', () => game.sceneManager.changeScene(currentScene, cursor)],
 	['environment', () => game.sceneManager.changeScene(currentScene, env)],
-	['tweendemo', () => game.sceneManager.changeScene(currentScene, tweenDemo)]
+	['tweendemo', () => game.sceneManager.changeScene(currentScene, tweenDemo)],
+	['uidemo', () => game.sceneManager.changeScene(currentScene, uiDemo)]
 ]);
 
-const selector = folder.add(dat, '场景选择', ['home', 'loading', 'mapdemo', 'cursordemo', 'environment', 'tweendemo']);
+const selector = folder.add(dat, '场景选择', ['home', 'loading', 'mapdemo', 'cursordemo', 'environment', 'tweendemo', 'uidemo']);
 selector.onChange((v: string) => {
 	currentScene = game.currentScene;
 	loadingTypes.get(v)();
