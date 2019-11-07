@@ -24,7 +24,7 @@ class UIDemo extends KnScene {
   boot() {
     this.addBackground();
     this.addRankBtn();
-    this.addTabs();
+    this.addRank();
     this.game.ticker.start();
   }
 
@@ -69,7 +69,7 @@ class UIDemo extends KnScene {
     });
   }
 
-  addTabs() {
+  addRank() {
     this.panel = this.game.add.group('panel', this);
     this.panel.visible = !1;
     this.panel.position.set(this.game.config.half_w, this.game.config.half_h);
@@ -91,6 +91,7 @@ class UIDemo extends KnScene {
     // 定义背景
     const bg = this.game.add.image('panelBg', panelModal, [0.5, 0.5]);
     bg.scale.set(0.36);
+    bg.interactive = !0;
 
     // 定义标题框
     const title = this.game.add.image('panelTitle', panelModal, [0.5, 0.5]);
@@ -189,32 +190,66 @@ class UIDemo extends KnScene {
     };
 
     mask.interactive = !0;
+
+    // 设置惯性
+    let inertial: any = {
+      start: 0,
+      startTime: 0, // 按下的时刻
+      endTime: 0, // 抬起手指的时刻
+      moveTime: 0, // 停止滑动的时刻
+      dumping: !1, // 末尾甩动
+      quicken: !1, // 是否计算距离加速
+      strength: 0 // 滑动力度
+    };
     mask.on('pointerdown', (e) => {
       canMove = !0;
       startPointer.y = e.data.global.y;
+      inertial.start = startPointer.y;
+      inertial.startTime = new Date().getTime();
     });
-    mask.on('pointerup', () => {
+    
+    mask.on('pointerup', (e) => {
       canMove = !1;
+      inertial.endTime = new Date().getTime();
+      inertial.dumping = inertial.endTime - inertial.moveTime < 10;
+      inertial.strength = e.data.global.y - inertial.start;
+      inertial.quicken = inertial.moveTime - inertial.startTime < 100;
+      // const intertialTicker = this.game.add.ticker().add(() => {
+      // distance = 7 / 8 * distance;
+      //   container.y += distance;
+      // });
+      // if (this.isInertance) {
+      //   intertialTicker.start();
+      // } else {
+      //   intertialTicker.stop();
+      // }
       bounceAction();
     });
     mask.on('pointerupoutside', () => {
       canMove = !1;
       bounceAction();
     });
+
+
+    const boundaryCheck = () => {
+      if (container.y > limitMin_Y) {
+        bounceStatus = 'up';
+        container.y >= limitMin_Y + bounceDeep && (container.y = limitMin_Y + bounceDeep, canMove = !1);
+      } else if (container.y < limitMax_Y) {
+        bounceStatus = 'down';
+        container.y <= limitMax_Y - bounceDeep && (container.y = limitMax_Y - bounceDeep, canMove = !1);
+      } else {
+        bounceStatus = null;
+      }
+    }
+
     mask.on('pointermove', (e) => {
       if (canMove && !bouncing) {
-        if (container.y > limitMin_Y) {
-          bounceStatus = 'up';
-          container.y >= limitMin_Y + bounceDeep && (container.y = limitMin_Y + bounceDeep, canMove = !1);
-        } else if (container.y < limitMax_Y) {
-          bounceStatus = 'down';
-          container.y <= limitMax_Y - bounceDeep && (container.y = limitMax_Y - bounceDeep, canMove = !1);
-        } else {
-          bounceStatus = null;
-        }
+        boundaryCheck();
         let offsetY = (e.data.global.y - startPointer.y) / smoothVal;
         startPointer.y = e.data.global.y;
         container.y = container.y + offsetY;
+        inertial.moveTime = new Date().getTime();
       }
     });
   }
