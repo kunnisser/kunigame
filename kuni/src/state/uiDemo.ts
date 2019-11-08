@@ -1,5 +1,6 @@
 import KnScene from "ts@/lib/gameobjects/kn_scene";
 import Game from "ts@/lib/core";
+import {events} from 'ts@/lib/utils/common';
 import { Container, Graphics } from "pixi.js";
 
 class UIDemo extends KnScene {
@@ -69,6 +70,15 @@ class UIDemo extends KnScene {
     });
   }
 
+  /** 弹层容器结构
+   * panel
+   * * floorBg - 全屏遮罩
+   * * panelModal- 弹层部分
+   * ** bg|title|closebtn|titleText - 弹层信息
+   * ** rankWrap -内容层
+   * *** ranklist - 列表内容
+   * *** mask - 滑动蒙版
+  */
   addRank() {
     this.panel = this.game.add.group('panel', this);
     this.panel.visible = !1;
@@ -207,41 +217,56 @@ class UIDemo extends KnScene {
       inertial.start = startPointer.y;
       inertial.startTime = new Date().getTime();
     });
-    
-    mask.on('pointerup', (e) => {
-      canMove = !1;
-      inertial.endTime = new Date().getTime();
-      inertial.dumping = inertial.endTime - inertial.moveTime < 10;
-      inertial.strength = e.data.global.y - inertial.start;
-      inertial.quicken = inertial.moveTime - inertial.startTime < 100;
-      // const intertialTicker = this.game.add.ticker().add(() => {
-      // distance = 7 / 8 * distance;
-      //   container.y += distance;
-      // });
-      // if (this.isInertance) {
-      //   intertialTicker.start();
-      // } else {
-      //   intertialTicker.stop();
-      // }
-      bounceAction();
-    });
-    mask.on('pointerupoutside', () => {
-      canMove = !1;
-      bounceAction();
-    });
 
-
+    // 滚动边界检测
     const boundaryCheck = () => {
       if (container.y > limitMin_Y) {
         bounceStatus = 'up';
+        inertial.dumping = !1;
         container.y >= limitMin_Y + bounceDeep && (container.y = limitMin_Y + bounceDeep, canMove = !1);
       } else if (container.y < limitMax_Y) {
         bounceStatus = 'down';
+        inertial.dumping = !1;
         container.y <= limitMax_Y - bounceDeep && (container.y = limitMax_Y - bounceDeep, canMove = !1);
       } else {
         bounceStatus = null;
       }
     }
+    
+    mask.on('pointerup', (e) => {
+      canMove = !1;
+      inertial.endTime = new Date().getTime();
+      inertial.dumping = inertial.endTime - inertial.moveTime < 50;
+
+      // 如需求根据滑动长度决定惯性的速度，开放下列注释
+      // inertial.quicken = inertial.moveTime - inertial.startTime < 100;
+      inertial.strength = e.data.global.y - inertial.start;
+
+      // 惯性距离
+      let inertialDistance = inertial.strength > 0 ? 30 : -30;
+
+      // 初始化事件状态
+      events.reset();
+      this.update = () => {
+        if (inertial.dumping) {
+          boundaryCheck();
+          inertialDistance = 7 / 8 * inertialDistance;
+            container.y += inertialDistance;
+        } else {
+
+          // 单次事件
+          events.addOnce(() => {
+            bounceAction();
+          })
+        }
+      }
+      bounceAction();
+    });
+
+    mask.on('pointerupoutside', () => {
+      canMove = !1;
+      bounceAction();
+    });
 
     mask.on('pointermove', (e) => {
       if (canMove && !bouncing) {
