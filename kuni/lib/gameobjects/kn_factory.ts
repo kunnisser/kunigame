@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-11-08 17:25:59
+ * @Last Modified time: 2019-11-11 00:16:02
  */
 
 /*
@@ -40,7 +40,13 @@ class KnFactory {
   }
 
   button = (key: any, switchKey: any, parent: PIXI.Container, align?: Array<number>) => {
-    const btn: any = this.image(key, parent, align);
+    let btn: any = null;
+    if (typeof key === 'number') {
+      const btnRect = this.graphics().generateRect(key, [0, 0, 100, 100, 6], false);
+      const btnTexture = this.game.app.renderer.generateTexture(btnRect, 1, window.devicePixelRatio);
+      key = btnTexture;
+    }
+    btn = this.image(key, parent, align);
     btn.interactive = !0;
     btn['next'] = null;
     btn.status = 'on';
@@ -110,11 +116,39 @@ class KnFactory {
     return ticker;
   }
 
-  text(content: string, style: object, anchor: Array<number>) {
+  text(content: string, style: any, anchor: Array<number>) {
+    let entryFontsize = style.fontSize;
+    entryFontsize && (style.fontSize = 3 * entryFontsize);
     const text = new KnText(this.game, content, style, anchor);
+    text.scale.set(0.34);
     return text;
   }
 
+  section(label: string = '', content: string, size: number, parent: KnGroup, sectionStyle: any) {
+    const section = this.group(`sect_${new Date().getTime()}`, parent);
+    const {padding = 4, bg = 0xd10311, width = 0} = sectionStyle;
+
+    // 标签文本
+    const labelText = this.text(label, {
+      fontSize: size,
+      fill: '#ffffff',
+      stroke: 0x000000,
+      strokeThickness: 6,
+      wordWrap: !0,
+      wordWrapWidth: width || 0
+    }, [0.5, 0]);
+
+    // 纯文本
+    const text = this.text(content, {
+      fontSize: size,
+      fill: '#000000',
+    }, [0, 0.5]); 
+    const rect = this.graphics().generateRect(bg, [0, 0, labelText.width + padding, labelText.height + padding, 4], false);
+    labelText.position.set(rect.width * 0.5, padding * 0.5);
+    text.position.set(rect.width + 2, rect.height * 0.5);
+    section.addChild(rect, text, labelText);
+    return section;
+  }
 }
 
 export default KnFactory;

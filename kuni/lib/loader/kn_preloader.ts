@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-27 00:40:41
+ * @Last Modified time: 2019-11-09 22:55:46
  */
 
 /** 
@@ -50,7 +50,7 @@ class Preloader extends KnScene {
 	}
 
 	create() {
-		const tmpText = this.game.add.text('loading...', { fontFamily: 'GrilledCheeseBTNToasted', fontSize: '12px' }, [0.5, 0.5]);
+		const tmpText = this.game.add.text('loading...', { fontFamily: 'GrilledCheeseBTNToasted', fontSize: 12 }, [0.5, 0.5]);
 		this.addChild(tmpText);
 		this.removeChild(tmpText);
 		this.position.set(this.game.config.half_w, this.game.config.half_h);
@@ -105,7 +105,7 @@ class Preloader extends KnScene {
 		// 绘制加载文字
 		this.loadingText = this.game.add.text('0 %', {
 			fontFamily: 'GrilledCheeseBTNToasted',
-			fontSize: '12px',
+			fontSize: 12,
 			fill: 0xffffff
 		}, [0.5, 0.5]);
 		this.loadingText.y = this.loadingbar.y;

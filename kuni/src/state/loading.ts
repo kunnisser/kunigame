@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-12 23:19:09
+ * @Last Modified time: 2019-11-09 22:55:58
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -48,7 +48,7 @@ class Loading extends KnScene {
 	}
 
 	boot() {
-		const tmpText = this.game.add.text('loading...', { fontFamily: 'GrilledCheeseBTNToasted', fontSize: '12px' }, [0.5, 0.5]);
+		const tmpText = this.game.add.text('loading...', { fontFamily: 'GrilledCheeseBTNToasted', fontSize: 12 }, [0.5, 0.5]);
 		this.addChild(tmpText);
 		this.removeChild(tmpText);
 		this.create();
@@ -79,7 +79,7 @@ class Loading extends KnScene {
 		// 绘制加载文字
 		const loadingText = this.game.add.text('0 %', {
 			fontFamily: 'GrilledCheeseBTNToasted',
-			fontSize: '14px',
+			fontSize: 14,
 			fill: 0x2c92e0
 		}, [0.5, 0.5]);
 		loadingText.y = innerBar.y + 10;

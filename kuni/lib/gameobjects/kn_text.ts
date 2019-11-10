@@ -6,6 +6,7 @@ class KnText extends Text{
 	constructor (game: Game, content: string, style: object, anchor: Array<number>) {
 		super(content, style);
 		this.game = game;
+		this.resolution = window.devicePixelRatio;
 		this.anchor.set(...anchor);
 	}
 }

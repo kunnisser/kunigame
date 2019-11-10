@@ -17,7 +17,9 @@ class UIDemo extends KnScene {
       'rankData': './assets/data/rankData.json',
       'panelBg': './assets/images/panelbg.png',
       'panelTitle': './assets/images/paneltitle.png',
-      'close': './assets/images/close.png'
+      'close': './assets/images/close.png',
+      'avator': './assets/images/avator.jpg',
+      'weapon_able': './assets/images/weapon_able.png'
     };
   }
 
@@ -25,7 +27,7 @@ class UIDemo extends KnScene {
     this.game.ticker.start();
     this.addBackground();
     this.addRankBtn();
-    this.addRank();
+    this.addModal();
   }
 
   addBackground() {
@@ -43,8 +45,85 @@ class UIDemo extends KnScene {
     }
   }
 
-  addRank() {
-    this.rank = new KnModal(this.game, this);
+  addModal() {
+    const options = {
+      type: 'scroll',
+      modalBg: 'panelBg',
+      titleBg: 'panelTitle',
+      close: 'close',
+      panels: [
+        {
+          title: '好友排行',
+          build: this.addRank
+        },
+        {
+          title: '本周美女',
+          build: this.addFriends
+        },
+        {
+          title: '武器信息',
+          build: this.addInfo
+        }
+      ]
+    };
+    this.rank = new KnModal(this.game, this, options);
+  }
+
+  // 添加排行内容
+  addRank = (modal: KnModal) => {
+    const rankData = this.loader.resources.rankData.data.ranklist;
+    rankData.forEach((rd, index) => {
+      this.generateRankItem(rd, index, modal);
+    });
+  }
+
+  addFriends = (modal) => {
+    const tmpImg = this.game.add.image('avator', modal.content);
+    tmpImg.width = modal.contentWidth;
+  }
+
+  addInfo = (modal) => {
+    const thumb = this.game.add.image('weapon_able', modal.content);
+    const thumbTitle = this.game.add.section('奥布莱恩之剑', '', 10, modal.content, {
+      padding: 10,
+      bg: 0xe5b240
+    });
+    thumb.height = thumbTitle.height;
+    thumb.width = thumb.height;
+    thumbTitle.position.set(thumb.width + 10, (thumb.height - thumbTitle.height) * 0.5);
+    const attack = this.game.add.section('攻击力', '50-120', 8, modal.content, {
+      padding: 6,
+      bg: 0x00a6cc
+    });
+    attack.position.set(thumb.width + 10, thumbTitle.height + 4);
+    const defence = this.game.add.section('防御', '300', 8, modal.content, {
+      padding: 6,
+      bg: 0x00a6cc
+    });
+    defence.position.set(thumb.width + 10, attack.y + attack.height + 4);
+  }
+
+  // 构建排行条目
+  generateRankItem(data: any, index: number, modal: KnModal) {
+    const rankItem = this.game.add.group('rankItem', modal.content);
+    const item_y = index * 34;
+    const itemBg = this.game.add.graphics().generateRect(0xb89254, [0, item_y, modal.contentWidth, 30, 10]);
+    const name = this.game.add.text(data.name, {
+      fontSize: 12,
+      fill: '#ffffff'
+    }, [0, 0.5]);
+    const rankIndex = this.game.add.text(index + 1 + '.', {
+      fontSize: 12,
+      fill: '#ffffff'
+    }, [0, 0.5]);
+    const rankValue = this.game.add.text('小鱼干: ' + data.star, {
+      fontSize: 8,
+      fill: '#ffffff'
+    }, [1, 0.5]);
+    rankIndex.position.set(10, item_y + itemBg.height * 0.5);
+    name.position.set(rankIndex.width + 20, item_y + itemBg.height * 0.5);
+    rankValue.position.set(itemBg.width - 10, item_y + itemBg.height * 0.5);
+    rankItem.addChild(itemBg, name, rankIndex, rankValue);
   }
 }
 
