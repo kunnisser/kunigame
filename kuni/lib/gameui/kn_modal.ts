@@ -31,6 +31,7 @@ class KnModal extends KnGroup {
     this.game = game;
     this.parent = parent;
     this.options = options;
+    this.tween = this.game.add.tween();
     this.generateModal();
     this.initial();
   }
@@ -171,11 +172,23 @@ class KnModal extends KnGroup {
 
   // panel切换
   switchPanel(index: number) {
-    this.content.removeChildren(0, this.content.children.length);
-    this.titleText.text = this.options.panels[index].title;
-    this.initial(index);
+    const toggleTween = this.tween.instance.to(this.content, 0.2, {
+      alpha: 0,
+      paused: true,
+      ease: this.tween.cubic.easeIn,
+      onComplete: () => {
+        this.content.removeChildren(0, this.content.children.length);
+        this.titleText.text = this.options.panels[index].title;
+        this.initial(index);
+        this.tween.instance.to(this.content, 0.2, {
+          alpha: 1,
+          ease: this.tween.cubic.easeOut
+        });
+      }
+    });
+    toggleTween.play();
   }
-
+    
   // 绑定容器滚动
   bindContainerScroll(isInitial: boolean = !1) {
     this.content.y = 0;

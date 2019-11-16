@@ -1,6 +1,7 @@
 import KnScene from "ts@/lib/gameobjects/kn_scene";
 import Game from "ts@/lib/core";
 import KnModal from "ts@/lib/gameui/kn_modal";
+import KnScrollMenu from "ts@/lib/gameui/kn_scrollMenu";
 
 class UIDemo extends KnScene {
   public game: Game;
@@ -19,14 +20,19 @@ class UIDemo extends KnScene {
       'panelTitle': './assets/images/paneltitle.png',
       'close': './assets/images/close.png',
       'avator': './assets/images/avator.jpg',
-      'weapon_able': './assets/images/weapon_able.png'
+      'weapon_able': './assets/images/weapon_able.png',
+      'cardBtn': './assets/images/cardBtn.png',
+      'settingBtn': './assets/images/settingBtn.png',
+      'lightBtn': './assets/images/sk_dkbear.png'
     };
   }
 
   boot() {
     this.game.ticker.start();
     this.addBackground();
-    this.addRankBtn();
+    // this.addRankBtn();
+    // this.addCardBtn();
+    this.addScrollMenu();
     this.addModal();
   }
 
@@ -36,10 +42,28 @@ class UIDemo extends KnScene {
     bg.height = this.game.config.height;
   }
 
+  addScrollMenu() {
+    const options = [
+      {
+        key: 'cardBtn',
+        name: '卡片'
+      },
+      {
+        key: 'settingBtn',
+        name: '设置'
+      },
+      {
+        key: 'lightBtn',
+        name: '光效'
+      },
+    ];
+    new KnScrollMenu(this.game, this, options);
+  }
+
   addRankBtn() {
     const btn = this.game.add.button('rankBtn', null, this, [0.5, 0.5]);
     btn.scale.set(0.2);
-    btn.position.set(200, 200);
+    btn.position.set(this.game.config.half_w - btn.width, this.game.config.half_h);
     btn.next = () => {
       this.rank.showPanel();
     }
@@ -101,6 +125,11 @@ class UIDemo extends KnScene {
       bg: 0x00a6cc
     });
     defence.position.set(thumb.width + 10, attack.y + attack.height + 4);
+    const crit = this.game.add.section('暴击', '14', 8, modal.content, {
+      padding: 6,
+      bg: 0x00a6cc
+    });
+    crit.position.set(thumb.width + 10, defence.y + defence.height + 4);
   }
 
   // 构建排行条目
@@ -124,6 +153,15 @@ class UIDemo extends KnScene {
     name.position.set(rankIndex.width + 20, item_y + itemBg.height * 0.5);
     rankValue.position.set(itemBg.width - 10, item_y + itemBg.height * 0.5);
     rankItem.addChild(itemBg, name, rankIndex, rankValue);
+  }
+  
+
+  addCardBtn() {
+    const btn = this.game.add.button('cardBtn', null, this, [0.5, 0.5]);
+    btn.scale.set(0.2);
+    btn.position.set(this.game.config.half_w + btn.width, this.game.config.half_h);
+    btn.next = () => {
+    }
   }
 }
 

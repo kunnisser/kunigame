@@ -21,7 +21,7 @@ module.exports = merge(common, {
                priority: "0",                // 缓存组优先级 false | object |
                vendor: {                   // key 为entry中定义的 入口名称
                    chunks: "initial",        // 必须三选一： "initial" | "all" | "async"(默认就是异步)
-                   test: /phaser/,     // 正则规则验证，如果符合就提取 chunk
+                   test: /pixi/, // 正则规则验证，如果符合就提取 chunk
                    name: "vendor",           // 要缓存的 分隔出来的 chunk 名称
                    minSize: 0,
                    minChunks: 1,
@@ -45,7 +45,7 @@ module.exports = merge(common, {
       //       ignore: ['.*']  //忽视.*文件
       //   }]),
         new CopyWebpackPlugin([{
-          from: path.resolve(__dirname, 'studio/assets'),
+          from: path.resolve(__dirname, 'kuni/assets'),
           to: 'assets',
           ignore: ['.*']  //忽视.*文件
         }])
