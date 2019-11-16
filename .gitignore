@@ -11,4 +11,4 @@
 !/webpack.dev.js
 !/webpack.prod.js
 !/tsconfig.json
-!/.gitlab-ci.yml
+!/.travis.yml
