@@ -13,13 +13,6 @@ before_script:
 script:
 - yarn build
 after_script:
-- cd ./output
-- git init
-- git config user.name "${kuniName}"
-- git config user.email "${kuniEmail}"
-- git add .
-- git commit -m "Update tools"
-- git push --force --quiet "https://${kuniTOKEN}@${kuniRef}" master
 branches:
   only:
   - master
