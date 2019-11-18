@@ -16,7 +16,7 @@ module.exports = {
 		index: ['./kuni/main.ts']
 	},
 	output: {
-		path: __dirname + '/output/kuni',
+		path: './output/kuni',
 		publicPath: '/kuni/',
 		filename: '[name]-[chunkhash].js'
 	},
