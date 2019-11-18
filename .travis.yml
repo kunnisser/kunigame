@@ -1,35 +1,33 @@
-
 language: node_js
-# nodejs版本
-node_js: 
-    - '11'
- 
-# Travis-CI Caching
+node_js:
+- '11'
+addons:
+  ssh_known_hosts:
+  - 139.224.223.179
 cache:
   directories:
-    - node_modules
- 
-# S: Build Lifecycle
+  - node_modules
 install:
-  - npm install
- 
-before_script:
- 
-# 无其他依赖项所以执行npm run build 构建就行了
+- yarn install
+before_script: 
 script:
-  - npm run build
- 
+- yarn build
 after_script:
-  - cd ./output
-  - git init
-  - git config user.name "${kuniName}"
-  - git config user.email "${kuniEmail}"
-  - git add .
-  - git commit -m "Update tools"
-  - git push --force --quiet "https://${kuniTOKEN}@${kuniRef}" master:${P_BRANCH}
-# E: Build LifeCycle
- 
-#指定分支，只有指定的分支提交时才会运行脚本
+- cd ./output
+- git init
+- git config user.name "${kuniName}"
+- git config user.email "${kuniEmail}"
+- git add .
+- git commit -m "Update tools"
+- git push --force --quiet "https://${kuniTOKEN}@${kuniRef}" master:${P_BRANCH}
 branches:
   only:
-    - master
+  - master
+before_install:
+- openssl aes-256-cbc -K $encrypted_02d903fb5ebd_key -iv $encrypted_02d903fb5ebd_iv
+  -in id_rsa.enc -out ~\/.ssh/id_rsa -d
+- eval "$(ssh-agent -s)"
+- chmod 600 ~/.ssh/id_rsa
+- ssh-add ~/.ssh/id_rsa
+after_success:
+  - ssh travis@139.224.223.179 -o StrictHostKeyChecking=no 'cd /var/www/jsapi/JavaScript-APIs-Set && git pull && yarn install && yarn build'
