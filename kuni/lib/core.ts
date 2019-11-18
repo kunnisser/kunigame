@@ -140,7 +140,7 @@ export default class Game {
 		this.app.view.style.height = size.height + 'px';
 
 		// 屏幕适配
-		this.app.renderer.autoResize = true;
+		this.app.renderer['autoResize'] = true;
 		this.app.renderer.resize(size.width, size.height);
 		settings.SCALE_MODE = SCALE_MODES.NEAREST;
 
