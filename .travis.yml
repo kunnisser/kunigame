@@ -19,7 +19,7 @@ after_script:
 - git config user.email "${kuniEmail}"
 - git add .
 - git commit -m "Update tools"
-- git push --force --quiet "https://${kuniTOKEN}@${kuniRef}" master:${P_BRANCH}
+- git push --force --quiet "https://${kuniTOKEN}@${kuniRef}" master
 branches:
   only:
   - master
@@ -30,4 +30,4 @@ before_install:
 - chmod 600 ~/.ssh/id_rsa
 - ssh-add ~/.ssh/id_rsa
 after_success:
-  - ssh travis@139.224.223.179 -o StrictHostKeyChecking=no 'cd /var/www/jsapi/JavaScript-APIs-Set && git pull && yarn install && yarn build'
+  - ssh travis@139.224.223.179 -o StrictHostKeyChecking=no 'cd ~/kunigame && git pull && yarn install && yarn build'

@@ -12,3 +12,4 @@
 !/webpack.prod.js
 !/tsconfig.json
 !/.travis.yml
+!/output
