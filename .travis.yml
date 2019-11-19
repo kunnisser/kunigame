@@ -25,4 +25,4 @@ before_install:
 - chmod 600 ~/.ssh/id_rsa
 - ssh-add ~/.ssh/id_rsa
 after_success:
-  - ssh travis@139.224.223.179 -o StrictHostKeyChecking=no './deploy.sh'
+  - ssh travis@139.224.223.179 -o StrictHostKeyChecking=no '~/deploy.sh'
