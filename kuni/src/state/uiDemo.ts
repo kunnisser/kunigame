@@ -14,16 +14,17 @@ class UIDemo extends KnScene {
     this.shootType = 1;
     this.resouces = {
       'uiBg': './assets/images/uibg.png',
-      'rankBtn': './assets/images/rankBtn.png',
       'rankData': './assets/data/rankData.json',
       'panelBg': './assets/images/panelbg.png',
       'panelTitle': './assets/images/paneltitle.png',
       'close': './assets/images/close.png',
       'avator': './assets/images/avator.jpg',
       'weapon_able': './assets/images/weapon_able.png',
-      'cardBtn': './assets/images/cardBtn.png',
-      'settingBtn': './assets/images/settingBtn.png',
-      'lightBtn': './assets/images/sk_dkbear.png'
+      'menu01': './assets/images/menu01.png',
+      'menu02': './assets/images/menu02.png',
+      'menu03': './assets/images/menu03.png',
+      'menu04': './assets/images/menu04.png',
+      'menu05': './assets/images/menu05.png'
     };
   }
 
@@ -45,17 +46,28 @@ class UIDemo extends KnScene {
   addScrollMenu() {
     const options = [
       {
-        key: 'cardBtn',
-        name: '卡片'
+        key: 'menu01',
+        name: '月之骑士',
+        callback: () => {
+          this.rank.showPanel();
+        }
       },
       {
-        key: 'settingBtn',
-        name: '设置'
+        key: 'menu02',
+        name: '先知',
       },
       {
-        key: 'lightBtn',
-        name: '光效'
+        key: 'menu03',
+        name: '段正淳',
       },
+      {
+        key: 'menu04',
+        name: '排行榜',
+      },
+      {
+        key: 'menu04',
+        name: '我服了你了行吧',
+      }
     ];
     new KnScrollMenu(this.game, this, options);
   }
@@ -65,7 +77,6 @@ class UIDemo extends KnScene {
     btn.scale.set(0.2);
     btn.position.set(this.game.config.half_w - btn.width, this.game.config.half_h);
     btn.next = () => {
-      this.rank.showPanel();
     }
   }
 
