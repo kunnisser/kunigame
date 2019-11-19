@@ -4,14 +4,17 @@ node_js:
 addons:
   ssh_known_hosts:
   - 139.224.223.179
+services:
+  - docker
 cache:
   directories:
   - node_modules
 install:
-- yarn install
+- docker build -t kuni .
+- docker restart rungame
 before_script: 
 script:
-- yarn build
+- docker ps | grep -q kuni
 after_script:
 branches:
   only:
@@ -22,5 +25,3 @@ before_install:
 - eval "$(ssh-agent -s)"
 - chmod 600 ~/.ssh/id_rsa
 - ssh-add ~/.ssh/id_rsa
-after_success:
-  - ssh travis@139.224.223.179 -o StrictHostKeyChecking=no 'cd ~/kunigame && git pull && yarn install && yarn build'
