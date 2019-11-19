@@ -37,7 +37,7 @@ module.exports = merge(common, {
         new webpack.DefinePlugin({
             'ENV': JSON.stringify(false)
         }),
-        new CleanWebpackPlugin(['output/*']),
+        new CleanWebpackPlugin(['output/kuni/*']),
       // 复制静态资源,将游戏资源文件内的内容复制到指定文件夹
       //   new CopyWebpackPlugin([{
       //       from: path.resolve(__dirname, 'starmanor/path'),
