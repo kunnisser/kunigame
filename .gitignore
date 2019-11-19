@@ -6,6 +6,7 @@
 !/.eslintrc.js
 !/.gitignore
 !/package.json
+!/package-lock.json
 !/README.md
 !/webpack.common.js
 !/webpack.dev.js
