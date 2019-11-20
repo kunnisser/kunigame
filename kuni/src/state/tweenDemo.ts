@@ -15,7 +15,6 @@ class TweenDemo extends KnScene {
       'wsjBg': './assets/images/wsj_bg.png',
       'staff': './assets/images/titleWeapon_02.png',
       'glow': './assets/shader/frag/glow.frag',
-      'vertex': './assets/shader/vertex/default.vert',
       'pumpkin': './assets/images/pumpkin.png',
       'cannikin': './assets/images/cannikin.png',
       'start': './assets/images/start.png'

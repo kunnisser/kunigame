@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-11-09 22:55:46
+ * @Last Modified time: 2019-11-20 10:35:34
  */
 
 /** 
@@ -30,7 +30,9 @@ class Preloader extends KnScene {
 		this.game = game;
 		this.resouces = {
 			'bg001': './assets/images/bg001.jpg',
-			'run': './assets/data/loadingrun.json'
+			'run': './assets/data/loadingrun.json',
+			'bg002': './assets/images/bg002.jpg',
+			'vertex': './assets/shader/vertex/default.vert'
 		};
 	}
 

@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-01 23:11:29
+ * @Last Modified time: 2019-11-20 10:33:27
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -22,7 +22,6 @@ class Home extends KnScene {
     this.game = game;
     this.clouds = [];
     this.resouces = {
-      'bg002': './assets/images/bg002.jpg'
     };
   }
 
