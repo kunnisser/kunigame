@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-28 23:03:59
+ * @Last Modified time: 2019-11-20 10:27:55
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -47,8 +47,7 @@ class MapDemo extends KnScene {
       'worldmap': './assets/data/worldmap.json',
       'world': './assets/images/maptiles.png',
       'boy': './assets/data/boy.json',
-      'lightmap': './assets/images/lightmap.png',
-      'lightmap_frag': './assets/shader/frag/lightmap.frag',
+      'lightmap': './assets/images/lightmap.png'
     };
   }
 
@@ -86,16 +85,22 @@ class MapDemo extends KnScene {
     this.tilemap = new TileMap(0, textures, aliasData, { tiledSizeX, tiledSizeY, tileWidth, tileHeight });
     this.tilemap.pivot.set(0, 0);
     this.addChild(this.tilemap);
+
+    // 添加地图角色
     this.initialBoy();
     
     // 加入lightmap
     this.addDarkLight();
 
     // 定义地图layer用于点击
-    const layer: any = this.drawStage.generateRect(0x1099bb, [0, 0, this.game.camera.width, this.game.camera.height], !1);
+    const layer: any = this.drawStage.generateRect(0xffffff, [0, 0, this.game.camera.width, this.game.camera.height], !1);
     layer.interactive = true;
     layer._events.pointerdown = [];
-    this.tilemap.addChild(layer);
+
+    // 添加点击layerWrap容器
+    const layerWrap = new PIXI['tilemap'].RectTileLayer(1, []);
+    layerWrap.addChild(layer);
+    this.tilemap.addChild(layerWrap);
 
     // 生成tween的时间线
     this.boy.timeline = this.game.add.tweenline();
