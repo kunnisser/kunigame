@@ -28,12 +28,14 @@ class KnScrollMenu extends KnGroup {
   }
 
   initial(bg: any) {
-    this.menuBg = bg;
     bg.interactive = !0;
     bg.on('pointerdown', this.onDragStart)
-      .on('pointerup', this.onDragEnd)
+      .on('pointerup', (e) => { 
+        this.onDragEnd(e);
+      })
       .on('pointerupoutside', this.onDragEnd)
       .on('pointermove', this.onDragMove);
+    this.menuBg = bg;
     this.appendMenus();
   }
 
@@ -52,7 +54,7 @@ class KnScrollMenu extends KnGroup {
     if (this.dragAble) {
 
       // 横向滑动距离
-      this.distance = (e.data.global.x - this.startX) / 25;
+      this.distance = (e.data.global.x - this.startX) / 5;
       
       // 滑动过程禁用点击
       this.clickAble = Math.abs(this.distance) < 0.2 ? !0 : !1;
@@ -68,6 +70,7 @@ class KnScrollMenu extends KnGroup {
     this.dragAble = !1;
     const menuBetweenDistance = Math.abs (this.bounds[0] / (this.menus.length - 1));
     const currentIndex = Math.abs(Math.round(this.menusGp.x * (this.menus.length - 1) / this.bounds[0]));
+    console.log(currentIndex);
     const tween: any = this.game.add.tween();
     tween.instance.to(this.menusGp, 0.2, {
       x: -currentIndex * menuBetweenDistance,
@@ -80,6 +83,7 @@ class KnScrollMenu extends KnGroup {
 
   generateMenu() {
     this.menusGp = this.game.add.group('menuGp', this);
+    this.menusGp.y = -10;
     this.options.forEach((opt: any, index: number) => {
       const menu = this.buildMenu(opt);
       menu.position.set(index * menu.width * 1.5, 0);
@@ -93,22 +97,27 @@ class KnScrollMenu extends KnGroup {
 
     const menu: KnGroup = this.game.add.group(`${opt.key}menu`, this.menusGp);
     const menuIcon = this.game.add.button(opt.key, null, menu, [0.5, 0.5]);
-    menuIcon.start = this.onDragStart;
-    menuIcon.outside = () => {
-      this.dragAble = !1;
+    menuIcon.start = (e) => {
+      this.onDragStart(e);
+    };
+    menuIcon.outside = (e) => {
+
+      // 处理按钮和滑动背景的判断冲突
+      const isContainBg = this.menuBg.containsPoint(e.data.global);
+      isContainBg || this.onDragEnd(e);
     };
     menuIcon.next = (e) => {
       this.onDragEnd(e);
 
       // 滑动状态不可点击，停止滑动再触发点击事件
       this.clickAble && opt.callback && opt.callback();
-    }
+    };
     const menuName = this.game.add.section(opt.name, '', 10, menu, {
       padding: 10,
       bg: 0xe5b240
     });
     menuName.x = -menuName.width * 0.5;
-    menuName.position.y = menuIcon.height * 0.5 + 10;
+    menuName.position.y = menuIcon.height * 0.5;
     return menu;
   }
 
@@ -119,6 +128,9 @@ class KnScrollMenu extends KnGroup {
       let currentD = this.game.config.half_w - currentX;
       let currentD_ABS = Math.abs(currentD);
       if (currentD_ABS > this.game.config.half_w + menu.width) {
+        
+        // 图片划出边界取消混合叠加渲染
+        menu.children[0]['blendMode'] = PIXI.BLEND_MODES.NORMAL;
         menu.visible = !1;
       } else {
         menu.visible = !0;
