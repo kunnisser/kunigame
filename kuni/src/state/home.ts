@@ -2,12 +2,13 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-11-20 10:33:27
+ * @Last Modified time: 2019-11-21 09:51:25
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
 import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
 import Game from 'ts@/lib/core';
+import { TransformImage } from 'ts@/lib/utils/common';
 
 class Home extends KnScene {
   public loadingTypes: Map<string, Function>;
@@ -52,14 +53,13 @@ class Home extends KnScene {
       drawStage.beginFill(color);
       drawStage.drawCircle(0, 0, radius);
       drawStage.endFill();
-      const cloudBit = new PIXI.Sprite(this.game.app.renderer.generateTexture(drawStage));
+      const cloudBit = TransformImage.transformToSprite(this.game, drawStage, this);
       cloudBit.anchor.set(0.5);
       cloudBit.x = cloudBit['targetX'] =
         (this.game.config.width - 2 * radius) * Math.random() + radius;
       cloudBit.y = cloudBit['targetY'] =
         (this.game.config.height - 2 * radius) * Math.random() + radius;
       cloudBit.alpha = 0.5;
-      this.addChild(cloudBit);
       this.clouds.push(cloudBit);
     }
   }

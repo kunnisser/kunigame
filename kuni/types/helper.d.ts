@@ -1,6 +1,7 @@
 
 interface IMath {
-	rdirect: Function // 随机正负1
+  rdirect: Function // 随机正负1
+  clamp: Function // 夹角范围数值
 }
 
 interface IEvents {

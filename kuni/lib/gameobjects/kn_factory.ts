@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-11-11 00:16:02
+ * @Last Modified time: 2019-11-21 09:51:43
  */
 
 /*
@@ -18,6 +18,7 @@ import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
 import KnText from 'ts@/lib/gameobjects/kn_text';
 import KnEmitter from 'ts@/lib/gameobjects/kn_emitter';
 import Game from 'ts@/lib/core';
+import { TransformImage } from 'ts@/lib/utils/common';
 import { knTweenLine, KnTween } from 'ts@/lib/gameobjects/kn_tween';
 import { Sprite, Texture, AnimatedSprite, utils, Ticker } from 'pixi.js';
 
@@ -43,7 +44,7 @@ class KnFactory {
     let btn: any = null;
     if (typeof key === 'number') {
       const btnRect = this.graphics().generateRect(key, [0, 0, 100, 100, 6], false);
-      const btnTexture = this.game.app.renderer.generateTexture(btnRect, 1, window.devicePixelRatio);
+      const btnTexture = TransformImage.transformToTexture(this.game, btnRect);
       key = btnTexture;
     }
     btn = this.image(key, parent, align);
@@ -54,11 +55,16 @@ class KnFactory {
       btn.texture,
       Object.prototype.toString.call(switchKey) === '[object String]' ? utils.TextureCache[switchKey] : switchKey
     ];
-    btn.on('pointerdown', () => {
+    btn.on('pointerdown', (e) => {
       btn.blendMode = PIXI.BLEND_MODES.ADD_NPM;
+      btn.start && btn.start(e);
     });
-    btn.on('pointerupoutside', () => {
+    btn.on('pointermove', (e) => {
+      btn.move && btn.move(e);
+    });
+    btn.on('pointerupoutside', (e) => {
       btn.blendMode = PIXI.BLEND_MODES.NORMAL;
+      btn.outside && btn.outside(e);
     });
     btn.on('pointerup', (e: Event) => {
       if (btn.blendMode === PIXI.BLEND_MODES.ADD_NPM) {

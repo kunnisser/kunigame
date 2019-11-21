@@ -1,15 +1,16 @@
 import {Graphics} from 'pixi.js';
+import Game from '../core';
 
 class KnGraphics extends Graphics {
-	public game: object;
-	constructor (game: object) {
+	public game: Game;
+	constructor (game: Game) {
 		super();
 		this.game = game;
 	}
 
 	// 绘制矩形
-	generateRect (color: number, points: Array<number>, anchor?: boolean) {
-		this.beginFill(color, 1);
+	generateRect (color: number, points: Array<number>, anchor?: boolean, alpha?: number) {
+		this.beginFill(color, typeof alpha === 'number' ? alpha : 1);
 	
 		// 锚点居中
 		anchor && (points[0] -= points[2] * 0.5, points[1] -= points[3] * 0.5);

@@ -2,6 +2,7 @@ import KnScene from "ts@/lib/gameobjects/kn_scene";
 import Game from "ts@/lib/core";
 import KnModal from "ts@/lib/gameui/kn_modal";
 import KnScrollMenu from "ts@/lib/gameui/kn_scrollMenu";
+import { TransformImage } from 'ts@/lib/utils/common';
 
 class UIDemo extends KnScene {
   public game: Game;
@@ -65,11 +66,16 @@ class UIDemo extends KnScene {
         name: '排行榜',
       },
       {
-        key: 'menu04',
+        key: 'menu05',
         name: '我服了你了行吧',
       }
     ];
-    new KnScrollMenu(this.game, this, options);
+    const scrollMenu = new KnScrollMenu(this.game, this, options);
+    const bgRect = this.game.add.graphics().generateRect(0xffffff, [0, 0, this.game.config.width, this.game.config.height], !0);
+    const menuBg = TransformImage.transformToSprite(this.game, bgRect, scrollMenu);
+    menuBg.alpha = 0;
+    menuBg.anchor.set(0.5);
+    scrollMenu.initial(menuBg);
   }
 
   addRankBtn() {

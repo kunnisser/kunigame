@@ -1,5 +1,6 @@
 import Game from "../core";
 import { Sprite } from "pixi.js";
+import { TransformImage } from 'ts@/lib/utils/common';
 import KnGraphics from "../gameobjects/kn_graphics";
 
 class KnTransition {
@@ -27,7 +28,7 @@ class KnTransition {
 
 	generateOverlay() {
 		const blackRect = this.game.add.graphics().generateRect(0x000000, [0, 0, 1, 1]);
-		this.overlay = this.game.add.image(this.game.app.renderer.generateTexture(blackRect, 1, window.devicePixelRatio), this.game.world);
+		this.overlay = TransformImage.transformToSprite(this.game, blackRect, this.game.world);
 		this.overlay.width = this.game.config.width;
 		this.overlay.height = this.game.config.height;
 		this.overlayReset();
