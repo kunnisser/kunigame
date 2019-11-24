@@ -2,6 +2,7 @@
 
 import { Container } from 'pixi.js';
 import KnGraphics from './kn_graphics';
+import KnMessage from '../gameui/kn_message';
 
 class KnScene extends Container {
 	public game: any;
@@ -12,6 +13,7 @@ class KnScene extends Container {
 	public loader: PIXI.Loader;
 	public dat?: any;
 	public drawStage: KnGraphics;
+	public tip: KnMessage;
 	constructor(game: object, key: string, boot?: boolean) {
 		super();
 		this.game = game;
@@ -55,6 +57,12 @@ class KnScene extends Container {
 	// 删除场景
 	remove() {
 		this.game.world.removeChild(this);
+	}
+
+	// 内置消息提示组件
+	bootMessage() {
+		this.tip = new KnMessage(this.game, this);
+		this.tip.position.set(this.width * 0.5, this.height * 0.5);
 	}
 }
 

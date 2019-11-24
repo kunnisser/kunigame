@@ -3,9 +3,14 @@ import Game from '../core';
 
 class KnGraphics extends Graphics {
 	public game: Game;
+	public border: IBorder;
 	constructor (game: Game) {
 		super();
 		this.game = game;
+	}
+
+	setBorder(border: IBorder) {
+		this.lineStyle(border.width, border.color, border.alpha, 1);
 	}
 
 	// 绘制矩形
@@ -20,6 +25,16 @@ class KnGraphics extends Graphics {
 		} else {
 			this.drawRect(...points as [number, number, number, number]);
 		}
+		this.endFill();
+		return this;
+	}
+
+	// 绘制圆
+	generateCircle (color: number, points: Array<number>, alpha?: number) {
+		this.beginFill(color, typeof alpha === 'number' ? alpha : 1);
+	
+		// 锚点居中
+		this.drawCircle(...points as [number, number, number]);
 		this.endFill();
 		return this;
 	}

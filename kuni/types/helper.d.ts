@@ -8,3 +8,9 @@ interface IEvents {
   reset: Function // 重置状态
   addOnce: Function // 一次性事件
 }
+
+interface IBorder {
+  width: number,
+  color: number,
+  alpha: number
+}

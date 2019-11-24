@@ -70,7 +70,6 @@ class KnScrollMenu extends KnGroup {
     this.dragAble = !1;
     const menuBetweenDistance = Math.abs (this.bounds[0] / (this.menus.length - 1));
     const currentIndex = Math.abs(Math.round(this.menusGp.x * (this.menus.length - 1) / this.bounds[0]));
-    console.log(currentIndex);
     const tween: any = this.game.add.tween();
     tween.instance.to(this.menusGp, 0.2, {
       x: -currentIndex * menuBetweenDistance,
@@ -96,7 +95,8 @@ class KnScrollMenu extends KnGroup {
   buildMenu(opt: any) {
 
     const menu: KnGroup = this.game.add.group(`${opt.key}menu`, this.menusGp);
-    const menuIcon = this.game.add.button(opt.key, null, menu, [0.5, 0.5]);
+    const menuIcon = this.game.add.button(opt.key, null, menu, [0.5, 0.5], opt.tipkey);
+    menuIcon.tip && menuIcon.tip.position.set(-menuIcon.width * 0.25, -menuIcon.height * 0.25);
     menuIcon.start = (e) => {
       this.onDragStart(e);
     };
@@ -112,6 +112,11 @@ class KnScrollMenu extends KnGroup {
       // 滑动状态不可点击，停止滑动再触发点击事件
       this.clickAble && opt.callback && opt.callback();
     };
+
+    menuIcon.cancel = (e) => {
+      this.onDragEnd(e);
+    }
+    
     const menuName = this.game.add.section(opt.name, '', 10, menu, {
       padding: 10,
       bg: 0xe5b240

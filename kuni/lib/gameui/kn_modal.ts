@@ -142,7 +142,7 @@ class KnModal extends KnGroup {
         btnRect.width = panelModal.width * 0.6 / navNum - margin;
         btnRect.height = 30;
         const btnText = this.game.add.text(panel.title, {
-          fontSize: btnRect.width * 0.15,
+          fontSize: btnRect.width * 0.18,
           fill: 0xffffff
         }, [0.5, 0.5]);
         btnRect.x = (index - 0.5 * navNum + 0.5) * (btnRect.width + margin);

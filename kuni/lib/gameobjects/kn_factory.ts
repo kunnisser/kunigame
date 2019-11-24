@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-11-21 09:51:43
+ * @Last Modified time: 2019-11-24 21:04:51
  */
 
 /*
@@ -40,7 +40,7 @@ class KnFactory {
     return parent.addChild(sprite), sprite;
   }
 
-  button = (key: any, switchKey: any, parent: PIXI.Container, align?: Array<number>) => {
+  button = (key: any, switchKey: any, parent: PIXI.Container, align?: Array<number>, tipkey?: any) => {
     let btn: any = null;
     if (typeof key === 'number') {
       const btnRect = this.graphics().generateRect(key, [0, 0, 100, 100, 6], false);
@@ -79,8 +79,14 @@ class KnFactory {
           }
         }
         btn.next && btn.next(e);
+      } else {
+        btn.cancel && btn.cancel(e);
       }
     });
+
+    if (tipkey) {
+      btn['tip'] = this.image(tipkey, parent, [0.5, 0.5]);
+    }
     return btn;
   }
 
