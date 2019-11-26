@@ -95,6 +95,8 @@ class CursorDemo extends KnScene {
     this.weapon = this.game.add.image('weapon', this, [0.5, 0.5]);
     this.weapon.position.set(this.game.config.half_w, this.game.config.half_h);
     this.weapon.scale.set(0.3);
+    this.weapon.interactive = !0;
+    this.weapon.buttonMode = !0;
   }
 
   // 粒子加载

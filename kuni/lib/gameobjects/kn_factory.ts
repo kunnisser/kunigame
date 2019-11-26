@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-11-24 21:04:51
+ * @Last Modified time: 2019-11-26 17:32:22
  */
 
 /*
@@ -17,6 +17,7 @@ import KnGroup from 'ts@/lib/gameobjects/kn_group';
 import KnGraphics from 'ts@/lib/gameobjects/kn_graphics';
 import KnText from 'ts@/lib/gameobjects/kn_text';
 import KnEmitter from 'ts@/lib/gameobjects/kn_emitter';
+import KnTiling from 'ts@/lib/gameui/kn_tiling';
 import Game from 'ts@/lib/core';
 import { TransformImage } from 'ts@/lib/utils/common';
 import { knTweenLine, KnTween } from 'ts@/lib/gameobjects/kn_tween';
@@ -49,6 +50,7 @@ class KnFactory {
     }
     btn = this.image(key, parent, align);
     btn.interactive = !0;
+    btn.buttonMode = !0;
     btn['next'] = null;
     btn.status = 'on';
     const [texture, swtichTexture] = [
@@ -160,6 +162,13 @@ class KnFactory {
     text.position.set(rect.width + 2, rect.height * 0.5);
     section.addChild(rect, text, labelText);
     return section;
+  }
+
+  tiling(key: any, width: number, height: number, parent: KnGroup) {
+    const texture = Object.prototype.toString.call(key) === '[object String]' ? utils.TextureCache[key] : key;
+    const tile = new KnTiling(texture, width, height);
+    tile.initialTiling(parent);
+    return tile;
   }
 }
 

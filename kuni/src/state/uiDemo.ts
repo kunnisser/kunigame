@@ -67,9 +67,9 @@ class UIDemo extends KnScene {
       {
         key: 'menu01',
         tipkey: 'menutip',
-        name: '月之骑士',
+        name: '夸父追日',
         callback: () => {
-          this.rank.showPanel();
+          this.game.sceneManager.changeScene(this, this.game.sceneManager.scenes[8]);
         }
       },
       {
@@ -257,7 +257,7 @@ class UIDemo extends KnScene {
       {
         name: '排行榜',
         icon: 'ui_08',
-        handler: null
+        handler: () => this.rank.showPanel()
       },
       {
         name: '公告',
