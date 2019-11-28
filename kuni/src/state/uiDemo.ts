@@ -67,7 +67,7 @@ class UIDemo extends KnScene {
       {
         key: 'menu01',
         tipkey: 'menutip',
-        name: '夸父追日',
+        name: '富甲天下',
         callback: () => {
           this.game.sceneManager.changeScene(this, this.game.sceneManager.scenes[8]);
         }

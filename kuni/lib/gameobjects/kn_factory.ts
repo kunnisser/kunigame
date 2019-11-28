@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-11-26 17:32:22
+ * @Last Modified time: 2019-11-26 19:43:47
  */
 
 /*
@@ -50,7 +50,6 @@ class KnFactory {
     }
     btn = this.image(key, parent, align);
     btn.interactive = !0;
-    btn.buttonMode = !0;
     btn['next'] = null;
     btn.status = 'on';
     const [texture, swtichTexture] = [
