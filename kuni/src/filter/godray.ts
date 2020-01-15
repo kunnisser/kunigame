@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-10-27 20:46:53
+ * @Last Modified time: 2020-01-07 22:51:04
  */
 
 /*
@@ -20,8 +20,7 @@ class GodrayFilter extends Filter {
     public _angle: number;
     constructor(loader: Loader) {
         super(loader.resources.vertex.data,
-            loader.resources.godray.data.replace('${perlin}',
-                loader.resources.perlin.data),
+            loader.resources.godray.data,
             {
                 time: 0.0
             });
@@ -29,12 +28,12 @@ class GodrayFilter extends Filter {
         this.uniforms.dimensions = new Float32Array(2);
 
         const options = {
-            angle: 30,
-            gain: 0.5,
-            lacunarity: 2.5,
-            time: 0.1,
+            angle: 50,
+            gain: 0.32,
+            lacunarity: 5,
+            time: 0,
             parallel: true,
-            center: [0, 0],
+            center: [100, -100],
         };
 
         this._angleLight = new Point();
@@ -55,7 +54,7 @@ class GodrayFilter extends Filter {
         this.uniforms.dimensions[0] = width;
         this.uniforms.dimensions[1] = height;
         this.uniforms.aspect = height / width;
-        this.time += 0.01;
+        this.time += 0.001;
         this.uniforms.time = this.time;
 
         filterManager.applyFilter(this, input, output, clear);

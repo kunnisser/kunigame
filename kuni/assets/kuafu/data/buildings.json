@@ -1,0 +1,22 @@
+{
+  "farm": {
+    "name": "农场",
+    "goods": ["shrimp", "chives", "cabbage"]
+  },
+  "pasture": {
+    "name": "牧场",
+    "goods": ["horse"]
+  },
+  "weapon": {
+    "name": "武器店",
+    "goods": ["badsword"]
+  },
+  "grocery": {
+    "name": "杂货店",
+    "goods": ["food", "lantern"]
+  },
+  "ore": {
+    "name": "矿场",
+    "goods": ["greengem", "diamond"]
+  }
+}

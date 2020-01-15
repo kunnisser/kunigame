@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-11-26 19:43:47
+ * @Last Modified time: 2019-12-04 21:51:00
  */
 
 /*
@@ -22,6 +22,7 @@ import Game from 'ts@/lib/core';
 import { TransformImage } from 'ts@/lib/utils/common';
 import { knTweenLine, KnTween } from 'ts@/lib/gameobjects/kn_tween';
 import { Sprite, Texture, AnimatedSprite, utils, Ticker } from 'pixi.js';
+import KnScene from './kn_scene';
 
 class KnFactory {
   public game: Game;
@@ -130,14 +131,14 @@ class KnFactory {
   }
 
   text(content: string, style: any, anchor: Array<number>) {
-    let entryFontsize = style.fontSize;
-    entryFontsize && (style.fontSize = 3 * entryFontsize);
-    const text = new KnText(this.game, content, style, anchor);
+    let entryStyle = Object.assign({}, style);
+    style.fontSize && (entryStyle.fontSize = 3 * style.fontSize);
+    const text = new KnText(this.game, content, entryStyle, anchor);
     text.scale.set(0.34);
     return text;
   }
 
-  section(label: string = '', content: string, size: number, parent: KnGroup, sectionStyle: any) {
+  section(label: string = '', content: string, size: number, parent: KnGroup | KnScene, sectionStyle?: any) {
     const section = this.group(`sect_${new Date().getTime()}`, parent);
     const {padding = 4, bg = 0xd10311, width = 0} = sectionStyle;
 
@@ -156,18 +157,49 @@ class KnFactory {
       fontSize: size,
       fill: '#000000',
     }, [0, 0.5]); 
-    const rect = this.graphics().generateRect(bg, [0, 0, labelText.width + padding, labelText.height + padding, 4], false);
+    const rect = this.graphics().generateRect(bg, [0, 0, labelText.width + padding, labelText.height + padding, 8], false);
     labelText.position.set(rect.width * 0.5, padding * 0.5);
     text.position.set(rect.width + 2, rect.height * 0.5);
     section.addChild(rect, text, labelText);
     return section;
   }
 
-  tiling(key: any, width: number, height: number, parent: KnGroup) {
+  // 滚动瓷砖
+  tiling(key: any, width: number, height: number, parent: KnGroup | KnScene) {
     const texture = Object.prototype.toString.call(key) === '[object String]' ? utils.TextureCache[key] : key;
     const tile = new KnTiling(texture, width, height);
     tile.initialTiling(parent);
     return tile;
+  }
+
+  // 文本跳动（数字）
+  jumpingNumber(textObj: KnText, options: any) {
+    let {plusedVal, interval} = options;
+    if (+textObj.text != plusedVal) {
+      if (+textObj.text > plusedVal) {
+        textObj.text = plusedVal;
+      } else {
+        textObj.text = +textObj.text + interval;
+      }
+    }
+  }
+
+  // 文本滚动
+  scrollText(text: string, textObj: KnText, delay: number, tween: any) {
+    const originY = textObj.y;
+    tween.instance.to(textObj, 0.2, {
+      y: originY - textObj.height,
+      delay,
+      ease: tween.cubic.easeIn,
+      onComplete: () => {
+        textObj.text = text;
+        textObj.y = originY + textObj.height;
+        tween.instance.to(textObj, 0.2, {
+          y: originY,
+          ease: tween.cubic.easeOut
+        });
+      }
+    });
   }
 }
 

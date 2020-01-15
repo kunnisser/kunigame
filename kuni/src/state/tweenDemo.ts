@@ -26,7 +26,6 @@ class TweenDemo extends KnScene {
     this.addBackground();
     this.addStaff();
     this.dev();
-    this.game.ticker.start();
   }
 
   dev() {

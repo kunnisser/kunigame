@@ -18,7 +18,8 @@ class KnSceneManager {
 
 	changeScene (from: KnScene | null, to: KnScene) {
 		if (from) {
-
+			this.game.ticker.stop();
+			
 			// 去除特殊的dat.gui
 			from.dat && this.game.gui.remove(from.dat);
 			this.game.overlay.leaveScene(() => {
@@ -53,11 +54,11 @@ class KnSceneManager {
 			globalLoader.load(() => {
 
 				// 首次加载的to 为 preloader
-				const homeScene = this.game.sceneManager.scenes[8];
+				const homeScene = this.game.sceneManager.scenes[3];
 				
 				// 进入preloader中
 				to.enter(homeScene, !0);
-			})
+			});
 		} else {
 			
 			// 首次进入场景且场景有资源需要加载，则会自动进入preloader场景

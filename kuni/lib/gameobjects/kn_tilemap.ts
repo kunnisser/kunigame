@@ -3,18 +3,18 @@ window['PIXI'] = PIXI;
 import 'pixi-tilemap';
 
 class TileMap extends PIXI['tilemap'].CompositeRectTileLayer{
-  public alias: Object;
+  public alias: any;
   public textures: Array<PIXI.Texture>;
   public size_x: number;
   public size_y: number;
   public tileWidth: number;
   public tileHeight: number;
-  public mapData: Array<number>;
+  public mapData: Array<any>;
   public multeMapData: Array<Array<any>>;
   public mapWall: Number; // 为墙体的瓷砖类型
   public staticMap: Boolean; // 是否为固定地图数据
   position: any;
-  constructor (zindex: Number, textures: Array<PIXI.Texture>, alias: Object, options: any) {
+  constructor (zindex: Number, textures: Array<PIXI.Texture>, alias: Array<any>, options: any) {
     super(0, textures);
     this.alias = alias;
     this.textures = textures;
@@ -24,7 +24,7 @@ class TileMap extends PIXI['tilemap'].CompositeRectTileLayer{
     this.tileHeight = options.tileHeight;
     this.mapData = [];
     this.mapWall = 3;
-    this.staticMap = false;
+    this.staticMap = true;
     this.buildTilemap();
     return this;
   }
@@ -33,7 +33,7 @@ class TileMap extends PIXI['tilemap'].CompositeRectTileLayer{
   public buildTilemap () {
     this.clear();
     if (this.staticMap) {
-      this.mapData = this.alias['layers'][0].data;
+      this.mapData = this.alias;
     } else {
       this.generateMulteMapData();
       let rollRd = 5;
@@ -44,12 +44,15 @@ class TileMap extends PIXI['tilemap'].CompositeRectTileLayer{
       this.mapData = [].concat(...this.multeMapData);
     }
     const textures = this.textures;
-    let index = 0;
 
     // 遍历data数据，根据layer数据中的类型下标添加对应的texture。
+    
     for (let md of this.mapData) {
-      this.addFrame(textures[md - 1], this.tileWidth * (index % this.size_x), this.tileHeight * ~~(index / this.size_x));
-      index += 1;
+      md.data.forEach((m, index) => {
+        if (m > 0) {
+          this.addFrame(textures[m - 1], this.tileWidth * (index % this.size_x), this.tileHeight * ~~(index / this.size_x));
+        }
+      });
     }
   }
 

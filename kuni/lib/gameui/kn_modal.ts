@@ -9,15 +9,17 @@ interface IMODAL_OPTIONS {
   modalBg: String,
   titleBg: String,
   close: String,
+  ismobile: Boolean,
   panels: Array<{
     title: string,
     build: Function
   }>
 }
+
 class KnModal extends KnGroup {
   public game: Game;
   public tween: any;
-  public parent: KnScene;
+  public parent: KnGroup | KnScene;
   public content: Container;
   public options: IMODAL_OPTIONS;
   public contentWidth: number;
@@ -26,7 +28,7 @@ class KnModal extends KnGroup {
   public limitMin_Y: number; // 滚动上边界
   public limitMax_Y: number; // 滚动下边界
   public bounceMap: any; // 回弹点信息
-  constructor(game: Game, parent: KnScene, options: any) {
+  constructor(game: Game, parent: KnScene|KnGroup, options: any) {
     super(game, 'knmodal', parent);
     this.game = game;
     this.parent = parent;
@@ -64,19 +66,19 @@ class KnModal extends KnGroup {
 
   /** 弹层容器结构
    * panel
-   * * floorBg - 全屏遮罩
-   * * panelModal- 弹层部分
+   * ** floorBg - 全屏遮罩
+   * ** panelModal - 弹层部分
    * ** bg|title|closebtn|titleText - 弹层信息
-   * ** rankWrap -内容层
+   * ** rankWrap - 内容层
    * *** ranklist - 列表内容
    * *** mask - 滑动蒙版
   */
   generateModal() {
     this.visible = !1;
-    this.position.set(this.game.config.half_w, this.game.config.half_h);
+    this.position.set(this.parent.width * 0.5, this.parent.height * 0.5);
 
     // 定义背景遮罩
-    const floorBg = this.game.add.graphics().generateRect(0x000000, [0, 0, this.game.config.width, this.game.config.height], true);
+    const floorBg = this.game.add.graphics().generateRect(0x000000, [0, 0, this.parent.width, this.parent.height], true);
     floorBg.alpha = 0.48;
     floorBg.interactive = !0;
     floorBg.on('pointerdown', () => {
@@ -93,6 +95,7 @@ class KnModal extends KnGroup {
     const bg = this.game.add.image(this.options.modalBg, panelModal, [0.5, 0.5]);
     bg.scale.set(0.26, 0.36);
     bg.interactive = !0;
+    
 
     // 定义标题框
     const title = this.game.add.image(this.options.titleBg, panelModal, [0.5, 0.5]);
@@ -106,6 +109,14 @@ class KnModal extends KnGroup {
       this.closePanel();
     };
 
+    // 移动端适配
+    if (this.options.ismobile) {
+      bg.width = this.width;
+      bg.height = this.height;
+      title.y = (title.height - bg.height) * 0.5 + 10;
+      close.position.set((close.width - bg.width) * 0.5 + 10, title.y);
+    }
+
     // 定义标题文字
     this.titleText = this.game.add.text(this.options.panels[0].title, {
       fontSize: title.height * 0.2,
@@ -117,8 +128,8 @@ class KnModal extends KnGroup {
     this.titleText.position.set(title.x, title.y);
     panelModal.addChild(this.titleText);
 
-    // 定义排行容器
-    const modalWrap = this.game.add.group('rankwrap', panelModal);
+    // 定义内容容器
+    const modalWrap = this.game.add.group('contentWrap', panelModal);
 
     // 定义mask
     const maskWidth = bg.width * 0.7;

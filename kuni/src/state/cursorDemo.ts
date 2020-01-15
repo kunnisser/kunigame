@@ -16,8 +16,7 @@ class CursorDemo extends KnScene {
     this.shootType = 1;
     this.resouces = {
       'star': './assets/images/star.png',
-      'weapon': './assets/images/titleWeapon_01.png',
-      'mark': './assets/images/mark.png',
+      'weapon': './assets/images/titleWeapon_01.png'
     }
     this.tween = this.game.add.tween();
   }

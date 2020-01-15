@@ -47,16 +47,14 @@ class KnTransition {
 	leaveScene(leaveCb: Function) {
 		const leaveTween: any = this.game.add.tween();
 		this.overlay.visible = !0;
-		setTimeout(() => {
-			leaveTween.instance.to(this.overlay, 0.34, {
-				alpha: 1,
-				ease: leaveTween.cubic.easeOut,
-				onComplete: () => {
-					leaveCb();
-				}
-				}
-			);
-		}, 0);
+		leaveTween.instance.to(this.overlay, 0.34, {
+			alpha: 1,
+			ease: leaveTween.cubic.easeOut,
+			onComplete: () => {
+				leaveCb();
+			}
+			}
+		);
 	}
 
 	entryScene() {
@@ -68,18 +66,16 @@ class KnTransition {
 		// 重置mask尺寸
 		this.renderMask(0);
 		const progress = {x: 0};
-		setTimeout(() => {
-			entryTween.instance.to(progress, 0.34, {
-				x: this.game.config.width,
-				ease: entryTween.cubic.easeIn,
-				onUpdate: () => {
-					this.renderMask(progress.x);
-				},
-				onComplete: () => {
-					this.maskReset();
-				}
-			});
-		}, 0);
+		entryTween.instance.to(progress, 0.34, {
+			x: this.game.config.width,
+			ease: entryTween.cubic.easeIn,
+			onUpdate: () => {
+				this.renderMask(progress.x);
+			},
+			onComplete: () => {
+				this.maskReset();
+			}
+		});
 	}
 }
 

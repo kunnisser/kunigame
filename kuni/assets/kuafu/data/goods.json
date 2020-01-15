@@ -1,0 +1,57 @@
+{
+  "shrimp": {
+    "name": "鲜虾",
+    "volume": 1,
+    "originPrice": 25
+  },
+  "chives": {
+    "name": "韭菜",
+    "volume": 1,
+    "originPrice": 15
+  },
+  "cabbage": {
+    "name": "白菜",
+    "volume": 3,
+    "originPrice": 10
+  },
+  "horse": {
+    "name": "马",
+    "volume": 30,
+    "originPrice": 300    
+  },
+  "greengem": {
+    "name": "绿宝石",
+    "volume": 2,
+    "originPrice": 800
+  },
+  "diamond": {
+    "name": "钻石",
+    "volume": 2,
+    "originPrice": 1000
+  },
+  "food": {
+    "name": "干粮",
+    "volume": 2,
+    "originPrice": 20
+  },
+  "lantern": {
+    "name": "灯笼",
+    "volume": 10,
+    "originPrice": 60
+  },
+  "badsword": {
+    "name": "生锈的铁剑",
+    "volume": 20,
+    "originPrice": 50
+  },
+  "bbq": {
+    "name": "传说中的BBQ",
+    "volume": 50,
+    "originPrice": 1000
+  },
+  "cow": {
+    "name": "奶牛",
+    "volume": 40,
+    "originPrice": 500
+  }
+}

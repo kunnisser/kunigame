@@ -11,7 +11,7 @@ import UIDemo from 'ts@/src/state/uiDemo';
 import KuaFu from './src/state/kuafu/kuafu';
 
 const game = new Game({
-	width: 750,
+	width: 1400,
 	ratio: 2
 });
 
@@ -37,7 +37,7 @@ const loadingTypes = new Map([
 	['cursordemo', () => game.sceneManager.changeScene(currentScene, cursor)],
 	['environment', () => game.sceneManager.changeScene(currentScene, env)],
 	['tweendemo', () => game.sceneManager.changeScene(currentScene, tweenDemo)],
-	['uidemo', () => game.sceneManager.changeScene(currentScene, uiDemo)]
+	['uidemo', () => game.sceneManager.changeScene(currentScene, uiDemo)],
 ]);
 
 const selector = folder.add(dat, '场景选择', ['home', 'loading', 'mapdemo', 'cursordemo', 'environment', 'tweendemo', 'uidemo']);

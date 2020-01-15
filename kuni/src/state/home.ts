@@ -28,6 +28,7 @@ class Home extends KnScene {
 
   boot() {
     this.create();
+    this.game.ticker.start();
   }
 
   create() {
@@ -44,7 +45,7 @@ class Home extends KnScene {
 
   initClouds() {
     this.clouds = [];
-    let limit = 780;
+    let limit = 320;
     const radius = 2;
     const drawStage = this.game.add.graphics();
     while (limit > 0) {
@@ -92,7 +93,7 @@ class Home extends KnScene {
   }
 
   initText() {
-    let currentText = new PIXI.Text("❤酷尼游戏", {
+    let currentText = new PIXI.Text("CAMS", {
       fontFamily: "Arial",
       fontSize: 100,
       fill: 0xffffff,

@@ -35,7 +35,7 @@ class KnScene extends Container {
 	enter(target?: KnScene, isFirstLoad?: Boolean) {
 		this.visible = !0;
 		this.boot(target, isFirstLoad);
-		isFirstLoad || this.game.overlay.entryScene();
+		isFirstLoad || (this.game.overlay.entryScene());
 	}
 
 	// 离开场景

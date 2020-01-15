@@ -48,6 +48,7 @@ export default class Game {
 		const view = document.getElementById('view');
 		this.view = view;
 		this.dpr = window.devicePixelRatio;
+		console.log('dpr = ', this.dpr);
 		this.camera = {};
 		// 设置游戏画布基本尺寸
 		this.config = {
@@ -60,7 +61,7 @@ export default class Game {
 		this.app = new Application({
 			width: this.config.width,
 			height: this.config.height,
-			antialias: !0,
+			antialias: !1,
 			transparent: !0,
 			resolution: this.dpr
 		});
@@ -143,6 +144,7 @@ export default class Game {
 		this.app.renderer['autoResize'] = true;
 		this.app.renderer.resize(size.width, size.height);
 		settings.SCALE_MODE = SCALE_MODES.NEAREST;
+		settings.FILTER_RESOLUTION = window.devicePixelRatio;
 
 		// 游戏容器适配
 		this.world.scale.set(size.width / config.width);

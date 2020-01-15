@@ -2,13 +2,16 @@
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-11-20 10:27:55
+ * @Last Modified time: 2020-01-15 16:42:36
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
 import Game from 'ts@/lib/core';
 import TileMap from 'ts@/lib/gameobjects/kn_tilemap';
-import { Rectangle, AnimatedSprite, Ticker, Sprite } from 'pixi.js';
+import { Rectangle, Ticker, Sprite } from 'pixi.js';
+import BaseRole from './roles/baseRole';
+import KnSkButton from 'ts@/lib/gameui/kn_skbutton';
+import KnGroup from 'ts@/lib/gameobjects/kn_group';
 
 interface Path {
   pointer: Array<number>,
@@ -19,35 +22,47 @@ interface Path {
   prev?: Path
 }
 
-class Role extends AnimatedSprite {
+class Role extends BaseRole {
   timeline: any;
   tweening: boolean; // 是否出现新的运动指令
   pointer: Array<number>;
   paths: Array<Path>;
   start: Path;
   end: Path;
+  acting: boolean; // 是否进行动作
   step: number; // 角色行走步数
 }
 
 class MapDemo extends KnScene {
   public tilemap: TileMap;
-  public road: Number;
-  public boy: Role;
+  public depthmap: TileMap;
+  public obstacles: Array<Number>; // 障碍集合
+  public gamer: Role;
   public ticker: Ticker;
   public darkCamera: Sprite;
   public alphaLight: Sprite;
+  public mark: Sprite;
+  public scene: KnGroup;
   constructor(game: Game, key: string, boot: boolean) {
     super(game, key, boot);
     this.game = game;
-    this.road = 1;
+    this.obstacles = [];
     this.ticker = null;
-    this.pivot.set(0, 0);
+    this.scene = this.game.add.group('scene', this);
+    this.scene.pivot.set(0, 0);
     this.drawStage = this.game.add.graphics();
     this.resouces = {
-      'worldmap': './assets/data/worldmap.json',
-      'world': './assets/images/maptiles.png',
-      'boy': './assets/data/boy.json',
-      'lightmap': './assets/images/lightmap.png'
+      'worldmap': './assets/data/rpg.json',
+      'world': './assets/images/GrasslandColor.png',
+      'lightmap': './assets/images/lightmap.png',
+      'druid_ske': './assets/data/deluyi_ske.json',
+      'druid_tex': './assets/data/deluyi_tex.json',
+      'druid': './assets/images/deluyi_tex.png',
+      'mark': './assets/images/mark.png',
+      'rpg_sk_bg': './assets/images/rpg_sk_bg.png',
+      'rpg_mask': './assets/images/rpg_mask.png',
+      'rpg_druid_weapon': './assets/images/rpg_druid_weapon.png',
+      'druid_sk_cure': './assets/images/druid_sk_cure.png',
     };
   }
 
@@ -60,35 +75,60 @@ class MapDemo extends KnScene {
         this.boot();
       }
     };
-    this.dat = this.game.gui.add(dat, '随机生成地牢');
+
+    const toggle = {
+      'LightmapVisible': !1,
+    }
+
+    this.game.gui.add(dat, '随机生成地牢');
+    const controller = this.game.gui.add(toggle, 'LightmapVisible');
+    controller.onChange((flag: boolean) => {
+      if (flag) {
+        this.alphaLight.visible = !0;
+        this.mask = this.alphaLight;
+      } else {
+        this.alphaLight.visible = !1;
+        this.mask = null;
+      }
+    });
   }
 
   boot() {
     this.dev();
     this.reset();
     const staticWorldTexture = this.loader.resources.world.texture;
+
     let textures = [];
 
     // 定义瓷砖尺寸
     const tiledSizeX = 32;
     const tiledSizeY = 32;
-    const tileWidth = 32, tileHeight = 32;
+    const tileWidth = 64, tileHeight = 64;
     const limitX = tiledSizeX * tileWidth - (this.game.camera.width / this.game.world.scale.x),
       limitY = tiledSizeY * tileHeight - (this.game.camera.height / this.game.world.scale.y);
-    for (var i = 0, l = 4; i < l; i++) {
-      const rectangle = new Rectangle(i * tileWidth, 0, tileWidth, tileHeight);
+    for (var i = 0, l = 256; i < l; i++) {
+      const rectangle = new Rectangle(i % 16 * tileWidth, ~~(i / 16) * tileHeight, tileWidth, tileHeight);
       const texture = staticWorldTexture.clone();
       texture.frame = rectangle;
       textures.push(texture);
     }
-    const aliasData = this.loader.resources.worldmap.data;
-    this.tilemap = new TileMap(0, textures, aliasData, { tiledSizeX, tiledSizeY, tileWidth, tileHeight });
+    const aliasData = this.loader.resources.worldmap.data.layers;
+
+    this.tilemap = new TileMap(0, textures, aliasData.slice(0, 4), { tiledSizeX, tiledSizeY, tileWidth, tileHeight });
     this.tilemap.pivot.set(0, 0);
-    this.addChild(this.tilemap);
+    
+    this.scene.addChild(this.tilemap);
 
     // 添加地图角色
-    this.initialBoy();
-    
+    this.initialRoles();
+
+    // 添加纵深层
+    this.depthmap = new TileMap(0, textures, aliasData.slice(4, 5), { tiledSizeX, tiledSizeY, tileWidth, tileHeight});
+    this.depthmap.pivot.set(0, 0);
+    this.scene.addChild(this.depthmap);
+
+    this.addMark(tileWidth, tileHeight);
+
     // 加入lightmap
     this.addDarkLight();
 
@@ -100,17 +140,17 @@ class MapDemo extends KnScene {
     // 添加点击layerWrap容器
     const layerWrap = new PIXI['tilemap'].RectTileLayer(1, []);
     layerWrap.addChild(layer);
-    this.tilemap.addChild(layerWrap);
+    this.depthmap.addChild(layerWrap);
 
     // 生成tween的时间线
-    this.boy.timeline = this.game.add.tweenline();
-    this.boy.paths = [];
+    this.gamer.timeline = this.game.add.tweenline();
+    this.gamer.paths = [];
 
     // 监听点击
     layer.on('pointerdown', (e) => {
       const pos = e.data.global;
       const start: Path = {
-        pointer: this.boy['pointer'],
+        pointer: this.gamer['pointer'],
         F: 0,
         G: 0,
         H: 0,
@@ -120,144 +160,158 @@ class MapDemo extends KnScene {
       const end = {
         pointer: this.transformPointer(pos.x, pos.y, tileWidth)
       };
-      this.boy.step = 0;
+      this.gamer.step = 0;
 
       // 之前的路径惯性续行(当首次tween没有结束，goingpointer还生成，则使用后者)
-      if (this.boy.paths.length) {
-        start.pointer = this.boy['goingPointer'] || this.boy.paths[this.boy.step].pointer;
+      if (this.gamer.paths.length) {
+        start.pointer = this.gamer['goingPointer'] || this.gamer.paths[this.gamer.step].pointer;
       }
 
       // 点击障碍物无法移动或NPC自身
       if (this.isobstacle(end.pointer) || this.isPointerOverlap(start, end)) {
-        this.boy.paths = [];
+        this.gamer.paths = [];
         return;
       }
 
       // 設置路徑
-      this.boy.paths = this.astar(start, end);
-      this.boy.start = start;
-      this.boy.end = end;
+      this.gamer.paths = this.astar(start, end);
+      this.gamer.start = start;
+      this.gamer.end = end;
+
+      // 设置mark
+      this.mark.visible = !0;
+      this.mark.position.set((end.pointer[0] + 0.5) * tileWidth, (end.pointer[1] + 0.5) * tileHeight);
+      this.mark.alpha = 1;
+      const tween = this.game.add.tween();
+      tween.instance.killTweensOf(this.mark);
+      tween.instance.to(this.mark, 0.25, {
+        y: this.mark.y + 10,
+        alpha: 0.2,
+        ease: tween.linear.easeNone,
+        repeat: 2,
+        yoyo: true,
+        onComplete: () => {
+          this.mark.visible = !1;
+        }
+      });
+
+      // 定义行走动画
+      this.gamer.role.animation.play('walk').timeScale = 2;
     });
 
     // 幀刷新
     this.update = () => {
-      if (!this.boy.tweening && this.boy.paths.length) {
-        this.boy.tweening = true;
-        this.roleRunning(this.boy, tileWidth, tileHeight);
+      if (!this.gamer.tweening && this.gamer.paths.length) {
+        this.gamer.tweening = true;
+        
+        // 定义初始方向?
+        this.setRolesDirect(this.gamer, this.gamer.start.pointer, this.gamer.end.pointer);
+        this.roleRunning(this.gamer, tileWidth, tileHeight);
       }
-      this.alphaLight.position.set(this.boy.x, this.boy.y);
+      this.alphaLight.position.set(this.gamer.x, this.gamer.y);
       this.cameraUpdate(limitX, limitY);
     };
+    this.game.ticker.start();
+    
+    // UI
+    this.addUIGroup();
   }
 
-  roleRunning(role: Role, tileWidth: number, tileHeight: number) {
+  // 添加点击标记
+  addMark(tileWidth, tileHeight) {
+    this.mark = this.game.add.image('mark', this.scene, [0.5, 0.5]);
+    this.mark.visible = !1;
+    this.mark.width = tileWidth * 0.5;
+    this.mark.height = tileHeight * 0.5;
+  }
+
+  roleRunning(character: Role, tileWidth: number, tileHeight: number) {
 
     // 每一格方向判断
-    const pointer = role.paths[role.step].pointer;
-    this.setRolesDirect(role, role.start.pointer, pointer);
-
+    const pointer = character.paths[character.step].pointer;
+    this.setRolesDirect(character, character.start.pointer, pointer);
+    
     // 将要去的路径作为参考路径用来做下一次方向判断
-    role.start.pointer = pointer;
-    role.timeline.clear();
-    role.timeline.to(role, 0.25, {
+    character.start.pointer = pointer;
+
+    character.timeline.clear();
+    character.timeline.to(character, 0.25, {
       x: (pointer[0] + 0.5) * tileWidth,
       y: (pointer[1] + 0.5) * tileHeight,
-      ease: role.timeline.linear.easeNone
+      ease: character.timeline.linear.easeNone
     }).call(() => {
-      const nextPath = role.paths[this.boy.step] || role.end;
+      const nextPath = character.paths[this.gamer.step] || character.end;
 
-      // 更新boy的地图坐标
-      role.pointer = pointer;
-      role['goingPointer'] = nextPath.pointer;
-      role.stop();
-      role.tweening = false;
+      // 更新gamer的地图坐标
+      character.pointer = pointer;
+      character['goingPointer'] = nextPath.pointer;
+      character.tweening = false;
 
       // 当行走至路径终点时
-      if (role.step === role.paths.length) {
-        role.paths = [];
-        role['goingPointer'] = null;
+      if (character.step === character.paths.length) {
+        character.paths = [];
+        character['goingPointer'] = null;
+        character.role.animation.play('stay');
       }
     });
-    role.step += 1;
+    character.step += 1;
   }
 
   addDarkLight() {
-    const alphaLight = this.game.add.image('lightmap', this, [0.5, 0.5]);
-    alphaLight.position.set(this.boy.x, this.boy.y);
-    alphaLight.scale.set(1, 0.6);
-    this.mask = alphaLight;
+    const alphaLight = this.game.add.image('lightmap', this.scene, [0.5, 0.5]);
+    alphaLight.position.set(this.gamer.x, this.gamer.y);
+    alphaLight.scale.set(2, 1);
     const tween = this.game.add.tween();
-    tween.instance.to(alphaLight.scale, 0.64, {
-      x: 1.08,
-      y: 0.58,
+    tween.instance.to(alphaLight.scale, 0.95, {
+      x: 2.05,
+      y: 0.95,
       repeat: 1000,
-      ease: tween.cubic.easeOut,
+      ease: tween.cubic.easeInOut,
       yoyo: true,
     });
     this.alphaLight = alphaLight;
+    this.alphaLight.visible = !1;
   }
 
   cameraUpdate(limitX, limitY) {
 
     // 镜头更新
-    const globalOffsetX = this.boy.x - this.game.camera.half_w / this.game.world.scale.x;
-    const globalOffsetY = this.boy.y - this.game.camera.half_h / this.game.world.scale.y;
+    const globalOffsetX = this.gamer.x - this.game.camera.half_w / this.game.world.scale.x;
+    const globalOffsetY = this.gamer.y - this.game.camera.half_h / this.game.world.scale.y;
     if (globalOffsetX >= 0 && globalOffsetX < limitX) {
-      this.pivot.x = globalOffsetX;
+      this.scene.pivot.x = globalOffsetX;
     } else if (globalOffsetX >= limitX) {
-      this.pivot.x = limitX;
+      this.scene.pivot.x = limitX;
     } else {
-      this.pivot.x = 0;
+      this.scene.pivot.x = 0;
     }
     if (globalOffsetY >= 0 && globalOffsetY < limitY) {
-      this.pivot.y = globalOffsetY;
+      this.scene.pivot.y = globalOffsetY;
     } else if (globalOffsetY >= limitY) {
-      this.pivot.y = limitY;
+      this.scene.pivot.y = limitY;
     } else {
-      this.pivot.y = 0;
+      this.scene.pivot.y = 0;
     }
   }
 
-  initialBoy() {
-    const frames = {
-      down: [],
-      up: [],
-      left: [],
-      right: []
-    };
-    for (let i = 0, l = 4; i < l; i++) {
-      frames.down.push(this.game.add.texture(`down0${i}.png`));
-      frames.left.push(this.game.add.texture(`left0${i}.png`));
-      frames.up.push(this.game.add.texture(`up0${i}.png`));
-      frames.right.push(this.game.add.texture(`right0${i}.png`));
-    }
-    this.boy = this.game.add.animation(frames.down, 0.2);
-    this.boy.width = 24;
-    this.boy.height = 32;
-    this.boy.anchor.set(0.5);
+  initialRoles() {   
 
-    // 设定人物初始坐标
-    this.boy['pointer'] = [16, 16];
-    this.boy.position.set(32 * this.boy.pointer[0] + 16, 32 * this.boy.pointer[1] + 16);
-    this.addChild(this.boy);
-    this.boy['frames'] = frames;
-
-    // 设置初始面向
-    this.boy.textures = frames.right;
+    // 定义德鲁伊
+    const stageRes = this.loader.resources;
+    const druidRes = [stageRes.druid_ske.data, stageRes.druid_tex.data, stageRes.druid.texture];
+    this.gamer = new Role(this.game, this.scene, druidRes);
+    this.gamer.pointer = [2, 2];
+    this.gamer.position.set(64 * this.gamer.pointer[0] + 32, 64 * this.gamer.pointer[1] + 32);
+    this.gamer.setFaceToRight();
   }
 
   // 设置角色面向
-  setRolesDirect(role: AnimatedSprite, prev: Array<number>, next: Array<number>) {
+  setRolesDirect(gamer: Role, prev: Array<number>, next: Array<number>) {
     if (prev[0] < next[0]) {
-      role.textures = role['frames'].right;
+      gamer.setFaceToRight();
     } else if (prev[0] > next[0]) {
-      role.textures = role['frames'].left;
-    } else if (prev[1] < next[1]) {
-      role.textures = role['frames'].down;
-    } else if (prev[1] > next[1]) {
-      role.textures = role['frames'].up;
+      gamer.setFaceToLeft();
     }
-    role.play();
   }
 
   // 坐标重叠
@@ -268,8 +322,8 @@ class MapDemo extends KnScene {
 
   // 点击坐标转换
   transformPointer(x: number, y: number, tileWidth: number) {
-    const mapX = x / this.game.world.scale.x + this.pivot.x,
-      mapY = y / this.game.world.scale.y + this.pivot.y;
+    const mapX = x / this.game.world.scale.x + this.scene.pivot.x,
+      mapY = y / this.game.world.scale.y + this.scene.pivot.y;
     return [~~(mapX / tileWidth), ~~(mapY / tileWidth)];
   }
 
@@ -419,7 +473,37 @@ class MapDemo extends KnScene {
   // 判断是否为障碍
   isobstacle(pointer: Array<number>) {
     const index = pointer[0] + this.tilemap.size_x * pointer[1];
-    return this.tilemap.mapData[index] !== this.road;
+    if (this.tilemap.mapData[2].data[index] > 0 && this.tilemap.mapData[3].data[index] === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // UI组
+  addUIGroup() {
+    const Gui = this.game.add.group('gui', this);
+    Gui.position.set(this.game.config.half_w, this.game.config.height - 50);
+    const attackConfig = {
+      type: 'normal',
+      cd: 0.8,
+      action: () => {
+        this.gamer.acting = true;
+        this.gamer.role.animation.play('sk_attack', 1);
+        return this.gamer;
+      }
+    };
+    const attack = new KnSkButton(this.game, Gui, 'rpg_druid_weapon', attackConfig);
+    attack.position.set(0, 0);
+    const cureConfig = {
+      cd: 2,
+      action: () => {
+        this.gamer.role.animation.play('sk_cure', 1);
+        return this.gamer;
+      }
+    };
+    const cure = new KnSkButton(this.game, Gui, 'druid_sk_cure', cureConfig);
+    cure.position.set(attack.width + 20, 0);
   }
 
   reset() {

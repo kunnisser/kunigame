@@ -44,7 +44,6 @@ class UIDemo extends KnScene {
   }
 
   boot() {
-    this.game.ticker.start();
     this.addBackground();
     this.addAvatar();
     this.addScrollMenu();
@@ -89,7 +88,7 @@ class UIDemo extends KnScene {
         name: '我服了你了行吧',
       }
     ];
-    const scrollMenu = new KnScrollMenu(this.game, this, options);
+    const scrollMenu = new KnScrollMenu(this.game, this, options, !0, 1.5);
     const bgRect = this.game.add.graphics().generateRect(0xffffff, [0, 0, this.game.config.width, this.game.config.height - 100], !0);
     const menuBg = TransformImage.transformToSprite(this.game, bgRect, scrollMenu);
     menuBg.alpha = 0;

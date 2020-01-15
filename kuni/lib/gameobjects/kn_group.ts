@@ -18,17 +18,19 @@ class KnGroup extends Container {
 	}
 
 	// @align - true 统一锚点居中
-	add (childs: Array<PIXI.Sprite>, align: boolean) {
-		const handler = align ? (chd: PIXI.Sprite) => {
-			chd.anchor.set(0.5);
+	add (childs: Array<any>, align: boolean) {
+		const handler = align ? (chd: any) => {
+			chd.anchor && chd.anchor.set(0.5);
 			this.addChild(chd);
-		} : (chd: PIXI.Sprite) => {
+		} : (chd: any) => {
 			this.addChild(chd);
 		}
 		for (let chd of childs) {
 			handler(chd);
 		}
 	}
+
+	update() {}
 }
 
 export default KnGroup;

@@ -1,7 +1,7 @@
 import KnScene from "ts@/lib/gameobjects/kn_scene";
 import Game from "ts@/lib/core";
 import KnEmitter from "ts@/lib/gameobjects/kn_emitter";
-import { GodrayFilter } from 'ts@/src/filter/godray';
+import { GodrayFilter } from "../filter/godray";
 
 class Environment extends KnScene {
   public game: Game;
@@ -11,18 +11,20 @@ class Environment extends KnScene {
   constructor(game: Game, key: string, boot: boolean) {
     super(game, key, boot);
     this.game = game;
-    this.shootType = 1;
     this.resouces = {
       'rain': './assets/images/rain.png',
       'snow': './assets/images/snow.png',
       'envBg': './assets/images/env_bg.png',
       'perlin': './assets/shader/frag/perlin.frag',
-      'godray': './assets/shader/frag/godray.frag',
+      'godray': './assets/shader/frag/godray.frag'
     }
   }
 
   boot() {
+    this.shootType = 1;
+    this.filters = [];
     this.tween = this.game.add.tween();
+    this.emitter = null;
     this.addBackground();
     this.generateRains();
     this.dev();
@@ -46,6 +48,7 @@ class Environment extends KnScene {
 
   toggleEnv(type: number) {
     this.emitter && this.emitter.destroy();
+    this.emitter = null;
     this.filters = [];
     switch (type) {
       case 1:
@@ -64,7 +67,6 @@ class Environment extends KnScene {
   }
 
   addFilter() {
-    this.emitter = null;
     this.filters = [new GodrayFilter(this.loader)];
   }
 
@@ -79,6 +81,7 @@ class Environment extends KnScene {
     this.emitter = this.game.add.emitter(this.game, 200, 'rain');
     this.emitter.shooting = !0;
     this.addChild(this.emitter);
+    console.log(this.children);
   }
 
   generateSnows() {
