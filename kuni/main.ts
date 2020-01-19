@@ -11,7 +11,7 @@ import UIDemo from 'ts@/src/state/uiDemo';
 import KuaFu from './src/state/kuafu/kuafu';
 
 const game = new Game({
-	width: 1400,
+	width: 1800,
 	ratio: 2
 });
 

@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-09-14 23:40:01 
- * @Last Modified by: kunnisser
- * @Last Modified time: 2020-01-15 16:42:36
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2020-01-16 16:02:39
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -116,14 +116,14 @@ class MapDemo extends KnScene {
 
     this.tilemap = new TileMap(0, textures, aliasData.slice(0, 4), { tiledSizeX, tiledSizeY, tileWidth, tileHeight });
     this.tilemap.pivot.set(0, 0);
-    
+
     this.scene.addChild(this.tilemap);
 
     // 添加地图角色
     this.initialRoles();
 
     // 添加纵深层
-    this.depthmap = new TileMap(0, textures, aliasData.slice(4, 5), { tiledSizeX, tiledSizeY, tileWidth, tileHeight});
+    this.depthmap = new TileMap(0, textures, aliasData.slice(4, 5), { tiledSizeX, tiledSizeY, tileWidth, tileHeight });
     this.depthmap.pivot.set(0, 0);
     this.scene.addChild(this.depthmap);
 
@@ -150,16 +150,18 @@ class MapDemo extends KnScene {
     layer.on('pointerdown', (e) => {
       const pos = e.data.global;
       const start: Path = {
-        pointer: this.gamer['pointer'],
+        pointer: this.gamer.pointer,
         F: 0,
         G: 0,
         H: 0,
         D: 0,
         prev: null
       };
+
       const end = {
         pointer: this.transformPointer(pos.x, pos.y, tileWidth)
       };
+
       this.gamer.step = 0;
 
       // 之前的路径惯性续行(当首次tween没有结束，goingpointer还生成，则使用后者)
@@ -203,7 +205,7 @@ class MapDemo extends KnScene {
     this.update = () => {
       if (!this.gamer.tweening && this.gamer.paths.length) {
         this.gamer.tweening = true;
-        
+
         // 定义初始方向?
         this.setRolesDirect(this.gamer, this.gamer.start.pointer, this.gamer.end.pointer);
         this.roleRunning(this.gamer, tileWidth, tileHeight);
@@ -212,7 +214,7 @@ class MapDemo extends KnScene {
       this.cameraUpdate(limitX, limitY);
     };
     this.game.ticker.start();
-    
+
     // UI
     this.addUIGroup();
   }
@@ -229,8 +231,9 @@ class MapDemo extends KnScene {
 
     // 每一格方向判断
     const pointer = character.paths[character.step].pointer;
+
     this.setRolesDirect(character, character.start.pointer, pointer);
-    
+
     // 将要去的路径作为参考路径用来做下一次方向判断
     character.start.pointer = pointer;
 
@@ -249,9 +252,10 @@ class MapDemo extends KnScene {
 
       // 当行走至路径终点时
       if (character.step === character.paths.length) {
+        character.paths.length > 0 &&
+        character.role.animation.play('stay');
         character.paths = [];
         character['goingPointer'] = null;
-        character.role.animation.play('stay');
       }
     });
     character.step += 1;
@@ -294,7 +298,7 @@ class MapDemo extends KnScene {
     }
   }
 
-  initialRoles() {   
+  initialRoles() {
 
     // 定义德鲁伊
     const stageRes = this.loader.resources;
@@ -480,6 +484,13 @@ class MapDemo extends KnScene {
     }
   }
 
+  // 暂停运动
+  pauseWalking () {
+    this.gamer.paths = [];
+    this.gamer['goingPointer'] = null;
+    this.gamer.step = 0;
+  }
+
   // UI组
   addUIGroup() {
     const Gui = this.game.add.group('gui', this);
@@ -488,17 +499,30 @@ class MapDemo extends KnScene {
       type: 'normal',
       cd: 0.8,
       action: () => {
-        this.gamer.acting = true;
+        this.pauseWalking();
+
         this.gamer.role.animation.play('sk_attack', 1);
+        this.gamer.role.addDBEventListener(this.gamer.DB.EventObject.COMPLETE, () => {
+          this.gamer.role.removeDBEventListener(this.gamer.DB.EventObject.COMPLETE);
+          const roleState = this.gamer.tweening ? 'walk' : 'stay';
+          this.gamer.role.animation.play(roleState);
+        }, this);
         return this.gamer;
       }
     };
     const attack = new KnSkButton(this.game, Gui, 'rpg_druid_weapon', attackConfig);
     attack.position.set(0, 0);
     const cureConfig = {
-      cd: 2,
+      cd: 5,
       action: () => {
+        this.pauseWalking();
+
         this.gamer.role.animation.play('sk_cure', 1);
+        this.gamer.role.addDBEventListener(this.gamer.DB.EventObject.COMPLETE, () => {
+          this.gamer.role.removeDBEventListener(this.gamer.DB.EventObject.COMPLETE);
+          const roleState = this.gamer.tweening ? 'walk' : 'stay';
+          this.gamer.role.animation.play(roleState);
+        }, this);
         return this.gamer;
       }
     };

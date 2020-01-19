@@ -28,7 +28,7 @@ class KnSkButton extends KnGroup{
 
     // 设置技能mask
     let mask: any = this.game.add.graphics();
-    mask.generateRect(0x000000, [0, 0, this.skillBtn.width, this.skillBtn.height, 6], false, 0.7);
+    mask.generateRect(0x000000, [0, 0, this.skillBtn.width + 2, this.skillBtn.height + 2, 6], false, 0.7);
     mask = TransformImage.transformToSprite(this.game, mask, this);
     mask.anchor.set(0.5, 1);
     mask.y += mask.height * 0.5;
@@ -39,6 +39,7 @@ class KnSkButton extends KnGroup{
       if (!this.skillBtn['clickable']) {
         return;
       }
+
       // 执行Action
       const gamer = config.action();
 
@@ -65,10 +66,16 @@ class KnSkButton extends KnGroup{
       y: 0,
       onComplete: () => {
         mask.visible = false;
-        mask.scale.set(1);
-        gamer.acting = false;
-        gamer.role.animation.play('stay');
         this.skillBtn['clickable'] = true;
+        this.skillBtn.blendMode = PIXI.BLEND_MODES.ADD_NPM;
+        tween.instance.to(mask.scale, 0.25, {
+          x: 1,
+          y: 1,
+          ease: tween.bounce.easeOut,
+          onComplete: () => {
+            this.skillBtn.blendMode = PIXI.BLEND_MODES.NORMAL;
+          }
+        });
       }
     });
   }
