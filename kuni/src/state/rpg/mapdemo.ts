@@ -1,10 +1,3 @@
-/*
- * @Author: kunnisser 
- * @Date: 2019-09-14 23:40:01 
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2020-02-08 22:09:02
- */
-
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
 import Game from 'ts@/lib/core';
 import TileMap from 'ts@/lib/gameobjects/kn_tilemap';
