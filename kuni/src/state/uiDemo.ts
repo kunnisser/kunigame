@@ -29,7 +29,6 @@ class UIDemo extends KnScene {
       'menu04': './assets/images/menu04.png',
       'menu05': './assets/images/menu05.png',
       'menutip': './assets/images/tip.png',
-      'avatar': './assets/images/user.jpeg',
       'ui_00': './assets/images/ui_00.png',
       'ui_01': './assets/images/ui_01.png',
       'ui_02': './assets/images/ui_02.png',
@@ -199,7 +198,7 @@ class UIDemo extends KnScene {
   }
 
   addAvatar() {
-    const avatar = new KnAvatar(this.game, this, 'avatar', 0xfff000);
+    const avatar = new KnAvatar(this.game, this, 'avatar', 0xddd123);
     avatar.setPosition(avatar.avatar_w + 4, avatar.avatar_h + 4);
   }
 

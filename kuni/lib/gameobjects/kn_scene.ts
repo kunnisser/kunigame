@@ -62,7 +62,7 @@ class KnScene extends Container {
 	// 内置消息提示组件
 	bootMessage() {
 		this.tip = new KnMessage(this.game, this);
-		this.tip.position.set(this.width * 0.5, this.height * 0.5);
+		this.tip.position.set(this.game.config.half_w, this.game.config.half_h);
 	}
 }
 

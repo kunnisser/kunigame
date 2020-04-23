@@ -6,12 +6,13 @@ class BaseRole extends KnGroup{
   public parent: KnScene | KnGroup;
   public role: any;
   public size: number;
-  public pointer: Array<number>; // 角色坐标
+  public name: string; // 角色名称
   public DB: any;
-  constructor(game, parent, res) {
+  constructor(game, parent, res, name) {
     super(game, 'baseRole', parent);
     this.game = game;
     this.parent = parent;
+    this.name = name;
     this.size = 64;
     this.roleGenerator(res);
     this.roleResize();
@@ -20,9 +21,9 @@ class BaseRole extends KnGroup{
   roleGenerator(res) {
     this.DB = dragonBones;
     const factory = this.DB.PixiFactory.factory;
-    factory.parseDragonBonesData(res[0]);
-    factory.parseTextureAtlasData(res[1], res[2]);
-    this.role = factory.buildArmatureDisplay('druid');
+    factory.parseDragonBonesData(res[`${this.name}_ske`].data);
+    factory.parseTextureAtlasData(res[`${this.name}_tex`].data, res[`${this.name}`].texture);
+    this.role = factory.buildArmatureDisplay(this.name);
     this.role.animation.play('stay');
     this.role.position.set(0, 32);
     this.addChild(this.role);
@@ -40,7 +41,7 @@ class BaseRole extends KnGroup{
 
   roleResize() {
     this.width = this.size;
-    this.height =this.size;
+    this.height = this.size;
   }
 }
 

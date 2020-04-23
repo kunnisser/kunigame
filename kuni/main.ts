@@ -1,7 +1,7 @@
 import Game from 'ts@/lib/core';
 import Home from 'ts@/src/state/home';
 import Loading from 'ts@/src/state/loading';
-import MapDemo from 'ts@/src/state/rpg/mapdemo';
+import MapDemo from 'ts@/src/state/rpg/mapDemo';
 import { GuiScene } from 'ts@/lib/utils/gui';
 import KnTranstion from 'ts@/lib/gameui/kn_transtion';
 import CursorDemo from 'ts@/src/state/cursorDemo';
@@ -11,7 +11,7 @@ import UIDemo from 'ts@/src/state/uiDemo';
 import KuaFu from './src/state/kuafu/kuafu';
 
 const game = new Game({
-	width: 1800,
+	width: 1240,
 	ratio: 2
 });
 

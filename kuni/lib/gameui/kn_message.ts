@@ -7,19 +7,20 @@ class KnMessage extends KnGroup{
   public message: KnText;
   public game: Game;
   public tween: any;
+  public lock: boolean;
   constructor(game: Game, parent: Container) {
     super(game, 'knmessage', parent);
     this.game = game;
     this.initial();
     this.tween = this.game.add.tween();
+    this.lock = !1;
   }
 
   initial() {
     const messageStyle = {
-      fontSize: 12,
+      fontSize: 18,
       fill: '#ffffff',
-      stroke: 0x666666,
-      strokeThickness: 6,
+      fontWeight: 'bold'
     }
     this.message = this.game.add.text('', messageStyle, [0.5, 0.5]);
 
@@ -30,6 +31,10 @@ class KnMessage extends KnGroup{
   }
 
   showMessage(message: string) {
+    if (this.lock) {
+      return;
+    }
+    this.lock = !0;
     this.message.text = message;
     const rect: any = this.children[0];
     rect.clear();
@@ -38,12 +43,11 @@ class KnMessage extends KnGroup{
       color: 0xffffff,
       alpha: 0.8
     });
-    this.children[0]['generateRect'](0x000000, [0, 0, this.message.width + 50, this.message.height + 6, this.message.height * 0.5], true, 0.6);
+    this.children[0]['generateRect'](0x000000, [0, 0, this.message.width + 60, this.message.height + 10, this.message.height * 0.5], true, 0.4);
     this.visible = !0;
     this.alpha = 0;
     this.scale.set(1);
     this.y += 50;
-    this.tween.instance.killAll();
     this.tween.instance.to(this.scale, 0.1, {
       x: 0.9,
       y: 1.15,
@@ -61,7 +65,7 @@ class KnMessage extends KnGroup{
           alpha: 1,
           ease: this.tween.cubic['easeOut'],
           onComplete: () => {
-            
+            this.lock = !1;
             this.hideMessage();
           }
         });

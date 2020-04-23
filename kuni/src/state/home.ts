@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
- * @Last Modified by: kunnisser
- * @Last Modified time: 2019-11-21 09:51:25
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2020-02-07 16:11:14
  */
 
 import KnScene from 'ts@/lib/gameobjects/kn_scene';
@@ -45,7 +45,7 @@ class Home extends KnScene {
 
   initClouds() {
     this.clouds = [];
-    let limit = 320;
+    let limit = 1940;
     const radius = 2;
     const drawStage = this.game.add.graphics();
     while (limit > 0) {
@@ -93,9 +93,9 @@ class Home extends KnScene {
   }
 
   initText() {
-    let currentText = new PIXI.Text("CAMS", {
+    let currentText = new PIXI.Text("老健沙雕", {
       fontFamily: "Arial",
-      fontSize: 100,
+      fontSize: 200,
       fill: 0xffffff,
       fontWeight: "bold",
       align: "center"

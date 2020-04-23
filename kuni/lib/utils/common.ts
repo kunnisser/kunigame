@@ -43,7 +43,13 @@ const events: IEvents = {
 const math: IMath = {
 	rdirect() {
 		return Math.random() * 100 < 50 ? 1 : -1;
-	},
+  },
+  between(range) {
+    return range[0] + Math.floor(Math.random() * (range[1] - range[0]));
+  },
+  crit(val, crit, critVal) { // 暂用
+    return (Math.floor(Math.random() * 100) < crit) ? Math.round(val * (1 + critVal / 100)) : val;
+  },
 	clamp(v: number, min: number, max: number) {
 		if (v < min) {
 			return min;
@@ -53,6 +59,14 @@ const math: IMath = {
 		}
 		else {
 			return v;
+		}
+	},
+	angleToPointer (source, parent, target) {
+		if (parent) {
+			const sourcePos = parent.toGlobal(source.position);
+			return Math.atan2(sourcePos.y - target.y, sourcePos.x - target.x);
+		} else {
+		    return Math.atan2(source.y - target.y, source.x - target.x);
 		}
 	}
 }

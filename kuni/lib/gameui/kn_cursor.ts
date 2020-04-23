@@ -7,7 +7,7 @@ class KnCursor extends KnGroup{
     this.game = game;
     const cssPath = [
       './assets/images/hand_cursor.png',
-      './assets/images/hover_cursor.png'
+      './assets/images/attack.png'
     ];
     const handIcon = `url(${cssPath[0]}),auto`;
     const hoverIcon= `url(${cssPath[1]}),auto`;
