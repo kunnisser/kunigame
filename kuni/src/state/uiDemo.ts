@@ -3,7 +3,6 @@ import Game from "ts@/lib/core";
 import KnModal from "ts@/lib/gameui/kn_modal";
 import KnScrollMenu from "ts@/lib/gameui/kn_scrollMenu";
 import { TransformImage } from 'ts@/lib/utils/common';
-import KnAvatar from "ts@/lib/gameui/kn_avatar";
 import KnMenuBar from "ts@/lib/gameui/kn_menubar";
 
 class UIDemo extends KnScene {
@@ -11,8 +10,8 @@ class UIDemo extends KnScene {
   public shootType: number;
   public tween: any;
   public rank: KnModal;
-  constructor(game: Game, key: string, boot: boolean) {
-    super(game, key, boot);
+  constructor(game: Game, key: string) {
+    super(game, key);
     this.game = game;
     this.shootType = 1;
     this.resouces = {
@@ -43,8 +42,11 @@ class UIDemo extends KnScene {
   }
 
   boot() {
+
+  }
+
+  create() {
     this.addBackground();
-    this.addAvatar();
     this.addScrollMenu();
     this.addFootbar();
     this.addTopbar();
@@ -67,7 +69,7 @@ class UIDemo extends KnScene {
         tipkey: 'menutip',
         name: '富甲天下',
         callback: () => {
-          this.game.sceneManager.changeScene(this, this.game.sceneManager.scenes[8]);
+          this.game.sceneManager.changeScene(this, this.game.sceneManager.scenes['home']);
         }
       },
       {
@@ -195,11 +197,6 @@ class UIDemo extends KnScene {
     btn.position.set(this.game.config.half_w + btn.width, this.game.config.half_h);
     btn.next = () => {
     }
-  }
-
-  addAvatar() {
-    const avatar = new KnAvatar(this.game, this, 'avatar', 0xddd123);
-    avatar.setPosition(avatar.avatar_w + 4, avatar.avatar_h + 4);
   }
 
   addFootbar() {

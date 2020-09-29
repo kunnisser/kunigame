@@ -10,8 +10,8 @@ class CursorDemo extends KnScene {
   public weapon: Sprite;
   public mark: Sprite;
   public tween: any;
-  constructor(game: Game, key: string, boot: boolean) {
-    super(game, key, boot);
+  constructor(game: Game, key: string) {
+    super(game, key);
     this.game = game;
     this.shootType = 1;
     this.resouces = {
@@ -22,11 +22,14 @@ class CursorDemo extends KnScene {
   }
 
   boot() {
+    this.dev();
+  }
+
+  create() {
     this.addBackground();
     this.generateStar();
     this.addWeapon();
     this.addMark();
-    this.dev();
   }
 
   dev() {
@@ -112,9 +115,9 @@ class CursorDemo extends KnScene {
       particle.x = pointX;
       particle.y = pointY;
       this.tween.instance.to(particle, 1.6, {
-        x: pointX + this.game.math.rdirect() * Math.random() * 200,
+        x: pointX + this.game.math.redirect() * Math.random() * 200,
         y: pointY - Math.random() * 200,
-        angle: 100 + this.game.math.rdirect() * Math.random() * 300,
+        angle: 100 + this.game.math.redirect() * Math.random() * 300,
         alpha: 0,
         ease: this.tween.linear.easeNone
       });
@@ -127,11 +130,11 @@ class CursorDemo extends KnScene {
     this.emitter.throtting -= 2;
     if (this.emitter.throtting < 0) {
       const particle = this.emitter.shoot();
-      particle.x = this.weapon.x + this.game.math.rdirect() * ~~(Math.random() * 10) * this.weapon.width ;
+      particle.x = this.weapon.x + this.game.math.redirect() * ~~(Math.random() * 10) * this.weapon.width;
       particle.y = this.weapon.y;
       this.tween.instance.to(particle, 1.6, {
-        y: particle.y + this.game.math.rdirect() * Math.random() * this.weapon.height,
-        angle: 100 + this.game.math.rdirect() * Math.random() * 300,
+        y: particle.y + this.game.math.redirect() * Math.random() * this.weapon.height,
+        angle: 100 + this.game.math.redirect() * Math.random() * 300,
         alpha: 0,
         ease: this.tween.linear.easeNone
       });
@@ -152,9 +155,9 @@ class CursorDemo extends KnScene {
       particle.x = pointX;
       particle.y = pointY;
       this.tween.instance.to(particle, 0.5, {
-        x: particle.x + this.game.math.rdirect() * Math.random() * 10,
+        x: particle.x + this.game.math.redirect() * Math.random() * 10,
         y: particle.y - Math.random() * 20 - 10,
-        angle: 100 + this.game.math.rdirect() * Math.random() * 300,
+        angle: 100 + this.game.math.redirect() * Math.random() * 300,
         alpha: 0,
         ease: this.tween.linear.easeNone
       });

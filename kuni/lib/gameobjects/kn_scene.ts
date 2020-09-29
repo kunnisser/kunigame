@@ -14,11 +14,11 @@ class KnScene extends Container {
 	public dat?: any;
 	public drawStage: KnGraphics;
 	public tip: KnMessage;
-	constructor(game: object, key: string, boot?: boolean) {
+	constructor(game: object, key: string) {
 		super();
 		this.game = game;
 		this.id = key;
-		this.isBoot = boot;
+		this.isBoot = !1;
 		this.isCached = !1;
 		this.initial();
 	}
@@ -28,31 +28,55 @@ class KnScene extends Container {
 		const world = this.game.world;
 		this.width = world.width;
 		this.height = world.height;
-		world.addChild(this);
 	}
 
 	// 进入场景
-	enter(target?: KnScene, isFirstLoad?: Boolean) {
-		this.visible = !0;
-		this.boot(target, isFirstLoad);
-		isFirstLoad || (this.game.overlay.entryScene());
+	enter(nextTarget?: KnScene, isFirstLoad?: Boolean) {
+		this.game.world.addChild(this);
+		isFirstLoad && this.game.overlay.entryScene();
+		this.game.currentScene = this;
+		if (this.game.overlay) {
+			this.game.overlay.destroy();
+			this.game.overlay = null;
+		}
+		if (!this.isBoot) {
+			this.create();
+			this.signBooting();
+
+			// ticker只能在首次加载注册，否则会注册多个事件
+			this.game.ticker.add((delta) => {
+				this.update(delta);
+			});
+		}
+		this.boot(nextTarget);
+		this.game.ticker.start();
+	}
+
+	loading(nextTarget: KnScene) {
+		throw new Error('Method not implemented.');
 	}
 
 	// 离开场景
 	exit() {
-		this.visible = !1;
-		this.drawStage && this.drawStage.clear();
-		this.removeChildren(0, this.children.length);
+		this.game.ticker.stop();
+		this.game.ticker.destroy();
+		this.game.world.removeChild(this);
+		this.game.currentScene = null;
 	}
 
 	// 构建场景
-	create() {}
+	create() { }
 
 	// 激活
 	boot(target?: KnScene, isFirstLoad?: Boolean) { }
 
+	// 标记激活
+	signBooting() {
+		this.isBoot = true;
+	}
+
 	// 刷新场景
-	update(delta: number, options?: object) {}
+	update(delta: number, options?: object) { }
 
 	// 删除场景
 	remove() {

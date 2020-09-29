@@ -22,8 +22,8 @@ class KuaFu extends KnScene {
   public gui: KnGroup; // 游戏信息UI
   public goods: any; // 游戏商品总类
 
-  constructor(game: Game, key: string, boot: boolean) {
-    super(game, key, boot);
+  constructor(game: Game, key: string) {
+    super(game, key);
     this.game = game;
     this.resouces = {
       'kuafu_bg': './assets/kuafu/kuafu_bg.png',
@@ -39,7 +39,6 @@ class KuaFu extends KnScene {
       'date': './assets/kuafu/data/date.json',
       'textarea': './assets/kuafu/textarea.png',
       'farm': './assets/kuafu/farm.png',
-      'weapon': './assets/kuafu/weapon.png',
       'grocery': './assets/kuafu/grocery.png',
       'ore': './assets/kuafu/ore.png',
       'pasture': './assets/kuafu/pasture.png'
@@ -48,6 +47,9 @@ class KuaFu extends KnScene {
 
   boot() {
     this.initialData();
+  }
+
+  create() {
     this.tween = this.game.add.tween();
     this.addBackground();
     this.addGameBg();
@@ -86,7 +88,7 @@ class KuaFu extends KnScene {
   }
 
   // 添加城池MODAL
-  addCityModal () {
+  addCityModal() {
     const cityOptions = {
       type: 'scroll',
       modalBg: 'kuafu_modal',

@@ -11,7 +11,12 @@ class KnTransition {
 		this.game = game;
 		this.generateOverlay();
 		this.addMask();
-	}
+  }
+
+  destroy() {
+    this.game.world.removeChild(this.overlay);
+    this.game.world.removeChild(this.mask);
+  }
 
 	addMask() {
 		this.mask = this.game.add.graphics();
@@ -21,9 +26,7 @@ class KnTransition {
 
 	renderMask(size?: number) {
 		this.mask.clear();
-		this.mask.beginFill(0x000000, 1);
-		this.mask.drawStar(this.game.config.half_w, this.game.config.half_h, 5, size);
-		this.mask.endFill();
+		this.mask.generateRect(0x000000, [this.game.config.half_w, this.game.config.half_h, size, size], !0);
 	}
 
 	generateOverlay() {

@@ -1,12 +1,10 @@
 import dat from 'dat.gui';
-import * as Stats from 'stats-js';
 import KnFactory from 'ts@/lib/gameobjects/kn_factory';
 import KnLoader from 'ts@/lib/loader/kn_loader';
 import KnSceneManager from 'ts@/lib/gameobjects/kn_scene_manager';
 import { Application, settings, SCALE_MODES } from 'pixi.js';
 import { debounce, math } from 'ts@/lib/utils/common';
 import KnScene from './gameobjects/kn_scene';
-import KnPreloader from 'ts@/lib/loader/kn_preloader';
 import KnTranstion from 'ts@/lib/gameui/kn_transtion';
 import KnCursor from './gameui/kn_cursor';
 
@@ -17,8 +15,8 @@ interface EnterProps {
 }
 
 export default class Game {
+	public entryStateKey: string;
 	public gui: any;
-	public stats: any;
 	public view?: HTMLElement | null;
 	public dpr: number;
 	public preloader: KnScene;
@@ -44,6 +42,7 @@ export default class Game {
 	public currentScene: KnScene; // 当前场景
 	public overlay: KnTranstion; // 转场遮罩
 	public cursor: KnCursor; // 游戏光标
+	entryHive: any;
 	constructor(config: EnterProps) {
 		const view = document.getElementById('view');
 		this.view = view;
@@ -61,7 +60,7 @@ export default class Game {
 		this.app = new Application({
 			width: this.config.width,
 			height: this.config.height,
-			antialias: !1,
+			antialias: false,
 			transparent: !0,
 			resolution: this.dpr
 		});
@@ -70,10 +69,6 @@ export default class Game {
 
 		// 注册gui调试实例
 		this.gui = new dat.GUI();
-
-		// 注册渲染性能调试
-		this.stats = new Stats();
-		this.view.appendChild(this.stats.dom);
 
 		// 添加加载器实例
 		this.loader = new KnLoader(this);
@@ -108,12 +103,8 @@ export default class Game {
 			});
 		}
 
-		// 定义全局场景loading
-		this.preloader = this.sceneManager.addScene('global_preloader', KnPreloader);
+		// 定义场景render刷新
 		this.refresh();
-
-		// performance & runtime
-		this.stats.showPanel(0);
 	}
 
 	// 重置画布尺寸
@@ -156,16 +147,8 @@ export default class Game {
 		this.camera.half_h = size.height * 0.5;
 	}
 
-	refresh () {
+	refresh() {
 		// 创建刷新器
 		this.ticker = this.add.ticker();
-		this.ticker.add((delta) => {
-			this.stats.begin();
-			for (let scene of this.sceneManager.scenes) {
-				scene.visible && scene.update && scene.update(delta);
-			}
-			this.stats.end();
-		});
-		this.ticker.autoStart = false;
 	}
 }

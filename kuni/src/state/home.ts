@@ -18,17 +18,17 @@ class Home extends KnScene {
   public textPixels: Array<Object>;
   bg: PIXI.Sprite;
   drawStage: KnGraphics;
-  constructor(game: Game, key: string, boot: boolean) {
-    super(game, key, boot);
+  constructor(game: Game, key: string) {
+    super(game, key);
     this.game = game;
     this.clouds = [];
     this.resouces = {
+      'bg002': './assets/images/bg002.jpg',
     };
   }
 
   boot() {
-    this.create();
-    this.game.ticker.start();
+    // this.create();
   }
 
   create() {
@@ -45,7 +45,7 @@ class Home extends KnScene {
 
   initClouds() {
     this.clouds = [];
-    let limit = 1940;
+    let limit = 565;
     const radius = 2;
     const drawStage = this.game.add.graphics();
     while (limit > 0) {
@@ -93,9 +93,9 @@ class Home extends KnScene {
   }
 
   initText() {
-    let currentText = new PIXI.Text("老健沙雕", {
+    let currentText = new PIXI.Text("凌晨帆", {
       fontFamily: "Arial",
-      fontSize: 200,
+      fontSize: 120,
       fill: 0xffffff,
       fontWeight: "bold",
       align: "center"
@@ -108,10 +108,11 @@ class Home extends KnScene {
     // 通过extract的pixels方法获取text对象的坐标组
     const textData = this.game.app.renderer.plugins.extract.pixels(currentText);
     this.textPixels = [];
-    for (let i = textData.length; i >= 0; i -= 4) {
+    let interval = 4;
+    for (let i = textData.length; i >= 0; i -= interval) {
       if (textData[i] !== 0) {
-        let x = (i / 4) % currentText.width;
-        let y = Math.floor(Math.floor(i / currentText.width) / 4);
+        let x = (i / interval) % currentText.width;
+        let y = Math.floor(Math.floor(i / currentText.width) / interval);
 
         // 粒子密度，每6颗取一个粒子
         if (x && x % 6 === 0 && (y && y % 6 === 0)) {

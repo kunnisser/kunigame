@@ -8,8 +8,8 @@ class Environment extends KnScene {
   public emitter: KnEmitter;
   public shootType: number;
   public tween: any;
-  constructor(game: Game, key: string, boot: boolean) {
-    super(game, key, boot);
+  constructor(game: Game, key: string) {
+    super(game, key);
     this.game = game;
     this.resouces = {
       'rain': './assets/images/rain.png',
@@ -21,13 +21,16 @@ class Environment extends KnScene {
   }
 
   boot() {
+    this.dev();
+  }
+
+  create() {
     this.shootType = 1;
     this.filters = [];
     this.tween = this.game.add.tween();
     this.emitter = null;
     this.addBackground();
     this.generateRains();
-    this.dev();
   }
 
   dev() {
@@ -114,9 +117,9 @@ class Environment extends KnScene {
       particle.x = Math.random() * this.game.config.width;
       particle.y = 0;
       this.tween.instance.to(particle, 2.4, {
-        x: particle.x + this.game.math.rdirect() * 100,
+        x: particle.x + this.game.math.redirect() * 100,
         y: this.game.config.height,
-        angle: this.game.math.rdirect() * 360,
+        angle: this.game.math.redirect() * 360,
         alpha: 0,
         ease: this.tween.linear.easeNone
       });

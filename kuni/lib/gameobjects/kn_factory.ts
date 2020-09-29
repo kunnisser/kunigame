@@ -1,8 +1,8 @@
 /*
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:25 
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2020-02-07 16:07:35
+ * @Last Modified by: kunnisser
+ * @Last Modified time: 2020-04-30 13:28:03
  */
 
 /*
@@ -21,7 +21,7 @@ import KnTiling from 'ts@/lib/gameui/kn_tiling';
 import Game from 'ts@/lib/core';
 import { TransformImage } from 'ts@/lib/utils/common';
 import { knTweenLine, KnTween } from 'ts@/lib/gameobjects/kn_tween';
-import { Sprite, Texture, AnimatedSprite, utils, Ticker } from 'pixi.js';
+import { Sprite, Texture, AnimatedSprite, utils } from 'pixi.js';
 import KnScene from './kn_scene';
 
 class KnFactory {
@@ -124,7 +124,7 @@ class KnFactory {
   }
 
   ticker = () => {
-    const ticker = new Ticker();
+    const ticker = PIXI.Ticker.shared;
     ticker.autoStart = false;
     ticker.stop();
     return ticker;

@@ -31,8 +31,8 @@ class MapDemo extends KnScene {
   public scene: KnGroup;
   public expbar: KnGroup;
   public tip: KnMessage;
-  constructor(game: Game, key: string, boot: boolean) {
-    super(game, key, boot);
+  constructor(game: Game, key: string) {
+    super(game, key);
     this.game = game;
     this.obstacles = [];
     this.ticker = null;
@@ -85,11 +85,14 @@ class MapDemo extends KnScene {
     const controller = this.game.gui.add(toggle, 'LightmapVisible');
     controller.onChange((flag: boolean) => {
       if (flag) {
-        this.alphaLight.visible = !0;
+        // 加入lightmap
+        this.addDarkLight();
         this.mask = this.alphaLight;
       } else {
         this.alphaLight.visible = !1;
         this.mask = null;
+        this.scene.removeChild(this.alphaLight);
+        this.alphaLight = null;
       }
     });
   }
@@ -97,6 +100,9 @@ class MapDemo extends KnScene {
   boot() {
     this.dev();
     this.reset();
+  }
+
+  create() {
     const staticWorldTexture = this.loader.resources.world.texture;
 
     let textures = [];
@@ -130,9 +136,6 @@ class MapDemo extends KnScene {
 
     // this.addMark(tileWidth, tileHeight);
 
-    // 加入lightmap
-    this.addDarkLight();
-
     // 定义地图layer用于点击
     const layer: any = this.drawStage.generateRect(0xffffff, [0, 0, this.game.camera.width, this.game.camera.height], !1);
     layer.interactive = true;
@@ -156,11 +159,11 @@ class MapDemo extends KnScene {
     this.update = () => {
       if (!this.gamer.tweening && this.gamer.paths.length) {
         this.gamer.tweening = true;
-        
+
         // 定义初始方向
         this.roleRunning(this.gamer, tileWidth, tileHeight);
       }
-      this.alphaLight.position.set(this.gamer.x, this.gamer.y);
+      this.alphaLight && this.alphaLight.position.set(this.gamer.x, this.gamer.y);
       this.cameraUpdate(limitX, limitY);
 
       if (this.gamer.bullets.length > 0 && this.gamer.target) {
@@ -214,7 +217,7 @@ class MapDemo extends KnScene {
     const end = {
       pointer: target
     };
-    
+
     this.gamer.step = 0;
     this.gamer.pause = false;
 
@@ -233,7 +236,7 @@ class MapDemo extends KnScene {
     this.gamer.paths = this.astar(start, end, distance);
     this.gamer.start = start;
     this.gamer.end = end;
-    
+
     // 设置mark
     // this.mark.visible = !0;
     // this.mark.position.set((end.pointer.x + 0.5) * tileWidth, (end.pointer.y + 0.5) * tileHeight);
@@ -279,15 +282,16 @@ class MapDemo extends KnScene {
     }).call(() => {
       const nextPath = character.paths[this.gamer.step] || character.end;
       character.goingPointer.set(nextPath.pointer.x, nextPath.pointer.y);
-      
+
       // 更新gamer的地图坐标
       this.gamer.reentry || character.pointer.set(pointer.x, pointer.y);
       character.tweening = false;
       this.gamer.reentry = false;
+
       // 当行走至路径终点时
       if (character.step === character.paths.length) {
         character.pause ||
-        character.role.animation.play('stay');
+          character.role.animation.play('stay');
         character.paths = [];
         character.goingPointer.set(0, 0);
       }
@@ -296,19 +300,17 @@ class MapDemo extends KnScene {
   }
 
   addDarkLight() {
-    const alphaLight = this.game.add.image('lightmap', this.scene, [0.5, 0.5]);
-    alphaLight.position.set(this.gamer.x, this.gamer.y);
-    alphaLight.scale.set(2, 1);
+    this.alphaLight = this.game.add.image('lightmap', this.scene, [0.5, 0.5]);
+    this.alphaLight.position.set(this.gamer.x, this.gamer.y);
+    this.alphaLight.scale.set(2, 1);
     const tween = this.game.add.tween();
-    tween.instance.to(alphaLight.scale, 0.95, {
+    tween.instance.to(this.alphaLight.scale, 0.95, {
       x: 2.05,
       y: 0.95,
       repeat: 1000,
       ease: tween.cubic.easeInOut,
       yoyo: true,
     });
-    this.alphaLight = alphaLight;
-    this.alphaLight.visible = !1;
   }
 
   cameraUpdate(limitX, limitY) {
@@ -352,7 +354,7 @@ class MapDemo extends KnScene {
   setRolesDirect(gamer: PlayerRole, prev: Point, next: Point) {
     if (prev.x < next.x) {
       gamer.setFaceToRight();
-    } else if (prev.x > next.x){
+    } else if (prev.x > next.x) {
       gamer.setFaceToLeft();
     }
   }
@@ -382,8 +384,8 @@ class MapDemo extends KnScene {
   transformPointer(pos: Point, tileWidth: number) {
     const mapX = pos.x / this.game.world.scale.x + this.scene.pivot.x,
       mapY = pos.y / this.game.world.scale.y + this.scene.pivot.y;
-      pos.x = ~~(mapX / tileWidth);
-      pos.y = ~~(mapY / tileWidth);
+    pos.x = ~~(mapX / tileWidth);
+    pos.y = ~~(mapY / tileWidth);
     return pos;
   }
 
@@ -497,7 +499,7 @@ class MapDemo extends KnScene {
       }
       finalPaths.push(path);
     }
-    
+
     return finalPaths;
   }
 

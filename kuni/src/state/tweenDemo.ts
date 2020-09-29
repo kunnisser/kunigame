@@ -7,8 +7,8 @@ class TweenDemo extends KnScene {
   public game: Game;
   public shootType: number;
   public tween: any;
-  constructor(game: Game, key: string, boot: boolean) {
-    super(game, key, boot);
+  constructor(game: Game, key: string) {
+    super(game, key);
     this.game = game;
     this.shootType = 1;
     this.resouces = {
@@ -22,10 +22,13 @@ class TweenDemo extends KnScene {
   }
 
   boot() {
+    this.dev();
+  }
+
+  create() {
     this.tween = this.game.add.tween();
     this.addBackground();
     this.addStaff();
-    this.dev();
   }
 
   dev() {
@@ -163,26 +166,26 @@ class TweenDemo extends KnScene {
     const tween: any = this.game.add.tween();
     const angle = -8;
     start.angle = 0;
-    const angleTween = tween.instance.to(start, 0.16, 
-    {
-      delay: 1.2,
-      angle: Math.abs(angle),
-      ease: tween.sine.easeInOut,
-      startAt: {
-        angle: angle
-      },
-      repeat: 2,
-      yoyo: true,
-      onComplete: () => {
-        tween.instance.to(start, 0.16, {
-          angle: 0,
-          ease: tween.sine.easeInOut,
-          onComplete: () => {
-            angleTween.restart(true);
-          }
-        });
-      }
-    });
+    const angleTween = tween.instance.to(start, 0.16,
+      {
+        delay: 1.2,
+        angle: Math.abs(angle),
+        ease: tween.sine.easeInOut,
+        startAt: {
+          angle: angle
+        },
+        repeat: 2,
+        yoyo: true,
+        onComplete: () => {
+          tween.instance.to(start, 0.16, {
+            angle: 0,
+            ease: tween.sine.easeInOut,
+            onComplete: () => {
+              angleTween.restart(true);
+            }
+          });
+        }
+      });
   }
 
   reset() {

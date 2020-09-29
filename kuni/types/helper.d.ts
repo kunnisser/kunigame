@@ -1,6 +1,6 @@
 
 interface IMath {
-  rdirect: Function // 随机正负1
+  redirect: Function // 随机正负1
   clamp: Function // 夹角范围数值
   angleToPointer: Function // 俩点的夹角
   between: Function // 数值范围

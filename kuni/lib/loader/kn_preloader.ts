@@ -2,7 +2,7 @@
  * @Author: kunnisser 
  * @Date: 2019-08-31 15:01:05 
  * @Last Modified by: kunnisser
- * @Last Modified time: 2019-11-20 21:01:48
+ * @Last Modified time: 2020-04-29 16:18:39
  */
 
 /** 
@@ -25,20 +25,25 @@ class Preloader extends KnScene {
 	defaultGui: string;
 	bg: PIXI.Sprite;
 	drawStage: KnGraphics;
-	constructor(game: Game, key: string, boot: boolean) {
-		super(game, key, boot);
+	startX: number;
+	constructor(game: Game, key: string) {
+		super(game, key);
 		this.game = game;
 		this.resouces = {
 			'bg001': './assets/images/bg001.jpg',
 			'run': './assets/data/loadingrun.json',
-			'bg002': './assets/images/bg002.jpg',
 			'vertex': './assets/shader/vertex/default.vert'
 		};
 	}
 
 	boot(target: KnScene, isFirstLoad?: Boolean) {
-		this.create();
-		if (target.resouces) {
+		this.loading(target, isFirstLoad);
+		this.anmi.x = this.startX;
+		this.loadingText.text = '0 %';
+	}
+
+	loading(target: KnScene, isFirstLoad?: Boolean) {
+		if (target && target.resouces) {
 			this.loadScene(target.resouces).on('progress', this.loadingHandler).load((loader) => {
 
 				// 资源加载完成，进入目标场景
@@ -84,6 +89,8 @@ class Preloader extends KnScene {
 
 	// 动画加载
 	generateSprite() {
+
+		// 绘制进度条卡通人物
 		const frames = [];
 		for (let i = 1, l = 4; i < l; i++) {
 			const val = i < 5 ? `0${i}` : i;
@@ -94,15 +101,16 @@ class Preloader extends KnScene {
 		this.anmi.anchor.set(0.5);
 		this.anmi.play();
 		this.addChild(this.anmi);
-		const startX = -this.game.config.half_w + this.anmi.width;
-		this.anmi.x = startX;
-		this.anmi.y = 100;
 
 		// 绘制加载条
 		this.loadingGp = this.game.add.group('sprite_loading', this);
 		this.loadingbar = this.drawStage.generateRect(0xd10311, [0, 0, this.game.config.half_w + this.anmi.width, 8, 4], !0);
 		this.loadingbar.y = this.anmi.y + this.anmi.height * 0.5 - 14;
 		this.loadingGp.addChild(this.loadingbar);
+
+		this.startX = (-this.loadingbar.width + this.anmi.width) * 0.5;
+		this.anmi.x = this.startX;
+		this.anmi.y = 0;
 
 		// 绘制加载文字
 		this.loadingText = this.game.add.text('0 %', {
@@ -113,7 +121,6 @@ class Preloader extends KnScene {
 		this.loadingText.y = this.loadingbar.y;
 		this.loadingGp.addChild(this.loadingText);
 	}
-
 }
 
 export default Preloader;
