@@ -1,7 +1,8 @@
 #忽略所有文件
 /*
 
-!/kuni/
+!/projects/
+!/editor/
 !/.babelrc
 !/.eslintrc.js
 !/.gitignore
