@@ -20,6 +20,8 @@ module.exports = {
     },
      "extends": "airbnb",
   "rules": {
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
         // "semi": ["error", "always"],
         // "quotes": [
         //     "error",
