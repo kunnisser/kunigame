@@ -12,11 +12,11 @@ class Environment extends KnScene {
     super(game, key);
     this.game = game;
     this.resouces = {
-      'rain': './assets/images/rain.png',
-      'snow': './assets/images/snow.png',
-      'envBg': './assets/images/env_bg.png',
-      'perlin': './assets/shader/frag/perlin.frag',
-      'godray': './assets/shader/frag/godray.frag'
+      'rain': '/projects/kuni/assets/images/rain.png',
+      'snow': '/projects/kuni/assets/images/snow.png',
+      'envBg': '/projects/kuni/assets/images/env_bg.png',
+      'perlin': '/projects/kuni/assets/shader/frag/perlin.frag',
+      'godray': '/projects/kuni/assets/shader/frag/godray.frag'
     }
   }
 

@@ -15,22 +15,18 @@ import { Router } from '@reach/router';
 import boardRoutes from './route';
 const routes = boardRoutes;
 
-const AppRouter = () => {
-  const switchRoutes = (
-    <Router>
-      {
-        routes.map((prop: object, key: any) => {
-          const ComponentChild = prop['component'];
-          if (prop['path'] === '*') {
-            return <ComponentChild default key={prop['key']} />
-          } else {
-            return <ComponentChild path={prop['path']} name={prop['name']} key={prop['key']} />
-          }
-        })
-      }
-    </Router>
-  );
-  return switchRoutes;
-}
+const AppRouter = () =>
+  <Router>
+    {
+      routes.map((prop) => {
+        const ComponentChild = prop.component;
+        if (prop.path === '*') {
+          return <ComponentChild default key={prop.key} />
+        } else {
+          return <ComponentChild path={prop.path} name={prop.name} key={prop.key} />
+        }
+      })
+    }
+  </Router>;
 
 export default AppRouter;

@@ -23,7 +23,7 @@ class Home extends KnScene {
     this.game = game;
     this.clouds = [];
     this.resouces = {
-      'bg002': './assets/images/bg002.jpg',
+      'bg002': '/projects/kuni/assets/images/bg002.jpg',
     };
   }
 

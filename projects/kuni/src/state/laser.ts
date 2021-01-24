@@ -15,7 +15,7 @@ class LaserDemo extends KnScene {
     this.game = game;
     this.shootType = 1;
     this.resouces = {
-      'beams': './assets/images/beams.png'
+      'beams': '/projects/kuni/assets/images/beams.png'
     }
   }
 

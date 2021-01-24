@@ -26,22 +26,22 @@ class KuaFu extends KnScene {
     super(game, key);
     this.game = game;
     this.resouces = {
-      'kuafu_bg': './assets/kuafu/kuafu_bg.png',
-      'kuafu_near_bg': './assets/kuafu/kuafu_near_bg.png',
-      'kuafu_far_bg': './assets/kuafu/kuafu_far_bg.png',
-      'kuafu_modal': './assets/kuafu/modal.jpg',
-      'hometown': './assets/kuafu/hometown.png',
-      'cityTitle': './assets/kuafu/cityTitle.png',
-      'goback': './assets/kuafu/goback.png',
-      'goods': './assets/kuafu/data/goods.json',
-      'citys': './assets/kuafu/data/citys.json',
-      'buildings': './assets/kuafu/data/buildings.json',
-      'date': './assets/kuafu/data/date.json',
-      'textarea': './assets/kuafu/textarea.png',
-      'farm': './assets/kuafu/farm.png',
-      'grocery': './assets/kuafu/grocery.png',
-      'ore': './assets/kuafu/ore.png',
-      'pasture': './assets/kuafu/pasture.png'
+      'kuafu_bg': '/projects/kuni/assets/kuafu/kuafu_bg.png',
+      'kuafu_near_bg': '/projects/kuni/assets/kuafu/kuafu_near_bg.png',
+      'kuafu_far_bg': '/projects/kuni/assets/kuafu/kuafu_far_bg.png',
+      'kuafu_modal': '/projects/kuni/assets/kuafu/modal.jpg',
+      'hometown': '/projects/kuni/assets/kuafu/hometown.png',
+      'cityTitle': '/projects/kuni/assets/kuafu/cityTitle.png',
+      'goback': '/projects/kuni/assets/kuafu/goback.png',
+      'goods': '/projects/kuni/assets/kuafu/data/goods.json',
+      'citys': '/projects/kuni/assets/kuafu/data/citys.json',
+      'buildings': '/projects/kuni/assets/kuafu/data/buildings.json',
+      'date': '/projects/kuni/assets/kuafu/data/date.json',
+      'textarea': '/projects/kuni/assets/kuafu/textarea.png',
+      'farm': '/projects/kuni/assets/kuafu/farm.png',
+      'grocery': '/projects/kuni/assets/kuafu/grocery.png',
+      'ore': '/projects/kuni/assets/kuafu/ore.png',
+      'pasture': '/projects/kuni/assets/kuafu/pasture.png'
     }
   }
 

@@ -6,9 +6,9 @@ import { math } from 'ts@/kuni/lib/utils/common';
 import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
 import PlayerRole from './player/playerRole';
 import EnemyRole from './enemy/enemyRole';
-import ExpBar from './gui/expbar';
 import KnAvatar from 'ts@/kuni/lib/gameui/kn_avatar';
 import KnMessage from 'ts@/kuni/lib/gameui/kn_message';
+import ExpBar from './gui/expbar';
 
 interface Path {
   pointer: Point,
@@ -40,30 +40,30 @@ class MapDemo extends KnScene {
     this.scene.pivot.set(0, 0);
     this.drawStage = this.game.add.graphics();
     this.resouces = {
-      'worldmap': './assets/data/rpg.json',
-      'world': './assets/images/GrasslandColor.png',
-      'lightmap': './assets/images/lightmap.png',
-      'druid_ske': './assets/data/deluyi_ske.json',
-      'druid_tex': './assets/data/deluyi_tex.json',
-      'druid': './assets/images/deluyi_tex.png',
-      'mark': './assets/images/mark.png',
-      'rpg_sk_bg': './assets/images/rpg_sk_bg.png',
-      'rpg_mask': './assets/images/rpg_mask.png',
-      'rpg_druid_weapon': './assets/images/rpg_druid_weapon.png',
-      'exp_icon': './assets/images/exp.png',
-      'exp_outbar': './assets/images/exp_outbar.png',
-      'exp_innerbar': './assets/images/exp_innerbar.png',
-      'avatar': './assets/images/avator_01.png',
-      'hp_bg': './assets/images/hp_bg.png',
-      'player_hp': './assets/images/player_hp.png',
-      'enemy_hp': './assets/images/enemy_hp.png',
-      'rpg_health_bar': './assets/images/rpg_health_bar.png',
-      'rpg_magic_bar': './assets/images/rpg_magic_bar.png',
-      'druid_sk_cure': './assets/images/druid_sk_cure.png',
-      'druid_bullet': './assets/images/druid_bullet.png',
-      'skull_ske': './assets/data/skull_ske.json',
-      'skull_tex': './assets/data/skull_tex.json',
-      'skull': './assets/images/skull_tex.png'
+      'worldmap': '/projects/kuni/assets/data/rpg.json',
+      'world': '/projects/kuni/assets/images/GrasslandColor.png',
+      'lightmap': '/projects/kuni/assets/images/lightmap.png',
+      'druid_ske': '/projects/kuni/assets/data/deluyi_ske.json',
+      'druid_tex': '/projects/kuni/assets/data/deluyi_tex.json',
+      'druid': '/projects/kuni/assets/images/deluyi_tex.png',
+      'mark': '/projects/kuni/assets/images/mark.png',
+      'rpg_sk_bg': '/projects/kuni/assets/images/rpg_sk_bg.png',
+      'rpg_mask': '/projects/kuni/assets/images/rpg_mask.png',
+      'rpg_druid_weapon': '/projects/kuni/assets/images/rpg_druid_weapon.png',
+      'exp_icon': '/projects/kuni/assets/images/exp.png',
+      'exp_outbar': '/projects/kuni/assets/images/exp_outbar.png',
+      'exp_innerbar': '/projects/kuni/assets/images/exp_innerbar.png',
+      'avatar': '/projects/kuni/assets/images/avator_01.png',
+      'hp_bg': '/projects/kuni/assets/images/hp_bg.png',
+      'player_hp': '/projects/kuni/assets/images/player_hp.png',
+      'enemy_hp': '/projects/kuni/assets/images/enemy_hp.png',
+      'rpg_health_bar': '/projects/kuni/assets/images/rpg_health_bar.png',
+      'rpg_magic_bar': '/projects/kuni/assets/images/rpg_magic_bar.png',
+      'druid_sk_cure': '/projects/kuni/assets/images/druid_sk_cure.png',
+      'druid_bullet': '/projects/kuni/assets/images/druid_bullet.png',
+      'skull_ske': '/projects/kuni/assets/data/skull_ske.json',
+      'skull_tex': '/projects/kuni/assets/data/skull_tex.json',
+      'skull': '/projects/kuni/assets/images/skull_tex.png'
     };
   }
 

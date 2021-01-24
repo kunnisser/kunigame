@@ -12,12 +12,12 @@ class TweenDemo extends KnScene {
     this.game = game;
     this.shootType = 1;
     this.resouces = {
-      'wsjBg': './assets/images/wsj_bg.png',
-      'staff': './assets/images/titleWeapon_02.png',
-      'glow': './assets/shader/frag/glow.frag',
-      'pumpkin': './assets/images/pumpkin.png',
-      'cannikin': './assets/images/cannikin.png',
-      'start': './assets/images/start.png'
+      'wsjBg': '/projects/kuni/assets/images/wsj_bg.png',
+      'staff': '/projects/kuni/assets/images/titleWeapon_02.png',
+      'glow': '/projects/kuni/assets/shader/frag/glow.frag',
+      'pumpkin': '/projects/kuni/assets/images/pumpkin.png',
+      'cannikin': '/projects/kuni/assets/images/cannikin.png',
+      'start': '/projects/kuni/assets/images/start.png'
     }
   }
 

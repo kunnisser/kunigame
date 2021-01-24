@@ -30,9 +30,9 @@ class Preloader extends KnScene {
 		super(game, key);
 		this.game = game;
 		this.resouces = {
-			'bg001': './assets/images/bg001.jpg',
-			'run': './assets/data/loadingrun.json',
-			'vertex': './assets/shader/vertex/default.vert'
+			'bg001': '/projects/kuni/assets/images/bg001.jpg',
+			'run': '/projects/kuni/assets/data/loadingrun.json',
+			'vertex': '/projects/kuni/assets/shader/vertex/default.vert'
 		};
 	}
 

@@ -60,7 +60,7 @@ module.exports = {
 				use: {
 					loader: 'url-loader',
 					options: {
-						name: 'assets/images/[name].[ext]'
+						name: '../projects/kuni/assets/images/[name].[ext]'
 					}
 				}
 			},
@@ -69,16 +69,29 @@ module.exports = {
 				use: {
 					loader: 'json-loader',
 					options: {
-						name: 'assets/data/[name].[ext]'
+						name: '../projects/kuni/assets/data/[name].[ext]'
 					}
 				}
 			},
-			// {
-			// 	test: /phaser-arcade-physics\.js$/,
-			// 	use: {
-			// 		loader: 'expose-loader?Phaser'
-			// 	}
-			// }
+      {
+        test: /\.less$/,
+				use: [
+					{
+						loader: "style-loader"
+					}, 
+					{
+						loader: "css-loader"
+					},
+					{
+						loader: "less-loader",
+						options: {
+							lessOptions: {
+								javascriptEnabled: true,
+							}
+						}
+					}
+				]
+			},
 		]
 	},
 	plugins: [
