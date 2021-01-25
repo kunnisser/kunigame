@@ -1,7 +1,7 @@
 import KnGroup from "../gameobjects/kn_group";
 import Game from "../core";
 import { Container, Graphics, Sprite } from "pixi.js";
-import { math } from 'ts@/kuni/lib/utils/common';
+import { math } from '../utils/common';
 
 class KnScrollMenu extends KnGroup {
   public options: any; // 菜单配置信息

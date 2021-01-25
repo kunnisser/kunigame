@@ -1,5 +1,5 @@
 import { Loader } from 'pixi.js';
-import Game from 'ts@/kuni/lib/core';
+import Game from '../core';
 
 class KnLoader extends Loader {
 	public game: Game;

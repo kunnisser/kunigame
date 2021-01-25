@@ -1,5 +1,5 @@
-import Game from 'ts@/kuni/lib/core';
-import { GuiScene } from 'ts@/kuni/lib/utils/gui';
+import Game from './lib/core';
+import { GuiScene } from './lib/utils/gui';
 import StateHive from './src/state/hive';
 
 const GameInitial = (view) => {

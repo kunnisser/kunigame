@@ -13,14 +13,14 @@
   * @param {Core} game - 当前运行的游戏实例的引用	
 */
 
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
-import KnGraphics from 'ts@/kuni/lib/gameobjects/kn_graphics';
-import KnText from 'ts@/kuni/lib/gameobjects/kn_text';
-import KnEmitter from 'ts@/kuni/lib/gameobjects/kn_emitter';
-import KnTiling from 'ts@/kuni/lib/gameui/kn_tiling';
-import Game from 'ts@/kuni/lib/core';
-import { TransformImage } from 'ts@/kuni/lib/utils/common';
-import { knTweenLine, KnTween } from 'ts@/kuni/lib/gameobjects/kn_tween';
+import KnGroup from '../gameobjects/kn_group';
+import KnGraphics from '../gameobjects/kn_graphics';
+import KnText from '../gameobjects/kn_text';
+import KnEmitter from '../gameobjects/kn_emitter';
+import KnTiling from '../gameui/kn_tiling';
+import Game from '../core';
+import { TransformImage } from '../utils/common';
+import { knTweenLine, KnTween } from '../gameobjects/kn_tween';
 import { Sprite, Texture, AnimatedSprite, utils } from 'pixi.js';
 import KnScene from './kn_scene';
 

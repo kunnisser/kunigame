@@ -9,9 +9,9 @@
  * 场景切换资源加载
 */
 
-import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
-import KnGraphics from 'ts@/kuni/lib/gameobjects/kn_graphics';
-import Game from 'ts@/kuni/lib/core';
+import KnScene from '../gameobjects/kn_scene';
+import KnGraphics from '../gameobjects/kn_graphics';
+import Game from '../core';
 import { AnimatedSprite } from 'pixi.js';
 
 class Preloader extends KnScene {

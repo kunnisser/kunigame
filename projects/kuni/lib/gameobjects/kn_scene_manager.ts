@@ -1,7 +1,7 @@
 /* 场景管理 */
-import Game from 'ts@/kuni/lib/core';
-import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
-import KnTranstion from 'ts@/kuni/lib/gameui/kn_transtion';
+import Game from '../core';
+import KnScene from '../gameobjects/kn_scene';
+import KnTranstion from '../gameui/kn_transtion';
 
 class KnSceneManager {
   public game: Game;

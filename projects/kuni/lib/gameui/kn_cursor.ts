@@ -1,4 +1,4 @@
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
+import KnGroup from '../gameobjects/kn_group';
 import Game from '../core';
 class KnCursor extends KnGroup {
   public game: Game;

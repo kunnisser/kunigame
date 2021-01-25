@@ -1,6 +1,6 @@
 import Game from "../core";
 import { Sprite } from "pixi.js";
-import { TransformImage } from 'ts@/kuni/lib/utils/common';
+import { TransformImage } from '../utils/common';
 import KnGraphics from "../gameobjects/kn_graphics";
 
 class KnTransition {

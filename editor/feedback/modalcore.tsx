@@ -14,6 +14,14 @@
 import React, { useState } from 'react';
 import { Modal } from 'antd';
 
+export interface ModalOptions {
+  width: number
+  name: string
+  footer: any,
+  content: any,
+  handler: any
+}
+
 const useModal = props => {
   const [modalVisible, setModalVisible] = useState(!1);
   const closeModal = () => setModalVisible(!1);
@@ -23,12 +31,16 @@ const useModal = props => {
   const [footer, setFooter] = useState(null);
   const [handler, setHandler] = useState(null);
 
-  const openModal: any = (options) => {
+  const openModal: any = (options: ModalOptions) => {
     setModalVisible(!0);
+    /** 设置宽度 */
     setWidth(options.width);
+    /** modal标题 */
     setName(options.name);
     setFooter(options.footer);
+    /** modal内容 */
     setContent(options.content);
+    /** modal提交事件 */
     setHandler(options.handler);
   };
 

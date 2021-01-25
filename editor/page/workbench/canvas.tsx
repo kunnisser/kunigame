@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 17:10:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-01-25 17:12:16
- * @FilePath: /kunigame/editor/page/workbench/canvas.tsx
+ * @LastEditTime: 2021-01-25 22:47:25
+ * @FilePath: \kunigame\editor\page\workbench\canvas.tsx
  * @Description: ---- 画布编辑 ----
  */
 
@@ -13,7 +13,7 @@ const StageEditor = () => {
   useEffect(() => {
     const view: any = document.getElementById('stage');
     GameInitial(view);
-  });
+  }, []);
   return <div id="stage"></div>;
 }
 
