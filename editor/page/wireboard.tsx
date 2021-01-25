@@ -2,28 +2,29 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-01-24 23:21:33
- * @FilePath: \kunigame\editor\page\wireboard.tsx
+ * @LastEditTime: 2021-01-25 17:13:28
+ * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
 
 import { Layout } from 'antd';
-import React, { useEffect } from 'react';
-import GameInitial from 'ts@/kuni/main';
+import React from 'react';
+import KnHeader from './header';
 import KnTabs from './outline';
 import OutlineTree from './outline/outline_tree';
+import StageEditor from './workbench/canvas';
 const { Header, Footer, Sider, Content } = Layout;
 const WireBoard = () => {
-  useEffect(() => {
-    const view: any = document.getElementById('stage');
-    GameInitial(view);
-  });
+
   return <Layout>
-    <Header>Header</Header>
+    <Header>
+      <img className="logo" src="../editor/assets/image/logo.png"></img>
+      <KnHeader />
+    </Header>
     <Layout>
       <Sider><KnTabs name="Outline" childComponent={OutlineTree} /></Sider>
       <Content>
-        <div id="stage"></div>
+        <KnTabs name="场景编辑" childComponent={StageEditor} />
       </Content>
       <Sider><KnTabs name="查看" childComponent={OutlineTree} /></Sider>
     </Layout>

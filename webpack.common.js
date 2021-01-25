@@ -60,7 +60,7 @@ module.exports = {
 				use: {
 					loader: 'url-loader',
 					options: {
-						name: '../projects/kuni/assets/images/[name].[ext]'
+						name: '[name].[ext]'
 					}
 				}
 			},
@@ -69,7 +69,7 @@ module.exports = {
 				use: {
 					loader: 'json-loader',
 					options: {
-						name: '../projects/kuni/assets/data/[name].[ext]'
+						name: '[name].[ext]'
 					}
 				}
 			},
