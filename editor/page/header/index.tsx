@@ -2,26 +2,42 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 16:00:13
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-01-25 22:44:12
- * @FilePath: \kunigame\editor\page\header\index.tsx
+ * @LastEditTime: 2021-01-27 17:37:19
+ * @FilePath: /kunigame/editor/page/header/index.tsx
  * @Description: ---- KN编辑器菜单 ----
  */
 
 import React, { useContext } from 'react';
-import { Button, Space } from 'antd';
+import { Button, Space, Tree, Input, Divider } from 'antd';
 import { PlusCircleOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import { WrapContext } from 'editor@/page/wireboard';
 import { ModalOptions } from 'editor@/feedback/modalcore';
-
+import { SmileOutlined, MehOutlined } from '@ant-design/icons';
+const { DirectoryTree } = Tree;
+// 文件类型数据
+const fileData = [
+  {
+    title: '项目',
+    key: 'file_project',
+    icon: <SmileOutlined />,
+  },
+  {
+    title: 'State场景',
+    key: 'state',
+    icon: <MehOutlined />,
+  },
+];
 const KnHeader = () => {
   const commonContext: any = useContext(WrapContext);
   const { openModal } = commonContext;
   const createProjectFile = () => {
     openModal({
       width: 600,
-      name: "新建文件",
+      name: "构建目录",
       content: <React.Fragment>
-        打开文件
+        <Input type="text" placeholder="请输入名称"></Input>
+        <Divider dashed />
+        <DirectoryTree showIcon treeData={fileData}></DirectoryTree>
       </React.Fragment>
     } as ModalOptions);
   };
