@@ -13,6 +13,12 @@ class KnGraphics extends Graphics {
 		this.lineStyle(border.width, border.color, border.alpha, 1);
 	}
 
+	// 绘制线段
+	generateLine(border) {
+		this.setBorder(border);
+		return this;
+	}
+
 	// 绘制矩形
 	generateRect(color: number, points: Array<number>, anchor?: boolean, alpha?: number) {
 		this.beginFill(color, typeof alpha === 'number' ? alpha : 1);

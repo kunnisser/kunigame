@@ -35,7 +35,9 @@ export default class Game {
 		half_w: number;
 		half_h: number;
 	}
+	public stage: PIXI.Container;
 	public world: PIXI.Container;
+	public coverMask: PIXI.Container;
 	public sceneManager: KnSceneManager;
 	public app: Application;
 	public loader: KnLoader;
@@ -73,8 +75,17 @@ export default class Game {
 		// 添加加载器实例
 		this.loader = new KnLoader(this);
 
+		// 添加生成游戏对象的快捷方式
+		this.add = new KnFactory(this);
+
 		// 初始化画布
-		this.world = this.app.stage;
+		this.stage = this.app.stage;
+
+		// 定义游戏容器
+		this.world = new PIXI.Container();
+
+		// 添加游戏容器
+		this.stage.addChild(this.world);
 
 		// 载入相关math方法
 		this.math = math;
@@ -85,11 +96,8 @@ export default class Game {
 		// 添加场景管理实例
 		this.sceneManager = new KnSceneManager(this);
 
-		// 添加生成游戏对象的快捷方式
-		this.add = new KnFactory(this);
-
 		// 初始化渲染器
-		this.app.renderer.render(this.world);
+		this.app.renderer.render(this.stage);
 
 		// 初始化光标
 		this.cursor = new KnCursor(this, this.world);
