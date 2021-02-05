@@ -7,6 +7,7 @@ import { debounce, math } from 'ts@/kuni/lib/utils/common';
 import KnScene from './gameobjects/kn_scene';
 import KnTranstion from 'ts@/kuni/lib/gameui/kn_transtion';
 import KnCursor from './gameui/kn_cursor';
+import CoverMask from './dev/editor_mask/cover';
 
 interface EnterProps {
 	width: number,
@@ -45,6 +46,10 @@ export default class Game {
 	public currentScene: KnScene; // 当前场景
 	public overlay: KnTranstion; // 转场遮罩
 	public cursor: KnCursor; // 游戏光标
+	public size: {
+		width: number,
+		height: number,
+	}; // 游戏尺寸
 	entryHive: any;
 	constructor(config: EnterProps) {
 		this.view = config.view;
@@ -91,7 +96,7 @@ export default class Game {
 		this.math = math;
 
 		// 适配幕布
-		this.resizeStage(this.view, config);
+		this.size = this.resizeStage(this.view, config);
 
 		// 添加场景管理实例
 		this.sceneManager = new KnSceneManager(this);
@@ -101,6 +106,10 @@ export default class Game {
 
 		// 初始化光标
 		this.cursor = new KnCursor(this, this.world);
+
+		// 定义和添加游戏编辑层
+		this.coverMask = new CoverMask(this, this.stage);
+		this.coverMask.scale.set(this.size.width / this.config.width);
 
 		// 页面尺寸改变
 		window.onresize = () => {
@@ -153,6 +162,7 @@ export default class Game {
 		this.camera.height = size.height;
 		this.camera.half_w = size.width * 0.5;
 		this.camera.half_h = size.height * 0.5;
+		return size;
 	}
 
 	refresh() {
