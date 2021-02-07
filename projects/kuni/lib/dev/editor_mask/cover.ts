@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-05 17:32:37
+ * @LastEditTime: 2021-02-07 17:34:13
  * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
@@ -13,9 +13,19 @@ import KnGroup from "../../gameobjects/kn_group";
 
 class CoverMask extends KnGroup {
   public game: Game;
+  public curTip_X: number;
+  public curTip_Y: number;
+  public start_X: number;
+  public start_Y: number;
+  public isDragging: boolean;
   constructor(game: Game, parent: PIXI.Container) {
     super(game, 'coverMask', parent);
     this.game = game;
+    this.start_X = 0;
+    this.start_Y = 0;
+    this.curTip_X = 0;
+    this.curTip_Y = 0;
+    this.isDragging = false;
     this.initial();
   }
 
@@ -85,6 +95,30 @@ class CoverMask extends KnGroup {
     // 缩放系数
     let scale: number = 1;
     const canvas: any = this.game.view.children[0];
+    // 绑定move事件
+    const posTextTip = this.game.add.text(``, {
+      fontSize: 14,
+      fontWeight: 'bold',
+      fill: 0x8ac007,
+      stroke: 0xffffff,
+      strokeThickness: 6,
+    }, [0, 0.5]);
+    canvas.addEventListener('mousedown', (e) => {
+      console.log(e);
+      this.isDragging = true;
+      this.start_X = e.offsetX / (COVER_SCALE * scale);
+      this.start_Y = e.offsetY / (COVER_SCALE * scale);
+    });
+    canvas.addEventListener('mousemove', (e) => {
+      this.curTip_X = e.offsetX / (COVER_SCALE * scale);
+      this.curTip_Y = e.offsetY / (COVER_SCALE * scale);
+      posTextTip.text = `${~~this.curTip_X}, ${~~this.curTip_Y}`;
+      posTextTip.position.set(this.curTip_X, this.curTip_Y);
+      if (this.isDragging) {
+
+      }
+    });
+    // 绑定wheel事件
     canvas.addEventListener('wheel', (e) => {
       scaleVal -= e.deltaY;
       if (scaleVal < SCALE_VALUE) {
@@ -94,6 +128,7 @@ class CoverMask extends KnGroup {
       this.scale.set(COVER_SCALE * scale);
       this.game.world.scale.set(COVER_SCALE * scale);
     });
+    this.addChild(posTextTip);
   }
 }
 
