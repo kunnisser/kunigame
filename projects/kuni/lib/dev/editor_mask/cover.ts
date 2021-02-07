@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-07 17:34:13
- * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
+ * @LastEditTime: 2021-02-08 00:51:11
+ * @FilePath: \kunigame\projects\kuni\lib\dev\editor_mask\cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
 
@@ -103,11 +103,22 @@ class CoverMask extends KnGroup {
       stroke: 0xffffff,
       strokeThickness: 6,
     }, [0, 0.5]);
+
+    // 定义移动的距离
+    let moveX: number = 0;
+    let moveY: number = 0;
     canvas.addEventListener('mousedown', (e) => {
       console.log(e);
       this.isDragging = true;
       this.start_X = e.offsetX / (COVER_SCALE * scale);
       this.start_Y = e.offsetY / (COVER_SCALE * scale);
+      moveX = this.game.world.x;
+      moveY = this.game.world.y;
+    });
+    canvas.addEventListener('mouseup', (e) => {
+      this.isDragging = false;
+      moveX = this.game.world.x;
+      moveY = this.game.world.y;
     });
     canvas.addEventListener('mousemove', (e) => {
       this.curTip_X = e.offsetX / (COVER_SCALE * scale);
@@ -115,7 +126,13 @@ class CoverMask extends KnGroup {
       posTextTip.text = `${~~this.curTip_X}, ${~~this.curTip_Y}`;
       posTextTip.position.set(this.curTip_X, this.curTip_Y);
       if (this.isDragging) {
+        // 项目位移查看
+        // 计算实时变化的x,y坐标
+        let _posX: number = moveX + (this.curTip_X - this.start_X) * 0.5;
+        let _posY: number = moveY + (this.curTip_Y - this.start_Y) * 0.5;
 
+        this.game.world.position.set(_posX, _posY);
+        this.position.set(_posX, _posY);
       }
     });
     // 绑定wheel事件
