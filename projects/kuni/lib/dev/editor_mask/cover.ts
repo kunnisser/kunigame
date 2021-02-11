@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-08 00:51:11
- * @FilePath: \kunigame\projects\kuni\lib\dev\editor_mask\cover.ts
+ * @LastEditTime: 2021-02-11 00:14:10
+ * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
 
@@ -83,11 +83,11 @@ class CoverMask extends KnGroup {
   }
 
   /**
-   * @description: 绑定操作监听事件
+   * @description: 绑定操作监听事件集
    * @param {*}
    * @return {*}
    */
-  bindControllerHandler() {
+  bindControllerHandler(): void {
     const SCALE_VALUE: number = 1000;
     let scaleVal: number = SCALE_VALUE;
     // 原先画布的缩放
@@ -105,45 +105,79 @@ class CoverMask extends KnGroup {
     }, [0, 0.5]);
 
     // 定义移动的距离
-    let moveX: number = 0;
-    let moveY: number = 0;
-    canvas.addEventListener('mousedown', (e) => {
-      console.log(e);
-      this.isDragging = true;
-      this.start_X = e.offsetX / (COVER_SCALE * scale);
-      this.start_Y = e.offsetY / (COVER_SCALE * scale);
-      moveX = this.game.world.x;
-      moveY = this.game.world.y;
+    // let moveX: number = 0;
+    // let moveY: number = 0;
+    // 定义当前视图的坐标
+    let _posX: number = 0;
+    let _posY: number = 0;
+    // canvas.addEventListener('mousedown', (e: MouseEvent) => {
+    //   this.isDragging = false;
+    //   this.start_X = e.offsetX;
+    //   this.start_Y = e.offsetY;
+    //   moveX = this.game.world.x;
+    //   moveY = this.game.world.y;
+    // });
+    // document.documentElement.addEventListener('mouseup', (e) => {
+    //   this.isDragging = false;
+    //   moveX = this.game.world.x;
+    //   moveY = this.game.world.y;
+    // });
+
+    canvas.addEventListener('mouseout', (e: MouseEvent) => {
+      posTextTip.visible = false;
     });
-    canvas.addEventListener('mouseup', (e) => {
-      this.isDragging = false;
-      moveX = this.game.world.x;
-      moveY = this.game.world.y;
-    });
-    canvas.addEventListener('mousemove', (e) => {
-      this.curTip_X = e.offsetX / (COVER_SCALE * scale);
-      this.curTip_Y = e.offsetY / (COVER_SCALE * scale);
+
+    canvas.addEventListener('mousemove', (e: MouseEvent) => {
+      posTextTip.visible = true;
+      this.curTip_X = (e.offsetX) / (COVER_SCALE * scale);
+      this.curTip_Y = (e.offsetY) / (COVER_SCALE * scale);
+      // if (this.isDragging) {
+      //   // 项目位移查看
+      //   // 计算实时变化的x,y坐标
+      //   _posX = moveX + (e.offsetX - this.start_X);
+      //   _posY = moveY + (e.offsetY - this.start_Y);
+      //   this.game.world.pivot.set(_posX, _posY);
+      //   this.pivot.set(_posX, _posY);
+      // }
+
       posTextTip.text = `${~~this.curTip_X}, ${~~this.curTip_Y}`;
       posTextTip.position.set(this.curTip_X, this.curTip_Y);
-      if (this.isDragging) {
-        // 项目位移查看
-        // 计算实时变化的x,y坐标
-        let _posX: number = moveX + (this.curTip_X - this.start_X) * 0.5;
-        let _posY: number = moveY + (this.curTip_Y - this.start_Y) * 0.5;
-
-        this.game.world.position.set(_posX, _posY);
-        this.position.set(_posX, _posY);
-      }
     });
     // 绑定wheel事件
-    canvas.addEventListener('wheel', (e) => {
+    canvas.addEventListener('wheel', (e: WheelEvent) => {
       scaleVal -= e.deltaY;
       if (scaleVal < SCALE_VALUE) {
         scaleVal = SCALE_VALUE;
       }
       scale = scaleVal / SCALE_VALUE;
+
+      // this.game.world.pivot.set(scaleIncrementsWidth * scaleDirectX, scaleIncrementsHeight * scaleDirectY);
+
+      // _posX = scaleIncrementsWidth * scaleDirectX;
+      // _posY = scaleIncrementsHeight * scaleDirectY;
+
+      // this.curTip_X = this.curTip_X - _posX;
+      // this.curTip_Y = this.curTip_Y - _posY;
+      // posTextTip.text = `${~~this.curTip_X}, ${~~this.curTip_Y}`;
+      // posTextTip.position.set(this.curTip_X, this.curTip_Y);
+
       this.scale.set(COVER_SCALE * scale);
       this.game.world.scale.set(COVER_SCALE * scale);
+
+      const scaleIncrementsWidth = (this.width / COVER_SCALE - this.game.config.width);
+      const scaleIncrementsHeight = this.height / COVER_SCALE - this.game.config.height;
+      // const scaleDirectX = 1;
+      // const scaleDirectY = 1;
+      console.log(this.width / COVER_SCALE);
+      console.log(scaleIncrementsWidth);
+      this.pivot.set(1820, 0);
+
+      if (scale == 1) {
+        _posX = 0;
+        _posY = 0;
+        this.game.world.pivot.set(0, 0);
+        this.pivot.set(0, 0);
+      }
     });
     this.addChild(posTextTip);
   }
