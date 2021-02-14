@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-11 00:14:10
- * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
+ * @LastEditTime: 2021-02-12 12:43:15
+ * @FilePath: \kunigame\projects\kuni\lib\dev\editor_mask\cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
 
@@ -92,6 +92,7 @@ class CoverMask extends KnGroup {
     let scaleVal: number = SCALE_VALUE;
     // 原先画布的缩放
     const COVER_SCALE = this.game.world.scale.x;
+
     // 缩放系数
     let scale: number = 1;
     const canvas: any = this.game.view.children[0];
@@ -104,9 +105,7 @@ class CoverMask extends KnGroup {
       strokeThickness: 6,
     }, [0, 0.5]);
 
-    // 定义移动的距离
-    // let moveX: number = 0;
-    // let moveY: number = 0;
+
     // 定义当前视图的坐标
     let _posX: number = 0;
     let _posY: number = 0;
@@ -129,19 +128,17 @@ class CoverMask extends KnGroup {
 
     canvas.addEventListener('mousemove', (e: MouseEvent) => {
       posTextTip.visible = true;
-      this.curTip_X = (e.offsetX) / (COVER_SCALE * scale);
-      this.curTip_Y = (e.offsetY) / (COVER_SCALE * scale);
-      // if (this.isDragging) {
-      //   // 项目位移查看
-      //   // 计算实时变化的x,y坐标
-      //   _posX = moveX + (e.offsetX - this.start_X);
-      //   _posY = moveY + (e.offsetY - this.start_Y);
-      //   this.game.world.pivot.set(_posX, _posY);
-      //   this.pivot.set(_posX, _posY);
-      // }
+      this.curTip_X = e.offsetX / (COVER_SCALE * scale);
+      this.curTip_Y = e.offsetY / (COVER_SCALE * scale);
+      const tip_X = this.curTip_X;
+      const tip_Y = this.y / (COVER_SCALE * scale) + this.curTip_Y;
+      console.log(this.width / COVER_SCALE - this.game.config.width);
+      console.log('-----');
 
-      posTextTip.text = `${~~this.curTip_X}, ${~~this.curTip_Y}`;
-      posTextTip.position.set(this.curTip_X, this.curTip_Y);
+
+
+      posTextTip.text = `${~~tip_X}, ${~~tip_Y}`;
+      posTextTip.position.set(tip_X, tip_Y);
     });
     // 绑定wheel事件
     canvas.addEventListener('wheel', (e: WheelEvent) => {
@@ -151,32 +148,26 @@ class CoverMask extends KnGroup {
       }
       scale = scaleVal / SCALE_VALUE;
 
-      // this.game.world.pivot.set(scaleIncrementsWidth * scaleDirectX, scaleIncrementsHeight * scaleDirectY);
 
-      // _posX = scaleIncrementsWidth * scaleDirectX;
-      // _posY = scaleIncrementsHeight * scaleDirectY;
-
-      // this.curTip_X = this.curTip_X - _posX;
-      // this.curTip_Y = this.curTip_Y - _posY;
-      // posTextTip.text = `${~~this.curTip_X}, ${~~this.curTip_Y}`;
-      // posTextTip.position.set(this.curTip_X, this.curTip_Y);
+      this.pivot.set(this.curTip_X, this.curTip_Y);
+      this.position.set(this.curTip_X * COVER_SCALE, this.curTip_Y * COVER_SCALE);
+      this.game.world.pivot.set(this.curTip_X, this.curTip_Y);
+      this.game.world.position.set(this.curTip_X * COVER_SCALE, this.curTip_Y * COVER_SCALE);
 
       this.scale.set(COVER_SCALE * scale);
       this.game.world.scale.set(COVER_SCALE * scale);
-
-      const scaleIncrementsWidth = (this.width / COVER_SCALE - this.game.config.width);
-      const scaleIncrementsHeight = this.height / COVER_SCALE - this.game.config.height;
-      // const scaleDirectX = 1;
-      // const scaleDirectY = 1;
-      console.log(this.width / COVER_SCALE);
-      console.log(scaleIncrementsWidth);
-      this.pivot.set(1820, 0);
+      const tip_X = this.x * COVER_SCALE + this.curTip_X;
+      const tip_Y = this.y * COVER_SCALE + this.curTip_Y;
+      posTextTip.text = `${~~tip_X}, ${~~tip_Y}`;
+      posTextTip.position.set(tip_X, tip_Y);
 
       if (scale == 1) {
         _posX = 0;
         _posY = 0;
         this.game.world.pivot.set(0, 0);
+        this.game.world.position.set(0, 0);
         this.pivot.set(0, 0);
+        this.position.set(0, 0);
       }
     });
     this.addChild(posTextTip);
