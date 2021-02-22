@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-16 15:42:30
+ * @LastEditTime: 2021-02-22 11:27:32
  * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
@@ -38,6 +38,7 @@ class CoverMask extends KnGroup {
     this.generateGrid();
     this.actionMask = this.addActionArea();
     this.bindControllerHandler(this.actionMask);
+    this.emitGameInfo();
   }
 
   /**
@@ -188,6 +189,9 @@ class CoverMask extends KnGroup {
     });
 
     this.addChild(posTextTip);
+  }
+
+  emitGameInfo() {
   }
 }
 

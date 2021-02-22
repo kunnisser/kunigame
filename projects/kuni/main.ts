@@ -24,6 +24,7 @@ const GameInitial = (view) => {
 
 	game.entryHive = GameHive['Triangulation'];
 	game.sceneManager.changeScene(null, GameHive['global_preloader']);
+	return game;
 };
 
 export default GameInitial;

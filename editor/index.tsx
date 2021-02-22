@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 16:57:00
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-01-25 21:45:13
- * @FilePath: \kunigame\editor\index.tsx
+ * @LastEditTime: 2021-02-22 11:18:10
+ * @FilePath: /kunigame/editor/index.tsx
  * @Description: ---- 酷尼编辑器入口文件 ----
  */
 
@@ -20,7 +20,6 @@ import './assets/main.less';
 import zhCN from 'antd/es/locale/zh_CN';
 
 const store: any = createStore(Combines);
-
 render(
   <ConfigProvider locale={zhCN}>
     <Provider store={store}>
@@ -31,6 +30,6 @@ render(
 );
 
 // 按路由进行热更新
-// if (module['hot']) {
-//   module['hot'].accept();
-// }
+if (module['hot']) {
+  module['hot'].accept();
+}

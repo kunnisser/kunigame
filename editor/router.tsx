@@ -15,8 +15,8 @@ import { Router } from '@reach/router';
 import boardRoutes from './route';
 const routes = boardRoutes;
 
-const AppRouter = () =>
-  <Router>
+const AppRouter = () => {
+  return <Router>
     {
       routes.map((prop) => {
         const ComponentChild = prop.component;
@@ -28,5 +28,6 @@ const AppRouter = () =>
       })
     }
   </Router>;
+}
 
 export default AppRouter;

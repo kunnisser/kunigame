@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-01-29 23:17:11
- * @FilePath: \kunigame\editor\page\wireboard.tsx
+ * @LastEditTime: 2021-02-22 16:21:01
+ * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
 
@@ -20,11 +20,39 @@ export const WrapContext = createContext({});
 
 const { Header, Footer, Sider, Content } = Layout;
 
-const WireBoard = () => {
+const WireBoard = (props) => {
   const [modal, openModal, closeModal] = useModal({});
   const CommonWidget = {
     openModal, closeModal
   };
+  const sceneTabs = [
+    {
+      name: "Outline",
+      childComponent: OutlineTree
+    }
+  ];
+
+  const editorTabs = [
+    {
+      name: "场景编辑",
+      childComponent: StageEditor
+    }
+  ];
+
+  const formTabs = [
+    {
+      name: "查看",
+      childComponent: OutlineTree
+    }
+  ];
+
+  const footerTabs = [
+    {
+      name: "元素列表",
+      childComponent: OutlineTree
+    }
+  ];
+
   return <WrapContext.Provider value={CommonWidget}>
     <ErrorBoundary>
       <Layout>
@@ -33,13 +61,15 @@ const WireBoard = () => {
           <KnHeader />
         </Header>
         <Layout>
-          <Sider><KnTabs name="Outline" childComponent={OutlineTree} /></Sider>
+          <Sider><KnTabs initialKey="tab_scene" tabs={sceneTabs} /></Sider>
           <Content>
-            <KnTabs name="场景编辑" childComponent={StageEditor} />
+            <KnTabs initialKey="tab_editor" tabs={editorTabs} />
           </Content>
-          <Sider><KnTabs name="查看" childComponent={OutlineTree} /></Sider>
+          <Sider><KnTabs initialKey="tab_form" tabs={formTabs} /></Sider>
         </Layout>
-        <Footer className="kn-footer">Footer</Footer>
+        <Footer className="kn-footer">
+          <KnTabs initialKey="tab_footer" tabs={footerTabs} />
+        </Footer>
         {modal}
       </Layout >
     </ErrorBoundary>

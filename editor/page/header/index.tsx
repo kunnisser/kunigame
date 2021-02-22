@@ -2,37 +2,51 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 16:00:13
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-01-29 23:02:56
- * @FilePath: \kunigame\editor\page\header\index.tsx
+ * @LastEditTime: 2021-02-19 11:02:18
+ * @FilePath: /kunigame/editor/page/header/index.tsx
  * @Description: ---- KN编辑器菜单 ----
  */
 
 import React, { useContext } from 'react';
-import { Button, Space, Input, Collapse } from 'antd';
+import { Button, Space, Form, message } from 'antd';
 import { PlusCircleOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import { WrapContext } from 'editor@/page/wireboard';
 import { ModalOptions } from 'editor@/feedback/modalcore';
-const { Panel } = Collapse;
+import FormCore from 'editor@/feedback/formcore';
+import createGameConfig from './gameBaseConfig/createGameConfig';
 // 文件类型数据
 
 const KnHeader = () => {
   const commonContext: any = useContext(WrapContext);
-  const { openModal } = commonContext;
+  const { openModal, closeModal } = commonContext;
+  const [createGameForm] = Form.useForm();
+  const resetForm = () => {
+    createGameForm.resetFields();
+  }
+  const submitForm = () => {
+    createGameForm.submit();
+  }
+  const onSubmit = (params): void => {
+    console.log(params);
+    resetForm();
+    closeModal();
+    message.success('创建成功！')
+  }
   const createProjectFile = () => {
     openModal({
       width: 600,
       name: "新建游戏项目",
       content: <React.Fragment>
-        <Input type="text" placeholder="项目名"></Input>
-        <Collapse defaultActiveKey={['1', '2', '3']} >
-          <Panel header="分辨率设置" key="1">
-            <p>123</p>
-          </Panel>
-          <Panel header="画质设置" key="2">
-            <p>345</p>
-          </Panel>
-        </Collapse>
-      </React.Fragment>
+        <FormCore form={createGameForm} {...createGameConfig} submit={onSubmit}></FormCore>
+      </React.Fragment>,
+      footer: [
+        <Button key="back" onClick={resetForm}>
+          重置
+      </Button>,
+        <Button key="submit" type="primary" onClick={submitForm}>
+          创建
+      </Button>,
+      ]
     } as ModalOptions);
   };
   return <React.Fragment>
