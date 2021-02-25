@@ -2,19 +2,21 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-22 16:21:01
+ * @LastEditTime: 2021-02-25 10:22:22
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
 
 import { Layout } from 'antd';
-import React, { createContext } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import KnHeader from './header';
 import KnTabs from './outline';
 import OutlineTree from './outline/outline_tree';
 import StageEditor from './workbench/canvas';
 import useModal from 'editor@/feedback/modalcore';
 import ErrorBoundary from './error_boundary';
+import { useSelector } from 'react-redux';
+import { CombineReducer } from 'editor@/common/store';
 
 export const WrapContext = createContext({});
 
@@ -22,6 +24,7 @@ const { Header, Footer, Sider, Content } = Layout;
 
 const WireBoard = (props) => {
   const [modal, openModal, closeModal] = useModal({});
+  const [sceneId, setCurrentSceneId] = useState('');
   const CommonWidget = {
     openModal, closeModal
   };
@@ -32,9 +35,12 @@ const WireBoard = (props) => {
     }
   ];
 
+  const selector = useSelector((store: CombineReducer) => store.sceneReducer.currentScene);
+
+
   const editorTabs = [
     {
-      name: "场景编辑",
+      name: sceneId,
       childComponent: StageEditor
     }
   ];
@@ -52,6 +58,13 @@ const WireBoard = (props) => {
       childComponent: OutlineTree
     }
   ];
+
+  useEffect(() => {
+    console.log(selector);
+    if (selector) {
+      setCurrentSceneId(selector.id);
+    }
+  }, [selector]);
 
   return <WrapContext.Provider value={CommonWidget}>
     <ErrorBoundary>

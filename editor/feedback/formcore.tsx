@@ -2,17 +2,17 @@
  * @Author: kunnisser
  * @Date: 2021-01-30 21:55:35
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-19 10:30:47
+ * @LastEditTime: 2021-02-25 16:15:02
  * @FilePath: /kunigame/editor/feedback/formcore.tsx
  * @Description: ---- REACT16 ----
  * +++++ <ANTD-V4></ANTD-V4>表单封装  +++++
  */
 
 import React from 'react';
-import { Form, Input, InputNumber, Switch } from 'antd';
+import { Form, Input, InputNumber, Switch, Select } from 'antd';
 import ruleMap from './validate/rules';
 import { FormInstance } from 'antd/lib/form';
-
+const Option = Select.Option;
 /** FormItem 定义表单内元素描述 */
 export interface FormItem {
   // form元素类型
@@ -42,7 +42,9 @@ export interface FormItem {
   defaultVal?: any,
   // 子节点的值属性
   propName?: string,
-  rules?: Array<object>,
+  // select子选项
+  options?: Array<any>,
+  rules?: Array<any>,
 }
 
 /** FormItem 定义表单包裹元素描述 */
@@ -54,9 +56,10 @@ export interface FormFragment {
 
 /** FormProps定义输入的Form配置描述 */
 export interface FormProps {
-  layout?: {
-    labelCol: object,
-    wrapperCol: object
+  layoutConfig?: {
+    labelCol?: object,
+    wrapperCol?: object,
+    layout: any,
   },
   formList: Array<FormItem | FormFragment>,
   formName: string,
@@ -64,7 +67,6 @@ export interface FormProps {
   form?: FormInstance
 }
 
-// const { Option } = Select;
 const rules: any = ruleMap;
 
 /**
@@ -82,6 +84,26 @@ const formInputHex = (formItem: FormItem): any => {
 }
 
 /**
+ * @description: 定义Select Form组件
+ * @param {FormItem} formItem
+ * @return {Select}
+ */
+const selectInputHex = (formItem: FormItem): any => {
+  return <Select
+    showSearch
+    placeholder={formItem.placeholder}
+    optionFilterProp="children"
+    filterOption={(input, option: any) =>
+      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+    }
+  >
+    {formItem.options?.map((option) => {
+      return <Option key={option.value} value={option.value}>{option.title}</Option>;
+    })};
+  </Select>;
+}
+
+/**
  * @description: 定义Switch Form组件
  * @param {*}
  * @return {*}
@@ -94,6 +116,7 @@ const formSwitchHex = (formItem: FormItem): any => {
 const FormItemsMapSheet = {
   'input': formInputHex,
   'switch': formSwitchHex,
+  'select': selectInputHex,
 };
 
 /**
@@ -156,7 +179,7 @@ const FormCore = (props: FormProps) => {
     form={props.form}
     name={props.formName}
     onFinish={props.submit}
-    {...props.layout}
+    {...props.layoutConfig}
   >
     {generateItems(props.formList)}
   </Form>
