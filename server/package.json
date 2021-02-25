@@ -1,0 +1,21 @@
+{
+  "name": "file_editor",
+  "version": "1.0.0",
+  "description": "游戏文件操作",
+  "main": "index.js",
+  "scripts": {
+    "start": "node bin/www",
+    "dev": "./node_modules/.bin/nodemon bin/www"
+  },
+  "author": "kunnisser",
+  "license": "ISC",
+  "devDependencies": {
+    "fs-extra": "^9.1.0",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-logger": "^3.2.1",
+    "koa-onerror": "^4.1.0",
+    "koa-router": "^10.0.0",
+    "nodemon": "^2.0.7"
+  }
+}

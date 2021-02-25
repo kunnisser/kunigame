@@ -3,6 +3,8 @@
 
 !/projects/
 !/editor/
+!/server/
+server/node_modules/
 !/.babelrc
 !/.eslintrc.js
 !/.gitignore
