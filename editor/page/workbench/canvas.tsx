@@ -2,16 +2,17 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 17:10:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-25 10:13:43
+ * @LastEditTime: 2021-02-26 16:19:21
  * @FilePath: /kunigame/editor/page/workbench/canvas.tsx
  * @Description: ---- 画布编辑 ----
  */
 
 import React, { useEffect } from 'react';
 import Game from 'ts@/kuni/lib/core';
-import GameInitial from 'ts@/kuni/main';
+import GameInitial from 'ts@/template/main';
 import { useDispatch } from 'react-redux';
 import { GET_SCENE_LIST, SET_CURRENT_SCENE } from 'editor@/common/gameStore/scene/action';
+
 const StageEditor = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {

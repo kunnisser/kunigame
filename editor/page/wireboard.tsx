@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-25 10:22:22
+ * @LastEditTime: 2021-02-26 16:33:52
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -60,7 +60,6 @@ const WireBoard = (props) => {
   ];
 
   useEffect(() => {
-    console.log(selector);
     if (selector) {
       setCurrentSceneId(selector.id);
     }

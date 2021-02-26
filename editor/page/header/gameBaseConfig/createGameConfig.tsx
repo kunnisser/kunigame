@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-17 15:13:48
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-22 16:02:15
+ * @LastEditTime: 2021-02-26 16:46:02
  * @FilePath: /kunigame/editor/page/header/gameBaseConfig/createGameConfig.tsx
  * @Description: ---- 创建项目配置 ----
  */
@@ -61,19 +61,19 @@ const createGameConfig: FormProps = {
               main: 'switch',
             },
             label: '抗锯齿',
-            param: 'aaa',
+            param: 'antialias',
             propName: 'checked',
             defaultVal: true
           },
           {
             type: {
-              main: 'input',
-              sub: 'number'
+              main: 'switch',
             },
-            label: 'dpr',
-            param: 'dpr',
-            defaultVal: 3
-          }
+            label: '背景透明',
+            param: 'transparent',
+            propName: 'checked',
+            defaultVal: true
+          },
         ];
         return <Collapse key="project_setting" defaultActiveKey={['1', '2', '3']}>
           <Panel header="分辨率设置" key="1">

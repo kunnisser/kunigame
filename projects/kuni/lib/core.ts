@@ -1,18 +1,21 @@
 import dat from 'dat.gui';
-import KnFactory from 'ts@/kuni/lib/gameobjects/kn_factory';
-import KnLoader from 'ts@/kuni/lib/loader/kn_loader';
-import KnSceneManager from 'ts@/kuni/lib/gameobjects/kn_scene_manager';
+import KnFactory from '../lib/gameobjects/kn_factory';
+import KnLoader from '../lib/loader/kn_loader';
+import KnSceneManager from '../lib/gameobjects/kn_scene_manager';
 import { Application, settings, SCALE_MODES } from 'pixi.js';
-import { debounce, math } from 'ts@/kuni/lib/utils/common';
+import { debounce, math } from '../lib/utils/common';
 import KnScene from './gameobjects/kn_scene';
-import KnTranstion from 'ts@/kuni/lib/gameui/kn_transtion';
+import KnTranstion from '../lib/gameui/kn_transtion';
 import KnCursor from './gameui/kn_cursor';
 import CoverMask from './dev/editor_mask/cover';
+import * as PIXI from 'pixi.js';
 
 interface EnterProps {
 	width: number,
 	height?: number,
 	ratio: number,
+	antialias: boolean,
+	transparent: boolean,
 	view: any,
 }
 
@@ -52,6 +55,7 @@ export default class Game {
 	}; // 游戏尺寸
 	entryHive: any;
 	constructor(config: EnterProps) {
+		window['PIXI'] = PIXI;
 		this.view = config.view;
 		this.dpr = window.devicePixelRatio;
 		console.log('dpr = ', this.dpr);
@@ -67,8 +71,8 @@ export default class Game {
 		this.app = new Application({
 			width: this.config.width,
 			height: this.config.height,
-			antialias: false,
-			transparent: !0,
+			antialias: config.antialias || false,
+			transparent: config.transparent || !0,
 			resolution: this.dpr
 		});
 

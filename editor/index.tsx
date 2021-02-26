@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 16:57:00
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-22 11:18:10
+ * @LastEditTime: 2021-02-26 10:33:39
  * @FilePath: /kunigame/editor/index.tsx
  * @Description: ---- 酷尼编辑器入口文件 ----
  */
@@ -16,8 +16,13 @@ import { ConfigProvider } from 'antd';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import Combines from 'editor@/common/store';
+import initialAxios from 'editor@/api/interceptor';
+
 import './assets/main.less';
 import zhCN from 'antd/es/locale/zh_CN';
+
+// 初始化api拦截器
+initialAxios();
 
 const store: any = createStore(Combines);
 render(

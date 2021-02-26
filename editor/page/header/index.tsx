@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 16:00:13
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-19 11:02:18
+ * @LastEditTime: 2021-02-26 16:53:43
  * @FilePath: /kunigame/editor/page/header/index.tsx
  * @Description: ---- KN编辑器菜单 ----
  */
@@ -14,6 +14,7 @@ import { WrapContext } from 'editor@/page/wireboard';
 import { ModalOptions } from 'editor@/feedback/modalcore';
 import FormCore from 'editor@/feedback/formcore';
 import createGameConfig from './gameBaseConfig/createGameConfig';
+import { createNewProject } from 'editor@/api/request/project';
 // 文件类型数据
 
 const KnHeader = () => {
@@ -28,9 +29,10 @@ const KnHeader = () => {
   }
   const onSubmit = (params): void => {
     console.log(params);
-    resetForm();
-    closeModal();
-    message.success('创建成功！')
+    createNewProject(params).then(() => {
+      resetForm();
+      closeModal();
+    });
   }
   const createProjectFile = () => {
     openModal({

@@ -12,7 +12,6 @@
 import { message } from 'antd';
 import axios from 'axios';
 import CODES from "./code";
-import { navigate } from '@reach/router';
 
 // 定义对象接口
 interface CancelPending {
@@ -56,17 +55,11 @@ const initialAxios: any = () => {
 
   // http响应拦截器
   axios['interceptors'].response.use((response: any) => {
+    console.log(`${response.config.url} -- 请求返回:`);
+    console.log(response);
     const { data: resultData = {} } = response;
-    // TODO 设置token过期失效相关处理
-    if (resultData.code === '4002') {
-    }
 
-    if (resultData.code === '4001') {
-      navigate("/admin/login");
-    }
-    
     // TODO 其他异常响应，例如权限不足
-    
     // 获取到正常数据并返回
     if (CODES['SUCCESS'].indexOf(resultData.code) > -1) {
       resultData.status = 'success';
@@ -81,9 +74,6 @@ const initialAxios: any = () => {
   }, error => {
     const errStatus = error.response ? error.response.status : '';
     error.message && message['warning'](CODES[errStatus] || error.message);
-    if (errStatus && (errStatus === 503 || errStatus === 500)) {
-      navigate("/admin/login");
-    }
     return Promise.reject(error.message || error);
   });
 };

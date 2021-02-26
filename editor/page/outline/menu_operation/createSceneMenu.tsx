@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-25 15:11:05
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-25 15:55:29
+ * @LastEditTime: 2021-02-26 10:01:15
  * @FilePath: /kunigame/editor/page/outline/menu_operation/createSceneMenu.tsx
  * @Description: ---- 新增场景操作 ----
  */
@@ -12,7 +12,7 @@ import { WrapContext } from 'editor@/page/wireboard';
 import { ModalOptions } from 'editor@/feedback/modalcore';
 import FormCore from 'editor@/feedback/formcore';
 import createSceneConfig from './config/createSceneConfig';
-
+import { createScene } from 'editor@/api/request/scene';
 const CreateSceneMenu = () => {
   const commonContext: any = useContext(WrapContext);
   const { openModal, closeModal } = commonContext;
@@ -24,10 +24,10 @@ const CreateSceneMenu = () => {
     createSceneForm.submit();
   }
   const onSubmit = (params): void => {
-    console.log(params);
-    resetForm();
-    closeModal();
-    message.success('创建成功！')
+    createScene(params).then(() => {
+      resetForm();
+      closeModal();
+    })
   }
 
   const createNewScene = () =>

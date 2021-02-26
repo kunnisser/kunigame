@@ -23,7 +23,7 @@ module.exports = {
 	resolve: {
 		extensions: ['.js', '.json', '.ts', '.tsx'],
 		alias: {
-			'ts@': path.join(__dirname, '/project'),
+			'ts@': path.join(__dirname, '/projects'),
 			'editor@': path.join(__dirname, '/editor')
 		},
 		plugins: [new TsconfigPathsPlugin({
