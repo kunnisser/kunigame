@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-25 17:01:47
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-26 10:17:23
+ * @LastEditTime: 2021-02-26 17:26:22
  * @FilePath: /kunigame/server/index.js
  * @Description: ---- koa服务启动文件 ----
  */
@@ -15,7 +15,6 @@ var router = require('koa-router')();
 var routes = require('./route');
 var cors = require('koa2-cors');
 var app = new koa();
-
 var env = require('./env');
 
 // error handler

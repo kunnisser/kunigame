@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 16:47:50
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-26 17:04:26
+ * @LastEditTime: 2021-02-26 17:30:17
  * @FilePath: /kunigame/server/route/project/api.js
  * @Description: ---- 项目操作API ----
  */
@@ -14,27 +14,29 @@ router.get('/', async (ctx) => {
   ctx.body = 'projectApi';
 });
 
-const projectBasePath =  '/projects/';
+const projectBasePath =  path.resolve('../', 'projects');
 
 /**
- * @description: 创建游戏项目
+ * @description: 创建游戏项目 [createGame]
  * @param {*}
  * @return {*}
  */
 
  const createGame = (params, ctx) => {
-   const sourcePath = path.normalize(`${projectBasePath}template`);
-   const targetPath = path.normalize(`${projectBasePath}${params.projectName}`);
-  try {
-    fs.copySync(sourcePath, targetPath);
-  } catch (error) {
-    ctx.body = {
-      code: CODE.FAIL,
-      msg: '项目创建失败',
-      data: null,
-    };
-    return;
-  }
+   const sourcePath = path.normalize(`${projectBasePath}/template`);
+   const targetPath = path.normalize(`${projectBasePath}/${params.projectName}`);
+   console.log(sourcePath);
+   console.log(targetPath);
+  fs.copySync(sourcePath, targetPath, function (err) {
+    if (err) {
+      ctx.body = {
+        code: CODE.FAIL,
+        msg: err,
+        data: null,
+      };
+      return;
+    }
+  });
  }
 
 router.post('/create', async (ctx) => {
@@ -45,7 +47,6 @@ router.post('/create', async (ctx) => {
     msg: '项目创建成功',
     data: null,
   };
-  return;
 });
 
 module.exports = router.routes();

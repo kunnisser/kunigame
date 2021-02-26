@@ -72,8 +72,7 @@ const initialAxios: any = () => {
       return Promise.resolve(response);
     }
   }, error => {
-    const errStatus = error.response ? error.response.status : '';
-    error.message && message['warning'](CODES[errStatus] || error.message);
+    error.message && message['warning'](error.message);
     return Promise.reject(error.message || error);
   });
 };
