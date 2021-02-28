@@ -6,6 +6,8 @@ const GameInitial = (view) => {
 	const game = new Game({
 		width: 1920,
 		ratio: 2,
+		antialias: true,
+		transparent: true,
 		view
 	});
 	// 定义全局Mask

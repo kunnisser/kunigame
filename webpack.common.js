@@ -64,15 +64,6 @@ module.exports = {
 					}
 				}
 			},
-			{
-				test: /\.json$/,
-				use: {
-					loader: 'json-loader',
-					options: {
-						name: '[name].[ext]'
-					}
-				}
-			},
       {
         test: /\.less$/,
 				use: [

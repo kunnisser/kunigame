@@ -1,13 +1,12 @@
 import Game from 'ts@/kuni/lib/core';
 import StateHive from './src/state/hive';
-
+import Config from './schema/game.json';
 const GameInitial = (view) => {
-	console.log(Game);
 	const game = new Game({
-		width: 1920,
-		ratio: 2,
-		antialias: true,
-		transparent: true,
+		width: Config.width,
+		ratio: Config.ratio,
+		antialias: Config.antialias,
+		transparent: Config.transparent,
 		view
 	});
 	// 定义全局Mask

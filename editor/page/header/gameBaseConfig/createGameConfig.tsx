@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-02-17 15:13:48
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-26 16:46:02
- * @FilePath: /kunigame/editor/page/header/gameBaseConfig/createGameConfig.tsx
+ * @LastEditTime: 2021-02-28 00:24:28
+ * @FilePath: \kunigame\editor\page\header\gameBaseConfig\createGameConfig.tsx
  * @Description: ---- 创建项目配置 ----
  */
 
@@ -49,9 +49,9 @@ const createGameConfig: FormProps = {
               main: 'input',
               sub: 'number'
             },
-            label: '高度',
-            param: 'height',
-            defaultVal: 1080,
+            label: '宽高比',
+            param: 'ratio',
+            defaultVal: 2,
           }
         ];
 

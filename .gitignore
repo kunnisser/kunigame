@@ -5,6 +5,7 @@
 !/editor/
 !/server/
 server/node_modules/
+projects/hive
 !/.babelrc
 !/.eslintrc.js
 !/.gitignore
