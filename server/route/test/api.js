@@ -2,16 +2,15 @@
  * @Author: kunnisser
  * @Date: 2021-02-28 21:12:06
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-03-01 00:01:20
+ * @LastEditTime: 2021-03-04 23:04:33
  * @FilePath: \kunigame\server\route\test\api.js
  * @Description: ---- 测试接口 ----
  */
 
 var router = require('koa-router')();
-var fs = require('fs-extra');
 var path = require('path');
-var babel = require('@babel/core');
 var routeUtils = require('../../common/route.js');
+var Utils = require('../../common/utils.js');
 
 router.get('/', async (ctx) => {
   ctx.body = 'testApi';
@@ -19,21 +18,23 @@ router.get('/', async (ctx) => {
 
 const gameWorkBenchPath = path.resolve('./', 'editor/page/workbench');
 
-const switchGameProject = (projectName) => {
-  const currentGamePath = path.normalize(`${gameWorkBenchPath}/canvas.tsx`);
-  babel.transformFileSync(currentGamePath, {
-    sourceType: "module",
-    presets: [
-      "@babel/preset-env",
-      "@babel/preset-typescript"
-    ],
+const switchGameProject = (currentGamePath) => {
+  const ast = Utils.fileToAst(currentGamePath);
+  Utils.findAstNode(ast, {
+    ImportDeclaration: (path) => {
+      if (path.key == 2) {
+        path.node.source.value = 'ts@/template/main';
+      }
+    }
   });
+  Utils.astToFile(ast, currentGamePath);
 }
 
 // 默认测试
 router.get('/index', async (ctx) => {
   try {
-    switchGameProject('heihei');
+    const currentGamePath = path.normalize(`${gameWorkBenchPath}/canvas.tsx`);
+    switchGameProject(currentGamePath);
     ctx.body = {
       code: CODE.SUCCESS,
       msg: 'test OK',

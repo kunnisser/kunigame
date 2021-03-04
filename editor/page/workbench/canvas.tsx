@@ -6,30 +6,29 @@
  * @FilePath: /kunigame/editor/page/workbench/canvas.tsx
  * @Description: ---- 画布编辑 ----
  */
-
 import React, { useEffect } from 'react';
 import Game from 'ts@/kuni/lib/core';
-import GameInitial from 'ts@/template/main';
+import GameInitial from "ts@/template/main";
 import { useDispatch } from 'react-redux';
 import { GET_SCENE_LIST, SET_CURRENT_SCENE } from 'editor@/common/gameStore/scene/action';
 
-const StageEditor = (props) => {
+const StageEditor = props => {
   const dispatch = useDispatch();
   useEffect(() => {
     const view: any = document.getElementById('stage');
-    const game: Game = GameInitial(view);
-    // 初始化游戏场景列表
+    const game: Game = GameInitial(view); // 初始化游戏场景列表
+
     dispatch({
       type: GET_SCENE_LIST,
       payload: game.sceneManager.scenes
-    });
-    // 获取当前游戏场景
+    }); // 获取当前游戏场景
+
     dispatch({
       type: SET_CURRENT_SCENE,
       payload: game.entryHive
     });
   }, []);
   return <div id="stage"></div>;
-}
+};
 
 export default StageEditor;
