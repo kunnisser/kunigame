@@ -18,6 +18,7 @@ router.get('/', async (ctx) => {
 
 const gameWorkBenchPath = path.resolve('./', 'editor/page/workbench');
 
+
 const switchGameProject = (currentGamePath) => {
   const ast = Utils.fileToAst(currentGamePath);
   Utils.findAstNode(ast, {

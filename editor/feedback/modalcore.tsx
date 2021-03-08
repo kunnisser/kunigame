@@ -30,7 +30,6 @@ const useModal = props => {
   const [content, setContent] = useState('');
   const [footer, setFooter] = useState(null);
   const [handler, setHandler] = useState(null);
-
   const openModal: any = (options: ModalOptions) => {
     setModalVisible(!0);
     /** 设置宽度 */

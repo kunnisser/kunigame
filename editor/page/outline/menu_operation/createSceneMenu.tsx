@@ -2,12 +2,12 @@
  * @Author: kunnisser
  * @Date: 2021-02-25 15:11:05
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-02-26 10:01:15
- * @FilePath: /kunigame/editor/page/outline/menu_operation/createSceneMenu.tsx
+ * @LastEditTime: 2021-03-06 20:59:37
+ * @FilePath: \kunigame\editor\page\outline\menu_operation\createSceneMenu.tsx
  * @Description: ---- 新增场景操作 ----
  */
 import React, { useContext } from 'react';
-import { Button, Form, message, Menu } from 'antd';
+import { Button, Form, Menu } from 'antd';
 import { WrapContext } from 'editor@/page/wireboard';
 import { ModalOptions } from 'editor@/feedback/modalcore';
 import FormCore from 'editor@/feedback/formcore';
