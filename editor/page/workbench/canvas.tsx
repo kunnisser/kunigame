@@ -8,7 +8,7 @@
  */
 import React, { useEffect } from 'react';
 import Game from 'ts@/kuni/lib/core';
-import GameInitial from "ts@/hive/tt/main";
+import GameInitial from "ts@/hive/aloha/main";
 import { useDispatch } from 'react-redux';
 import { GET_SCENE_LIST, SET_CURRENT_SCENE } from 'editor@/common/gameStore/scene/action';
 

@@ -2,19 +2,21 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 16:00:13
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-03-08 23:38:14
+ * @LastEditTime: 2021-03-09 22:09:23
  * @FilePath: \kunigame\editor\page\header\index.tsx
  * @Description: ---- KN编辑器菜单 ----
  */
 
 import React, { useContext, useState } from 'react';
-import { Button, Space, Form, Card, Input, Tooltip } from 'antd';
+import { Button, Space, Form, Card, Tooltip } from 'antd';
 import { PlusCircleOutlined, PlayCircleOutlined, UnorderedListOutlined, SettingOutlined, DeleteOutlined } from '@ant-design/icons';
 import { WrapContext } from 'editor@/page/wireboard';
 import { ModalOptions } from 'editor@/feedback/modalcore';
 import FormCore from 'editor@/feedback/formcore';
 import createGameConfig from './gameBaseConfig/createGameConfig';
 import { changeProject, createNewProject, getProjectList } from 'editor@/api/request/project';
+import editGameConfig from './gameBaseConfig/editGameConfig';
+import deleteGameConfig from './gameBaseConfig/deleteGameConfig';
 
 const { Meta } = Card;
 
@@ -22,20 +24,25 @@ const KnHeader = () => {
   const commonContext: any = useContext(WrapContext);
   const { openModal, closeModal, openChildModal, closeChildModal } = commonContext;
   const [createGameForm] = Form.useForm();
+  const [editGameForm] = Form.useForm();
+  const [deleteGameForm] = Form.useForm();
   const [listLoading, setListLoading] = useState(false);
-  const resetForm = () => {
-    createGameForm.resetFields();
-  }
-  const submitForm = () => {
-    createGameForm.submit();
-  }
-  const onSubmit = (params): void => {
-    createNewProject(params).then(() => {
-      resetForm();
-      closeModal();
-    });
-  }
+
+
+  // 新建项目
   const createProjectFile = () => {
+    const resetForm = () => {
+      createGameForm.resetFields();
+    }
+    const submitForm = () => {
+      createGameForm.submit();
+    }
+    const onSubmit = (params): void => {
+      createNewProject(params).then(() => {
+        resetForm();
+        closeModal();
+      });
+    }
     openModal({
       width: 600,
       name: "新建游戏项目",
@@ -53,6 +60,7 @@ const KnHeader = () => {
     } as ModalOptions);
   };
 
+  // 显示项目列表
   const showProjectList = () => {
     setListLoading(true);
     getProjectList().then((ret) => {
@@ -69,7 +77,7 @@ const KnHeader = () => {
                     <PlayCircleOutlined key={`${project}_booting`} onClick={() => useProject(project)} />
                   </Tooltip>,
                   <Tooltip title="设置项目">
-                    <SettingOutlined key={`${project}_setting`} onClick={() => useProject(project)} />
+                    <SettingOutlined key={`${project}_setting`} onClick={() => settingProject(project)} />
                   </Tooltip>,
                   <Tooltip title="删除项目">
                     <DeleteOutlined key={`${project}_delete`} onClick={() => confirmProject(project)} />
@@ -90,19 +98,44 @@ const KnHeader = () => {
     });
   }
 
+  // 设置项目
+  const settingProject = (projectName) => {
+    const editProject = () => {
+      editGameForm.submit();
+    }
+    const onEditGameForm = (param) => {
+      console.log(param);
+      closeChildModal();
+    }
+    openChildModal({
+      width: 600,
+      name: "项目设置",
+      content: <React.Fragment>
+        <FormCore form={editGameForm} {...editGameConfig} submit={onEditGameForm}></FormCore>
+      </React.Fragment>,
+      footer: [
+        <Button key="submit" type="primary" onClick={editProject}>
+          提交修改
+        </Button>]
+    } as ModalOptions);
+  }
+
   // 删除项目
   const confirmProject = (projectName) => {
-    let editProjectName = '';
-    const deleteProject = () => {
+    const onDeleteGameForm = (param) => {
+      console.log(param.projectName);
       console.log(projectName);
-      console.log(editProjectName);
       closeChildModal();
+      deleteGameForm.resetFields();
+    }
+    const deleteProject = () => {
+      deleteGameForm.submit();
     };
     openChildModal({
       width: 600,
       name: "请输入项目名确认删除",
       content: <React.Fragment>
-        <Input type="text" onChange={(e) => { editProjectName = e.target.value; }} placeholder="请输入项目名" onPressEnter={deleteProject}></Input>
+        <FormCore form={deleteGameForm} {...deleteGameConfig} submit={onDeleteGameForm}></FormCore>
       </React.Fragment>,
       footer: [
         <Button key="submit" type="primary" onClick={deleteProject}>
