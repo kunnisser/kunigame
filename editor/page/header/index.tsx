@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 16:00:13
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-03-09 22:09:23
+ * @LastEditTime: 2021-04-11 22:47:21
  * @FilePath: \kunigame\editor\page\header\index.tsx
  * @Description: ---- KN编辑器菜单 ----
  */
@@ -121,10 +121,9 @@ const KnHeader = () => {
   }
 
   // 删除项目
-  const confirmProject = (projectName) => {
+  const confirmProject = (projectName: string) => {
     const onDeleteGameForm = (param) => {
-      console.log(param.projectName);
-      console.log(projectName);
+      console.log(projectName, param);
       closeChildModal();
       deleteGameForm.resetFields();
     }

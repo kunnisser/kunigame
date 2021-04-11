@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-03-08 22:49:36
+ * @LastEditTime: 2021-04-11 16:48:23
  * @FilePath: \kunigame\editor\page\wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -73,7 +73,9 @@ const WireBoard = (props) => {
     <ErrorBoundary>
       <Layout>
         <Header>
-          <img className="logo" src="../editor/assets/image/logo.png"></img>
+          <div className="logo">
+            <img src="../editor/assets/image/logo.png"></img>
+          </div>
           <KnHeader />
         </Header>
         <Layout>

@@ -12,8 +12,8 @@
 @disabled-color: rgba(0, 0, 0, 0.25); // 失效色
 @border-radius-base: 2px; // 组件/浮层圆角
 @border-color-base: #d9d9d9; // 边框色
-@box-shadow-base: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08),
-  0 9px 28px 8px rgba(0, 0, 0, 0.05); // 浮层阴影
+@box-shadow-base: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
+  0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05); // 浮层阴影
 // @background-color-light:  #e0e0e0;
 
 // layout
@@ -32,12 +32,15 @@ body {
 }
 
 .logo {
+  width: 200px;
   height: 100%;
-  margin-right: 10px;
+  display: inline-block;
+  text-align: center;
+  background-color: #3e434a;
 }
 
 .logo img {
-  height: inherit;
+  height: 50%;
 }
 
 #editor {
@@ -54,7 +57,7 @@ body {
   height: calc(100vh - 364px);
 }
 
-.kn-footer{
+.kn-footer {
   height: 300px;
 }
 
@@ -62,6 +65,6 @@ body {
   color: #52c41a;
 }
 
-.ant-layout-footer{
+.ant-layout-footer {
   padding: 0;
 }
