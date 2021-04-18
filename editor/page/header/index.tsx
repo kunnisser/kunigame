@@ -2,21 +2,22 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 16:00:13
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-04-11 22:47:21
+ * @LastEditTime: 2021-04-18 18:57:36
  * @FilePath: \kunigame\editor\page\header\index.tsx
  * @Description: ---- KN编辑器菜单 ----
  */
 
 import React, { useContext, useState } from 'react';
-import { Button, Space, Form, Card, Tooltip } from 'antd';
+import { Button, Space, Form, Card, Tooltip, Empty, message } from 'antd';
 import { PlusCircleOutlined, PlayCircleOutlined, UnorderedListOutlined, SettingOutlined, DeleteOutlined } from '@ant-design/icons';
 import { WrapContext } from 'editor@/page/wireboard';
 import { ModalOptions } from 'editor@/feedback/modalcore';
 import FormCore from 'editor@/feedback/formcore';
 import createGameConfig from './gameBaseConfig/createGameConfig';
-import { changeProject, createNewProject, getProjectList } from 'editor@/api/request/project';
+import { changeProject, createNewProject, getProjectList, removeProject, editProject } from 'editor@/api/request/project';
 import editGameConfig from './gameBaseConfig/editGameConfig';
 import deleteGameConfig from './gameBaseConfig/deleteGameConfig';
+import { getCurrentProject, setCurrentProject } from 'editor@/storage';
 
 const { Meta } = Card;
 
@@ -38,7 +39,12 @@ const KnHeader = () => {
       createGameForm.submit();
     }
     const onSubmit = (params): void => {
+      if (params.projectName === 'kuni') {
+        message.error('当前名称不可用');
+        return;
+      }
       createNewProject(params).then(() => {
+        setCurrentProject(params.projectName);
         resetForm();
         closeModal();
       });
@@ -69,6 +75,7 @@ const KnHeader = () => {
           width: 600,
           name: "项目总览",
           content: <React.Fragment>
+            {ret?.data?.data.length === 0 && <Empty description="暂无项目，请创建！"></Empty>}
             {ret?.data?.data.map((project: any) => {
               return <Card loading={listLoading}
                 key={`${project}_card`}
@@ -100,11 +107,17 @@ const KnHeader = () => {
 
   // 设置项目
   const settingProject = (projectName) => {
-    const editProject = () => {
+    const editPickedProject = () => {
       editGameForm.submit();
     }
     const onEditGameForm = (param) => {
-      console.log(param);
+      editProject({ projectName, ...param }).then((ret) => {
+        if (ret.data.status === 'success') {
+          closeChildModal();
+          closeModal();
+          editGameForm.resetFields();
+        }
+      });
       closeChildModal();
     }
     openChildModal({
@@ -114,7 +127,7 @@ const KnHeader = () => {
         <FormCore form={editGameForm} {...editGameConfig} submit={onEditGameForm}></FormCore>
       </React.Fragment>,
       footer: [
-        <Button key="submit" type="primary" onClick={editProject}>
+        <Button key="submit" type="primary" onClick={editPickedProject}>
           提交修改
         </Button>]
     } as ModalOptions);
@@ -123,9 +136,19 @@ const KnHeader = () => {
   // 删除项目
   const confirmProject = (projectName: string) => {
     const onDeleteGameForm = (param) => {
-      console.log(projectName, param);
-      closeChildModal();
-      deleteGameForm.resetFields();
+      if (projectName !== param.projectName) {
+        message.warning('请输入对应的项目名称');
+        return;
+      }
+      const currentProjectName = getCurrentProject();
+      removeProject({ projectName, currentProjectName }).then((ret) => {
+        if (ret.data.status === 'success') {
+          closeChildModal();
+          closeModal();
+          deleteGameForm.resetFields();
+        }
+      });
+
     }
     const deleteProject = () => {
       deleteGameForm.submit();
@@ -148,6 +171,7 @@ const KnHeader = () => {
     changeProject({ projectName }).then((ret) => {
       if (ret.data.status === 'success') {
         closeModal();
+        setCurrentProject(projectName);
       }
     });
   };
