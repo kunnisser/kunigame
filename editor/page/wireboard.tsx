@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-04-11 16:48:23
+ * @LastEditTime: 2021-04-20 20:48:09
  * @FilePath: \kunigame\editor\page\wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -79,11 +79,11 @@ const WireBoard = (props) => {
           <KnHeader />
         </Header>
         <Layout>
-          <Sider><KnTabs initialKey="tab_scene" tabs={sceneTabs} /></Sider>
+          <Sider theme="light"><KnTabs initialKey="tab_scene" tabs={sceneTabs} /></Sider>
           <Content>
             <KnTabs initialKey="tab_editor" tabs={editorTabs} />
           </Content>
-          <Sider><KnTabs initialKey="tab_form" tabs={formTabs} /></Sider>
+          <Sider theme="light"><KnTabs initialKey="tab_form" tabs={formTabs} /></Sider>
         </Layout>
         <Footer className="kn-footer">
           <KnTabs initialKey="tab_footer" tabs={footerTabs} />
