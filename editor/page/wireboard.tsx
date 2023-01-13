@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2022-09-22 15:12:29
- * @FilePath: /kunigame/editor/page/wireboard.tsx
+ * @LastEditTime: 2021-04-20 20:48:09
+ * @FilePath: \kunigame\editor\page\wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
 

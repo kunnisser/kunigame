@@ -10,29 +10,29 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = merge(common, {
-	mode: 'development',
-	devtool: 'inline-source-map',
-	watch: true,
-	module: {
-		rules: [
-			{
-				test: /\.js$/,
-				use: {
-					loader: 'eslint-loader'
-				},
-				enforce: 'pre',
-				include: [path.resolve(__dirname, 'app')]
-			}
-		]
-	},
-	devServer: {
-		inline: true,
-		port: 3008,
-		host: 'localhost'
-	},
-	plugins: [
-		new webpack.DefinePlugin({
-			'ENV': JSON.stringify(true)
-		})
-	]
+  mode: 'development',
+  devtool: 'inline-source-map',
+  watch: true,
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'eslint-loader',
+        },
+        enforce: 'pre',
+        include: [path.resolve(__dirname, 'app')],
+      },
+    ],
+  },
+  devServer: {
+    inline: true,
+    port: 3008,
+    host: 'localhost',
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      ENV: JSON.stringify(true),
+    }),
+  ],
 });

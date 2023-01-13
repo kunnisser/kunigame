@@ -2,13 +2,13 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 16:00:13
  * @LastEditors: kunnisser
- * @LastEditTime: 2022-09-08 16:03:59
+ * @LastEditTime: 2023-01-13 17:18:27
  * @FilePath: /kunigame/editor/page/header/index.tsx
  * @Description: ---- KN编辑器菜单 ----
  */
 
 import React, { useContext, useState } from "react";
-import { Button, Space, Form, Card, Tooltip } from "antd";
+import { Button, Space, Form, Card, Tooltip, message } from "antd";
 import {
   PlusCircleOutlined,
   PlayCircleOutlined,
@@ -23,10 +23,12 @@ import createGameConfig from "./gameBaseConfig/createGameConfig";
 import {
   changeProject,
   createNewProject,
+  editProject,
   getProjectList
 } from "editor@/api/request/project";
 import editGameConfig from "./gameBaseConfig/editGameConfig";
 import deleteGameConfig from "./gameBaseConfig/deleteGameConfig";
+import { setCurrentProject } from "editor@/storage";
 
 const { Meta } = Card;
 
@@ -48,7 +50,12 @@ const KnHeader = () => {
       createGameForm.submit();
     };
     const onSubmit = (params): void => {
+      if (params.projectName === "kuni") {
+        message.error("当前名称不可用");
+        return;
+      }
       createNewProject(params).then(() => {
+        setCurrentProject(params.projectName);
         resetForm();
         closeModal();
       });
@@ -130,11 +137,17 @@ const KnHeader = () => {
 
   // 设置项目
   const settingProject = (projectName) => {
-    const editProject = () => {
+    const editPickedProject = () => {
       editGameForm.submit();
     };
     const onEditGameForm = (param) => {
-      console.log(param);
+      editProject({ projectName, ...param }).then((ret) => {
+        if (ret.data.status === "success") {
+          closeChildModal();
+          closeModal();
+          editGameForm.resetFields();
+        }
+      });
       closeChildModal();
     };
     openChildModal({
@@ -150,7 +163,7 @@ const KnHeader = () => {
         </React.Fragment>
       ),
       footer: [
-        <Button key="submit" type="primary" onClick={editProject}>
+        <Button key="submit" type="primary" onClick={editPickedProject}>
           提交修改
         </Button>
       ]
@@ -158,7 +171,7 @@ const KnHeader = () => {
   };
 
   // 删除项目
-  const confirmProject = (projectName) => {
+  const confirmProject = (projectName: string) => {
     const onDeleteGameForm = (param) => {
       console.log(param.projectName);
       console.log(projectName);
@@ -193,6 +206,7 @@ const KnHeader = () => {
     changeProject({ projectName }).then((ret) => {
       if (ret.data.status === "success") {
         closeModal();
+        setCurrentProject(projectName);
       }
     });
   };
