@@ -10,6 +10,7 @@ import LaserDemo from 'ts@/kuni/src/state/laser';
 import KuaFu from 'ts@/kuni/src/state/kuafu/kuafu';
 import Preloader from 'ts@/kuni/lib/loader/kn_preloader';
 import Triangulation from 'ts@/kuni/src/state/postion';
+import Tv from 'ts@/kuni/src/state/tv';
 
 const StateHiveKey = {
   global_preloader: Preloader,
@@ -23,6 +24,7 @@ const StateHiveKey = {
   laserdemo: LaserDemo,
   kuafu: KuaFu,
   Triangulation: Triangulation,
+  tv: Tv,
 };
 
 let StateHive = (game) => {

@@ -85,7 +85,7 @@ class TweenDemo extends KnScene {
   addStaff() {
     const staff = this.addSprite('staff');
     staff.scale.set(0.2);
-    staff.filters = [new GlowFilter(this.loader)];
+    staff.filters = [new GlowFilter(this.loader, 0x31fcc4)];
     staff.angle = 0;
     this.easeTween(staff);
   }
@@ -93,7 +93,7 @@ class TweenDemo extends KnScene {
   // 添加南瓜
   addPumpkin() {
     const pumpkin = this.addSprite('pumpkin');
-    pumpkin.filters = [new GlowFilter(this.loader, 0xffffff)];
+    pumpkin.filters = [new GlowFilter(this.loader, 0x31fcc4)];
     pumpkin.angle = -2;
     this.sineTween(pumpkin);
   }

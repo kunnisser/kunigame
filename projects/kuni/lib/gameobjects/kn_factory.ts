@@ -1,17 +1,17 @@
 /*
- * @Author: kunnisser 
- * @Date: 2019-08-31 15:01:25 
+ * @Author: kunnisser
+ * @Date: 2019-08-31 15:01:25
  * @Last Modified by: kunnisser
  * @Last Modified time: 2020-04-30 13:28:03
  */
 
 /*
-  * KnFactory 是一个快速构建大量公用游戏对象的类
-  * 其创建的对象会自动添加到对应的Manager, World或者是自定义组中
-  * @class KnFactory
-  * @constructor
-  * @param {Core} game - 当前运行的游戏实例的引用	
-*/
+ * KnFactory 是一个快速构建大量公用游戏对象的类
+ * 其创建的对象会自动添加到对应的Manager, World或者是自定义组中
+ * @class KnFactory
+ * @constructor
+ * @param {Core} game - 当前运行的游戏实例的引用
+ */
 
 import KnGroup from '../gameobjects/kn_group';
 import KnGraphics from '../gameobjects/kn_graphics';
@@ -35,39 +35,63 @@ class KnFactory {
   }
 
   image = (key: any, parent: PIXI.Container, align?: Array<number>) => {
-    const texture = Object.prototype.toString.call(key) === '[object String]' ? utils.TextureCache[key] : key;
+    const texture =
+      Object.prototype.toString.call(key) === '[object String]'
+        ? utils.TextureCache[key]
+        : key;
     const sprite = new Sprite(texture);
     align && sprite.anchor.set(...align);
     parent || (parent = this.game.world);
     return parent.addChild(sprite), sprite;
-  }
+  };
 
-  button = (key: any, switchKey: any, parent: PIXI.Container, align?: Array<number>, tipkey?: any) => {
+  button = (
+    key: any,
+    switchKey: any,
+    parent: PIXI.Container,
+    align?: Array<number>,
+    tipkey?: any
+  ) => {
     let btn: any = null;
     if (typeof key === 'number') {
-      const btnRect = this.graphics().generateRect(key, [0, 0, 100, 100, 6], false);
+      const btnRect = this.graphics().generateRect(
+        key,
+        [0, 0, 100, 100, 6],
+        false
+      );
       const btnTexture = TransformImage.transformToTexture(this.game, btnRect);
       key = btnTexture;
     }
+
     btn = this.image(key, parent, align);
+
     btn.interactive = !0;
+
     btn['next'] = null;
+
     btn.status = 'on';
+
     const [texture, swtichTexture] = [
       btn.texture,
-      Object.prototype.toString.call(switchKey) === '[object String]' ? utils.TextureCache[switchKey] : switchKey
+      Object.prototype.toString.call(switchKey) === '[object String]'
+        ? utils.TextureCache[switchKey]
+        : switchKey,
     ];
+
     btn.on('pointerdown', (e) => {
       btn.blendMode = PIXI.BLEND_MODES.ADD_NPM;
       btn.start && btn.start(e);
     });
+
     btn.on('pointermove', (e) => {
       btn.move && btn.move(e);
     });
+
     btn.on('pointerupoutside', (e) => {
       btn.blendMode = PIXI.BLEND_MODES.NORMAL;
       btn.outside && btn.outside(e);
     });
+
     btn.on('pointerup', (e: Event) => {
       if (btn.blendMode === PIXI.BLEND_MODES.ADD_NPM) {
         btn.blendMode = PIXI.BLEND_MODES.NORMAL;
@@ -90,7 +114,7 @@ class KnFactory {
       btn['tip'] = this.image(tipkey, parent, [0.5, 0.5]);
     }
     return btn;
-  }
+  };
 
   texture(key) {
     return Texture.from(key);
@@ -128,7 +152,7 @@ class KnFactory {
     ticker.autoStart = false;
     ticker.stop();
     return ticker;
-  }
+  };
 
   text(content: string, style: any, anchor: Array<number>) {
     let entryStyle = Object.assign({}, style);
@@ -138,26 +162,44 @@ class KnFactory {
     return text;
   }
 
-  section(label: string = '', content: string, size: number, parent: KnGroup | KnScene, sectionStyle?: any) {
+  section(
+    label: string = '',
+    content: string,
+    size: number,
+    parent: KnGroup | KnScene,
+    sectionStyle?: any
+  ) {
     const section = this.group(`sect_${new Date().getTime()}`, parent);
     const { padding = 4, bg = 0xd10311, width = 0 } = sectionStyle;
 
     // 标签文本
-    const labelText = this.text(label, {
-      fontSize: size,
-      fill: '#ffffff',
-      stroke: 0x000000,
-      strokeThickness: 6,
-      wordWrap: !0,
-      wordWrapWidth: width || 0
-    }, [0.5, 0]);
+    const labelText = this.text(
+      label,
+      {
+        fontSize: size,
+        fill: '#ffffff',
+        stroke: 0x000000,
+        strokeThickness: 6,
+        wordWrap: !0,
+        wordWrapWidth: width || 0,
+      },
+      [0.5, 0]
+    );
 
     // 纯文本
-    const text = this.text(content, {
-      fontSize: size,
-      fill: '#000000',
-    }, [0, 0.5]);
-    const rect = this.graphics().generateRect(bg, [0, 0, labelText.width + padding, labelText.height + padding, 8], false);
+    const text = this.text(
+      content,
+      {
+        fontSize: size,
+        fill: '#000000',
+      },
+      [0, 0.5]
+    );
+    const rect = this.graphics().generateRect(
+      bg,
+      [0, 0, labelText.width + padding, labelText.height + padding, 8],
+      false
+    );
     labelText.position.set(rect.width * 0.5, padding * 0.5);
     text.position.set(rect.width + 2, rect.height * 0.5);
     section.addChild(rect, text, labelText);
@@ -166,7 +208,10 @@ class KnFactory {
 
   // 滚动瓷砖
   tiling(key: any, width: number, height: number, parent: KnGroup | KnScene) {
-    const texture = Object.prototype.toString.call(key) === '[object String]' ? utils.TextureCache[key] : key;
+    const texture =
+      Object.prototype.toString.call(key) === '[object String]'
+        ? utils.TextureCache[key]
+        : key;
     const tile = new KnTiling(texture, width, height);
     tile.initialTiling(parent);
     return tile;
@@ -196,9 +241,9 @@ class KnFactory {
         textObj.y = originY + textObj.height;
         tween.instance.to(textObj, 0.2, {
           y: originY,
-          ease: tween.cubic.easeOut
+          ease: tween.cubic.easeOut,
         });
-      }
+      },
     });
   }
 }

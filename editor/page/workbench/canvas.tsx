@@ -2,13 +2,13 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 17:10:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-03-08 00:10:13
- * @FilePath: \kunigame\editor\page\workbench\canvas.tsx
+ * @LastEditTime: 2021-03-12 13:55:17
+ * @FilePath: /kunigame/editor/page/workbench/canvas.tsx
  * @Description: ---- 画布编辑 ----
  */
 import React, { useEffect } from 'react';
 import Game from 'ts@/kuni/lib/core';
-import GameInitial from "ts@/hive/aloha/main";
+import GameInitial from "ts@/kuni/main";
 import { useDispatch } from 'react-redux';
 import { GET_SCENE_LIST, SET_CURRENT_SCENE } from 'editor@/common/gameStore/scene/action';
 

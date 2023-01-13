@@ -2,21 +2,21 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-03-08 22:49:36
- * @FilePath: \kunigame\editor\page\wireboard.tsx
+ * @LastEditTime: 2022-09-22 15:12:29
+ * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
 
-import { Layout } from 'antd';
-import React, { createContext, useEffect, useState } from 'react';
-import KnHeader from './header';
-import KnTabs from './outline';
-import OutlineTree from './outline/outline_tree';
-import StageEditor from './workbench/canvas';
-import useModal from 'editor@/feedback/modalcore';
-import ErrorBoundary from './error_boundary';
-import { useSelector } from 'react-redux';
-import { CombineReducer } from 'editor@/common/store';
+import { Layout } from "antd";
+import React, { createContext, useEffect, useState } from "react";
+import KnHeader from "./header";
+import KnTabs from "./outline";
+import OutlineTree from "./outline/outline_tree";
+import StageEditor from "./workbench/canvas";
+import useModal from "editor@/feedback/modalcore";
+import ErrorBoundary from "./error_boundary";
+import { useSelector } from "react-redux";
+import { CombineReducer } from "editor@/common/store";
 
 export const WrapContext = createContext({});
 
@@ -25,7 +25,7 @@ const { Header, Footer, Sider, Content } = Layout;
 const WireBoard = (props) => {
   const [childModal, openChildModal, closeChildModal] = useModal({});
   const [modal, openModal, closeModal] = useModal({ childModal: childModal });
-  const [sceneId, setCurrentSceneId] = useState('');
+  const [sceneId, setCurrentSceneId] = useState("");
   const CommonWidget = {
     openModal,
     closeModal,
@@ -34,13 +34,14 @@ const WireBoard = (props) => {
   };
   const sceneTabs = [
     {
-      name: "Outline",
+      name: "场景元素",
       childComponent: OutlineTree
     }
   ];
 
-  const selector = useSelector((store: CombineReducer) => store.sceneReducer.currentScene);
-
+  const selector = useSelector(
+    (store: CombineReducer) => store.sceneReducer.currentScene
+  );
 
   const editorTabs = [
     {
@@ -51,14 +52,14 @@ const WireBoard = (props) => {
 
   const formTabs = [
     {
-      name: "查看",
+      name: "场景",
       childComponent: OutlineTree
     }
   ];
 
   const footerTabs = [
     {
-      name: "元素列表",
+      name: "素材列表",
       childComponent: OutlineTree
     }
   ];
@@ -69,27 +70,33 @@ const WireBoard = (props) => {
     }
   }, [selector]);
 
-  return <WrapContext.Provider value={CommonWidget}>
-    <ErrorBoundary>
-      <Layout>
-        <Header>
-          <img className="logo" src="../editor/assets/image/logo.png"></img>
-          <KnHeader />
-        </Header>
+  return (
+    <WrapContext.Provider value={CommonWidget}>
+      <ErrorBoundary>
         <Layout>
-          <Sider><KnTabs initialKey="tab_scene" tabs={sceneTabs} /></Sider>
-          <Content>
-            <KnTabs initialKey="tab_editor" tabs={editorTabs} />
-          </Content>
-          <Sider><KnTabs initialKey="tab_form" tabs={formTabs} /></Sider>
+          <Header style={{ marginBottom: "6px" }}>
+            <div className="logo">Kuni(kunigame)</div>
+            <KnHeader />
+          </Header>
+          <Layout>
+            <Sider theme="light">
+              <KnTabs initialKey="tab_scene" tabs={sceneTabs} />
+            </Sider>
+            <Content style={{ margin: "0 6px" }}>
+              <KnTabs initialKey="tab_editor" tabs={editorTabs} />
+            </Content>
+            <Sider theme="light">
+              <KnTabs initialKey="tab_form" tabs={formTabs} />
+            </Sider>
+          </Layout>
+          <Footer className="kn-footer" style={{ marginTop: "6px" }}>
+            <KnTabs initialKey="tab_footer" tabs={footerTabs} />
+          </Footer>
+          {modal}
         </Layout>
-        <Footer className="kn-footer">
-          <KnTabs initialKey="tab_footer" tabs={footerTabs} />
-        </Footer>
-        {modal}
-      </Layout >
-    </ErrorBoundary>
-  </WrapContext.Provider>;
-}
+      </ErrorBoundary>
+    </WrapContext.Provider>
+  );
+};
 
 export default WireBoard;

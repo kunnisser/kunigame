@@ -24,7 +24,7 @@ const GameInitial = (view) => {
 		game.sceneManager.changeScene(game.currentScene, GameHive[v]);
 	});
 
-	game.entryHive = GameHive['Triangulation'];
+	game.entryHive = GameHive['tweendemo'];
 	game.sceneManager.changeScene(null, GameHive['global_preloader']);
 	return game;
 };

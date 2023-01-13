@@ -10,7 +10,6 @@
       "esnext"
     ],
     "sourceMap": true,
-    "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "importHelpers": true,
     "noImplicitReturns": true,
