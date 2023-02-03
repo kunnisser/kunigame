@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 16:00:13
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-01-13 17:18:27
+ * @LastEditTime: 2023-02-02 16:39:13
  * @FilePath: /kunigame/editor/page/header/index.tsx
  * @Description: ---- KN编辑器菜单 ----
  */
@@ -24,11 +24,12 @@ import {
   changeProject,
   createNewProject,
   editProject,
-  getProjectList
+  getProjectList,
+  removeProject
 } from "editor@/api/request/project";
 import editGameConfig from "./gameBaseConfig/editGameConfig";
 import deleteGameConfig from "./gameBaseConfig/deleteGameConfig";
-import { setCurrentProject } from "editor@/storage";
+import { setCurrentProject, getCurrentProject } from "editor@/storage";
 
 const { Meta } = Card;
 
@@ -88,48 +89,52 @@ const KnHeader = () => {
     setListLoading(true);
     getProjectList().then((ret) => {
       if (ret.data.status === "success") {
-        openModal({
-          width: 600,
-          name: "项目总览",
-          content: (
-            <React.Fragment>
-              {ret?.data?.data.map((project: any) => {
-                return (
-                  <Card
-                    loading={listLoading}
-                    key={`${project}_card`}
-                    actions={[
-                      <Tooltip title="启用项目">
-                        <PlayCircleOutlined
-                          key={`${project}_booting`}
-                          onClick={() => useProject(project)}
-                        />
-                      </Tooltip>,
-                      <Tooltip title="设置项目">
-                        <SettingOutlined
-                          key={`${project}_setting`}
-                          onClick={() => settingProject(project)}
-                        />
-                      </Tooltip>,
-                      <Tooltip title="删除项目">
-                        <DeleteOutlined
-                          key={`${project}_delete`}
-                          onClick={() => confirmProject(project)}
-                        />
-                      </Tooltip>
-                    ]}
-                  >
-                    <Meta
-                      title={project}
-                      description="This is the description"
-                    />
-                  </Card>
-                );
-              })}
-            </React.Fragment>
-          ),
-          footer: null
-        } as ModalOptions);
+        if (ret?.data?.data.length > 0) {
+          openModal({
+            width: 600,
+            name: "项目总览",
+            content: (
+              <React.Fragment>
+                {ret?.data?.data.map((project: any) => {
+                  return (
+                    <Card
+                      loading={listLoading}
+                      key={`${project}_card`}
+                      actions={[
+                        <Tooltip title="启用项目">
+                          <PlayCircleOutlined
+                            key={`${project}_booting`}
+                            onClick={() => useProject(project)}
+                          />
+                        </Tooltip>,
+                        <Tooltip title="设置项目">
+                          <SettingOutlined
+                            key={`${project}_setting`}
+                            onClick={() => settingProject(project)}
+                          />
+                        </Tooltip>,
+                        <Tooltip title="删除项目">
+                          <DeleteOutlined
+                            key={`${project}_delete`}
+                            onClick={() => confirmDeleteProject(project)}
+                          />
+                        </Tooltip>
+                      ]}
+                    >
+                      <Meta
+                        title={project}
+                        description="This is the description"
+                      />
+                    </Card>
+                  );
+                })}
+              </React.Fragment>
+            ),
+            footer: null
+          } as ModalOptions);
+        } else {
+          message.info("项目列表为空");
+        }
       }
       setListLoading(false);
     });
@@ -171,12 +176,23 @@ const KnHeader = () => {
   };
 
   // 删除项目
-  const confirmProject = (projectName: string) => {
-    const onDeleteGameForm = (param) => {
-      console.log(param.projectName);
-      console.log(projectName);
-      closeChildModal();
-      deleteGameForm.resetFields();
+  const confirmDeleteProject = (projectName: string) => {
+    const onDeleteGameForm = async (param) => {
+      if (param.projectName === projectName) {
+        try {
+          await removeProject({
+            projectName: projectName,
+            currentProjectName: getCurrentProject()
+          });
+        } catch (e) {
+          message.warning(e);
+        }
+        closeChildModal();
+        closeModal();
+        deleteGameForm.resetFields();
+      } else {
+        message.warning("请输入对应的项目名称");
+      }
     };
     const deleteProject = () => {
       deleteGameForm.submit();

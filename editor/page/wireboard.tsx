@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2021-04-20 20:48:09
- * @FilePath: \kunigame\editor\page\wireboard.tsx
+ * @LastEditTime: 2023-02-02 17:31:00
+ * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
 
@@ -12,6 +12,7 @@ import React, { createContext, useEffect, useState } from "react";
 import KnHeader from "./header";
 import KnTabs from "./outline";
 import OutlineTree from "./outline/outline_tree";
+import ContainerTree from "./outline/outline_tree/container";
 import StageEditor from "./workbench/canvas";
 import useModal from "editor@/feedback/modalcore";
 import ErrorBoundary from "./error_boundary";
@@ -35,7 +36,7 @@ const WireBoard = (props) => {
   const sceneTabs = [
     {
       name: "场景元素",
-      childComponent: OutlineTree
+      childComponent: ContainerTree
     }
   ];
 

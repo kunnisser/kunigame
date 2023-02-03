@@ -2,17 +2,19 @@
  * @Author: kunnisser
  * @Date: 2021-01-24 21:50:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2022-09-27 11:18:10
+ * @LastEditTime: 2023-02-03 17:01:14
  * @FilePath: /kunigame/editor/page/outline/outline_tree/index.tsx
  * @Description: ---- 大纲树状结构 ----
  */
 
 import React, { useState, useEffect } from "react";
 import { Tree, Input, Dropdown } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import { MenuOperation } from "../menu_operation/index";
+import { setCurrentScene } from "editor@/common/gameStore/scene/action";
+import Game from "ts@/kuni/lib/core";
 
 const DirectoryTree = Tree.DirectoryTree;
 
@@ -79,6 +81,13 @@ const OutlineTree = () => {
     (store: CombineReducer) => store.sceneReducer.scene
   );
 
+  // 获取游戏实例
+  const game: Game = useSelector(
+    (store: CombineReducer) => store.sceneReducer.game
+  );
+
+  const dispatch: any = useDispatch();
+
   // 当前游戏场景
   const currentScene = useSelector(
     (store: CombineReducer) => store.sceneReducer.currentScene
@@ -132,7 +141,16 @@ const OutlineTree = () => {
       ];
       setDisplayList(curDisplayList);
       onExpand(["scenes", currentScene.id]);
+    } else {
+      const curDisplayList: any = [
+        {
+          title: "光标",
+          key: "cursor"
+        }
+      ];
+      setDisplayList(curDisplayList);
     }
+    console.log(currentScene);
   }, [currentScene]);
 
   // 场景列表管理菜单
@@ -163,6 +181,18 @@ const OutlineTree = () => {
           defaultExpandAll
           autoExpandParent={autoExpandParent}
           treeData={loop(displayList)}
+          onSelect={(selected: Array<string>) => {
+            const key: string = selected[0];
+            const lastCurrentScene = currentScene;
+            const pickedScene: KnScene | null = selector[key];
+            if (pickedScene) {
+              const param: any = setCurrentScene(pickedScene);
+              // 设置当前编辑游戏场景
+              dispatch(param);
+              // 跳转当前编辑游戏场景
+              game.sceneManager.changeScene(lastCurrentScene, selector[key]);
+            }
+          }}
           onRightClick={(e: any) => {
             setRightClickType(e.node.key);
           }}
