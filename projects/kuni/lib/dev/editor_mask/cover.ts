@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-01-11 13:30:08
+ * @LastEditTime: 2023-02-06 17:33:32
  * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
@@ -21,6 +21,8 @@ class CoverMask extends KnGroup {
   public move_Y: number;
   public isDragging: boolean;
   public actionMask: Graphics;
+  public cursorX: number;
+  public cursorY: number;
   constructor(game: Game, parent: PIXI.Container) {
     super(game, "coverMask", parent);
     this.game = game;
@@ -30,6 +32,8 @@ class CoverMask extends KnGroup {
     this.curTip_Y = 0;
     this.move_X = 0;
     this.move_Y = 0;
+    this.cursorX = 0;
+    this.cursorY = 0;
     this.isDragging = false;
     this.initial();
   }
@@ -165,11 +169,11 @@ class CoverMask extends KnGroup {
       this.curTip_X = e.data.global.x / (COVER_SCALE * scale);
       this.curTip_Y = e.data.global.y / (COVER_SCALE * scale);
 
-      const textTip_X: number = ~~(this.move_X + this.curTip_X);
-      const textTip_Y: number = ~~(this.move_Y + this.curTip_Y);
+      this.cursorX = ~~(this.move_X + this.curTip_X);
+      this.cursorY = ~~(this.move_Y + this.curTip_Y);
 
-      posTextTip.text = `${textTip_X}, ${textTip_Y}`;
-      posTextTip.position.set(textTip_X, textTip_Y);
+      posTextTip.text = `${this.cursorX}, ${this.cursorY}`;
+      posTextTip.position.set(100, 100);
     });
 
     // 绑定缩放事件
@@ -186,12 +190,12 @@ class CoverMask extends KnGroup {
       this.game.world.scale.set(COVER_SCALE * scale);
 
       // 改变缩放锚点
-      this.pivot.set(posTextTip.x, posTextTip.y);
-      this.position.set(posTextTip.x * COVER_SCALE, posTextTip.y * COVER_SCALE);
-      this.game.world.pivot.set(posTextTip.x, posTextTip.y);
+      this.pivot.set(this.cursorX, this.cursorY);
+      this.position.set(this.cursorX * COVER_SCALE, this.cursorY * COVER_SCALE);
+      this.game.world.pivot.set(this.cursorX, this.cursorY);
       this.game.world.position.set(
-        posTextTip.x * COVER_SCALE,
-        posTextTip.y * COVER_SCALE
+        this.cursorX * COVER_SCALE,
+        this.cursorY * COVER_SCALE
       );
 
       // 计算缩放产生的相对位置偏离

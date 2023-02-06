@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-02 17:31:00
+ * @LastEditTime: 2023-02-06 17:06:47
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -18,6 +18,7 @@ import useModal from "editor@/feedback/modalcore";
 import ErrorBoundary from "./error_boundary";
 import { useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
+import AssetsList from "./outline/outline_tree/assets";
 
 export const WrapContext = createContext({});
 
@@ -61,7 +62,7 @@ const WireBoard = (props) => {
   const footerTabs = [
     {
       name: "素材列表",
-      childComponent: OutlineTree
+      childComponent: AssetsList
     }
   ];
 
