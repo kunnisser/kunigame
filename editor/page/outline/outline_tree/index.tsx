@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-24 21:50:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-03 17:01:14
+ * @LastEditTime: 2023-02-06 16:56:46
  * @FilePath: /kunigame/editor/page/outline/outline_tree/index.tsx
  * @Description: ---- 大纲树状结构 ----
  */
@@ -76,11 +76,6 @@ const OutlineTree = () => {
     setSearchValue(value);
   };
 
-  // 获取游戏场景列表
-  const selector = useSelector(
-    (store: CombineReducer) => store.sceneReducer.scene
-  );
-
   // 获取游戏实例
   const game: Game = useSelector(
     (store: CombineReducer) => store.sceneReducer.game
@@ -88,15 +83,9 @@ const OutlineTree = () => {
 
   const dispatch: any = useDispatch();
 
-  // 当前游戏场景
   const currentScene = useSelector(
     (store: CombineReducer) => store.sceneReducer.currentScene
   );
-
-  const sceneList = Object.values(selector).map((scene: KnScene) => ({
-    title: scene.id,
-    key: scene.id
-  }));
 
   // 遍历添加查询样式
   const loop = (data) =>
@@ -127,7 +116,13 @@ const OutlineTree = () => {
 
   // 监听游戏初始化完成
   useEffect(() => {
-    if (currentScene) {
+    if (game) {
+      const sceneListTree = Object.values(game.editHive).map(
+        (scene: KnScene) => ({
+          title: scene.id,
+          key: scene.id
+        })
+      );
       const curDisplayList: any = [
         {
           title: "光标",
@@ -136,22 +131,14 @@ const OutlineTree = () => {
         {
           title: "显示列表",
           key: "scenes",
-          children: sceneList
-        }
-      ];
-      setDisplayList(curDisplayList);
-      onExpand(["scenes", currentScene.id]);
-    } else {
-      const curDisplayList: any = [
-        {
-          title: "光标",
-          key: "cursor"
+          children: sceneListTree
         }
       ];
       setDisplayList(curDisplayList);
     }
-    console.log(currentScene);
-  }, [currentScene]);
+
+    // onExpand(["scenes", currentScene.id]);
+  }, [game]);
 
   // 场景列表管理菜单
   const sceneListMenu = <CreateSceneMenu></CreateSceneMenu>;
@@ -183,14 +170,11 @@ const OutlineTree = () => {
           treeData={loop(displayList)}
           onSelect={(selected: Array<string>) => {
             const key: string = selected[0];
-            const lastCurrentScene = currentScene;
-            const pickedScene: KnScene | null = selector[key];
+            const pickedScene: KnScene | null = game.editHive[key];
             if (pickedScene) {
-              const param: any = setCurrentScene(pickedScene);
               // 设置当前编辑游戏场景
-              dispatch(param);
-              // 跳转当前编辑游戏场景
-              game.sceneManager.changeScene(lastCurrentScene, selector[key]);
+              currentScene && game.sceneManager.exitEditScene(currentScene);
+              dispatch(setCurrentScene(pickedScene));
             }
           }}
           onRightClick={(e: any) => {

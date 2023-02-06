@@ -2,12 +2,12 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-03 17:29:00
+ * @LastEditTime: 2023-02-06 16:50:13
  * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
  * @Description: ---- 场景元素列表 ----
  */
 import React, { useState, useEffect } from "react";
-import { Tree, Input, Dropdown } from "antd";
+import { Tree, Dropdown } from "antd";
 import { useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import { MenuOperation } from "../menu_operation/index";
@@ -17,7 +17,6 @@ const DirectoryTree = Tree.DirectoryTree;
 const ContainerTree = () => {
   const [displayList, setDisplayList] = useState([] as any);
   const [expandedKeys, setExpandedKeys] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
   const [autoExpandParent, setAutoExpandParent] = useState(true);
   const [rightClickType, setRightClickType] = useState();
 
@@ -57,23 +56,13 @@ const ContainerTree = () => {
     (store: CombineReducer) => store.sceneReducer.currentScene
   );
 
+  const game = useSelector((store: CombineReducer) => store.sceneReducer.game);
+
   // 遍历添加查询样式
   const loop = (data) =>
     data.map((item) => {
       const target: String = `${item.constructor.name}_${item.text}`;
-      const index = target.indexOf(searchValue);
-      const beforeStr = target.substr(0, index);
-      const afterStr = target.substr(index + searchValue.length);
-      const title =
-        index > -1 ? (
-          <span>
-            {beforeStr}
-            <span className="site-tree-search-value">{searchValue}</span>
-            {afterStr}
-          </span>
-        ) : (
-          <span>{target}</span>
-        );
+      const title = target;
       if (item.children > 0) {
         return { title, key: target, children: loop(item.children) };
       }
@@ -87,11 +76,15 @@ const ContainerTree = () => {
 
   // 监听游戏初始化完成
   useEffect(() => {
-    if (currentScene) {
+    if (currentScene && currentScene.children) {
+      // 跳转当前编辑游戏场景
+      const createdScene = game.sceneManager.dispatchEditScene(currentScene);
+      console.log(createdScene);
+
       // 当前游戏场景下的容器列表
-      const containerList: Array<any> = currentScene.children;
+      const containerList: Array<any> = createdScene.children;
       setDisplayList(containerList);
-      onExpand(["containerTree", currentScene.id]);
+      onExpand(["containerTree", createdScene.id]);
     }
   }, [currentScene]);
 
