@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-06 17:33:32
+ * @LastEditTime: 2023-02-07 14:46:18
  * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
@@ -128,6 +128,7 @@ class CoverMask extends KnGroup {
     const SCALE_VALUE: number = 1000;
     let scaleVal: number = SCALE_VALUE;
     // 原先画布的缩放
+    console.log(this.game.world.scale.x);
     const COVER_SCALE = this.game.world.scale.x;
 
     // 缩放系数

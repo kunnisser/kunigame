@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-06 16:50:13
+ * @LastEditTime: 2023-02-07 16:39:40
  * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
  * @Description: ---- 场景元素列表 ----
  */
@@ -66,7 +66,6 @@ const ContainerTree = () => {
       if (item.children > 0) {
         return { title, key: target, children: loop(item.children) };
       }
-      console.log(target);
       return {
         title,
         key: target,
@@ -78,15 +77,28 @@ const ContainerTree = () => {
   useEffect(() => {
     if (currentScene && currentScene.children) {
       // 跳转当前编辑游戏场景
-      const createdScene = game.sceneManager.dispatchEditScene(currentScene);
-      console.log(createdScene);
-
-      // 当前游戏场景下的容器列表
-      const containerList: Array<any> = createdScene.children;
-      setDisplayList(containerList);
-      onExpand(["containerTree", createdScene.id]);
+      const createdSceneEntity: any = getCreatedScene();
+      // 判断是否场景资源已经加载
+      if (createdSceneEntity instanceof Promise) {
+        createdSceneEntity.then((ret) => {
+          setCreatedScene(ret);
+        });
+      } else {
+        setCreatedScene(createdSceneEntity);
+      }
     }
   }, [currentScene]);
+
+  const getCreatedScene = async () => {
+    return await game.sceneManager.dispatchEditScene(currentScene);
+  };
+
+  const setCreatedScene = (scene) => {
+    // 当前游戏场景下的容器列表
+    const containerList: Array<any> = scene.children;
+    setDisplayList(containerList);
+    onExpand(["containerTree", scene.id]);
+  };
 
   // 场景列表管理菜单
   const sceneListMenu = <CreateSceneMenu></CreateSceneMenu>;

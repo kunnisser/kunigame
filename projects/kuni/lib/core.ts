@@ -95,9 +95,6 @@ export default class Game {
     // 定义游戏容器
     this.world = new PIXI.Container();
 
-    // 添加游戏容器
-    this.stage.addChild(this.world);
-
     // 载入相关math方法
     this.math = math;
 
@@ -116,6 +113,9 @@ export default class Game {
     // 定义和添加游戏编辑层
     this.coverMask = new CoverMask(this, this.stage);
     this.coverMask.scale.set(this.size.width / this.config.width);
+
+    // 添加游戏容器
+    this.stage.addChild(this.world);
 
     // 页面尺寸改变
     window.onresize = () => {

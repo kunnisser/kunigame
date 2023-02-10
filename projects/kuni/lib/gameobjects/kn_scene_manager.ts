@@ -1,4 +1,5 @@
 /* 场景管理 */
+import EditorTools from "ts@/hive/nnsd/src/tools";
 import Game from "../core";
 import KnScene from "../gameobjects/kn_scene";
 import KnTranstion from "../gameui/kn_transtion";
@@ -64,7 +65,29 @@ class KnSceneManager {
 
   // 编辑场景跳转
   dispatchEditScene(to: KnScene) {
-    return to.enter();
+    if (to.isCached || !to.resouces) {
+      console.log(to.id, "已缓存");
+
+      // 进入加载好的界面 to 为要进入的界面
+      this.game.currentScene = to;
+      return to.enter();
+    } else {
+      let globalLoader = this.game.loader;
+      // 全局loading界面的资源加载
+      for (let key of Object.keys(to.resouces)) {
+        globalLoader = globalLoader.add(key, to.resouces[key]);
+      }
+      return new Promise((resolve) => {
+        globalLoader.load(() => {
+          console.log(to.id + " resource is ready!");
+          to.isCached = true;
+          this.game.currentScene = to;
+          resolve(to.enter());
+          // 开发模式
+          new EditorTools(this.game);
+        });
+      });
+    }
   }
 
   // 退出场景

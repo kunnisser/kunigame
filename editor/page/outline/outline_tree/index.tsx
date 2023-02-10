@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-24 21:50:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-06 16:56:46
+ * @LastEditTime: 2023-02-07 16:36:32
  * @FilePath: /kunigame/editor/page/outline/outline_tree/index.tsx
  * @Description: ---- 大纲树状结构 ----
  */
@@ -173,8 +173,10 @@ const OutlineTree = () => {
             const pickedScene: KnScene | null = game.editHive[key];
             if (pickedScene) {
               // 设置当前编辑游戏场景
-              currentScene && game.sceneManager.exitEditScene(currentScene);
-              dispatch(setCurrentScene(pickedScene));
+              if (!currentScene || currentScene.id !== pickedScene.id) {
+                currentScene && game.sceneManager.exitEditScene(currentScene);
+                dispatch(setCurrentScene(pickedScene));
+              }
             }
           }}
           onRightClick={(e: any) => {

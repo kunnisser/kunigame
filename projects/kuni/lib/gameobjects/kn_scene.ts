@@ -40,15 +40,14 @@ class KnScene extends Container {
       this.game.overlay = null;
     }
     if (!this.isBoot) {
-      this.create();
+      this.boot(nextTarget);
       this.signBooting();
-
+      this.create();
       // ticker只能在首次加载注册，否则会注册多个事件
       this.game.ticker.add((delta) => {
         this.update(delta);
       });
     }
-    this.boot(nextTarget);
     this.game.ticker.start();
     return this;
   }
@@ -61,7 +60,7 @@ class KnScene extends Container {
   exit() {
     this.game.ticker.stop();
     this.game.ticker.destroy();
-    this.game.world.removeChild(this);
+    this.remove();
     this.game.currentScene = null;
   }
 

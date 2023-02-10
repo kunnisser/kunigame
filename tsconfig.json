@@ -16,6 +16,7 @@
     "noImplicitThis": true,
     "allowJs": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
