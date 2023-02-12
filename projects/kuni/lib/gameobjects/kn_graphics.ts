@@ -1,12 +1,14 @@
-import { Graphics } from "pixi.js";
-import Game from "../core";
+import { Graphics } from 'pixi.js';
+import Game from '../core';
 
 class KnGraphics extends Graphics {
   public game: Game;
   public border: IBorder;
-  constructor(game: Game) {
+  public id: string | undefined;
+  constructor(game: Game, id?: string) {
     super();
     this.game = game;
+    this.id = id || '';
   }
 
   setBorder(border: IBorder) {
@@ -26,7 +28,7 @@ class KnGraphics extends Graphics {
     anchor?: boolean,
     alpha?: number
   ) {
-    this.beginFill(color, typeof alpha === "number" ? alpha : 1);
+    this.beginFill(color, typeof alpha === 'number' ? alpha : 1);
 
     // 锚点居中
     anchor && ((points[0] -= points[2] * 0.5), (points[1] -= points[3] * 0.5));
@@ -60,7 +62,7 @@ class KnGraphics extends Graphics {
     this.setBorder({
       width: lineWidth,
       color: strokeColor,
-      alpha: 1
+      alpha: 1,
     } as IBorder);
 
     // 根据绘制的矩形图形宽高比来决定锚点修正
@@ -168,7 +170,7 @@ class KnGraphics extends Graphics {
 
   // 绘制圆
   generateCircle(color: number, points: Array<number>, alpha?: number) {
-    this.beginFill(color, typeof alpha === "number" ? alpha : 1);
+    this.beginFill(color, typeof alpha === 'number' ? alpha : 1);
 
     // 锚点居中
     this.drawCircle(...(points as [number, number, number]));
@@ -178,7 +180,7 @@ class KnGraphics extends Graphics {
 
   // 绘制空心圆
   generateLineCircle(color: number, points: Array<number>, alpha?: number) {
-    this.beginFill(color, typeof alpha === "number" ? alpha : 1);
+    this.beginFill(color, typeof alpha === 'number' ? alpha : 1);
     // 锚点居中
     this.drawCircle(...(points as [number, number, number]));
     this.beginHole();

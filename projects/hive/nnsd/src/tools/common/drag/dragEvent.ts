@@ -2,35 +2,84 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-10 16:53:35
- * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
+ * @LastEditTime: 2023-02-12 18:23:33
+ * @FilePath: \kunigame\projects\hive\nnsd\src\tools\common\drag\dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
 
-import { Container } from "pixi.js";
+import DragPosition from '.';
 
-const dragMove = (world, target) => {
-  target.alpha = 0.75;
-  world.on("pointermove", (event) => {
-    console.log(event);
-    if (target) {
-      target.toLocal(event.data.global, null, target.position);
+/**
+ * @description: 激活绑定移动相关事件
+ * @param {DragPosition} dragContext
+ * @return {*}
+ */
+export const freeMovePosition = (dragContext: DragPosition) => {
+  // 当前点击的对象
+  let dragTarget: any = null;
+
+  // 绑定移动控件的拖动事件
+  const centerPointer = dragContext.anchorHandler;
+  centerPointer.interactive = true;
+  centerPointer.cursor = 'pointer';
+  centerPointer.on('pointerdown', startDragMove, centerPointer);
+
+  const xAxisHandler = dragContext.anchorArrowX;
+  xAxisHandler.interactive = true;
+  xAxisHandler.cursor = 'pointer';
+  xAxisHandler.on('pointerdown', startDragMove, xAxisHandler);
+
+  const yAxisHandler = dragContext.anchorArrowY;
+  yAxisHandler.interactive = true;
+  yAxisHandler.cursor = 'pointer';
+  yAxisHandler.on('pointerdown', startDragMove, yAxisHandler);
+
+  // 定义解绑触发事件
+  dragContext.game.stage.on('pointerup', dragEnd);
+  dragContext.game.stage.on('pointerupoutside', dragEnd);
+
+  /**
+   * @description: 自由移动提示工具及目标的坐标
+   * @param {any} this 对应场景的上下文
+   * @param {any} event 点击事件
+   * @return {*}
+   */
+  function onDragMove(event: any) {
+    const { moveGroup, game, bootTarget } = dragContext;
+    if (moveGroup) {
+      const [x, y] = game.coverMask.translateWheelScalePosition(event);
+      if (dragTarget.id === 'handler') {
+        moveGroup.position.set(x, y);
+        bootTarget.position.set(x, y);
+      }
+      dragTarget.id === 'xAxis' && ((moveGroup.x = x), (bootTarget.x = x));
+      dragTarget.id === 'yAxis' && ((moveGroup.y = y), (bootTarget.y = y));
     }
-  });
-};
-
-const dragEnd = (world, target) => {
-  if (target) {
-    target.alpha = 1;
-    world.off("pointermove", dragMove);
   }
-};
 
-export const freeMovePosition = (world: Container, target: any) => {
-  target.interactive = true;
-  target.cursor = "pointer";
+  /**
+   * @description: 按下后开始移动事件
+   * @param {any} this
+   * @return {*}
+   */
+  function startDragMove(this: any) {
+    dragTarget = this;
+    if (dragTarget) {
+      console.log(dragTarget);
+      dragTarget.alpha = 0.75;
+      dragTarget.on('pointermove', onDragMove, dragTarget);
+    }
+  }
 
-  target.on("pointerdown", () => dragMove(world, target), target);
-
-  world.on("pointerup", () => dragEnd(world, target));
+  /**
+   * @description: 停止移动事件
+   * @param {*}
+   * @return {*}
+   */
+  function dragEnd() {
+    if (dragTarget) {
+      dragTarget.alpha = 1;
+      dragTarget.off('pointermove', onDragMove);
+    }
+  }
 };

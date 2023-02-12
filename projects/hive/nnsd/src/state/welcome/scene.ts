@@ -2,16 +2,15 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-10 15:55:47
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
+ * @LastEditTime: 2023-02-12 16:46:11
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
 
-import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
-import Game from "ts@/kuni/lib/core";
-import KnText from "ts@/kuni/lib/gameobjects/kn_text";
-import { Sprite } from "pixi.js";
-// import CoverMask from "ts@/kuni/lib/dev/editor_mask/cover";
+import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
+import Game from 'ts@/kuni/lib/core';
+import KnText from 'ts@/kuni/lib/gameobjects/kn_text';
+import { Sprite } from 'pixi.js';
 
 class Welcome extends KnScene {
   public game: Game;
@@ -21,21 +20,21 @@ class Welcome extends KnScene {
     this.game = game;
     this.key = key;
     this.resouces = {
-      "bg": "/projects/hive/nnsd/assets/images/bg002.jpg"
+      bg: '/projects/hive/nnsd/assets/images/bg002.jpg',
     };
   }
 
   boot() {}
 
   create() {
-    const bg: Sprite = this.game.add.image("bg", this);
+    const bg: Sprite = this.game.add.image('bg', this);
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
     const demoText: KnText = this.game.add.text(
-      "WELCOME",
+      'WELCOME',
       {
-        fontSize: "24",
-        fill: 0xffffff
+        fontSize: '24',
+        fill: 0xffffff,
       },
       [0.5, 0.5]
     );

@@ -1,14 +1,14 @@
-import dat from "dat.gui";
-import KnFactory from "../lib/gameobjects/kn_factory";
-import KnLoader from "../lib/loader/kn_loader";
-import KnSceneManager from "../lib/gameobjects/kn_scene_manager";
-import { Application, settings, SCALE_MODES } from "pixi.js";
-import { debounce, math } from "../lib/utils/common";
-import KnScene from "./gameobjects/kn_scene";
-import KnTranstion from "../lib/gameui/kn_transtion";
-import KnCursor from "./gameui/kn_cursor";
-import CoverMask from "./dev/editor_mask/cover";
-import * as PIXI from "pixi.js";
+import dat from 'dat.gui';
+import KnFactory from '../lib/gameobjects/kn_factory';
+import KnLoader from '../lib/loader/kn_loader';
+import KnSceneManager from '../lib/gameobjects/kn_scene_manager';
+import { Application, settings, SCALE_MODES } from 'pixi.js';
+import { debounce, math } from '../lib/utils/common';
+import KnScene from './gameobjects/kn_scene';
+import KnTranstion from '../lib/gameui/kn_transtion';
+import KnCursor from './gameui/kn_cursor';
+import CoverMask from './dev/editor_mask/cover';
+import * as PIXI from 'pixi.js';
 
 interface EnterProps {
   width: number;
@@ -42,7 +42,7 @@ export default class Game {
   };
   public stage: PIXI.Container;
   public world: PIXI.Container;
-  public coverMask: PIXI.Container;
+  public coverMask: CoverMask;
   public sceneManager: KnSceneManager;
   public app: Application;
   public loader: KnLoader;
@@ -57,17 +57,17 @@ export default class Game {
   entryHive: any;
   editHive: any;
   constructor(config: EnterProps) {
-    window["PIXI"] = PIXI;
+    window['PIXI'] = PIXI;
     this.view = config.view;
     this.dpr = window.devicePixelRatio;
-    console.log("dpr = ", this.dpr);
+    console.log('dpr = ', this.dpr);
     this.camera = {};
     // 设置游戏画布基本尺寸
     this.config = {
       width: config.width,
       height: config.width / config.ratio,
       half_w: config.width * 0.5,
-      half_h: (config.width / config.ratio) * 0.5
+      half_h: (config.width / config.ratio) * 0.5,
     };
 
     this.app = new Application({
@@ -75,7 +75,7 @@ export default class Game {
       height: this.config.height,
       antialias: config.antialias || false,
       transparent: config.transparent || !0,
-      resolution: this.dpr
+      resolution: this.dpr,
     });
 
     this.view.appendChild(this.app.view);
@@ -141,20 +141,20 @@ export default class Game {
     if (Cur_Ratio > RATIO) {
       size = {
         width: SCREEN_HEIGHT * RATIO,
-        height: +SCREEN_HEIGHT
+        height: +SCREEN_HEIGHT,
       };
     } else {
       size = {
         width: +SCREEN_WIDTH,
-        height: SCREEN_WIDTH / RATIO
+        height: SCREEN_WIDTH / RATIO,
       };
     }
 
-    this.app.view.style.width = size.width + "px";
-    this.app.view.style.height = size.height + "px";
+    this.app.view.style.width = size.width + 'px';
+    this.app.view.style.height = size.height + 'px';
 
     // 屏幕适配
-    this.app.renderer["autoResize"] = true;
+    this.app.renderer['autoResize'] = true;
     this.app.renderer.resize(size.width, size.height);
     settings.SCALE_MODE = SCALE_MODES.NEAREST;
     settings.FILTER_RESOLUTION = window.devicePixelRatio;

@@ -2,14 +2,14 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-07 14:46:18
- * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
+ * @LastEditTime: 2023-02-12 03:01:04
+ * @FilePath: \kunigame\projects\kuni\lib\dev\editor_mask\cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
 
-import { Graphics, Text } from "pixi.js";
-import Game from "../../core";
-import KnGroup from "../../gameobjects/kn_group";
+import { Graphics, Text } from 'pixi.js';
+import Game from '../../core';
+import KnGroup from '../../gameobjects/kn_group';
 
 class CoverMask extends KnGroup {
   public game: Game;
@@ -23,8 +23,10 @@ class CoverMask extends KnGroup {
   public actionMask: Graphics;
   public cursorX: number;
   public cursorY: number;
+  public scaleRatio: number; // 缩放系数
+  static COVER_SCALE: number;
   constructor(game: Game, parent: PIXI.Container) {
-    super(game, "coverMask", parent);
+    super(game, 'coverMask', parent);
     this.game = game;
     this.start_X = 0;
     this.start_Y = 0;
@@ -35,10 +37,12 @@ class CoverMask extends KnGroup {
     this.cursorX = 0;
     this.cursorY = 0;
     this.isDragging = false;
+    this.scaleRatio = 1;
     this.initial();
   }
 
   initial() {
+    CoverMask.COVER_SCALE = this.game.world.scale.x;
     this.generateGrid();
     this.actionMask = this.addActionArea();
     this.bindControllerHandler(this.actionMask);
@@ -56,7 +60,7 @@ class CoverMask extends KnGroup {
     const border: IBorder = {
       width: 1,
       color: 0xffffff,
-      alpha: 0.15
+      alpha: 0.15,
     };
     const lines: Graphics = this.game.add.graphics().generateLine(border);
     const texts_x: Array<Text> = [];
@@ -70,8 +74,8 @@ class CoverMask extends KnGroup {
         `${y}`,
         {
           fontSize: 14,
-          fontWeight: "bold",
-          fill: 0x8ac007
+          fontWeight: 'bold',
+          fill: 0x8ac007,
         },
         [0, 0.5]
       );
@@ -88,8 +92,8 @@ class CoverMask extends KnGroup {
         `${x}`,
         {
           fontSize: 14,
-          fontWeight: "bold",
-          fill: 0x8ac007
+          fontWeight: 'bold',
+          fill: 0x8ac007,
         },
         [0.5, 0]
       );
@@ -120,6 +124,22 @@ class CoverMask extends KnGroup {
   }
 
   /**
+   * @description: 公共缩放坐标计算
+   * @param {*} event
+   * @return {*}
+   */
+  translateWheelScalePosition(event) {
+    this.curTip_X =
+      event.data.global.x / (CoverMask.COVER_SCALE * this.scaleRatio);
+    this.curTip_Y =
+      event.data.global.y / (CoverMask.COVER_SCALE * this.scaleRatio);
+
+    this.cursorX = ~~(this.move_X + this.curTip_X);
+    this.cursorY = ~~(this.move_Y + this.curTip_Y);
+    return [this.cursorX, this.cursorY];
+  }
+
+  /**
    * @description: 绑定操作监听事件集
    * @param {*}
    * @return {*}
@@ -129,10 +149,9 @@ class CoverMask extends KnGroup {
     let scaleVal: number = SCALE_VALUE;
     // 原先画布的缩放
     console.log(this.game.world.scale.x);
-    const COVER_SCALE = this.game.world.scale.x;
 
     // 缩放系数
-    let scale: number = 1;
+    this.scaleRatio = 1;
 
     const canvas: any = this.game.view.children[0];
 
@@ -141,10 +160,10 @@ class CoverMask extends KnGroup {
       ``,
       {
         fontSize: 14,
-        fontWeight: "bold",
+        fontWeight: 'bold',
         fill: 0x8ac007,
         stroke: 0xffffff,
-        strokeThickness: 6
+        strokeThickness: 6,
       },
       [0.5, 0.5]
     );
@@ -152,51 +171,50 @@ class CoverMask extends KnGroup {
     // 控制鼠标划入面板监听事件
     let mouseIn: boolean = false;
 
-    mask.on("mouseout", (e: MouseEvent) => {
+    mask.on('mouseout', (e: MouseEvent) => {
       mouseIn = false;
       posTextTip.visible = mouseIn;
     });
 
-    mask.on("mouseover", (e: any) => {
+    mask.on('mouseover', (e: any) => {
       mouseIn = true;
       posTextTip.visible = mouseIn;
     });
 
-    mask.on("mousemove", (e) => {
+    mask.on('mousemove', (e) => {
       if (!mouseIn) {
         return;
       }
       posTextTip.visible = true;
-      this.curTip_X = e.data.global.x / (COVER_SCALE * scale);
-      this.curTip_Y = e.data.global.y / (COVER_SCALE * scale);
-
-      this.cursorX = ~~(this.move_X + this.curTip_X);
-      this.cursorY = ~~(this.move_Y + this.curTip_Y);
+      this.translateWheelScalePosition(e);
 
       posTextTip.text = `${this.cursorX}, ${this.cursorY}`;
       posTextTip.position.set(100, 100);
     });
 
     // 绑定缩放事件
-    canvas.addEventListener("wheel", (e: WheelEvent) => {
+    canvas.addEventListener('wheel', (e: WheelEvent) => {
       posTextTip.visible = false;
       scaleVal -= e.deltaY;
       if (scaleVal < SCALE_VALUE) {
         scaleVal = SCALE_VALUE;
       }
-      scale = scaleVal / SCALE_VALUE;
+      this.scaleRatio = scaleVal / SCALE_VALUE;
 
       // 缩放画布及控制台
-      this.scale.set(COVER_SCALE * scale);
-      this.game.world.scale.set(COVER_SCALE * scale);
+      this.scale.set(CoverMask.COVER_SCALE * this.scaleRatio);
+      this.game.world.scale.set(CoverMask.COVER_SCALE * this.scaleRatio);
 
       // 改变缩放锚点
       this.pivot.set(this.cursorX, this.cursorY);
-      this.position.set(this.cursorX * COVER_SCALE, this.cursorY * COVER_SCALE);
+      this.position.set(
+        this.cursorX * CoverMask.COVER_SCALE,
+        this.cursorY * CoverMask.COVER_SCALE
+      );
       this.game.world.pivot.set(this.cursorX, this.cursorY);
       this.game.world.position.set(
-        this.cursorX * COVER_SCALE,
-        this.cursorY * COVER_SCALE
+        this.cursorX * CoverMask.COVER_SCALE,
+        this.cursorY * CoverMask.COVER_SCALE
       );
 
       // 计算缩放产生的相对位置偏离
@@ -204,7 +222,7 @@ class CoverMask extends KnGroup {
       this.move_Y = this.toLocal(this.game.stage.position).y;
 
       // 缩小为初始尺寸重置定位
-      if (scale == 1) {
+      if (this.scaleRatio == 1) {
         this.game.world.pivot.set(0, 0);
         this.game.world.position.set(0, 0);
         this.pivot.set(0, 0);

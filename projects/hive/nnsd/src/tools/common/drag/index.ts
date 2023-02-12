@@ -2,17 +2,17 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-10 16:48:28
- * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
+ * @LastEditTime: 2023-02-12 18:16:51
+ * @FilePath: \kunigame\projects\hive\nnsd\src\tools\common\drag\index.ts
  * @Description: ---- 公共拖动 ----
  */
 
-import { Sprite } from "pixi.js";
-import Game from "ts@/kuni/lib/core";
-import KnGraphics from "ts@/kuni/lib/gameobjects/kn_graphics";
-import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
-import KnText from "ts@/kuni/lib/gameobjects/kn_text";
-import { freeMovePosition } from "./dragEvent";
+import { Sprite } from 'pixi.js';
+import Game from 'ts@/kuni/lib/core';
+import KnGraphics from 'ts@/kuni/lib/gameobjects/kn_graphics';
+import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
+import KnText from 'ts@/kuni/lib/gameobjects/kn_text';
+import { freeMovePosition } from './dragEvent';
 
 class DragPosition {
   public game: Game;
@@ -22,10 +22,12 @@ class DragPosition {
   public dragBorder: KnGraphics; // 拖动边框
   public anchorArrowX: KnGraphics; // 拖动X
   public anchorArrowY: KnGraphics; //拖动Y
+  public bootTarget: any;
   arrowY: KnGraphics;
   constructor(game) {
     this.game = game;
     this.initial(game);
+    this.bootTarget = null;
   }
 
   initial(game: Game) {
@@ -34,14 +36,14 @@ class DragPosition {
     this.game.stage.hitArea = this.game.app.screen;
 
     const dragActions = {
-      "Sprite": this.bootSpriteDrag,
-      "KnText": this.bootTextDrag,
-      "KnGroup": () => {}
+      Sprite: this.bootSpriteDrag,
+      KnText: this.bootTextDrag,
+      KnGroup: () => {},
     };
     console.log(game.currentScene.children);
     // 创建拖动组
     this.moveGroup = this.game.add.group(
-      "moveContainer",
+      'moveContainer',
       this.game.currentScene
     );
     // 创建拖动边框
@@ -49,14 +51,12 @@ class DragPosition {
     this.moveGroup.addChild(this.dragBorder);
 
     // 创建锚点抓手
-    this.anchorGroup = this.game.add.group("anchorGroup", this.moveGroup);
+    this.anchorGroup = this.game.add.group('anchorGroup', this.moveGroup);
 
     // 锚点移动事件
-    this.anchorHandler = this.game.add.graphics();
-    freeMovePosition(this.game.stage, this.anchorHandler);
-
-    this.anchorArrowX = this.game.add.graphics();
-    this.anchorArrowY = this.game.add.graphics();
+    this.anchorHandler = this.game.add.graphics('handler');
+    this.anchorArrowX = this.game.add.graphics('xAxis');
+    this.anchorArrowY = this.game.add.graphics('yAxis');
     this.anchorGroup.addChild(this.anchorArrowX);
     this.anchorGroup.addChild(this.anchorArrowY);
     this.anchorGroup.addChild(this.anchorHandler);
@@ -66,10 +66,12 @@ class DragPosition {
       const itemType: string = item.constructor.name;
       dragActions[itemType](item);
     });
+
+    freeMovePosition(this);
   }
 
   drawArrowX(item, borderSize) {
-    let { x, y }: { x: number; y: number } = item;
+    let { x, y }: { x: number; y: number } = { x: 0, y: 0 };
     // 对齐边框修正
     x += (item.anchor.x - 0.5) * borderSize;
     y += (item.anchor.y - 0.5) * borderSize;
@@ -79,7 +81,7 @@ class DragPosition {
   }
 
   drawArrowY(item, borderSize) {
-    let { x, y }: { x: number; y: number } = item;
+    let { x, y }: { x: number; y: number } = { x: 0, y: 0 };
     x += (item.anchor.x - 0.5) * borderSize;
     y += (item.anchor.y - 0.5) * borderSize;
     this.anchorArrowY.clear();
@@ -93,18 +95,18 @@ class DragPosition {
     this.anchorHandler.generateCircle(
       0x000000,
       [
-        item.x + (item.anchor.x - 0.5) * borderSize,
-        item.y + (item.anchor.y - 0.5) * borderSize,
-        5
+        (item.anchor.x - 0.5) * borderSize,
+        (item.anchor.y - 0.5) * borderSize,
+        5,
       ],
       1
     );
     this.anchorHandler.generateCircle(
       0xfe9600,
       [
-        item.x + (item.anchor.x - 0.5) * borderSize,
-        item.y + (item.anchor.y - 0.5) * borderSize,
-        4
+        (item.anchor.x - 0.5) * borderSize,
+        (item.anchor.y - 0.5) * borderSize,
+        4,
       ],
       1
     );
@@ -118,7 +120,7 @@ class DragPosition {
       [BorderWidth, StrokeWidth],
       0x65e924,
       0x000000,
-      [item.x, item.y, item.width, item.height],
+      [0, 0, item.width, item.height],
       item.anchor
     );
     return BorderWidth + StrokeWidth * 2;
@@ -126,7 +128,9 @@ class DragPosition {
 
   bootTextDrag = (item: KnText) => {
     item.interactive = true;
-    item.on("click", () => {
+    item.on('click', () => {
+      this.bootTarget = item;
+      this.moveGroup.position.set(item.x, item.y);
       const borderSize = this.drawPositionEditorBorder(item);
       this.drawEditorAnchor(item, borderSize);
     });
@@ -134,7 +138,7 @@ class DragPosition {
 
   bootSpriteDrag = (item: Sprite) => {
     // item.interactive = true;
-    item.on("click", () => {});
+    item.on('click', () => {});
   };
 }
 
