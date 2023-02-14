@@ -6,14 +6,14 @@ import { events } from "../utils/common";
 import KnText from "../gameobjects/kn_text";
 
 interface IMODAL_OPTIONS {
-  modalBg: String,
-  titleBg: String,
-  close: String,
-  ismobile: Boolean,
+  modalBg: String;
+  titleBg: String;
+  close: String;
+  ismobile: Boolean;
   panels: Array<{
-    title: string,
-    build: Function
-  }>
+    title: string;
+    build: Function;
+  }>;
 }
 
 class KnModal extends KnGroup {
@@ -29,7 +29,7 @@ class KnModal extends KnGroup {
   public limitMax_Y: number; // 滚动下边界
   public bounceMap: any; // 回弹点信息
   constructor(game: Game, parent: KnScene | KnGroup, options: any) {
-    super(game, 'knmodal', parent);
+    super(game, "knmodal", parent);
     this.game = game;
     this.parent = parent;
     this.options = options;
@@ -46,7 +46,7 @@ class KnModal extends KnGroup {
     tween.instance.to(this.children[1].scale, 0.25, {
       x: 1,
       y: 1,
-      ease: tween.bounce.easeOut,
+      ease: tween.bounce.easeOut
     });
   }
 
@@ -72,16 +72,22 @@ class KnModal extends KnGroup {
    * ** rankWrap - 内容层
    * *** ranklist - 列表内容
    * *** mask - 滑动蒙版
-  */
+   */
   generateModal() {
     this.visible = !1;
     this.position.set(this.parent.width * 0.5, this.parent.height * 0.5);
 
     // 定义背景遮罩
-    const floorBg = this.game.add.graphics().generateRect(0x000000, [0, 0, this.parent.width, this.parent.height], true);
+    const floorBg = this.game.add
+      .graphics()
+      .generateRect(
+        0x000000,
+        [0, 0, this.parent.width, this.parent.height],
+        true
+      );
     floorBg.alpha = 0.48;
     floorBg.interactive = !0;
-    floorBg.on('pointerdown', () => {
+    floorBg.on("pointerdown", () => {
       if (panelModal.scale.x === 1) {
         this.closePanel();
       }
@@ -89,20 +95,32 @@ class KnModal extends KnGroup {
     this.addChild(floorBg);
 
     // 定义弹出框的主体容器
-    const panelModal = this.game.add.group('panelModal', this);
+    const panelModal = this.game.add.group("panelModal", this);
 
     // 定义背景
-    const bg = this.game.add.image(this.options.modalBg, panelModal, [0.5, 0.5]);
+    const bg = this.game.add.image(
+      this.options.modalBg,
+      panelModal,
+      [0.5, 0.5]
+    );
     bg.scale.set(0.26, 0.36);
     bg.interactive = !0;
 
-
     // 定义标题框
-    const title = this.game.add.image(this.options.titleBg, panelModal, [0.5, 0.5]);
+    const title = this.game.add.image(
+      this.options.titleBg,
+      panelModal,
+      [0.5, 0.5]
+    );
     title.y = -bg.height * 0.5 + title.height;
 
     // 定义关闭按钮
-    const close = this.game.add.button(this.options.close, null, panelModal, [0.5, 0.5]);
+    const close = this.game.add.button(
+      this.options.close,
+      null,
+      panelModal,
+      [0.5, 0.5]
+    );
     close.position.set(bg.width * 0.38, -bg.height * 0.38);
     close.scale.set(0.6);
     close.next = () => {
@@ -118,27 +136,37 @@ class KnModal extends KnGroup {
     }
 
     // 定义标题文字
-    this.titleText = this.game.add.text(this.options.panels[0].title, {
-      fontSize: title.height * 0.2,
-      fill: 0xffffff,
-      stroke: 0x000000,
-      strokeThickness: 6,
-      fontWeight: 'bold'
-    }, [0.5, 0.5]);
+    this.titleText = this.game.add.text(
+      "",
+      this.options.panels[0].title,
+      {
+        fontSize: title.height * 0.2,
+        fill: 0xffffff,
+        stroke: 0x000000,
+        strokeThickness: 6,
+        fontWeight: "bold"
+      },
+      [0.5, 0.5]
+    );
     this.titleText.position.set(title.x, title.y);
     panelModal.addChild(this.titleText);
 
     // 定义内容容器
-    const modalWrap = this.game.add.group('contentWrap', panelModal);
+    const modalWrap = this.game.add.group("contentWrap", panelModal);
 
     // 定义mask
     const maskWidth = bg.width * 0.7;
-    this.overlay = this.game.add.graphics().generateRect(0x0485de, [0, 0, maskWidth, bg.height * 0.5, 10]);
-    modalWrap.position.set(-this.overlay.width * 0.5, -this.overlay.height * 0.5);
+    this.overlay = this.game.add
+      .graphics()
+      .generateRect(0x0485de, [0, 0, maskWidth, bg.height * 0.5, 10]);
+    modalWrap.position.set(
+      -this.overlay.width * 0.5,
+      -this.overlay.height * 0.5
+    );
     modalWrap.addChild(this.overlay);
 
     // 定义内容列表
-    this.content = this.game.add.group('modalContent', modalWrap);
+    this.content = this.game.add.group("modalContent", modalWrap);
     modalWrap.mask = this.overlay;
     this.contentWidth = maskWidth;
 
@@ -146,26 +174,35 @@ class KnModal extends KnGroup {
     const navNum = this.options.panels.length;
     const margin = 4;
     if (navNum > 1) {
-      const navtab = this.game.add.group('modalNavTab', panelModal);
-      navtab['currentIndex'] = 0;
+      const navtab = this.game.add.group("modalNavTab", panelModal);
+      navtab["currentIndex"] = 0;
       this.options.panels.forEach((panel, index: number) => {
-        const btnRect = this.game.add.button(0xd10311, null, navtab, [0.5, 0.5]);
-        btnRect.width = panelModal.width * 0.6 / navNum - margin;
+        const btnRect = this.game.add.button(
+          0xd10311,
+          null,
+          navtab,
+          [0.5, 0.5]
+        );
+        btnRect.width = (panelModal.width * 0.6) / navNum - margin;
         btnRect.height = 30;
-        const btnText = this.game.add.text(panel.title, {
-          fontSize: btnRect.width * 0.18,
-          fill: 0xffffff
-        }, [0.5, 0.5]);
+        const btnText = this.game.add.text(
+          "",
+          panel.title,
+          {
+            fontSize: btnRect.width * 0.18,
+            fill: 0xffffff
+          },
+          [0.5, 0.5]
+        );
         btnRect.x = (index - 0.5 * navNum + 0.5) * (btnRect.width + margin);
         btnText.x = btnRect.x;
         navtab.y = this.overlay.y + this.overlay.height * 0.5 + btnRect.height;
         navtab.addChild(btnText);
         btnRect.next = () => {
-
           // 这里视业务逻辑是否要做判断
-          if (navtab['currentIndex'] != index) {
+          if (navtab["currentIndex"] != index) {
             this.switchPanel(index);
-            navtab['currentIndex'] = index;
+            navtab["currentIndex"] = index;
           }
         };
       });
@@ -175,9 +212,10 @@ class KnModal extends KnGroup {
   // panel切换后的内容重置
   initial(index?: number) {
     const indexType = Object.prototype.toString.call(index);
-    const isInitial = indexType === '[object Undefined]';
+    const isInitial = indexType === "[object Undefined]";
     const currenIndex: any = isInitial ? 0 : index;
-    this.options.panels[currenIndex].build && this.options.panels[currenIndex].build(this);
+    this.options.panels[currenIndex].build &&
+      this.options.panels[currenIndex].build(this);
     this.bindContainerScroll(isInitial);
   }
 
@@ -221,22 +259,22 @@ class KnModal extends KnGroup {
     let bounceStatus: any = null;
     let bouncing = !1;
     this.bounceMap = {
-      'up': this.limitMin_Y,
-      'down': this.limitMax_Y
-    }
+      "up": this.limitMin_Y,
+      "down": this.limitMax_Y
+    };
     const bounceAction = () => {
-
       // 回弹
-      bounceStatus && bounce.instance.to(this.content, 0.4, {
-        y: this.bounceMap[bounceStatus],
-        ease: bounce.cubic.easeOut,
-        onStart: () => {
-          bouncing = !0;
-        },
-        onComplete: () => {
-          bouncing = !1;
-        }
-      });
+      bounceStatus &&
+        bounce.instance.to(this.content, 0.4, {
+          y: this.bounceMap[bounceStatus],
+          ease: bounce.cubic.easeOut,
+          onStart: () => {
+            bouncing = !0;
+          },
+          onComplete: () => {
+            bouncing = !1;
+          }
+        });
     };
 
     // 设置惯性
@@ -251,72 +289,77 @@ class KnModal extends KnGroup {
     };
 
     // 只在初始化时绑定事件
-    isInitial && this.overlay.on('pointerdown', (e) => {
-      canMove = !0;
-      startPointer.y = e.data.global.y;
-      inertial.start = startPointer.y;
-      inertial.startTime = new Date().getTime();
-    });
+    isInitial &&
+      this.overlay.on("pointerdown", (e) => {
+        canMove = !0;
+        startPointer.y = e.data.global.y;
+        inertial.start = startPointer.y;
+        inertial.startTime = new Date().getTime();
+      });
 
     // 滚动边界检测
     const boundaryCheck = () => {
       if (this.content.y > this.limitMin_Y) {
-        bounceStatus = 'up';
+        bounceStatus = "up";
         inertial.dumping = !1;
-        this.content.y >= this.limitMin_Y + bounceDeep && (this.content.y = this.limitMin_Y + bounceDeep, canMove = !1);
+        this.content.y >= this.limitMin_Y + bounceDeep &&
+          ((this.content.y = this.limitMin_Y + bounceDeep), (canMove = !1));
       } else if (this.content.y < this.limitMax_Y) {
-        bounceStatus = 'down';
+        bounceStatus = "down";
         inertial.dumping = !1;
-        this.content.y <= this.limitMax_Y - bounceDeep && (this.content.y = this.limitMax_Y - bounceDeep, canMove = !1);
+        this.content.y <= this.limitMax_Y - bounceDeep &&
+          ((this.content.y = this.limitMax_Y - bounceDeep), (canMove = !1));
       } else {
         bounceStatus = null;
       }
-    }
+    };
 
-    isInitial && this.overlay.on('pointerup', (e) => {
-      canMove = !1;
-      inertial.endTime = new Date().getTime();
-      inertial.dumping = inertial.endTime - inertial.moveTime < 20;
+    isInitial &&
+      this.overlay.on("pointerup", (e) => {
+        canMove = !1;
+        inertial.endTime = new Date().getTime();
+        inertial.dumping = inertial.endTime - inertial.moveTime < 20;
 
-      // 如需求根据滑动长度决定惯性的速度，开放下列注释
-      // inertial.quicken = inertial.moveTime - inertial.startTime < 100;
-      inertial.strength = e.data.global.y - inertial.start;
+        // 如需求根据滑动长度决定惯性的速度，开放下列注释
+        // inertial.quicken = inertial.moveTime - inertial.startTime < 100;
+        inertial.strength = e.data.global.y - inertial.start;
 
-      // 惯性距离
-      let inertialDistance = inertial.strength > 0 ? 30 : -30;
+        // 惯性距离
+        let inertialDistance = inertial.strength > 0 ? 30 : -30;
 
-      // 初始化事件状态
-      events.reset();
-      this.parent.update = () => {
-        if (inertial.dumping) {
+        // 初始化事件状态
+        events.reset();
+        this.parent.update = () => {
+          if (inertial.dumping) {
+            boundaryCheck();
+            inertialDistance = (7 / 8) * inertialDistance;
+            this.content.y += inertialDistance;
+          } else {
+            // 单次事件
+            events.addOnce(() => {
+              bounceAction();
+            });
+          }
+        };
+        bounceAction();
+      });
+
+    isInitial &&
+      this.overlay.on("pointerupoutside", () => {
+        canMove = !1;
+        bounceAction();
+      });
+
+    isInitial &&
+      this.overlay.on("pointermove", (e) => {
+        if (canMove && !bouncing) {
           boundaryCheck();
-          inertialDistance = 7 / 8 * inertialDistance;
-          this.content.y += inertialDistance;
-        } else {
-
-          // 单次事件
-          events.addOnce(() => {
-            bounceAction();
-          })
+          let offsetY = (e.data.global.y - startPointer.y) / smoothVal;
+          startPointer.y = e.data.global.y;
+          this.content.y = this.content.y + offsetY;
+          inertial.moveTime = new Date().getTime();
         }
-      }
-      bounceAction();
-    });
-
-    isInitial && this.overlay.on('pointerupoutside', () => {
-      canMove = !1;
-      bounceAction();
-    });
-
-    isInitial && this.overlay.on('pointermove', (e) => {
-      if (canMove && !bouncing) {
-        boundaryCheck();
-        let offsetY = (e.data.global.y - startPointer.y) / smoothVal;
-        startPointer.y = e.data.global.y;
-        this.content.y = this.content.y + offsetY;
-        inertial.moveTime = new Date().getTime();
-      }
-    });
+      });
   }
 }
 

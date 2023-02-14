@@ -16,29 +16,29 @@ class Welcome extends KnScene {
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
-    this.resouces = {
-    }
+    this.resouces = {};
   }
 
-  boot() {
-  }
+  boot() {}
 
   create() {
-    const demoText: KnText = this.game.add.text('WELCOME', {
-      fontSize: '24',
-      fill: 0xffffff
-    }, [0.5, 0.5]);
+    const demoText: KnText = this.game.add.text(
+      "",
+      "WELCOME",
+      {
+        fontSize: "24",
+        fill: 0xffffff
+      },
+      [0.5, 0.5]
+    );
     demoText.position.set(this.game.config.half_w, this.game.config.half_h);
     this.addChild(demoText);
-
   }
 
-  update() {
-  }
+  update() {}
 
   reset() {
     if (this.children.length > 1) {
-
       // 清除场景对象
       this.removeChildren(1, this.children.length);
     }

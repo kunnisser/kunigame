@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-24 21:50:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-07 16:36:32
+ * @LastEditTime: 2023-02-14 15:16:04
  * @FilePath: /kunigame/editor/page/outline/outline_tree/index.tsx
  * @Description: ---- 大纲树状结构 ----
  */
@@ -14,13 +14,16 @@ import { CombineReducer } from "editor@/common/store";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import { MenuOperation } from "../menu_operation/index";
 import { setCurrentScene } from "editor@/common/gameStore/scene/action";
+import {
+  BarsOutlined,
+  AppstoreOutlined,
+  CaretDownOutlined
+} from "@ant-design/icons";
 import Game from "ts@/kuni/lib/core";
-
-const DirectoryTree = Tree.DirectoryTree;
 
 const OutlineTree = () => {
   const [displayList, setDisplayList] = useState([]);
-  const [expandedKeys, setExpandedKeys] = useState([]);
+  const [expandedKeys, setExpandedKeys] = useState(["scenes"]);
   const [searchValue, setSearchValue] = useState("");
   const [autoExpandParent, setAutoExpandParent] = useState(true);
   const [rightClickType, setRightClickType] = useState();
@@ -110,7 +113,8 @@ const OutlineTree = () => {
       return {
         title,
         key: item.key,
-        isLeaf: true
+        isLeaf: true,
+        icon: <BarsOutlined />
       };
     });
 
@@ -125,19 +129,16 @@ const OutlineTree = () => {
       );
       const curDisplayList: any = [
         {
-          title: "光标",
-          key: "cursor"
-        },
-        {
           title: "显示列表",
           key: "scenes",
-          children: sceneListTree
+          children: sceneListTree,
+          icon: <AppstoreOutlined />
         }
       ];
       setDisplayList(curDisplayList);
     }
 
-    // onExpand(["scenes", currentScene.id]);
+    onExpand(["scenes"]);
   }, [game]);
 
   // 场景列表管理菜单
@@ -162,9 +163,11 @@ const OutlineTree = () => {
         overlay={rightClickType == "scenes" ? sceneListMenu : sceneMenu}
         trigger={["contextMenu"]}
       >
-        <DirectoryTree
+        <Tree
+          showIcon
           onExpand={onExpand}
           expandedKeys={expandedKeys}
+          switcherIcon={<CaretDownOutlined />}
           defaultExpandAll
           autoExpandParent={autoExpandParent}
           treeData={loop(displayList)}

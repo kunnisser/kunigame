@@ -19,12 +19,12 @@ class AttackTip extends KnGroup {
   initial() {
     const hurtStyle = {
       fontSize: 50,
-      fontWeight: 'bold',
-      fill: '#ffffff',
+      fontWeight: "bold",
+      fill: "#ffffff",
       stroke: 0xd10311,
       strokeThickness: 20
-    }
-    this.hurtText = this.game.add.text('', hurtStyle, [0.5, 0.5]);
+    };
+    this.hurtText = this.game.add.text("", "", hurtStyle, [0.5, 0.5]);
     this.hurtText.y -= this.parent.height;
     this.hurtText.visible = false;
     this.addChild(this.hurtText);
@@ -37,7 +37,7 @@ class AttackTip extends KnGroup {
     }
     const staticY = this.hurtText.y;
     this.hurtText.visible = !0;
-    this.hurtText.text = this.hurtVal + '';
+    this.hurtText.text = this.hurtVal + "";
     parent.hp -= this.hurtVal;
 
     this.tween.instance.to(this.hurtText, 0.5, {
@@ -51,7 +51,7 @@ class AttackTip extends KnGroup {
 
     parent.hp = parent.hp < 0 ? 0 : parent.hp;
 
-    const restWidth = parent.staticHpWidth * parent.hp / parent.maxHp;
+    const restWidth = (parent.staticHpWidth * parent.hp) / parent.maxHp;
 
     this.tween.instance.to(parent.hpbar, 0.4, {
       width: restWidth,

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-03 15:09:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-03 15:09:26
+ * @LastEditTime: 2023-02-14 11:03:36
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
  * @Description: ----  ----
  */
@@ -31,6 +31,7 @@ class Start extends KnScene {
 
   create() {
     const demoText: KnText = this.game.add.text(
+      "测试文本",
       "Start",
       {
         fontSize: "24",

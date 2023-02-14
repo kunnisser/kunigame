@@ -98,6 +98,26 @@ module.exports = {
             loader: "stylus-loader"
           }
         ]
+      },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        include: [path.join(__dirname, "/editor")],
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-react"],
+              plugins: ["@babel/plugin-transform-react-jsx"]
+            }
+          },
+          {
+            loader: "@svgr/webpack",
+            options: {
+              babel: false,
+              icon: true
+            }
+          }
+        ]
       }
     ]
   },

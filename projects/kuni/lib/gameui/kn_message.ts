@@ -3,13 +3,13 @@ import { Container } from "pixi.js";
 import Game from "../core";
 import KnText from "../gameobjects/kn_text";
 
-class KnMessage extends KnGroup{
+class KnMessage extends KnGroup {
   public message: KnText;
   public game: Game;
   public tween: any;
   public lock: boolean;
   constructor(game: Game, parent: Container) {
-    super(game, 'knmessage', parent);
+    super(game, "knmessage", parent);
     this.game = game;
     this.initial();
     this.tween = this.game.add.tween();
@@ -19,10 +19,10 @@ class KnMessage extends KnGroup{
   initial() {
     const messageStyle = {
       fontSize: 18,
-      fill: '#ffffff',
-      fontWeight: 'bold'
-    }
-    this.message = this.game.add.text('', messageStyle, [0.5, 0.5]);
+      fill: "#ffffff",
+      fontWeight: "bold"
+    };
+    this.message = this.game.add.text("", "", messageStyle, [0.5, 0.5]);
 
     const rectBg = this.game.add.graphics();
     this.addChild(rectBg);
@@ -43,7 +43,18 @@ class KnMessage extends KnGroup{
       color: 0xffffff,
       alpha: 0.8
     });
-    this.children[0]['generateRect'](0x000000, [0, 0, this.message.width + 60, this.message.height + 10, this.message.height * 0.5], true, 0.4);
+    this.children[0]["generateRect"](
+      0x000000,
+      [
+        0,
+        0,
+        this.message.width + 60,
+        this.message.height + 10,
+        this.message.height * 0.5
+      ],
+      true,
+      0.4
+    );
     this.visible = !0;
     this.alpha = 0;
     this.scale.set(1);
@@ -53,17 +64,17 @@ class KnMessage extends KnGroup{
       y: 1.15,
       yoyo: true,
       repeat: 1,
-      ease: this.tween.back['easeInOut']
+      ease: this.tween.back["easeInOut"]
     });
     this.tween.instance.to(this, 0.1, {
       y: this.game.config.half_h,
       alpha: 1,
-      ease: this.tween.cubic['easeOut'],
+      ease: this.tween.cubic["easeOut"],
       onComplete: () => {
         this.scale.set(1);
         this.tween.instance.to(this, 1, {
           alpha: 1,
-          ease: this.tween.cubic['easeOut'],
+          ease: this.tween.cubic["easeOut"],
           onComplete: () => {
             this.lock = !1;
             this.hideMessage();

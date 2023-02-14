@@ -2,12 +2,12 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-12 18:23:33
- * @FilePath: \kunigame\projects\hive\nnsd\src\tools\common\drag\dragEvent.ts
+ * @LastEditTime: 2023-02-14 17:16:00
+ * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
 
-import DragPosition from '.';
+import DragPosition from ".";
 
 /**
  * @description: 激活绑定移动相关事件
@@ -21,22 +21,25 @@ export const freeMovePosition = (dragContext: DragPosition) => {
   // 绑定移动控件的拖动事件
   const centerPointer = dragContext.anchorHandler;
   centerPointer.interactive = true;
-  centerPointer.cursor = 'pointer';
-  centerPointer.on('pointerdown', startDragMove, centerPointer);
+  centerPointer.cursor = "pointer";
+  centerPointer.on("pointerdown", startDragMove, centerPointer);
 
   const xAxisHandler = dragContext.anchorArrowX;
   xAxisHandler.interactive = true;
-  xAxisHandler.cursor = 'pointer';
-  xAxisHandler.on('pointerdown', startDragMove, xAxisHandler);
+  xAxisHandler.cursor = "pointer";
+  xAxisHandler.on("pointerdown", startDragMove, xAxisHandler);
 
   const yAxisHandler = dragContext.anchorArrowY;
   yAxisHandler.interactive = true;
-  yAxisHandler.cursor = 'pointer';
-  yAxisHandler.on('pointerdown', startDragMove, yAxisHandler);
+  yAxisHandler.cursor = "pointer";
+  yAxisHandler.on("pointerdown", startDragMove, yAxisHandler);
 
   // 定义解绑触发事件
-  dragContext.game.stage.on('pointerup', dragEnd);
-  dragContext.game.stage.on('pointerupoutside', dragEnd);
+  dragContext.game.stage.on("pointerup", dragEnd);
+  dragContext.game.stage.on("pointerupoutside", dragEnd);
+  document.addEventListener("keyup", (e) => {
+    e.key === "Escape" && (dragContext.moveGroup.visible = false);
+  });
 
   /**
    * @description: 自由移动提示工具及目标的坐标
@@ -48,12 +51,12 @@ export const freeMovePosition = (dragContext: DragPosition) => {
     const { moveGroup, game, bootTarget } = dragContext;
     if (moveGroup) {
       const [x, y] = game.coverMask.translateWheelScalePosition(event);
-      if (dragTarget.id === 'handler') {
+      if (dragTarget.id === "handler") {
         moveGroup.position.set(x, y);
         bootTarget.position.set(x, y);
       }
-      dragTarget.id === 'xAxis' && ((moveGroup.x = x), (bootTarget.x = x));
-      dragTarget.id === 'yAxis' && ((moveGroup.y = y), (bootTarget.y = y));
+      dragTarget.id === "xAxis" && ((moveGroup.x = x), (bootTarget.x = x));
+      dragTarget.id === "yAxis" && ((moveGroup.y = y), (bootTarget.y = y));
     }
   }
 
@@ -67,7 +70,7 @@ export const freeMovePosition = (dragContext: DragPosition) => {
     if (dragTarget) {
       console.log(dragTarget);
       dragTarget.alpha = 0.75;
-      dragTarget.on('pointermove', onDragMove, dragTarget);
+      dragTarget.on("pointermove", onDragMove, dragTarget);
     }
   }
 
@@ -77,9 +80,10 @@ export const freeMovePosition = (dragContext: DragPosition) => {
    * @return {*}
    */
   function dragEnd() {
+    console.log(dragTarget);
     if (dragTarget) {
       dragTarget.alpha = 1;
-      dragTarget.off('pointermove', onDragMove);
+      dragTarget.off("pointermove", onDragMove);
     }
   }
 };

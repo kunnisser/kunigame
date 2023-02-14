@@ -7,7 +7,7 @@ import { TransformImage } from "ts@/kuni/lib/utils/common";
 import KnScrollMenu from "ts@/kuni/lib/gameui/kn_scrollMenu";
 import KnText from "ts@/kuni/lib/gameobjects/kn_text";
 import GameUiInfo from "./ui/info";
-import PriceGenerator from './business/price';
+import PriceGenerator from "./business/price";
 
 class KuaFu extends KnScene {
   public game: Game;
@@ -26,23 +26,23 @@ class KuaFu extends KnScene {
     super(game, key);
     this.game = game;
     this.resouces = {
-      'kuafu_bg': '/projects/kuni/assets/kuafu/kuafu_bg.png',
-      'kuafu_near_bg': '/projects/kuni/assets/kuafu/kuafu_near_bg.png',
-      'kuafu_far_bg': '/projects/kuni/assets/kuafu/kuafu_far_bg.png',
-      'kuafu_modal': '/projects/kuni/assets/kuafu/modal.jpg',
-      'hometown': '/projects/kuni/assets/kuafu/hometown.png',
-      'cityTitle': '/projects/kuni/assets/kuafu/cityTitle.png',
-      'goback': '/projects/kuni/assets/kuafu/goback.png',
-      'goods': '/projects/kuni/assets/kuafu/data/goods.json',
-      'citys': '/projects/kuni/assets/kuafu/data/citys.json',
-      'buildings': '/projects/kuni/assets/kuafu/data/buildings.json',
-      'date': '/projects/kuni/assets/kuafu/data/date.json',
-      'textarea': '/projects/kuni/assets/kuafu/textarea.png',
-      'farm': '/projects/kuni/assets/kuafu/farm.png',
-      'grocery': '/projects/kuni/assets/kuafu/grocery.png',
-      'ore': '/projects/kuni/assets/kuafu/ore.png',
-      'pasture': '/projects/kuni/assets/kuafu/pasture.png'
-    }
+      "kuafu_bg": "/projects/kuni/assets/kuafu/kuafu_bg.png",
+      "kuafu_near_bg": "/projects/kuni/assets/kuafu/kuafu_near_bg.png",
+      "kuafu_far_bg": "/projects/kuni/assets/kuafu/kuafu_far_bg.png",
+      "kuafu_modal": "/projects/kuni/assets/kuafu/modal.jpg",
+      "hometown": "/projects/kuni/assets/kuafu/hometown.png",
+      "cityTitle": "/projects/kuni/assets/kuafu/cityTitle.png",
+      "goback": "/projects/kuni/assets/kuafu/goback.png",
+      "goods": "/projects/kuni/assets/kuafu/data/goods.json",
+      "citys": "/projects/kuni/assets/kuafu/data/citys.json",
+      "buildings": "/projects/kuni/assets/kuafu/data/buildings.json",
+      "date": "/projects/kuni/assets/kuafu/data/date.json",
+      "textarea": "/projects/kuni/assets/kuafu/textarea.png",
+      "farm": "/projects/kuni/assets/kuafu/farm.png",
+      "grocery": "/projects/kuni/assets/kuafu/grocery.png",
+      "ore": "/projects/kuni/assets/kuafu/ore.png",
+      "pasture": "/projects/kuni/assets/kuafu/pasture.png"
+    };
   }
 
   boot() {
@@ -62,7 +62,14 @@ class KuaFu extends KnScene {
   }
 
   addBackground() {
-    const bg = this.game.add.graphics().generateRect(0x839cc8, [0, 0, this.game.config.width, this.game.config.height]);
+    const bg = this.game.add
+      .graphics()
+      .generateRect(0x839cc8, [
+        0,
+        0,
+        this.game.config.width,
+        this.game.config.height
+      ]);
     this.addChild(bg);
   }
 
@@ -71,33 +78,42 @@ class KuaFu extends KnScene {
     const bgScale = bgHeight / 256;
 
     // 远景
-    this.farbg = this.game.add.tiling('kuafu_far_bg', this.width, bgHeight, this);
+    this.farbg = this.game.add.tiling(
+      "kuafu_far_bg",
+      this.width,
+      bgHeight,
+      this
+    );
     this.farbg.y = Math.round(this.game.config.half_h - bgHeight * 0.5);
     this.farbg.tileScale.set(bgScale);
 
     // 道路
-    this.bg = this.game.add.tiling('kuafu_bg', this.width, bgHeight, this);
+    this.bg = this.game.add.tiling("kuafu_bg", this.width, bgHeight, this);
     this.bg.y = this.farbg.y;
     this.bg.tileScale.set(bgScale);
 
     // 近景
-    this.nearbg = this.game.add.tiling('kuafu_near_bg', this.width, bgHeight, this);
+    this.nearbg = this.game.add.tiling(
+      "kuafu_near_bg",
+      this.width,
+      bgHeight,
+      this
+    );
     this.nearbg.y = this.farbg.y;
     this.nearbg.tileScale.set(bgScale);
-
   }
 
   // 添加城池MODAL
   addCityModal() {
     const cityOptions = {
-      type: 'scroll',
-      modalBg: 'kuafu_modal',
-      titleBg: 'cityTitle',
-      close: 'goback',
+      type: "scroll",
+      modalBg: "kuafu_modal",
+      titleBg: "cityTitle",
+      close: "goback",
       ismobile: true,
       panels: [
         {
-          title: '家乡选择',
+          title: "家乡选择",
           build: this.addContent
         }
       ]
@@ -106,14 +122,14 @@ class KuaFu extends KnScene {
     this.cityMenu.showPanel();
 
     const cityDetialOptions = {
-      type: 'scroll',
-      modalBg: 'kuafu_modal',
-      titleBg: 'cityTitle',
-      close: 'goback',
+      type: "scroll",
+      modalBg: "kuafu_modal",
+      titleBg: "cityTitle",
+      close: "goback",
       ismobile: true,
       panels: [
         {
-          title: '城市',
+          title: "城市",
           build: this.addDetail
         }
       ]
@@ -123,62 +139,106 @@ class KuaFu extends KnScene {
 
   addContent = (modal) => {
     this.addCityMenu(modal);
-  }
+  };
 
   addDetail = (modal) => {
     this.addCityDetail(modal);
-  }
+  };
 
   // 城池菜单
   addCityMenu(modal) {
     const cityData = this.loader.resources.citys.data.citys;
     let options: Array<any> = [];
     for (let cd of cityData.list) {
-      options.push(Object.assign(cd, {
-        callback: () => {
-          this.cityDetail.showPanel();
-        }
-      }))
+      options.push(
+        Object.assign(cd, {
+          callback: () => {
+            this.cityDetail.showPanel();
+          }
+        })
+      );
     }
 
-    const scrollMenu = new KnScrollMenu(this.game, modal.children[1], options, !1, 1.2, (index) => {
-      this.updateCityTip(index, options);
-    });
-    const bgRect = this.game.add.graphics().generateRect(0x000000, [0, 0, modal.children[1].width, modal.children[1].height - modal.titleText.height * 8]);
-    const menuBg = TransformImage.transformToSprite(this.game, bgRect, scrollMenu);
+    const scrollMenu = new KnScrollMenu(
+      this.game,
+      modal.children[1],
+      options,
+      !1,
+      1.2,
+      (index) => {
+        this.updateCityTip(index, options);
+      }
+    );
+    const bgRect = this.game.add
+      .graphics()
+      .generateRect(0x000000, [
+        0,
+        0,
+        modal.children[1].width,
+        modal.children[1].height - modal.titleText.height * 8
+      ]);
+    const menuBg = TransformImage.transformToSprite(
+      this.game,
+      bgRect,
+      scrollMenu
+    );
     menuBg.alpha = 0;
     menuBg.anchor.set(0.5);
     scrollMenu.initial(menuBg);
 
-    const cityTip = this.game.add.group('cityTip', modal.children[1]);
+    const cityTip = this.game.add.group("cityTip", modal.children[1]);
     cityTip.y = scrollMenu.menusGp.height;
-    const cityTipBg = this.game.add.image('textarea', cityTip, [0.5, 0.5]);
+    const cityTipBg = this.game.add.image("textarea", cityTip, [0.5, 0.5]);
     cityTipBg.scale.y = 2;
     scrollMenu.menusGp.y -= cityTipBg.height * 0.5;
-    this.cityTipText = this.game.add.text(options[0].tip, {
-      fontSize: 24,
-      fill: '#999999',
-      stroke: 0xffffff,
-      strokeThickness: 12,
-      wordWrap: !0,
-      wordWrapWidth: cityTipBg.width * 1.8
-    }, [0.5, 0.5]);
+    this.cityTipText = this.game.add.text(
+      "",
+      options[0].tip,
+      {
+        fontSize: 24,
+        fill: "#999999",
+        stroke: 0xffffff,
+        strokeThickness: 12,
+        wordWrap: !0,
+        wordWrapWidth: cityTipBg.width * 1.8
+      },
+      [0.5, 0.5]
+    );
     cityTip.addChild(this.cityTipText);
   }
 
   // 城池内部详情
   addCityDetail(modal) {
     let keys = Object.keys(this.loader.resources.buildings.data);
-    let buildings: Array<any> = Object.values(this.loader.resources.buildings.data);
+    let buildings: Array<any> = Object.values(
+      this.loader.resources.buildings.data
+    );
     buildings.forEach((builder, index) => {
-      builder['key'] = keys[index];
-      builder['callback'] = () => {
+      builder["key"] = keys[index];
+      builder["callback"] = () => {
         this.generatePriceModal(builder);
-      }
+      };
     });
-    const scrollMenu = new KnScrollMenu(this.game, modal.children[1], buildings, !1, 1.2);
-    const bgRect = this.game.add.graphics().generateRect(0x000000, [0, 0, modal.children[1].width, modal.children[1].height - modal.titleText.height * 8]);
-    const menuBg = TransformImage.transformToSprite(this.game, bgRect, scrollMenu);
+    const scrollMenu = new KnScrollMenu(
+      this.game,
+      modal.children[1],
+      buildings,
+      !1,
+      1.2
+    );
+    const bgRect = this.game.add
+      .graphics()
+      .generateRect(0x000000, [
+        0,
+        0,
+        modal.children[1].width,
+        modal.children[1].height - modal.titleText.height * 8
+      ]);
+    const menuBg = TransformImage.transformToSprite(
+      this.game,
+      bgRect,
+      scrollMenu
+    );
     menuBg.alpha = 0;
     menuBg.anchor.set(0.5);
     scrollMenu.initial(menuBg);
@@ -213,7 +273,6 @@ class KuaFu extends KnScene {
 
   reset() {
     if (this.children.length > 1) {
-
       // 清除group子对象
       this.removeChildren(1, this.children.length);
     }

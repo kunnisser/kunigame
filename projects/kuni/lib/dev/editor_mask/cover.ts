@@ -7,9 +7,9 @@
  * @Description: ---- 编辑蒙层 ----
  */
 
-import { Graphics, Text } from 'pixi.js';
-import Game from '../../core';
-import KnGroup from '../../gameobjects/kn_group';
+import { Graphics, Text } from "pixi.js";
+import Game from "../../core";
+import KnGroup from "../../gameobjects/kn_group";
 
 class CoverMask extends KnGroup {
   public game: Game;
@@ -26,7 +26,7 @@ class CoverMask extends KnGroup {
   public scaleRatio: number; // 缩放系数
   static COVER_SCALE: number;
   constructor(game: Game, parent: PIXI.Container) {
-    super(game, 'coverMask', parent);
+    super(game, "coverMask", parent);
     this.game = game;
     this.start_X = 0;
     this.start_Y = 0;
@@ -60,7 +60,7 @@ class CoverMask extends KnGroup {
     const border: IBorder = {
       width: 1,
       color: 0xffffff,
-      alpha: 0.15,
+      alpha: 0.15
     };
     const lines: Graphics = this.game.add.graphics().generateLine(border);
     const texts_x: Array<Text> = [];
@@ -71,11 +71,12 @@ class CoverMask extends KnGroup {
       lines.moveTo(0, y);
       lines.lineTo(width, y);
       const scaleText = this.game.add.text(
+        "",
         `${y}`,
         {
           fontSize: 14,
-          fontWeight: 'bold',
-          fill: 0x8ac007,
+          fontWeight: "bold",
+          fill: 0x8ac007
         },
         [0, 0.5]
       );
@@ -89,11 +90,12 @@ class CoverMask extends KnGroup {
       lines.lineTo(x, height);
       this.addChild(lines);
       const scaleText = this.game.add.text(
+        "",
         `${x}`,
         {
           fontSize: 14,
-          fontWeight: 'bold',
-          fill: 0x8ac007,
+          fontWeight: "bold",
+          fill: 0x8ac007
         },
         [0.5, 0]
       );
@@ -157,13 +159,14 @@ class CoverMask extends KnGroup {
 
     // 绑定move事件
     const posTextTip = this.game.add.text(
+      "",
       ``,
       {
         fontSize: 14,
-        fontWeight: 'bold',
+        fontWeight: "bold",
         fill: 0x8ac007,
         stroke: 0xffffff,
-        strokeThickness: 6,
+        strokeThickness: 6
       },
       [0.5, 0.5]
     );
@@ -171,17 +174,17 @@ class CoverMask extends KnGroup {
     // 控制鼠标划入面板监听事件
     let mouseIn: boolean = false;
 
-    mask.on('mouseout', (e: MouseEvent) => {
+    mask.on("mouseout", (e: MouseEvent) => {
       mouseIn = false;
       posTextTip.visible = mouseIn;
     });
 
-    mask.on('mouseover', (e: any) => {
+    mask.on("mouseover", (e: any) => {
       mouseIn = true;
       posTextTip.visible = mouseIn;
     });
 
-    mask.on('mousemove', (e) => {
+    mask.on("mousemove", (e) => {
       if (!mouseIn) {
         return;
       }
@@ -193,7 +196,7 @@ class CoverMask extends KnGroup {
     });
 
     // 绑定缩放事件
-    canvas.addEventListener('wheel', (e: WheelEvent) => {
+    canvas.addEventListener("wheel", (e: WheelEvent) => {
       posTextTip.visible = false;
       scaleVal -= e.deltaY;
       if (scaleVal < SCALE_VALUE) {

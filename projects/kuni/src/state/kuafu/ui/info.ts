@@ -22,7 +22,7 @@ class GameUiInfo extends KnGroup {
   public yearText: KnText; // 年份文本
 
   constructor(game: Game, parent: KuaFu, options?: any) {
-    super(game, 'gameInfo', parent);
+    super(game, "gameInfo", parent);
     this.gameDate = this.game.loader.resources.date.data;
     this.game = game;
     this.options = options;
@@ -31,15 +31,19 @@ class GameUiInfo extends KnGroup {
     this.parent = parent;
   }
 
-
   // 添加财富面板
   addWealth() {
-    this.wealthText = this.game.add.text(this.wealth + '', {
-      fontSize: 30,
-      fill: 0x999999,
-      strokeThickness: 10,
-      stroke: 0xffffff
-    }, [0.5, 0.5]);
+    this.wealthText = this.game.add.text(
+      "",
+      this.wealth + "",
+      {
+        fontSize: 30,
+        fill: 0x999999,
+        strokeThickness: 10,
+        stroke: 0xffffff
+      },
+      [0.5, 0.5]
+    );
     this.addChild(this.wealthText);
     this.wealthText.position.set(this.game.config.half_w, 160);
   }
@@ -54,9 +58,9 @@ class GameUiInfo extends KnGroup {
     };
 
     const { year, month, day } = this.getDateString();
-    this.yearText = this.game.add.text(year, dateStyle, [0.5, 0.5]);
-    this.monthText = this.game.add.text(month, dateStyle, [0.5, 0.5]);
-    this.dayText = this.game.add.text(day, dateStyle, [0.5, 0.5]);
+    this.yearText = this.game.add.text("", year, dateStyle, [0.5, 0.5]);
+    this.monthText = this.game.add.text("", month, dateStyle, [0.5, 0.5]);
+    this.dayText = this.game.add.text("", day, dateStyle, [0.5, 0.5]);
 
     this.add([this.yearText, this.monthText, this.dayText], true);
     this.yearText.position.set(this.game.config.half_w - 150, 300);
@@ -102,8 +106,10 @@ class GameUiInfo extends KnGroup {
     const { day, month, year, numArr } = this.getDateString();
     const compareArr = this.compareYM(numArr);
     this.game.add.scrollText(day, this.dayText, 0, this.parent.tween);
-    compareArr[0] && this.game.add.scrollText(year, this.yearText, 0.2, this.parent.tween);
-    compareArr[1] && this.game.add.scrollText(month, this.monthText, 0.4, this.parent.tween);
+    compareArr[0] &&
+      this.game.add.scrollText(year, this.yearText, 0.2, this.parent.tween);
+    compareArr[1] &&
+      this.game.add.scrollText(month, this.monthText, 0.4, this.parent.tween);
 
     // 获取季节数据
     let [seasonType] = TransformAncientDate.getSeason(this.gameDate, numArr[1]);

@@ -3,7 +3,9 @@ import Game from "../core";
 
 class KnText extends Text {
   game: Game;
+  public id: String;
   constructor(
+    id: string,
     game: Game,
     content: string,
     style: object,
@@ -13,6 +15,7 @@ class KnText extends Text {
     this.game = game;
     this.resolution = window.devicePixelRatio;
     this.anchor.set(...anchor);
+    this.id = id;
   }
 }
 

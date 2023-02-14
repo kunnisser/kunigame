@@ -84,7 +84,7 @@ class KnSceneManager {
           this.game.currentScene = to;
           resolve(to.enter());
           // 开发模式
-          new EditorTools(this.game);
+          this.game.editorTools = new EditorTools(this.game);
         });
       });
     }

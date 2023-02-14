@@ -2,17 +2,15 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-12 18:16:51
- * @FilePath: \kunigame\projects\hive\nnsd\src\tools\common\drag\index.ts
+ * @LastEditTime: 2023-02-14 17:34:35
+ * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
  * @Description: ---- 公共拖动 ----
  */
 
-import { Sprite } from 'pixi.js';
-import Game from 'ts@/kuni/lib/core';
-import KnGraphics from 'ts@/kuni/lib/gameobjects/kn_graphics';
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
-import KnText from 'ts@/kuni/lib/gameobjects/kn_text';
-import { freeMovePosition } from './dragEvent';
+import Game from "ts@/kuni/lib/core";
+import KnGraphics from "ts@/kuni/lib/gameobjects/kn_graphics";
+import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import { freeMovePosition } from "./dragEvent";
 
 class DragPosition {
   public game: Game;
@@ -23,9 +21,11 @@ class DragPosition {
   public anchorArrowX: KnGraphics; // 拖动X
   public anchorArrowY: KnGraphics; //拖动Y
   public bootTarget: any;
+  public parent: KnGroup;
   arrowY: KnGraphics;
-  constructor(game) {
+  constructor(game, parent) {
     this.game = game;
+    this.parent = parent;
     this.initial(game);
     this.bootTarget = null;
   }
@@ -35,36 +35,26 @@ class DragPosition {
     this.game.stage.interactive = true;
     this.game.stage.hitArea = this.game.app.screen;
 
-    const dragActions = {
-      Sprite: this.bootSpriteDrag,
-      KnText: this.bootTextDrag,
-      KnGroup: () => {},
-    };
-    console.log(game.currentScene.children);
     // 创建拖动组
-    this.moveGroup = this.game.add.group(
-      'moveContainer',
-      this.game.currentScene
-    );
+    this.moveGroup = this.game.add.group("moveContainer", this.parent);
     // 创建拖动边框
-    this.dragBorder = this.game.add.graphics();
+    this.dragBorder = this.game.add.graphics("drag_border");
     this.moveGroup.addChild(this.dragBorder);
 
     // 创建锚点抓手
-    this.anchorGroup = this.game.add.group('anchorGroup', this.moveGroup);
+    this.anchorGroup = this.game.add.group("anchorGroup", this.moveGroup);
 
     // 锚点移动事件
-    this.anchorHandler = this.game.add.graphics('handler');
-    this.anchorArrowX = this.game.add.graphics('xAxis');
-    this.anchorArrowY = this.game.add.graphics('yAxis');
+    this.anchorHandler = this.game.add.graphics("handler");
+    this.anchorArrowX = this.game.add.graphics("xAxis");
+    this.anchorArrowY = this.game.add.graphics("yAxis");
     this.anchorGroup.addChild(this.anchorArrowX);
     this.anchorGroup.addChild(this.anchorArrowY);
     this.anchorGroup.addChild(this.anchorHandler);
 
     const displayList = game.currentScene.children;
     displayList.map((item: any) => {
-      const itemType: string = item.constructor.name;
-      dragActions[itemType](item);
+      this.bootDrag(item);
     });
 
     freeMovePosition(this);
@@ -97,7 +87,7 @@ class DragPosition {
       [
         (item.anchor.x - 0.5) * borderSize,
         (item.anchor.y - 0.5) * borderSize,
-        5,
+        5
       ],
       1
     );
@@ -106,7 +96,7 @@ class DragPosition {
       [
         (item.anchor.x - 0.5) * borderSize,
         (item.anchor.y - 0.5) * borderSize,
-        4,
+        4
       ],
       1
     );
@@ -126,19 +116,20 @@ class DragPosition {
     return BorderWidth + StrokeWidth * 2;
   }
 
-  bootTextDrag = (item: KnText) => {
+  bootDrag = (item: any) => {
+    console.log(item);
     item.interactive = true;
-    item.on('click', () => {
-      this.bootTarget = item;
-      this.moveGroup.position.set(item.x, item.y);
-      const borderSize = this.drawPositionEditorBorder(item);
-      this.drawEditorAnchor(item, borderSize);
+    item.on("click", () => {
+      this.onClickDragging(item);
     });
   };
 
-  bootSpriteDrag = (item: Sprite) => {
-    // item.interactive = true;
-    item.on('click', () => {});
+  onClickDragging = (item: any) => {
+    this.bootTarget = item;
+    this.moveGroup.visible = true;
+    this.moveGroup.position.set(item.x, item.y);
+    const borderSize = this.drawPositionEditorBorder(item);
+    this.drawEditorAnchor(item, borderSize);
   };
 }
 
