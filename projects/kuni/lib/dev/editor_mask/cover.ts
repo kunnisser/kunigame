@@ -2,14 +2,15 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-16 17:25:52
- * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
+ * @LastEditTime: 2023-02-16 23:34:55
+ * @FilePath: \kunigame\projects\kuni\lib\dev\editor_mask\cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
 
-import { Container, Graphics, Text } from "pixi.js";
-import Game from "../../core";
-import KnGroup from "../../gameobjects/kn_group";
+import { Container, Text } from 'pixi.js';
+import Game from '../../core';
+import KnGraphics from '../../gameobjects/kn_graphics';
+import KnGroup from '../../gameobjects/kn_group';
 
 class CoverMask extends KnGroup {
   public game: Game;
@@ -25,9 +26,9 @@ class CoverMask extends KnGroup {
   public cursorY: number;
   public scaleRatio: number; // 缩放系数
   static COVER_SCALE: number;
-  lines: Graphics;
+  public lines: KnGraphics;
   constructor(game: Game, parent: PIXI.Container) {
-    super(game, "coverMask", parent);
+    super(game, 'coverMask', parent);
     this.game = game;
     this.start_X = 0;
     this.start_Y = 0;
@@ -44,9 +45,8 @@ class CoverMask extends KnGroup {
 
   initial() {
     CoverMask.COVER_SCALE = this.game.world.scale.x;
-    this.generateGrid();
-    this.actionMask = this.addActionArea();
-    this.bindControllerHandler(this.actionMask);
+    this.lines = this.generateGrid();
+    this.bindControllerHandler(this.lines);
   }
 
   /**
@@ -54,16 +54,18 @@ class CoverMask extends KnGroup {
    * @param {void}
    * @return {void}
    */
-  generateGrid(): void {
+  generateGrid(): KnGraphics {
     const width: number = this.game.config.width ?? 0;
     const height: number = this.game.config.height ?? 0;
     const size: number = 100;
     const border: IBorder = {
       width: 1,
       color: 0xffffff,
-      alpha: 0.15
+      alpha: 0.15,
     };
-    const lines: Graphics = this.game.add.graphics().generateLine(border);
+    const lines: KnGraphics = this.game.add.graphics().generateLine(border);
+    lines.interactive = true;
+
     const texts_x: Array<Text> = [];
     const texts_y: Array<Text> = [];
 
@@ -72,12 +74,12 @@ class CoverMask extends KnGroup {
       lines.moveTo(0, y);
       lines.lineTo(width, y);
       const scaleText = this.game.add.text(
-        "",
+        '',
         `${y}`,
         {
           fontSize: 14,
-          fontWeight: "bold",
-          fill: 0x8ac007
+          fontWeight: 'bold',
+          fill: 0x8ac007,
         },
         [0, 0.5]
       );
@@ -91,12 +93,12 @@ class CoverMask extends KnGroup {
       lines.lineTo(x, height);
       this.addChild(lines);
       const scaleText = this.game.add.text(
-        "",
+        '',
         `${x}`,
         {
           fontSize: 14,
-          fontWeight: "bold",
-          fill: 0x8ac007
+          fontWeight: 'bold',
+          fill: 0x8ac007,
         },
         [0.5, 0]
       );
@@ -105,26 +107,27 @@ class CoverMask extends KnGroup {
     }
     this.addChild(...texts_x);
     this.addChild(...texts_y);
+    return lines;
   }
 
   /**
    * @description: 添加操作蒙版
    * @param {*}
-   * @return {Graphics} actionMask 返回操作蒙层
+   * @return {KnGraphics} actionMask 返回操作蒙层
    */
-  addActionArea(): Graphics {
-    const actionMask: Graphics = this.game.add.graphics();
-    actionMask.hitArea = new PIXI.Rectangle(
-      0,
-      0,
-      this.game.config.width,
-      this.game.config.height
-    );
-    actionMask.interactive = false;
-    this.addChild(actionMask);
-    actionMask.position.set(0, 0);
-    return actionMask;
-  }
+  // addActionArea(): Graphics {
+  //   const actionMask: Graphics = this.game.add.graphics();
+  //   actionMask.hitArea = new PIXI.Rectangle(
+  //     0,
+  //     0,
+  //     this.game.config.width,
+  //     this.game.config.height
+  //   );
+  //   actionMask.interactive = false;
+  //   this.addChild(actionMask);
+  //   actionMask.position.set(0, 0);
+  //   return actionMask;
+  // }
 
   /**
    * @description: 公共缩放坐标计算
@@ -147,11 +150,11 @@ class CoverMask extends KnGroup {
    * @param {*}
    * @return {*}
    */
-  bindControllerHandler(mask: Container): void {
+  bindControllerHandler(mask: KnGraphics): void {
     const SCALE_VALUE: number = 1000;
     let scaleVal: number = SCALE_VALUE;
     // 原先画布的缩放
-    console.log(this.game.world.scale.x);
+    console.log(mask);
 
     // 缩放系数
     this.scaleRatio = 1;
@@ -159,48 +162,50 @@ class CoverMask extends KnGroup {
     const canvas: any = this.game.view.children[0];
 
     // 绑定move事件
-    const posTextTip = this.game.add.text(
-      "",
-      ``,
-      {
-        fontSize: 14,
-        fontWeight: "bold",
-        fill: 0x8ac007,
-        stroke: 0xffffff,
-        strokeThickness: 6
-      },
-      [0.5, 0.5]
-    );
+    // const posTextTip = this.game.add.text(
+    //   '',
+    //   ``,
+    //   {
+    //     fontSize: 14,
+    //     fontWeight: 'bold',
+    //     fill: 0x8ac007,
+    //     stroke: 0xffffff,
+    //     strokeThickness: 6,
+    //   },
+    //   [0.5, 0.5]
+    // );
 
     // 控制鼠标划入面板监听事件
-    let mouseIn: boolean = false;
+    // let mouseIn: boolean = false;
 
-    mask.on("mouseout", (e: MouseEvent) => {
-      mouseIn = false;
-      posTextTip.visible = mouseIn;
-    });
+    // mask.on('mouseout', (e: MouseEvent) => {
+    //   mouseIn = false;
+    //   posTextTip.visible = mouseIn;
+    // });
 
-    mask.on("mouseover", (e: any) => {
-      mouseIn = true;
-      posTextTip.visible = mouseIn;
-    });
+    // mask.on('mouseover', (e: any) => {
+    //   mouseIn = true;
+    //   posTextTip.visible = mouseIn;
+    // });
 
-    mask.on("mousemove", (e) => {
-      if (!mouseIn) {
-        return;
-      }
-      posTextTip.visible = true;
+    mask.interactive = true;
+
+    mask.on('mousemove', (e) => {
+      // if (!mouseIn) {
+      //   return;
+      // }
+      // posTextTip.visible = true;
       console.log(e);
       this.translateWheelScalePosition(e);
 
-      posTextTip.text = `${this.cursorX}, ${this.cursorY}`;
-      posTextTip.position.set(100, 100);
+      // posTextTip.text = `${this.cursorX}, ${this.cursorY}`;
+      // posTextTip.position.set(100, 100);
     });
 
     // 绑定缩放事件
-    canvas.addEventListener("wheel", (e: WheelEvent) => {
+    canvas.addEventListener('wheel', (e: WheelEvent) => {
       console.log(e);
-      posTextTip.visible = false;
+      // posTextTip.visible = false;
       scaleVal -= e.deltaY;
       if (scaleVal < SCALE_VALUE - 250) {
         scaleVal = SCALE_VALUE - 250;
@@ -237,7 +242,7 @@ class CoverMask extends KnGroup {
       }
     });
 
-    this.addChild(posTextTip);
+    // this.addChild(posTextTip);
   }
 }
 
