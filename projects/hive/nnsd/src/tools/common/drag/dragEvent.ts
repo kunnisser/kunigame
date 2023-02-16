@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-14 17:16:00
+ * @LastEditTime: 2023-02-15 17:21:12
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
@@ -68,7 +68,6 @@ export const freeMovePosition = (dragContext: DragPosition) => {
   function startDragMove(this: any) {
     dragTarget = this;
     if (dragTarget) {
-      console.log(dragTarget);
       dragTarget.alpha = 0.75;
       dragTarget.on("pointermove", onDragMove, dragTarget);
     }
@@ -80,7 +79,6 @@ export const freeMovePosition = (dragContext: DragPosition) => {
    * @return {*}
    */
   function dragEnd() {
-    console.log(dragTarget);
     if (dragTarget) {
       dragTarget.alpha = 1;
       dragTarget.off("pointermove", onDragMove);

@@ -70,7 +70,12 @@ class KnSceneManager {
 
       // 进入加载好的界面 to 为要进入的界面
       this.game.currentScene = to;
-      return to.enter();
+
+      const enterScene = to.enter();
+
+      // 开发模式
+      this.game.editorTools = new EditorTools(this.game);
+      return enterScene;
     } else {
       let globalLoader = this.game.loader;
       // 全局loading界面的资源加载

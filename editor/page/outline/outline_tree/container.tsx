@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-14 17:34:51
+ * @LastEditTime: 2023-02-15 14:58:44
  * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
  * @Description: ---- 场景元素列表 ----
  */
@@ -59,7 +59,7 @@ const ContainerTree = () => {
   const generateTargetName = (item) => {
     const nameTypeMap = {
       "KnGroup": {
-        key: "groupId",
+        key: "name",
         icon: GroupIcon
       },
       "KnText": {

@@ -10,6 +10,7 @@ import KnCursor from "./gameui/kn_cursor";
 import CoverMask from "./dev/editor_mask/cover";
 import * as PIXI from "pixi.js";
 import EditorTools from "ts@/hive/nnsd/src/tools";
+import KnGroup from "./gameobjects/kn_group";
 
 interface EnterProps {
   width: number;
@@ -76,7 +77,7 @@ export default class Game {
       width: this.config.width,
       height: this.config.height,
       antialias: config.antialias || false,
-      transparent: config.transparent || !0,
+      transparent: config.transparent || !1,
       resolution: this.dpr
     });
 
@@ -95,7 +96,7 @@ export default class Game {
     this.stage = this.app.stage;
 
     // 定义游戏容器
-    this.world = new PIXI.Container();
+    this.world = new KnGroup(this, "world", this.stage);
 
     // 载入相关math方法
     this.math = math;
@@ -112,12 +113,12 @@ export default class Game {
     // 初始化光标
     this.cursor = new KnCursor(this, this.world);
 
+    // 添加游戏容器
+    // this.stage.addChild(this.world);
+
     // 定义和添加游戏编辑层
     this.coverMask = new CoverMask(this, this.stage);
     this.coverMask.scale.set(this.size.width / this.config.width);
-
-    // 添加游戏容器
-    this.stage.addChild(this.world);
 
     // 页面尺寸改变
     window.onresize = () => {

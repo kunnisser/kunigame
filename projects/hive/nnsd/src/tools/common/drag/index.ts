@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-14 17:34:35
+ * @LastEditTime: 2023-02-16 10:51:20
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
  * @Description: ---- 公共拖动 ----
  */
@@ -11,6 +11,7 @@ import Game from "ts@/kuni/lib/core";
 import KnGraphics from "ts@/kuni/lib/gameobjects/kn_graphics";
 import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
 import { freeMovePosition } from "./dragEvent";
+import { Point } from "pixi.js";
 
 class DragPosition {
   public game: Game;
@@ -52,12 +53,25 @@ class DragPosition {
     this.anchorGroup.addChild(this.anchorArrowY);
     this.anchorGroup.addChild(this.anchorHandler);
 
+    this.bindDragToolsFunction(game);
+  }
+
+  // 场景进入后，对场景内的各个元素进行拖动组件生成
+  bindDragToolsFunction(game) {
     const displayList = game.currentScene.children;
-    displayList.map((item: any) => {
-      this.bootDrag(item);
-    });
+    this.recursionBind(displayList);
 
     freeMovePosition(this);
+  }
+
+  recursionBind(list) {
+    list.map((item: any) => {
+      if (item.children.length > 0) {
+        this.recursionBind(item.children);
+      } else {
+        this.bootDrag(item);
+      }
+    });
   }
 
   drawArrowX(item, borderSize) {
@@ -117,7 +131,6 @@ class DragPosition {
   }
 
   bootDrag = (item: any) => {
-    console.log(item);
     item.interactive = true;
     item.on("click", () => {
       this.onClickDragging(item);
@@ -125,11 +138,28 @@ class DragPosition {
   };
 
   onClickDragging = (item: any) => {
+    // 克隆目标的宽高和初始坐标
+    const cloneItem: any = {
+      x: item.x,
+      y: item.y,
+      width: item.width,
+      height: item.height,
+      anchor: null
+    };
+    // 适配容器container里没有anchor, 同时根据容器的bounds重新定义cloneItem的数据
+    if (!item.anchor) {
+      cloneItem.anchor = new Point(0, 0);
+      const bounds = item.getLocalBounds();
+      cloneItem.width = bounds.x + bounds.width;
+      cloneItem.height = bounds.y + bounds.height;
+    } else {
+      cloneItem.anchor = item.anchor;
+    }
     this.bootTarget = item;
     this.moveGroup.visible = true;
-    this.moveGroup.position.set(item.x, item.y);
-    const borderSize = this.drawPositionEditorBorder(item);
-    this.drawEditorAnchor(item, borderSize);
+    this.moveGroup.position.set(cloneItem.x, cloneItem.y);
+    const borderSize = this.drawPositionEditorBorder(cloneItem);
+    this.drawEditorAnchor(cloneItem, borderSize);
   };
 }
 

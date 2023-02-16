@@ -2,12 +2,12 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-12 03:01:04
- * @FilePath: \kunigame\projects\kuni\lib\dev\editor_mask\cover.ts
+ * @LastEditTime: 2023-02-16 17:25:52
+ * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
 
-import { Graphics, Text } from "pixi.js";
+import { Container, Graphics, Text } from "pixi.js";
 import Game from "../../core";
 import KnGroup from "../../gameobjects/kn_group";
 
@@ -20,11 +20,12 @@ class CoverMask extends KnGroup {
   public move_X: number;
   public move_Y: number;
   public isDragging: boolean;
-  public actionMask: Graphics;
+  public actionMask: Container;
   public cursorX: number;
   public cursorY: number;
   public scaleRatio: number; // 缩放系数
   static COVER_SCALE: number;
+  lines: Graphics;
   constructor(game: Game, parent: PIXI.Container) {
     super(game, "coverMask", parent);
     this.game = game;
@@ -119,7 +120,7 @@ class CoverMask extends KnGroup {
       this.game.config.width,
       this.game.config.height
     );
-    actionMask.interactive = true;
+    actionMask.interactive = false;
     this.addChild(actionMask);
     actionMask.position.set(0, 0);
     return actionMask;
@@ -146,7 +147,7 @@ class CoverMask extends KnGroup {
    * @param {*}
    * @return {*}
    */
-  bindControllerHandler(mask: Graphics): void {
+  bindControllerHandler(mask: Container): void {
     const SCALE_VALUE: number = 1000;
     let scaleVal: number = SCALE_VALUE;
     // 原先画布的缩放
@@ -189,6 +190,7 @@ class CoverMask extends KnGroup {
         return;
       }
       posTextTip.visible = true;
+      console.log(e);
       this.translateWheelScalePosition(e);
 
       posTextTip.text = `${this.cursorX}, ${this.cursorY}`;
@@ -197,11 +199,13 @@ class CoverMask extends KnGroup {
 
     // 绑定缩放事件
     canvas.addEventListener("wheel", (e: WheelEvent) => {
+      console.log(e);
       posTextTip.visible = false;
       scaleVal -= e.deltaY;
-      if (scaleVal < SCALE_VALUE) {
-        scaleVal = SCALE_VALUE;
+      if (scaleVal < SCALE_VALUE - 250) {
+        scaleVal = SCALE_VALUE - 250;
       }
+      console.log(scaleVal);
       this.scaleRatio = scaleVal / SCALE_VALUE;
 
       // 缩放画布及控制台

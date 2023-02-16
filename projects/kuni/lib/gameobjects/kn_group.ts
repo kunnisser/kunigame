@@ -1,12 +1,12 @@
-import { Container } from 'pixi.js';
+import { Container } from "pixi.js";
 
 class KnGroup extends Container {
   public game: object;
-  public groupId: string;
-  constructor(game: object, key: string, parent: any) {
+  public name: string;
+  constructor(game: object, name: string, parent: any) {
     super();
     this.game = game;
-    this.groupId = key;
+    this.name = name;
     parent.addChild(this);
     this.x = 0;
     this.y = 0;
