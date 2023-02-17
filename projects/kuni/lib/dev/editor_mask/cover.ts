@@ -7,10 +7,10 @@
  * @Description: ---- 编辑蒙层 ----
  */
 
-import { Container, Text } from 'pixi.js';
-import Game from '../../core';
-import KnGraphics from '../../gameobjects/kn_graphics';
-import KnGroup from '../../gameobjects/kn_group';
+import { Container, Text } from "pixi.js";
+import Game from "../../core";
+import KnGraphics from "../../gameobjects/kn_graphics";
+import KnGroup from "../../gameobjects/kn_group";
 
 class CoverMask extends KnGroup {
   public game: Game;
@@ -28,7 +28,7 @@ class CoverMask extends KnGroup {
   static COVER_SCALE: number;
   public lines: KnGraphics;
   constructor(game: Game, parent: PIXI.Container) {
-    super(game, 'coverMask', parent);
+    super(game, "coverMask", parent);
     this.game = game;
     this.start_X = 0;
     this.start_Y = 0;
@@ -61,7 +61,7 @@ class CoverMask extends KnGroup {
     const border: IBorder = {
       width: 1,
       color: 0xffffff,
-      alpha: 0.15,
+      alpha: 0.15
     };
     const lines: KnGraphics = this.game.add.graphics().generateLine(border);
     lines.interactive = true;
@@ -74,12 +74,12 @@ class CoverMask extends KnGroup {
       lines.moveTo(0, y);
       lines.lineTo(width, y);
       const scaleText = this.game.add.text(
-        '',
+        "",
         `${y}`,
         {
           fontSize: 14,
-          fontWeight: 'bold',
-          fill: 0x8ac007,
+          fontWeight: "bold",
+          fill: 0x8ac007
         },
         [0, 0.5]
       );
@@ -93,12 +93,12 @@ class CoverMask extends KnGroup {
       lines.lineTo(x, height);
       this.addChild(lines);
       const scaleText = this.game.add.text(
-        '',
+        "",
         `${x}`,
         {
           fontSize: 14,
-          fontWeight: 'bold',
-          fill: 0x8ac007,
+          fontWeight: "bold",
+          fill: 0x8ac007
         },
         [0.5, 0]
       );
@@ -153,8 +153,6 @@ class CoverMask extends KnGroup {
   bindControllerHandler(mask: KnGraphics): void {
     const SCALE_VALUE: number = 1000;
     let scaleVal: number = SCALE_VALUE;
-    // 原先画布的缩放
-    console.log(mask);
 
     // 缩放系数
     this.scaleRatio = 1;
@@ -190,12 +188,11 @@ class CoverMask extends KnGroup {
 
     mask.interactive = true;
 
-    mask.on('mousemove', (e) => {
+    mask.on("mousemove", (e) => {
       // if (!mouseIn) {
       //   return;
       // }
       // posTextTip.visible = true;
-      console.log(e);
       this.translateWheelScalePosition(e);
 
       // posTextTip.text = `${this.cursorX}, ${this.cursorY}`;
@@ -203,14 +200,12 @@ class CoverMask extends KnGroup {
     });
 
     // 绑定缩放事件
-    canvas.addEventListener('wheel', (e: WheelEvent) => {
-      console.log(e);
+    canvas.addEventListener("wheel", (e: WheelEvent) => {
       // posTextTip.visible = false;
       scaleVal -= e.deltaY;
       if (scaleVal < SCALE_VALUE - 250) {
         scaleVal = SCALE_VALUE - 250;
       }
-      console.log(scaleVal);
       this.scaleRatio = scaleVal / SCALE_VALUE;
 
       // 缩放画布及控制台

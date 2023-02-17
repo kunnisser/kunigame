@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-14 17:04:11
+ * @LastEditTime: 2023-02-17 11:10:29
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -62,6 +62,7 @@ class Welcome extends KnScene {
       this.game.config.half_h * 0.5
     );
     this.addChild(demo1Text);
+    this.sortChildren();
   }
 
   update() {}
