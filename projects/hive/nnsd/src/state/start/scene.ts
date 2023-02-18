@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-02-03 15:09:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-15 17:19:18
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
+ * @LastEditTime: 2023-02-19 00:22:01
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\start\scene.ts
  * @Description: ----  ----
  */
 /*
@@ -15,9 +15,9 @@
  * @Description: ---- 示例欢迎场景 ----
  */
 
-import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
-import Game from "ts@/kuni/lib/core";
-import KnText from "ts@/kuni/lib/gameobjects/kn_text";
+import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
+import Game from 'ts@/kuni/lib/core';
+import KnText from 'ts@/kuni/lib/gameobjects/kn_text';
 
 class Start extends KnScene {
   public game: Game;
@@ -31,29 +31,41 @@ class Start extends KnScene {
 
   create() {
     const demoText: KnText = this.game.add.text(
-      "测试文本",
-      "Start",
+      '测试1',
+      'test1',
       {
-        fontSize: "24",
-        fill: 0xffffff
+        fontSize: '24',
+        fill: 0xffffff,
       },
       [0.5, 0.5]
     );
     demoText.position.set(this.game.config.half_w, this.game.config.half_h);
-    const testGroup = this.game.add.group("test", this);
+    const testGroup = this.game.add.group('test', this);
 
     const demo1Text: KnText = this.game.add.text(
-      "测试2",
-      "测试文本",
+      '测试2',
+      'test2',
       {
-        fontSize: "24",
-        fill: 0xffffff
+        fontSize: '24',
+        fill: 0xffffff,
       },
       [0.5, 0.5]
     );
     demo1Text.position.set(300, 400);
+
+    const demo2Text: KnText = this.game.add.text(
+      '测试3',
+      'test3',
+      {
+        fontSize: '24',
+        fill: 0xffffff,
+      },
+      [0.5, 0.5]
+    );
+    demo2Text.position.set(400, 400);
     testGroup.addChild(demoText);
     testGroup.addChild(demo1Text);
+    testGroup.addChild(demo2Text);
   }
 
   update() {}

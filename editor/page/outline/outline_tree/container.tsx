@@ -2,12 +2,12 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-15 14:58:44
- * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
+ * @LastEditTime: 2023-02-19 00:45:07
+ * @FilePath: \kunigame\editor\page\outline\outline_tree\container.tsx
  * @Description: ---- 场景元素列表 ----
  */
 import React, { useState, useEffect } from "react";
-import { Tree } from "antd";
+import { message, Tree } from "antd";
 import { useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import Icon from "@ant-design/icons";
@@ -15,6 +15,7 @@ import TextIcon from "editor@/assets/icon/text.svg";
 import SpriteIcon from "editor@/assets/icon/sprite.svg";
 import GroupIcon from "editor@/assets/icon/group.svg";
 import GraphicsIcon from "editor@/assets/icon/graphics.svg";
+import { DataNode } from "antd/lib/tree";
 
 const ContainerTree = () => {
   const [displayList, setDisplayList] = useState([] as any);
@@ -129,7 +130,8 @@ const ContainerTree = () => {
   const setCreatedScene = (scene) => {
     // 当前游戏场景下的容器列表
     const containerList: Array<any> = scene.children;
-    setDisplayList(containerList);
+    const transformTreeList = loop(containerList);
+    setDisplayList(transformTreeList);
     onExpand(["containerTree"]);
   };
 
@@ -137,6 +139,83 @@ const ContainerTree = () => {
     console.log(keys, element.node.item);
     game.editorTools.dragTool.onClickDragging(element.node.item);
   };
+
+
+
+  const dropHandler = (info) => {
+    console.log('把', info.dragNode);
+    console.log('移动到', info.node);
+    // const dragKey = info.dragNode.key;
+    const dropPos = info.node.pos.split('-');
+    const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1]);
+    const isDropGroup = info.node.dragOverGapTop || info.node.dragOverGapBottom || !info.node.isLeaf;
+    if (isDropGroup) {
+      console.log(dropPos);
+      console.log(info.dropPosition, dropPosition);
+      const dragKey = info.dragNode.key;
+      const dropKey = info.node.key;
+      const loop = (
+        data: DataNode[],
+        key: React.Key,
+        callback: (node: DataNode, i: number, data: DataNode[]) => void,
+      ) => {
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].key === key) {
+            return callback(data[i], i, data);
+          }
+          if (data[i].children) {
+            loop(data[i].children!, key, callback);
+          }
+        }
+      };
+      const data = [...displayList];
+
+      // Find dragObject
+      let dragObj: DataNode;
+      loop(data, dragKey, (item, index, arr) => {
+        arr.splice(index, 1);
+        dragObj = item;
+      });
+
+      if (!info.dropToGap) {
+        // Drop on the content
+        loop(data, dropKey, (item) => {
+          item.children = item.children || [];
+          // where to insert 示例添加到头部，可以是随意位置
+          item.children.unshift(dragObj);
+        });
+      } else if (
+        ((info.node as any).props.children || []).length > 0 && // Has children
+        (info.node as any).props.expanded && // Is expanded
+        dropPosition === 1 // On the bottom gap
+      ) {
+        loop(data, dropKey, (item) => {
+          item.children = item.children || [];
+          // where to insert 示例添加到头部，可以是随意位置
+          item.children.unshift(dragObj);
+          // in previous version, we use item.children.push(dragObj) to insert the
+          // item to the tail of the children
+        });
+      } else {
+        let ar: DataNode[] = [];
+        let i: number;
+        loop(data, dropKey, (_item, index, arr) => {
+          ar = arr;
+          i = index;
+        });
+        if (dropPosition === -1) {
+          ar.splice(i!, 0, dragObj!);
+        } else {
+          ar.splice(i! + 1, 0, dragObj!);
+        }
+      }
+
+      setDisplayList(data);
+    } else {
+      message.warning('不可移动到根节点!');
+    }
+
+  }
 
   return (
     <div>
@@ -147,9 +226,12 @@ const ContainerTree = () => {
       /> */}
       <Tree
         showIcon
+        draggable
+        blockNode
+        onDrop={dropHandler}
         onExpand={onExpand}
         expandedKeys={expandedKeys}
-        treeData={loop(displayList)}
+        treeData={displayList}
         onSelect={selectElementTarget}
       />
     </div>
