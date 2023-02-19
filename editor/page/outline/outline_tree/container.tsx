@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-19 00:45:07
+ * @LastEditTime: 2023-02-20 00:01:51
  * @FilePath: \kunigame\editor\page\outline\outline_tree\container.tsx
  * @Description: ---- 场景元素列表 ----
  */
@@ -88,7 +88,7 @@ const ContainerTree = () => {
       const [type, title, icon] = generateTargetName(item);
       const targetKey = `${type}_${title}`;
 
-      if (item.children && item.children.length) {
+      if (item.constructor.name === 'KnGroup') {
         return {
           title,
           key: targetKey,
@@ -145,16 +145,31 @@ const ContainerTree = () => {
   const dropHandler = (info) => {
     console.log('把', info.dragNode);
     console.log('移动到', info.node);
-    // const dragKey = info.dragNode.key;
-    const dropPos = info.node.pos.split('-');
+    const dragTargetNode = info.dragNode;
+    const dropTargetNode = info.node;
+    const dropPos = dropTargetNode.pos.split('-');
     const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1]);
-    const isDropGroup = info.node.dragOverGapTop || info.node.dragOverGapBottom || !info.node.isLeaf;
-    if (isDropGroup) {
-      console.log(dropPos);
+    const isGroup = dropTargetNode.item.constructor.name === 'KnGroup';
+    const isDropAble = dropTargetNode.dragOverGapTop || dropTargetNode.dragOverGapBottom || !dropTargetNode.isLeaf || isGroup;
+    if (isDropAble) {
       console.log(info.dropPosition, dropPosition);
-      const dragKey = info.dragNode.key;
-      const dropKey = info.node.key;
-      const loop = (
+      const dragKey = dragTargetNode.key;
+      const dropKey = dropTargetNode.key;
+
+      const dropIndex = info.dropPosition > 0 ? info.dropPosition - 1 : 0;
+
+      // 如果drop的目标不是KnGroup，则说明是在组内移动， 如果是KnGroup则认为是跨组
+      if (isGroup && dropPosition === 0) {
+        dropTargetNode.item.addChildAt(dragTargetNode.item, dropIndex);
+      } else {
+        if (dropTargetNode.item.parent.id === dragTargetNode.item.parent.id) {
+          dropTargetNode.item.parent.setChildIndex(dragTargetNode.item, dropIndex);
+        } else {
+          dropTargetNode.item.parent.addChildAt(dragTargetNode.item, dropIndex);
+        }
+      }
+
+      const dropLoop = (
         data: DataNode[],
         key: React.Key,
         callback: (node: DataNode, i: number, data: DataNode[]) => void,
@@ -164,7 +179,7 @@ const ContainerTree = () => {
             return callback(data[i], i, data);
           }
           if (data[i].children) {
-            loop(data[i].children!, key, callback);
+            dropLoop(data[i].children!, key, callback);
           }
         }
       };
@@ -172,24 +187,24 @@ const ContainerTree = () => {
 
       // Find dragObject
       let dragObj: DataNode;
-      loop(data, dragKey, (item, index, arr) => {
+      dropLoop(data, dragKey, (item, index, arr) => {
         arr.splice(index, 1);
         dragObj = item;
       });
 
       if (!info.dropToGap) {
         // Drop on the content
-        loop(data, dropKey, (item) => {
+        dropLoop(data, dropKey, (item) => {
           item.children = item.children || [];
           // where to insert 示例添加到头部，可以是随意位置
           item.children.unshift(dragObj);
         });
       } else if (
-        ((info.node as any).props.children || []).length > 0 && // Has children
-        (info.node as any).props.expanded && // Is expanded
+        ((dropTargetNode as any).props.children || []).length > 0 && // Has children
+        (dropTargetNode as any).props.expanded && // Is expanded
         dropPosition === 1 // On the bottom gap
       ) {
-        loop(data, dropKey, (item) => {
+        dropLoop(data, dropKey, (item) => {
           item.children = item.children || [];
           // where to insert 示例添加到头部，可以是随意位置
           item.children.unshift(dragObj);
@@ -199,7 +214,7 @@ const ContainerTree = () => {
       } else {
         let ar: DataNode[] = [];
         let i: number;
-        loop(data, dropKey, (_item, index, arr) => {
+        dropLoop(data, dropKey, (_item, index, arr) => {
           ar = arr;
           i = index;
         });
@@ -209,7 +224,7 @@ const ContainerTree = () => {
           ar.splice(i! + 1, 0, dragObj!);
         }
       }
-
+      console.log(data);
       setDisplayList(data);
     } else {
       message.warning('不可移动到根节点!');

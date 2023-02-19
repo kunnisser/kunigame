@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-03 15:09:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-19 00:22:01
+ * @LastEditTime: 2023-02-19 23:05:01
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\start\scene.ts
  * @Description: ----  ----
  */
@@ -40,7 +40,7 @@ class Start extends KnScene {
       [0.5, 0.5]
     );
     demoText.position.set(this.game.config.half_w, this.game.config.half_h);
-    const testGroup = this.game.add.group('test', this);
+    const testGroup = this.game.add.group('group1', this);
 
     const demo1Text: KnText = this.game.add.text(
       '测试2',
@@ -66,6 +66,8 @@ class Start extends KnScene {
     testGroup.addChild(demoText);
     testGroup.addChild(demo1Text);
     testGroup.addChild(demo2Text);
+
+    this.game.add.group('group2', this);
   }
 
   update() {}
