@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-16 10:51:20
+ * @LastEditTime: 2023-02-20 17:39:28
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
  * @Description: ---- 公共拖动 ----
  */
@@ -66,7 +66,7 @@ class DragPosition {
 
   recursionBind(list) {
     list.map((item: any) => {
-      if (item.children.length > 0) {
+      if (item.constructor.name === "KnGroup") {
         this.recursionBind(item.children);
       } else {
         this.bootDrag(item);
@@ -138,14 +138,26 @@ class DragPosition {
   };
 
   onClickDragging = (item: any) => {
+    // 获取点击元素的全局坐标（考虑画布缩放）
+    let { x, y } = item;
+    const loopGlobalCoord = (item) => {
+      if (item.parent.constructor.name === "KnGroup") {
+        x += item.parent.x;
+        y += item.parent.y;
+        loopGlobalCoord(item.parent);
+      }
+    };
+    loopGlobalCoord(item);
+
     // 克隆目标的宽高和初始坐标
     const cloneItem: any = {
-      x: item.x,
-      y: item.y,
+      x,
+      y,
       width: item.width,
       height: item.height,
       anchor: null
     };
+
     // 适配容器container里没有anchor, 同时根据容器的bounds重新定义cloneItem的数据
     if (!item.anchor) {
       cloneItem.anchor = new Point(0, 0);

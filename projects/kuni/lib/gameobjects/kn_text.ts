@@ -16,6 +16,7 @@ class KnText extends Text {
     this.resolution = window.devicePixelRatio;
     this.anchor.set(...anchor);
     this.id = id;
+    this.name = id;
   }
 }
 

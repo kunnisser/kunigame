@@ -7,6 +7,7 @@ import KnMessage from "../gameui/kn_message";
 class KnScene extends Container {
   public game: any;
   public id: string;
+  public name: string;
   public isBoot: boolean;
   public resouces: object;
   public isCached: boolean;
@@ -18,6 +19,7 @@ class KnScene extends Container {
     super();
     this.game = game;
     this.id = key;
+    this.name = key;
     this.isBoot = !1;
     this.isCached = !1;
     this.initial();

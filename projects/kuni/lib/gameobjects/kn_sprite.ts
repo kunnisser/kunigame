@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-14 16:15:56
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-14 16:18:21
+ * @LastEditTime: 2023-02-20 15:04:01
  * @FilePath: /kunigame/projects/kuni/lib/gameobjects/kn_sprite.ts
  * @Description: ---- sprite类 ----
  */
@@ -15,6 +15,7 @@ class KnSprite extends Sprite {
   constructor(id: string, texture: Texture) {
     super(texture);
     this.id = id;
+    this.name = id;
   }
 }
 
