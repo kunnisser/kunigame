@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-15 17:21:12
+ * @LastEditTime: 2023-02-21 17:29:43
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
@@ -41,6 +41,27 @@ export const freeMovePosition = (dragContext: DragPosition) => {
     e.key === "Escape" && (dragContext.moveGroup.visible = false);
   });
 
+  // 定义拖拽撤销功能
+  document.addEventListener("keydown", (e) => {
+    const currentSceneId = dragContext.game.currentScene.id;
+    const currentActionStack = dragContext.actionStack[currentSceneId];
+    if (
+      currentActionStack &&
+      currentActionStack.length > 0 &&
+      e.key === "z" &&
+      (e.ctrlKey || e.metaKey)
+    ) {
+      const prevAction = currentActionStack.pop();
+      if (prevAction) {
+        const { moveGroup, relativeX, relativeY } = dragContext;
+        const { x, y } = prevAction?.position;
+        prevAction?.target.position.set(x - relativeX, y - relativeY);
+        console.log(dragContext);
+        moveGroup.position.set(x, y);
+      }
+    }
+  });
+
   /**
    * @description: 自由移动提示工具及目标的坐标
    * @param {any} this 对应场景的上下文
@@ -48,12 +69,12 @@ export const freeMovePosition = (dragContext: DragPosition) => {
    * @return {*}
    */
   function onDragMove(event: any) {
-    const { moveGroup, game, bootTarget } = dragContext;
+    const { moveGroup, game, bootTarget, relativeX, relativeY } = dragContext;
     if (moveGroup) {
       const [x, y] = game.coverMask.translateWheelScalePosition(event);
       if (dragTarget.id === "handler") {
         moveGroup.position.set(x, y);
-        bootTarget.position.set(x, y);
+        bootTarget.position.set(x - relativeX, y - relativeY); // 画布内对象还原为相对坐标
       }
       dragTarget.id === "xAxis" && ((moveGroup.x = x), (bootTarget.x = x));
       dragTarget.id === "yAxis" && ((moveGroup.y = y), (bootTarget.y = y));
@@ -70,6 +91,14 @@ export const freeMovePosition = (dragContext: DragPosition) => {
     if (dragTarget) {
       dragTarget.alpha = 0.75;
       dragTarget.on("pointermove", onDragMove, dragTarget);
+      const bootTarget = dragContext.bootTarget;
+      const bootTargetPosition = dragContext.bootTarget.position;
+      const currentSceneId = dragContext.game.currentScene.id;
+      // 对操作栈插入拖拽前的数据
+      dragContext.actionStack[currentSceneId].push({
+        position: { x: bootTargetPosition.x, y: bootTargetPosition.y },
+        target: bootTarget
+      });
     }
   }
 

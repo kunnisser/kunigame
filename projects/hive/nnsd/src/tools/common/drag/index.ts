@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-20 17:39:28
+ * @LastEditTime: 2023-02-21 17:04:06
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
  * @Description: ---- 公共拖动 ----
  */
@@ -12,6 +12,11 @@ import KnGraphics from "ts@/kuni/lib/gameobjects/kn_graphics";
 import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
 import { freeMovePosition } from "./dragEvent";
 import { Point } from "pixi.js";
+
+export interface DragActionStack {
+  position: { x: number; y: number };
+  target: any;
+}
 
 class DragPosition {
   public game: Game;
@@ -24,11 +29,17 @@ class DragPosition {
   public bootTarget: any;
   public parent: KnGroup;
   arrowY: KnGraphics;
+  relativeX: number;
+  relativeY: number;
+  public actionStack: any;
   constructor(game, parent) {
     this.game = game;
     this.parent = parent;
     this.initial(game);
     this.bootTarget = null;
+    this.actionStack = {};
+    console.log(game.currentScene.id);
+    this.actionStack[game.currentScene.id] = [];
   }
 
   initial(game: Game) {
@@ -139,11 +150,11 @@ class DragPosition {
 
   onClickDragging = (item: any) => {
     // 获取点击元素的全局坐标（考虑画布缩放）
-    let { x, y } = item;
+    (this.relativeX = 0), (this.relativeY = 0);
     const loopGlobalCoord = (item) => {
       if (item.parent.constructor.name === "KnGroup") {
-        x += item.parent.x;
-        y += item.parent.y;
+        this.relativeX += item.parent.x;
+        this.relativeY += item.parent.y;
         loopGlobalCoord(item.parent);
       }
     };
@@ -151,8 +162,8 @@ class DragPosition {
 
     // 克隆目标的宽高和初始坐标
     const cloneItem: any = {
-      x,
-      y,
+      x: item.x + this.relativeX,
+      y: item.y + this.relativeY,
       width: item.width,
       height: item.height,
       anchor: null
@@ -169,6 +180,7 @@ class DragPosition {
     }
     this.bootTarget = item;
     this.moveGroup.visible = true;
+
     this.moveGroup.position.set(cloneItem.x, cloneItem.y);
     const borderSize = this.drawPositionEditorBorder(cloneItem);
     this.drawEditorAnchor(cloneItem, borderSize);

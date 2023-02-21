@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-03 15:09:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-20 14:34:50
+ * @LastEditTime: 2023-02-21 11:04:53
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
  * @Description: ----  ----
  */
@@ -21,6 +21,7 @@ import KnText from "ts@/kuni/lib/gameobjects/kn_text";
 
 class Start extends KnScene {
   public game: Game;
+  demoTest: KnText;
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
