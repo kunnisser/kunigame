@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-22 15:01:29
+ * @LastEditTime: 2023-02-22 17:27:41
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
@@ -75,14 +75,10 @@ export const freeMovePosition = (dragContext: DragPosition) => {
       dragTarget.alpha = 0.75;
       dragTarget.on("pointermove", onDragMove, dragTarget);
 
-      // 对操作栈插入拖拽前的数据
-      const bootTarget = dragContext.bootTarget;
       const bootTargetPosition = dragContext.bootTarget.position;
-      dragContext.game.currentScene.actionStack.push({
-        position: { x: bootTargetPosition.x, y: bootTargetPosition.y },
-        target: bootTarget,
-        tool: dragContext.moveGroup
-      });
+
+      dragContext.dragStartX = bootTargetPosition.x;
+      dragContext.dragStartY = bootTargetPosition.y;
     }
   }
 
@@ -95,6 +91,20 @@ export const freeMovePosition = (dragContext: DragPosition) => {
     if (dragTarget) {
       dragTarget.alpha = 1;
       dragTarget.off("pointermove", onDragMove);
+      // 对操作栈插入拖拽前的数据
+      const bootTarget = dragContext.bootTarget;
+      const bootTargetPosition = dragContext.bootTarget.position;
+
+      dragContext.game.currentScene.cancelActionStack.push({
+        position: {
+          prevX: dragContext.dragStartX,
+          prevY: dragContext.dragStartY,
+          nextX: bootTargetPosition.x,
+          nextY: bootTargetPosition.y
+        },
+        target: bootTarget,
+        tool: dragContext.moveGroup
+      });
     }
   }
 };

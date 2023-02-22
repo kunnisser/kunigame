@@ -16,7 +16,8 @@ class KnScene extends Container {
   public dat?: any;
   public drawStage: KnGraphics;
   public tip: KnMessage;
-  public actionStack: Array<any>; // 工具操作栈
+  public cancelActionStack: Array<any>; // 工具撤销操作栈
+  public resumeActionStack: Array<any>; // 工具恢复操作栈
   constructor(game: object, key: string) {
     super();
     this.game = game;
@@ -25,7 +26,8 @@ class KnScene extends Container {
     this.isBoot = !1;
     this.isCached = !1;
     this.isBinded = !1;
-    this.actionStack = [];
+    this.cancelActionStack = [];
+    this.resumeActionStack = [];
     this.initial();
   }
 

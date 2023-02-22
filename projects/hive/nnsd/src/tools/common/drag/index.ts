@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-22 14:56:21
+ * @LastEditTime: 2023-02-22 17:31:57
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
  * @Description: ---- 公共拖动 ----
  */
@@ -14,7 +14,7 @@ import { freeMovePosition } from "./dragEvent";
 import { Point } from "pixi.js";
 
 export interface DragActionStack {
-  position: { x: number; y: number };
+  position: { prevX: number; prevY: number; nextX: number; nextY: number };
   target: any;
   tool: any;
 }
@@ -29,6 +29,8 @@ class DragPosition {
   public anchorArrowY: KnGraphics; //拖动Y
   public bootTarget: any;
   public parent: KnGroup;
+  public dragStartX: number; // 拖拽开始坐标X
+  public dragStartY: number;
   arrowY: KnGraphics;
   relativeX: number;
   relativeY: number;
@@ -39,6 +41,8 @@ class DragPosition {
     this.bootTarget = null;
     this.relativeX = 0;
     this.relativeY = 0;
+    this.dragStartX = 0;
+    this.dragStartY = 0;
   }
 
   initial(game: Game) {
@@ -65,9 +69,10 @@ class DragPosition {
 
     this.bindDragToolsFunction(game);
 
-    // 定义拖拽撤销功能,覆盖式
+    // 定义拖拽撤销恢复功能,覆盖式
     document.onkeydown = (e) => {
-      const currentActionStack = this.game.currentScene.actionStack;
+      const currentActionStack = this.game.currentScene.cancelActionStack;
+      const resumeActionStack = this.game.currentScene.resumeActionStack;
       if (
         currentActionStack &&
         currentActionStack.length > 0 &&
@@ -75,15 +80,34 @@ class DragPosition {
         (e.ctrlKey || e.metaKey)
       ) {
         const prevAction = currentActionStack.pop();
+
+        resumeActionStack.push(prevAction);
         if (prevAction) {
-          const { x, y } = prevAction?.position;
-          console.log(x - this.relativeX, y - this.relativeY);
+          const { prevX, prevY } = prevAction?.position;
           this.onClickDragging(prevAction?.target);
           prevAction?.target.position.set(
-            x - this.relativeX,
-            y - this.relativeY
+            prevX - this.relativeX,
+            prevY - this.relativeY
           );
-          this.moveGroup.position.set(x, y);
+          this.moveGroup.position.set(prevX, prevY);
+        }
+      } else if (
+        resumeActionStack &&
+        resumeActionStack.length > 0 &&
+        e.key === "y" &&
+        (e.ctrlKey || e.metaKey)
+      ) {
+        const resumeAction = resumeActionStack.pop();
+
+        currentActionStack.push(resumeAction);
+        if (resumeAction) {
+          const { nextX, nextY } = resumeAction?.position;
+          this.onClickDragging(resumeAction?.target);
+          resumeAction?.target.position.set(
+            nextX - this.relativeX,
+            nextY - this.relativeY
+          );
+          this.moveGroup.position.set(nextX, nextY);
         }
       }
     };
