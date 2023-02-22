@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-21 17:29:43
+ * @LastEditTime: 2023-02-22 15:01:29
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
@@ -11,9 +11,10 @@ import DragPosition from ".";
 
 /**
  * @description: 激活绑定移动相关事件
- * @param {DragPosition} dragContext
+ * @param {DragPosition} dragContext DragPosition 实例
  * @return {*}
  */
+
 export const freeMovePosition = (dragContext: DragPosition) => {
   // 当前点击的对象
   let dragTarget: any = null;
@@ -35,32 +36,14 @@ export const freeMovePosition = (dragContext: DragPosition) => {
   yAxisHandler.on("pointerdown", startDragMove, yAxisHandler);
 
   // 定义解绑触发事件
-  dragContext.game.stage.on("pointerup", dragEnd);
-  dragContext.game.stage.on("pointerupoutside", dragEnd);
-  document.addEventListener("keyup", (e) => {
+  dragContext.game.stage.off("pointerup").on("pointerup", dragEnd);
+  dragContext.game.stage
+    .off("pointerupoutside")
+    .on("pointerupoutside", dragEnd);
+  // 定义覆盖式取消事件
+  document.onkeyup = (e) => {
     e.key === "Escape" && (dragContext.moveGroup.visible = false);
-  });
-
-  // 定义拖拽撤销功能
-  document.addEventListener("keydown", (e) => {
-    const currentSceneId = dragContext.game.currentScene.id;
-    const currentActionStack = dragContext.actionStack[currentSceneId];
-    if (
-      currentActionStack &&
-      currentActionStack.length > 0 &&
-      e.key === "z" &&
-      (e.ctrlKey || e.metaKey)
-    ) {
-      const prevAction = currentActionStack.pop();
-      if (prevAction) {
-        const { moveGroup, relativeX, relativeY } = dragContext;
-        const { x, y } = prevAction?.position;
-        prevAction?.target.position.set(x - relativeX, y - relativeY);
-        console.log(dragContext);
-        moveGroup.position.set(x, y);
-      }
-    }
-  });
+  };
 
   /**
    * @description: 自由移动提示工具及目标的坐标
@@ -83,7 +66,7 @@ export const freeMovePosition = (dragContext: DragPosition) => {
 
   /**
    * @description: 按下后开始移动事件
-   * @param {any} this
+   * @param {any} this 绑定拖动的目标，例如 拖动控件的部件
    * @return {*}
    */
   function startDragMove(this: any) {
@@ -91,13 +74,14 @@ export const freeMovePosition = (dragContext: DragPosition) => {
     if (dragTarget) {
       dragTarget.alpha = 0.75;
       dragTarget.on("pointermove", onDragMove, dragTarget);
+
+      // 对操作栈插入拖拽前的数据
       const bootTarget = dragContext.bootTarget;
       const bootTargetPosition = dragContext.bootTarget.position;
-      const currentSceneId = dragContext.game.currentScene.id;
-      // 对操作栈插入拖拽前的数据
-      dragContext.actionStack[currentSceneId].push({
+      dragContext.game.currentScene.actionStack.push({
         position: { x: bootTargetPosition.x, y: bootTargetPosition.y },
-        target: bootTarget
+        target: bootTarget,
+        tool: dragContext.moveGroup
       });
     }
   }

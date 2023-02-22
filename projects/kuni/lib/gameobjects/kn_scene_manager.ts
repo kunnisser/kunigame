@@ -73,6 +73,8 @@ class KnSceneManager {
 
       const enterScene = to.enter();
 
+      this.game.currentScene.isBinded = true;
+
       // 开发模式
       this.game.editorTools = new EditorTools(this.game);
       return enterScene;

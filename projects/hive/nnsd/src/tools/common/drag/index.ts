@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-21 17:04:06
+ * @LastEditTime: 2023-02-22 14:56:21
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
  * @Description: ---- 公共拖动 ----
  */
@@ -16,6 +16,7 @@ import { Point } from "pixi.js";
 export interface DragActionStack {
   position: { x: number; y: number };
   target: any;
+  tool: any;
 }
 
 class DragPosition {
@@ -31,15 +32,13 @@ class DragPosition {
   arrowY: KnGraphics;
   relativeX: number;
   relativeY: number;
-  public actionStack: any;
   constructor(game, parent) {
     this.game = game;
     this.parent = parent;
     this.initial(game);
     this.bootTarget = null;
-    this.actionStack = {};
-    console.log(game.currentScene.id);
-    this.actionStack[game.currentScene.id] = [];
+    this.relativeX = 0;
+    this.relativeY = 0;
   }
 
   initial(game: Game) {
@@ -65,13 +64,35 @@ class DragPosition {
     this.anchorGroup.addChild(this.anchorHandler);
 
     this.bindDragToolsFunction(game);
+
+    // 定义拖拽撤销功能,覆盖式
+    document.onkeydown = (e) => {
+      const currentActionStack = this.game.currentScene.actionStack;
+      if (
+        currentActionStack &&
+        currentActionStack.length > 0 &&
+        e.key === "z" &&
+        (e.ctrlKey || e.metaKey)
+      ) {
+        const prevAction = currentActionStack.pop();
+        if (prevAction) {
+          const { x, y } = prevAction?.position;
+          console.log(x - this.relativeX, y - this.relativeY);
+          this.onClickDragging(prevAction?.target);
+          prevAction?.target.position.set(
+            x - this.relativeX,
+            y - this.relativeY
+          );
+          this.moveGroup.position.set(x, y);
+        }
+      }
+    };
   }
 
   // 场景进入后，对场景内的各个元素进行拖动组件生成
   bindDragToolsFunction(game) {
     const displayList = game.currentScene.children;
     this.recursionBind(displayList);
-
     freeMovePosition(this);
   }
 
@@ -143,14 +164,18 @@ class DragPosition {
 
   bootDrag = (item: any) => {
     item.interactive = true;
-    item.on("click", () => {
+
+    const bootDragClick = () => {
       this.onClickDragging(item);
-    });
+    };
+    // 注意，由于scene被缓存，需要先清空绑定事件
+    item.off("click").on("click", bootDragClick);
   };
 
   onClickDragging = (item: any) => {
     // 获取点击元素的全局坐标（考虑画布缩放）
-    (this.relativeX = 0), (this.relativeY = 0);
+    this.relativeX = 0;
+    this.relativeY = 0;
     const loopGlobalCoord = (item) => {
       if (item.parent.constructor.name === "KnGroup") {
         this.relativeX += item.parent.x;
@@ -180,7 +205,6 @@ class DragPosition {
     }
     this.bootTarget = item;
     this.moveGroup.visible = true;
-
     this.moveGroup.position.set(cloneItem.x, cloneItem.y);
     const borderSize = this.drawPositionEditorBorder(cloneItem);
     this.drawEditorAnchor(cloneItem, borderSize);

@@ -11,10 +11,12 @@ class KnScene extends Container {
   public isBoot: boolean;
   public resouces: object;
   public isCached: boolean;
+  public isBinded: boolean; // 用于判断各种事件是否已绑定
   public loader: PIXI.Loader;
   public dat?: any;
   public drawStage: KnGraphics;
   public tip: KnMessage;
+  public actionStack: Array<any>; // 工具操作栈
   constructor(game: object, key: string) {
     super();
     this.game = game;
@@ -22,6 +24,8 @@ class KnScene extends Container {
     this.name = key;
     this.isBoot = !1;
     this.isCached = !1;
+    this.isBinded = !1;
+    this.actionStack = [];
     this.initial();
   }
 
