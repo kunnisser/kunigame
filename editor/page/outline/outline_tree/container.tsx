@@ -2,13 +2,13 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-20 16:24:37
+ * @LastEditTime: 2023-02-23 16:06:11
  * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
  * @Description: ---- 场景元素列表 ----
  */
 import React, { useState, useEffect } from "react";
 import { message, Tree } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import Icon from "@ant-design/icons";
 import TextIcon from "editor@/assets/icon/text.svg";
@@ -16,11 +16,12 @@ import SpriteIcon from "editor@/assets/icon/sprite.svg";
 import GroupIcon from "editor@/assets/icon/group.svg";
 import GraphicsIcon from "editor@/assets/icon/graphics.svg";
 import { DataNode } from "antd/lib/tree";
+import { GET_GAME_ITEM } from "editor@/common/gameStore/scene/action";
 
 const ContainerTree = () => {
   const [displayList, setDisplayList] = useState([] as any);
   const [expandedKeys, setExpandedKeys] = useState([]);
-
+  const dispatch = useDispatch();
   const onExpand = (expandedKeys) => {
     setExpandedKeys(expandedKeys);
   };
@@ -136,13 +137,15 @@ const ContainerTree = () => {
   };
 
   const selectElementTarget = (keys: Array<string>, element: any) => {
-    console.log(keys, element.node.item);
+    // 设置选中的元素
+    dispatch({
+      type: GET_GAME_ITEM,
+      payload: element.node.item
+    });
     game.editorTools.dragTool.onClickDragging(element.node.item);
   };
 
   const dropHandler = (info) => {
-    console.log("把", info.dragNode);
-    console.log("移动到", info.node);
     const dragTargetNode = info.dragNode;
     const dropTargetNode = info.node;
     const dropPos = dropTargetNode.pos.split("-");

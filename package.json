@@ -52,6 +52,7 @@
     "pixi-tilemap": "^2.0.0",
     "raw-loader": "^0.5.1",
     "react": "^16.14.0",
+    "react-dat-gui": "^4.1.1",
     "react-dom": "^16.14.0",
     "react-redux": "^7.2.2",
     "react-scripts": "4.0.1",

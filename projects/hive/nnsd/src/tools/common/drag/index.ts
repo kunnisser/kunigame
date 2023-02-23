@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-22 17:31:57
+ * @LastEditTime: 2023-02-23 15:34:04
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
  * @Description: ---- 公共拖动 ----
  */
@@ -228,6 +228,7 @@ class DragPosition {
       cloneItem.anchor = item.anchor;
     }
     this.bootTarget = item;
+    this.game.editorTools.editTargetElement = item;
     this.moveGroup.visible = true;
     this.moveGroup.position.set(cloneItem.x, cloneItem.y);
     const borderSize = this.drawPositionEditorBorder(cloneItem);

@@ -16,6 +16,7 @@ const GameInitial = (view) => {
   // game.entryHive = GameHive["Welcome"];
   // game.sceneManager.dispatchEditScene(GameHive["Welcome"]);
 
+  window["game"] = game;
   return game;
 };
 

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-19 17:29:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-03 16:57:47
+ * @LastEditTime: 2023-02-23 16:02:31
  * @FilePath: /kunigame/editor/common/gameStore/scene/action.ts
  * @Description: ---- 场景状态action ----
  */
@@ -13,6 +13,7 @@ import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 const GET_SCENE_LIST = Symbol();
 const SET_CURRENT_SCENE = Symbol();
 const GET_GAME = Symbol();
+const GET_GAME_ITEM = Symbol();
 
 const getSceneList = (list: Array<KnScene>) => {
   return {
@@ -35,11 +36,20 @@ const getGame = (game: Game | null) => {
   };
 };
 
+const getGameItem = (item: any) => {
+  return {
+    type: GET_GAME_ITEM,
+    payload: item
+  };
+};
+
 export {
   GET_SCENE_LIST,
   getSceneList,
   SET_CURRENT_SCENE,
   setCurrentScene,
   GET_GAME,
-  getGame
+  getGame,
+  GET_GAME_ITEM,
+  getGameItem
 };
