@@ -23,6 +23,7 @@ interface EnterProps {
 
 export default class Game {
   public edit: symbol; // 编辑模式
+  public redux: any; // 外部redux对象
   public entryStateKey: string;
   public gui: any;
   public view: HTMLElement;

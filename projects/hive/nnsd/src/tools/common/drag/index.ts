@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-23 15:34:04
+ * @LastEditTime: 2023-02-24 10:32:12
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
  * @Description: ---- 公共拖动 ----
  */
@@ -12,6 +12,7 @@ import KnGraphics from "ts@/kuni/lib/gameobjects/kn_graphics";
 import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
 import { freeMovePosition } from "./dragEvent";
 import { Point } from "pixi.js";
+import { GET_GAME_ITEM } from "editor@/common/gameStore/scene/action";
 
 export interface DragActionStack {
   position: { prevX: number; prevY: number; nextX: number; nextY: number };
@@ -197,6 +198,13 @@ class DragPosition {
   };
 
   onClickDragging = (item: any) => {
+    // inspector注入目标
+    // 设置选中的元素
+    this.game.redux.dispatch({
+      type: GET_GAME_ITEM,
+      payload: item
+    });
+
     // 获取点击元素的全局坐标（考虑画布缩放）
     this.relativeX = 0;
     this.relativeY = 0;

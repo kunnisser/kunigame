@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 17:10:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-06 16:56:34
+ * @LastEditTime: 2023-02-24 10:31:39
  * @FilePath: /kunigame/editor/page/workbench/canvas.tsx
  * @Description: ---- 画布编辑 ----
  */
@@ -20,7 +20,9 @@ const StageEditor = (props) => {
   useEffect(() => {
     const view: any = document.getElementById("stage");
     const game: Game = GameInitial(view); // 初始化游戏场景列表
-
+    game.redux = {
+      dispatch
+    };
     // 获取所有游戏场景
     dispatch({
       type: GET_SCENE_LIST,

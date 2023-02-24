@@ -2,11 +2,12 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-22 17:27:41
+ * @LastEditTime: 2023-02-24 17:09:34
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
 
+import { GET_GAME_ITEM } from "editor@/common/gameStore/scene/action";
 import DragPosition from ".";
 
 /**
@@ -40,9 +41,16 @@ export const freeMovePosition = (dragContext: DragPosition) => {
   dragContext.game.stage
     .off("pointerupoutside")
     .on("pointerupoutside", dragEnd);
+
   // 定义覆盖式取消事件
   document.onkeyup = (e) => {
-    e.key === "Escape" && (dragContext.moveGroup.visible = false);
+    e.key === "Escape" &&
+      ((dragContext.moveGroup.visible = false),
+      // 同时清空选中元素
+      dragContext.game.redux.dispatch({
+        type: GET_GAME_ITEM,
+        payload: null
+      }));
   };
 
   /**
@@ -61,6 +69,12 @@ export const freeMovePosition = (dragContext: DragPosition) => {
       }
       dragTarget.id === "xAxis" && ((moveGroup.x = x), (bootTarget.x = x));
       dragTarget.id === "yAxis" && ((moveGroup.y = y), (bootTarget.y = y));
+
+      // 动态变更gameItem对象
+      game.redux.dispatch({
+        type: GET_GAME_ITEM,
+        payload: bootTarget
+      });
     }
   }
 
