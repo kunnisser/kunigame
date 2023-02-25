@@ -2,21 +2,19 @@
  * @Author: kunnisser
  * @Date: 2023-02-24 14:14:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-24 17:06:33
- * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/anchor.tsx
+ * @LastEditTime: 2023-02-25 20:05:50
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\anchor.tsx
  * @Description: ----  ----
  */
 import React from "react";
 import isString from "lodash.isstring";
 import cx from "classnames";
 import { Button, Space } from "antd";
+import Icon from "@ant-design/icons";
 import {
-  ArrowUpOutlined,
-  ArrowDownOutlined,
-  ArrowLeftOutlined,
-  ArrowRightOutlined,
   BorderOuterOutlined
 } from "@ant-design/icons";
+import { LeftArrow, LeftTopArrow, LeftBottomArrow, TopArrow, BottomArrow, RightArrow, RightBottomArrow, RightTopArrow } from 'editor@/assets/icon';
 
 interface DefaultProps {
   className?: String;
@@ -46,19 +44,19 @@ const DatAnchor = (props: DefaultProps) => {
 
   const anchorOptions = [
     {
-      icon: <ArrowUpOutlined />,
+      icon: <Icon component={LeftTopArrow as any} />,
       val: defaultVal.clone().set(0, 0)
     },
     {
-      icon: <ArrowUpOutlined />,
+      icon: <Icon component={TopArrow as any} />,
       val: defaultVal.clone().set(0.5, 0)
     },
     {
-      icon: <ArrowUpOutlined />,
+      icon: <Icon component={RightTopArrow as any} />,
       val: defaultVal.clone().set(1, 0)
     },
     {
-      icon: <ArrowLeftOutlined />,
+      icon: <Icon component={LeftArrow as any} />,
       val: defaultVal.clone().set(0, 0.5)
     },
     {
@@ -66,19 +64,19 @@ const DatAnchor = (props: DefaultProps) => {
       val: defaultVal.clone().set(0.5, 0.5)
     },
     {
-      icon: <ArrowRightOutlined />,
+      icon: <Icon component={RightArrow as any} />,
       val: defaultVal.clone().set(1, 0.5)
     },
     {
-      icon: <ArrowUpOutlined />,
+      icon: <Icon component={LeftBottomArrow as any} />,
       val: defaultVal.clone().set(0, 1)
     },
     {
-      icon: <ArrowDownOutlined />,
+      icon: <Icon component={BottomArrow as any} />,
       val: defaultVal.clone().set(0.5, 1)
     },
     {
-      icon: <ArrowDownOutlined />,
+      icon: <Icon component={RightBottomArrow as any} />,
       val: defaultVal.clone().set(1, 1)
     }
   ];
