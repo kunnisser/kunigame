@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-26 02:12:31
+ * @LastEditTime: 2023-02-27 00:21:12
  * @FilePath: \kunigame\editor\page\outline\inspector_config\index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -11,7 +11,6 @@ import DatGui from "react-dat-gui";
 import "editor@/assets/dat-gui.styl";
 import { useStore } from "react-redux";
 import Game from "ts@/kuni/lib/core";
-// import { CombineReducer } from "editor@/common/store";
 import { DatProperties, InspectorConfig } from "./config";
 
 const Inspector = () => {
