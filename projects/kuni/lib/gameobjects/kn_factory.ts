@@ -24,6 +24,7 @@ import { knTweenLine, KnTween } from "../gameobjects/kn_tween";
 import { Texture, AnimatedSprite, utils } from "pixi.js";
 import KnScene from "./kn_scene";
 import KnSprite from "./kn_sprite";
+import KnBitMapText from "./kn_bitmap_text";
 
 class KnFactory {
   public game: Game;
@@ -161,6 +162,10 @@ class KnFactory {
     const text = new KnText(id, this.game, content, entryStyle, anchor);
     text.scale.set(0.34);
     return text;
+  }
+
+  bitmapText(id: string, content: string, style: any, anchor?: Array<number>) {
+    return new KnBitMapText(id, this.game, content, style, anchor || [0, 0]);
   }
 
   section(

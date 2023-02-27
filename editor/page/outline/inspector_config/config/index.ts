@@ -2,14 +2,15 @@
  * @Author: kunnisser
  * @Date: 2023-02-27 00:17:14
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-27 00:17:25
- * @FilePath: \kunigame\editor\page\outline\inspector_config\config\index.ts
+ * @LastEditTime: 2023-02-27 15:00:04
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/config/index.ts
  * @Description: ---- 配置集合 ----
  */
 
-import DatGroupPropertyConfig from './group';
-import DatSpritePropertyConfig from './sprite';
-import DatTextPropertyConfig from './text';
+import DatBitMapTextPropertyConfig from "./bitmapText";
+import DatGroupPropertyConfig from "./group";
+import DatSpritePropertyConfig from "./sprite";
+import DatTextPropertyConfig from "./text";
 
 export interface DatProperties {
   label: string;
@@ -26,6 +27,7 @@ const InspectorConfig = {
   KnText: DatTextPropertyConfig,
   KnGroup: DatGroupPropertyConfig,
   KnSprite: DatSpritePropertyConfig,
+  KnBitMapText: DatBitMapTextPropertyConfig
 };
 
 export { InspectorConfig };

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-24 14:14:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-27 11:05:06
+ * @LastEditTime: 2023-02-27 16:56:03
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/anchor.tsx
  * @Description: ----  ----
  */
@@ -22,18 +22,7 @@ import {
   RightBottomArrow,
   RightTopArrow
 } from "editor@/assets/icon";
-
-interface DefaultProps {
-  className?: String;
-  style?: "any";
-  data?: any;
-  path: string;
-  label: String;
-  labelWidth?: String;
-  liveUpdate?: Boolean;
-  onUpdate?: Function;
-  _onUpdateValue?: Function;
-}
+import { DefaultProps } from "./interface";
 
 const DatAnchor = (props: DefaultProps) => {
   const handleChange = (val) => {

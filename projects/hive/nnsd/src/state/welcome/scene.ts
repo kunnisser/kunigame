@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-17 11:10:29
+ * @LastEditTime: 2023-02-27 17:31:53
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -21,7 +21,9 @@ class Welcome extends KnScene {
     this.key = key;
     this.resouces = {
       bg: "/projects/hive/nnsd/assets/images/bg002.jpg",
-      logo: "/projects/hive/nnsd/assets/images/logo.png"
+      logo: "/projects/hive/nnsd/assets/images/logo.png",
+      font_a: "/projects/hive/nnsd/assets/fonts/font_a.fnt",
+      font_b: "/projects/hive/nnsd/assets/fonts/font_b.fnt"
     };
   }
 
@@ -61,7 +63,14 @@ class Welcome extends KnScene {
       this.game.config.half_w * 0.5,
       this.game.config.half_h * 0.5
     );
+
+    const bmText = this.game.add.bitmapText("点阵文字示例", "1531230", {
+      fontSize: 35,
+      fontName: "font_b"
+    });
+    bmText.position.set(600, 300);
     this.addChild(demo1Text);
+    this.addChild(bmText);
     this.sortChildren();
   }
 

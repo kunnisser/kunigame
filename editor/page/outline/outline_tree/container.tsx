@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-24 10:26:11
+ * @LastEditTime: 2023-02-27 14:57:40
  * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
  * @Description: ---- 场景元素列表 ----
  */
@@ -73,6 +73,10 @@ const ContainerTree = () => {
       "KnSprite": {
         key: "id",
         icon: SpriteIcon
+      },
+      "KnBitMapText": {
+        key: "id",
+        icon: TextIcon
       }
     };
     const type: string = item.constructor.name;

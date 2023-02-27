@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-24 21:50:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-14 15:16:04
+ * @LastEditTime: 2023-02-27 17:29:07
  * @FilePath: /kunigame/editor/page/outline/outline_tree/index.tsx
  * @Description: ---- 大纲树状结构 ----
  */
@@ -13,7 +13,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import { MenuOperation } from "../menu_operation/index";
-import { setCurrentScene } from "editor@/common/gameStore/scene/action";
+import {
+  GET_GAME_ITEM,
+  setCurrentScene
+} from "editor@/common/gameStore/scene/action";
 import {
   BarsOutlined,
   AppstoreOutlined,
@@ -179,6 +182,11 @@ const OutlineTree = () => {
               if (!currentScene || currentScene.id !== pickedScene.id) {
                 currentScene && game.sceneManager.exitEditScene(currentScene);
                 dispatch(setCurrentScene(pickedScene));
+                // 清空当前目标
+                dispatch({
+                  type: GET_GAME_ITEM,
+                  payload: null
+                });
               }
             }
           }}
