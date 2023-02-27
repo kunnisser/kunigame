@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-24 21:26:21
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-23 10:55:48
+ * @LastEditTime: 2023-02-27 10:46:16
  * @FilePath: /kunigame/editor/page/outline/index.tsx
  * @Description: ---- 项目大纲文件显示 ----
  */
@@ -29,6 +29,7 @@ const KnTabs = (props: TabsProps) => {
         {props.tabs.map((tab, index) => {
           return (
             <TabPane
+              className="overflow-scroller"
               tab={
                 <span>
                   {tab.icon}

@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-02-24 14:14:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-25 20:05:50
- * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\anchor.tsx
+ * @LastEditTime: 2023-02-27 11:05:06
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/anchor.tsx
  * @Description: ----  ----
  */
 import React from "react";
@@ -11,10 +11,17 @@ import isString from "lodash.isstring";
 import cx from "classnames";
 import { Button, Space } from "antd";
 import Icon from "@ant-design/icons";
+import { BorderOuterOutlined } from "@ant-design/icons";
 import {
-  BorderOuterOutlined
-} from "@ant-design/icons";
-import { LeftArrow, LeftTopArrow, LeftBottomArrow, TopArrow, BottomArrow, RightArrow, RightBottomArrow, RightTopArrow } from 'editor@/assets/icon';
+  LeftArrow,
+  LeftTopArrow,
+  LeftBottomArrow,
+  TopArrow,
+  BottomArrow,
+  RightArrow,
+  RightBottomArrow,
+  RightTopArrow
+} from "editor@/assets/icon";
 
 interface DefaultProps {
   className?: String;
@@ -94,7 +101,7 @@ const DatAnchor = (props: DefaultProps) => {
         size={[50, 20]}
         wrap
         align="center"
-        style={{ padding: "10px 0 10px 50px" }}
+        style={{ padding: "10px 0 10px 46px" }}
       >
         {anchorOptions.map((option) => {
           return (

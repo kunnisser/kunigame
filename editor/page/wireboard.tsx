@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-23 14:15:57
+ * @LastEditTime: 2023-02-27 10:46:22
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -27,6 +27,7 @@ import {
   BulbOutlined,
   DesktopOutlined
 } from "@ant-design/icons";
+import "editor@/assets/index.styl";
 
 export const WrapContext = createContext({});
 
@@ -100,7 +101,7 @@ const WireBoard = (props) => {
             <div className="logo">Kuni(kunigame)</div>
             <KnHeader />
           </Header>
-          <Layout>
+          <Layout className="vh-scroll">
             <aside
               style={{
                 display: "flex",
