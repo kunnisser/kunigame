@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-27 16:51:41
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-27 17:31:03
+ * @LastEditTime: 2023-02-28 16:18:00
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/resource.tsx
  * @Description: ---- inspector - Resource - checkbox ----
  */
@@ -10,25 +10,24 @@ import React from "react";
 import { DefaultProps } from "./interface";
 import isString from "lodash.isstring";
 import cx from "classnames";
-import { Button, Space } from "antd";
+import { Radio } from "antd";
 import { useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
-
-const FONT_TYPE = 6;
+import { RadioChangeEvent } from "antd/lib/radio";
 
 const DatResourcePicker = (props: DefaultProps) => {
-  const handleChange = (val) => {
+  const handleChange = (e: RadioChangeEvent) => {
     const { liveUpdate, _onUpdateValue, onUpdate, path } = props;
-    _onUpdateValue && _onUpdateValue(path, val);
+    _onUpdateValue && _onUpdateValue(path, e.target.value);
     if (liveUpdate) {
-      onUpdate && onUpdate(val);
+      onUpdate && onUpdate(e.target.value);
     }
   };
   const game = useSelector((store: CombineReducer) => store.sceneReducer.game);
   const resources: Array<any> = Object.values(game.loader.resources);
   const fontResources: Array<string> = resources
     .filter((res) => {
-      return res.type === FONT_TYPE;
+      return res.bitmapFont;
     })
     .map((item) => item.name);
   const { path, label, className } = props;
@@ -38,7 +37,7 @@ const DatResourcePicker = (props: DefaultProps) => {
 
   return (
     <li
-      className={cx("cr", "select", className)}
+      className={cx("cr", "radio", className)}
       style={{
         width: labelWidth
       }}
@@ -46,24 +45,15 @@ const DatResourcePicker = (props: DefaultProps) => {
       <div>
         <label>{labelText}</label>
       </div>
-      <Space
-        size={[50, 20]}
-        wrap
-        align="center"
-        style={{ padding: "10px 0 10px 46px" }}
-      >
+      <Radio.Group onChange={handleChange} value={defaultVal}>
         {fontResources.map((name) => {
           return (
-            <Button
-              key={name}
-              type={defaultVal === name ? "primary" : "default"}
-              onClick={() => handleChange(name)}
-            >
+            <Radio key={name} value={name}>
               {name}
-            </Button>
+            </Radio>
           );
         })}
-      </Space>
+      </Radio.Group>
     </li>
   );
 };
