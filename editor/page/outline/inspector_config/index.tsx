@@ -2,22 +2,23 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-28 15:08:03
+ * @LastEditTime: 2023-03-01 17:06:36
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
 import React, { useEffect, useState } from "react";
 import DatGui from "react-dat-gui";
 import "editor@/assets/dat-gui.styl";
-import { useStore } from "react-redux";
+import { useDispatch, useStore } from "react-redux";
 import Game from "ts@/kuni/lib/core";
 import { DatProperties, InspectorConfig } from "./config";
+import { updateEditGameItem } from "editor@/common/gameStore/scene/action";
 
 const Inspector = () => {
   const [gameItem, setGameItem] = useState(null as any);
   const [gameItemType, setGameItemType] = useState(null as any);
   const store = useStore();
-
+  const dispatch = useDispatch();
   useEffect(() => {
     store.subscribe(() => {
       const item = store.getState().sceneReducer.gameItem;
@@ -59,12 +60,14 @@ const Inspector = () => {
     return retArr;
   };
 
-  const handleUpdate = (newData: any) => {
+  const handleUpdate = (newData: any, path: string) => {
     const game: Game = store.getState().sceneReducer.game;
     const gameItem = store.getState().sceneReducer.gameItem;
-
+    const editGameItem = store.getState().sceneReducer.editGameItem;
+    editGameItem[path] = newData[path];
+    dispatch(updateEditGameItem(editGameItem));
+    console.log(editGameItem);
     const keysArray = Object.keys(newData);
-
     for (const keysCombine of keysArray) {
       const keys = keysCombine.split("-");
       // 链式调用赋值

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-27 14:57:40
+ * @LastEditTime: 2023-03-01 16:30:02
  * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
  * @Description: ---- 场景元素列表 ----
  */
@@ -200,8 +200,6 @@ const ContainerTree = () => {
           // where to insert 示例添加到头部，可以是随意位置
           item.children.unshift(dragObj);
           item.item.addChildAt(dragObj.item, 0);
-          // in previous version, we use item.children.push(dragObj) to insert the
-          // item to the tail of the children
         });
       } else {
         let ar: DataNode[] = [];
