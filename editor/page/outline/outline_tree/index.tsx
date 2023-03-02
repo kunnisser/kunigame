@@ -2,18 +2,19 @@
  * @Author: kunnisser
  * @Date: 2021-01-24 21:50:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-01 16:59:36
+ * @LastEditTime: 2023-03-02 16:52:01
  * @FilePath: /kunigame/editor/page/outline/outline_tree/index.tsx
  * @Description: ---- 大纲树状结构 ----
  */
 
 import React, { useState, useEffect } from "react";
-import { Tree, Input, Dropdown } from "antd";
+import { Tree, Input, Dropdown, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import { MenuOperation } from "../menu_operation/index";
 import {
+  clearEditGameItem,
   getGameItem,
   setCurrentScene
 } from "editor@/common/gameStore/scene/action";
@@ -23,6 +24,9 @@ import {
   CaretDownOutlined
 } from "@ant-design/icons";
 import Game from "ts@/kuni/lib/core";
+import { isObjectEmpty } from "editor@/tool";
+
+const { confirm } = Modal;
 
 const OutlineTree = () => {
   const [displayList, setDisplayList] = useState([]);
@@ -30,7 +34,7 @@ const OutlineTree = () => {
   const [searchValue, setSearchValue] = useState("");
   const [autoExpandParent, setAutoExpandParent] = useState(true);
   const [rightClickType, setRightClickType] = useState();
-
+  const [selectedKeys, setSelectedKeys] = useState([] as any);
   const { CreateSceneMenu } = MenuOperation;
 
   const onExpand = (expandedKeys) => {
@@ -91,6 +95,10 @@ const OutlineTree = () => {
 
   const currentScene = useSelector(
     (store: CombineReducer) => store.sceneReducer.currentScene
+  );
+
+  const editGameItem = useSelector(
+    (store: CombineReducer) => store.sceneReducer.editGameItem
   );
 
   // 遍历添加查询样式
@@ -155,6 +163,15 @@ const OutlineTree = () => {
     // </Menu>
   );
 
+  //跳转场景
+  const changeAppointScene = (pickedScene: any) => {
+    setSelectedKeys([pickedScene.name]);
+    currentScene && game.sceneManager.exitEditScene(currentScene);
+    dispatch(setCurrentScene(pickedScene));
+    // 清空当前目标
+    dispatch(getGameItem(null));
+  };
+
   return (
     <div>
       <Input
@@ -170,6 +187,7 @@ const OutlineTree = () => {
           showIcon
           onExpand={onExpand}
           expandedKeys={expandedKeys}
+          selectedKeys={selectedKeys}
           switcherIcon={<CaretDownOutlined />}
           defaultExpandAll
           autoExpandParent={autoExpandParent}
@@ -177,13 +195,23 @@ const OutlineTree = () => {
           onSelect={(selected: Array<string>) => {
             const key: string = selected[0];
             const pickedScene: KnScene | null = game.editHive[key];
+
             if (pickedScene) {
               // 设置当前编辑游戏场景
               if (!currentScene || currentScene.id !== pickedScene.id) {
-                currentScene && game.sceneManager.exitEditScene(currentScene);
-                dispatch(setCurrentScene(pickedScene));
-                // 清空当前目标
-                dispatch(getGameItem(null));
+                // confirm是否提交操作
+                if (isObjectEmpty(editGameItem)) {
+                  changeAppointScene(pickedScene);
+                } else {
+                  confirm({
+                    title: "还存在编辑记录，确认先进行保存么？",
+                    onOk() {
+                      dispatch(clearEditGameItem());
+
+                      changeAppointScene(pickedScene);
+                    }
+                  });
+                }
               }
             }
           }}

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-01 17:06:36
+ * @LastEditTime: 2023-03-02 14:09:29
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -63,10 +63,11 @@ const Inspector = () => {
   const handleUpdate = (newData: any, path: string) => {
     const game: Game = store.getState().sceneReducer.game;
     const gameItem = store.getState().sceneReducer.gameItem;
+    const gameItemName = gameItem.name;
     const editGameItem = store.getState().sceneReducer.editGameItem;
-    editGameItem[path] = newData[path];
+    editGameItem[gameItemName] = editGameItem[gameItemName] || {};
+    editGameItem[gameItemName][path] = newData[path];
     dispatch(updateEditGameItem(editGameItem));
-    console.log(editGameItem);
     const keysArray = Object.keys(newData);
     for (const keysCombine of keysArray) {
       const keys = keysCombine.split("-");

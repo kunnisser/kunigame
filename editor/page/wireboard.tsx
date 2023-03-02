@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-27 10:46:22
+ * @LastEditTime: 2023-03-02 16:20:27
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -16,7 +16,7 @@ import ContainerTree from "./outline/outline_tree/container";
 import StageEditor from "./workbench/canvas";
 import useModal from "editor@/feedback/modalcore";
 import ErrorBoundary from "./error_boundary";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch, useStore } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import AssetsList from "./outline/outline_tree/assets";
 import Inspector from "./outline/inspector_config";
@@ -28,6 +28,7 @@ import {
   DesktopOutlined
 } from "@ant-design/icons";
 import "editor@/assets/index.styl";
+import { clearEditGameItem } from "editor@/common/gameStore/scene/action";
 
 export const WrapContext = createContext({});
 
@@ -36,7 +37,10 @@ const { Header, Footer, Sider, Content } = Layout;
 const WireBoard = (props) => {
   const [childModal, openChildModal, closeChildModal] = useModal({});
   const [modal, openModal, closeModal] = useModal({ childModal: childModal });
+  const store = useStore();
+  const dispatch = useDispatch();
   const [sceneId, setCurrentSceneId] = useState("");
+  const [isNewGameEdit, setIsNewGameEdit] = useState(false);
   const CommonWidget = {
     openModal,
     closeModal,
@@ -67,7 +71,8 @@ const WireBoard = (props) => {
     {
       name: sceneId,
       childComponent: StageEditor,
-      icon: <DesktopOutlined />
+      icon: <DesktopOutlined />,
+      suffixIcon: isNewGameEdit ? "*" : ""
     }
   ];
 
@@ -88,10 +93,28 @@ const WireBoard = (props) => {
   ];
 
   useEffect(() => {
+    store.subscribe(() => {
+      checkEditTodoList();
+    });
+    document.addEventListener("keydown", (e: KeyboardEvent) => {
+      if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        dispatch(clearEditGameItem());
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     if (selector) {
       setCurrentSceneId(selector.id);
     }
   }, [selector]);
+
+  const checkEditTodoList = () => {
+    const editGameItem = store.getState().sceneReducer.editGameItem;
+    const bool = Object.keys(editGameItem).length > 0;
+    setIsNewGameEdit(bool);
+  };
 
   return (
     <WrapContext.Provider value={CommonWidget}>

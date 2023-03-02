@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-24 17:09:34
+ * @LastEditTime: 2023-03-02 14:20:24
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
@@ -43,7 +43,7 @@ export const freeMovePosition = (dragContext: DragPosition) => {
     .on("pointerupoutside", dragEnd);
 
   // 定义覆盖式取消事件
-  document.onkeyup = (e) => {
+  document.onkeyup = (e: KeyboardEvent) => {
     e.key === "Escape" &&
       ((dragContext.moveGroup.visible = false),
       // 同时清空选中元素

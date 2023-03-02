@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-24 21:26:21
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-27 10:46:16
+ * @LastEditTime: 2023-03-02 11:11:45
  * @FilePath: /kunigame/editor/page/outline/index.tsx
  * @Description: ---- 项目大纲文件显示 ----
  */
@@ -17,6 +17,7 @@ interface TabsProps {
     /** tabs组件包裹的子组件 */
     childComponent: any;
     icon: any;
+    suffixIcon?: any;
   }>;
   initialKey: string;
 }
@@ -34,6 +35,7 @@ const KnTabs = (props: TabsProps) => {
                 <span>
                   {tab.icon}
                   {tab.name}
+                  {tab.suffixIcon}
                 </span>
               }
               key={props.initialKey + index}

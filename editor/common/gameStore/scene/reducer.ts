@@ -2,12 +2,13 @@
  * @Author: kunnisser
  * @Date: 2021-02-22 09:21:27
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-01 17:07:44
+ * @LastEditTime: 2023-03-02 14:31:37
  * @FilePath: /kunigame/editor/common/gameStore/scene/reducer.ts
  * @Description: ---- 操作scene状态 ----
  */
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import {
+  CLEAR_EDIT_GAME_ITEM,
   GET_GAME,
   GET_GAME_ITEM,
   GET_SCENE_LIST,
@@ -29,7 +30,7 @@ const initialState: SceneState = {
   currentScene: null,
   game: null,
   gameItem: null,
-  editGameItem: []
+  editGameItem: {}
 };
 
 const _getSceneList = (state: SceneState, action) => {
@@ -67,12 +68,20 @@ const _updateEditGameItem = (state: SceneState, action) => {
   };
 };
 
+const _clearEditGameItem = (state: SceneState, action) => {
+  return {
+    ...state,
+    editGameItem: action.payload
+  };
+};
+
 const SceneMap = {};
 SceneMap[GET_SCENE_LIST] = _getSceneList;
 SceneMap[SET_CURRENT_SCENE] = _setCurrentScene;
 SceneMap[GET_GAME] = _getGame;
 SceneMap[GET_GAME_ITEM] = _getGameItem;
 SceneMap[UPDATE_EDIT_GAME_ITEM] = _updateEditGameItem;
+SceneMap[CLEAR_EDIT_GAME_ITEM] = _clearEditGameItem;
 
 const sceneReducer = (state = initialState, action) => {
   if (SceneMap[action.type]) {

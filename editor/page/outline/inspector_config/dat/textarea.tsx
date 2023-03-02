@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-28 14:21:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-28 14:50:50
+ * @LastEditTime: 2023-03-02 16:31:37
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/textarea.tsx
  * @Description: ---- 多行文本设置 ----
  */
@@ -33,11 +33,15 @@ const DatTextAreaPicker = (props: DefaultProps) => {
         width: labelWidth
       }}
     >
-      <div className="cr-item">
+      <div>
         <label>{labelText}</label>
       </div>
-      <div>
-        <textarea value={defaultVal} onChange={handleChange}></textarea>
+      <div className="cr-item">
+        <textarea
+          value={defaultVal}
+          rows={3}
+          onChange={handleChange}
+        ></textarea>
       </div>
     </li>
   );
