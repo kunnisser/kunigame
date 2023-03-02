@@ -12,18 +12,18 @@ import GameInitial from "ts@/hive/nnsd/main";
 import { useDispatch } from "react-redux";
 import { getGame, getSceneList } from "editor@/common/gameStore/scene/action";
 
-const StageEditor = (props) => {
+const StageEditor = props => {
   const dispatch = useDispatch();
   useEffect(() => {
     const view: any = document.getElementById("stage");
     const game: Game = GameInitial(view); // 初始化游戏场景列表
+
     game.redux = {
       dispatch
-    };
-    // 获取所有游戏场景
-    dispatch(getSceneList(game.sceneManager.scenes));
+    }; // 获取所有游戏场景
 
-    // 传递游戏实例
+    dispatch(getSceneList(game.sceneManager.scenes)); // 传递游戏实例
+
     dispatch(getGame(game));
   }, []);
   return <div id="stage"></div>;
