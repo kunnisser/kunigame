@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-25 17:08:05
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-02 17:28:36
+ * @LastEditTime: 2023-03-06 14:41:19
  * @FilePath: /kunigame/server/route/scene/api.js
  * @Description: ---- 场景接口 ----
  */
@@ -22,7 +22,8 @@ router.post("/create", async (ctx) => {
   };
 });
 
-router.get("/update", async (ctx) => {
+router.post("/update", async (ctx) => {
+  console.log(ctx.request.body);
   ctx.body = {
     code: CODE.SUCCESS,
     msg: "更新成功",
