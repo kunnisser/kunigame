@@ -1,19 +1,17 @@
 /*
  * @Author: kunnisser
- * @Date: 2021-02-26 14:50:22
+ * @Date: 2023-03-07 10:12:37
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-07 15:38:59
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
- * @Description: ---- 示例欢迎场景 ----
+ * @LastEditTime: 2023-03-07 10:18:26
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/ast/scene.ts
+ * @Description: ----  ----
  */
 
-import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import Game from "ts@/kuni/lib/core";
+import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import KnText from "ts@/kuni/lib/gameobjects/kn_text";
 
-class Start extends KnScene {
-  game: Game;
-  demoTest: KnText;
+class AST extends KnScene {
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
@@ -56,7 +54,6 @@ class Start extends KnScene {
       [0.5, 0.5]
     );
     demo2Text.position.set(400, 400);
-
     testGroup.addChild(demoText);
     testGroup.addChild(demo1Text);
     testGroup.addChild(demo2Text);
@@ -75,4 +72,4 @@ class Start extends KnScene {
   }
 }
 
-export default Start;
+export default AST;

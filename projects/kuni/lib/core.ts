@@ -82,6 +82,8 @@ export default class Game {
       resolution: this.dpr
     });
 
+    globalThis.__PIXI_APP__ = this.app;
+
     this.view.appendChild(this.app.view);
 
     // 注册gui调试实例

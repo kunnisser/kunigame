@@ -1,10 +1,13 @@
 // 场景映射配置
 import Start from "./start/scene";
 import Welcome from "./welcome/scene";
+import Ast from "./ast/scene";
+
 // import Preloader from "ts@/kuni/lib/loader/kn_preloader";
 const StateHiveKey = {
   Welcome: Welcome,
-  Start: Start
+  Start: Start,
+  Ast: Ast
 };
 
 const StateHive = (game) => {
