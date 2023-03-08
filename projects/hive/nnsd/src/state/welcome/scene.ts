@@ -35,8 +35,8 @@ class Welcome extends KnScene {
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
     const logo: Sprite = this.game.add.image("logo", this);
-    logo.y = 453;
-    logo.x = 353;
+    logo.y = 254;
+    logo.x = 676;
     logo.anchor.set(0.5, 0.5);
     const demoText: KnText = this.game.add.text("demoText", "WELCOME", {}, [0.5, 0.5]);
     demoText.visible = true;
@@ -47,30 +47,32 @@ class Welcome extends KnScene {
     demoText.style.dropShadowColor = "#57d8d8";
     demoText.style.fill = "#ffffff";
     demoText.style.strokeThickness = 20;
-    demoText.style.stroke = "#df0000";
-    demoText.text = "cams";
-    demoText.x = 1129;
-    demoText.y = this.game.config.half_h;
+    demoText.style.stroke = "#0058df";
+    demoText.text = "Aion";
+    demoText.x = 1059;
+    demoText.y = 236;
     demoText.style.fontSize = 500;
     const demo1Text: KnText = this.game.add.text("demo1Text", "测试", {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
+    demo1Text.text = "kunnisser";
     demo1Text.x = 1129;
     demo1Text.y = 696;
-    demo1Text.scale.y = 2.8;
-    demo1Text.scale.x = 4.2;
+    demo1Text.scale.y = 1;
+    demo1Text.scale.x = 1;
     const bmText = this.game.add.bitmapText("bmText", "153112312312313123\n23012313212313\n1", {
       fontSize: 35,
       fontName: "Desyrel"
     });
+    bmText.align = "center";
     bmText.anchor.set(0.5, 0.5);
-    bmText.y = 344;
-    bmText.x = 1137;
+    bmText.y = 509;
+    bmText.x = 1032;
     bmText.letterSpacing = 11;
     bmText.fontSize = 100;
     bmText.fontName = "Desyrel";
-    bmText.text = "cams";
+    bmText.text = "somewhere over\nthe rainbow";
     this.addChild(demoText);
     this.addChild(demo1Text);
     this.addChild(bmText);

@@ -2,18 +2,14 @@
  * @Author: kunnisser
  * @Date: 2021-03-07 21:38:50
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-07 00:15:13
+ * @LastEditTime: 2023-03-08 23:22:11
  * @FilePath: \kunigame\server\route\project\path\index.js
  * @Description: ---- 项目路径汇总 ----
  */
 const path = require('path');
-const os = require('os');
 
 // 游戏项目目录路径
-const basePath =
-  os.type() == 'Darwin'
-    ? path.normalize(process.cwd())
-    : path.normalize(path.resolve(process.cwd(), '..'));
+const basePath = path.normalize(process.cwd());
 
 // 项目工程路径
 const projectBasePath = path.normalize(path.resolve(basePath, 'projects'));
