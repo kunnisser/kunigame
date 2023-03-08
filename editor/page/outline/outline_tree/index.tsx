@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-24 21:50:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-02 16:52:01
+ * @LastEditTime: 2023-03-08 17:06:35
  * @FilePath: /kunigame/editor/page/outline/outline_tree/index.tsx
  * @Description: ---- 大纲树状结构 ----
  */
@@ -25,6 +25,8 @@ import {
 } from "@ant-design/icons";
 import Game from "ts@/kuni/lib/core";
 import { isObjectEmpty } from "editor@/tool";
+import { updateScene } from "editor@/api/request/scene";
+import { EditGameName } from "editor@/page/workbench/canvas";
 
 const { confirm } = Modal;
 
@@ -206,6 +208,11 @@ const OutlineTree = () => {
                   confirm({
                     title: "还存在编辑记录，确认先进行保存么？",
                     onOk() {
+                      updateScene({
+                        projectName: EditGameName,
+                        sceneName: currentScene.id,
+                        editRecords: editGameItem
+                      });
                       dispatch(clearEditGameItem());
 
                       changeAppointScene(pickedScene);

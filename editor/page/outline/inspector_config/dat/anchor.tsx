@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-24 14:14:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-27 16:56:03
+ * @LastEditTime: 2023-03-08 15:45:48
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/anchor.tsx
  * @Description: ----  ----
  */
@@ -36,44 +36,45 @@ const DatAnchor = (props: DefaultProps) => {
   const { path, label, className } = props;
   const labelText = isString(label) ? label : path;
   const labelWidth = "100%";
-  const defaultVal = props.data ? props.data[path] : [];
+  const { x, y } = props.data ? props.data[path] : { x: 0, y: 0 };
+  const defaultVal = { x, y };
 
   const anchorOptions = [
     {
       icon: <Icon component={LeftTopArrow as any} />,
-      val: defaultVal.clone().set(0, 0)
+      val: { x: 0, y: 0 }
     },
     {
       icon: <Icon component={TopArrow as any} />,
-      val: defaultVal.clone().set(0.5, 0)
+      val: { x: 0.5, y: 0 }
     },
     {
       icon: <Icon component={RightTopArrow as any} />,
-      val: defaultVal.clone().set(1, 0)
+      val: { x: 1, y: 0 }
     },
     {
       icon: <Icon component={LeftArrow as any} />,
-      val: defaultVal.clone().set(0, 0.5)
+      val: { x: 0, y: 0.5 }
     },
     {
       icon: <BorderOuterOutlined />,
-      val: defaultVal.clone().set(0.5, 0.5)
+      val: { x: 0.5, y: 0.5 }
     },
     {
       icon: <Icon component={RightArrow as any} />,
-      val: defaultVal.clone().set(1, 0.5)
+      val: { x: 1, y: 0.5 }
     },
     {
       icon: <Icon component={LeftBottomArrow as any} />,
-      val: defaultVal.clone().set(0, 1)
+      val: { x: 0, y: 1 }
     },
     {
       icon: <Icon component={BottomArrow as any} />,
-      val: defaultVal.clone().set(0.5, 1)
+      val: { x: 0.5, y: 1 }
     },
     {
       icon: <Icon component={RightBottomArrow as any} />,
-      val: defaultVal.clone().set(1, 1)
+      val: { x: 1, y: 1 }
     }
   ];
   return (

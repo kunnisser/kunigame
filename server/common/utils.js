@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-03-04 21:23:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-07 14:10:46
+ * @LastEditTime: 2023-03-08 10:16:00
  * @FilePath: /kunigame/server/common/utils.js
  * @Description: ---- 公共操作 ----
  */
@@ -28,7 +28,11 @@ const findAstNode = (ast, visitor) => {
 };
 
 const astToFile = (ast, path) => {
-  const code = babelGenerator(ast).code;
+  const code = babelGenerator(ast, {
+    jsescOption: {
+      minimal: true
+    }
+  }).code;
   fs.writeFileSync(path, code);
 };
 

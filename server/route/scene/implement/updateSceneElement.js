@@ -10,6 +10,11 @@ const path = require("path");
 const T = require("@babel/types");
 const { hivePath } = require("../../project/path/index");
 const Utils = require("../../../common/utils.js");
+const {
+  convertGamePropertyToExpression,
+  generateExpressionStatement,
+  transformToArray
+} = require("./generateElementExpression");
 const suffixName = "scene.ts";
 
 /**
@@ -31,42 +36,76 @@ const updateScene = (requestParams) => {
   const actionKeys = Object.keys(editRecords);
   const ast = Utils.fileToAst(targetPath);
 
-  const transformToArray = (target, len) => {
-    if (len > 0 && target.object.type === "MemberExpression") {
-      const newTarget = target.object;
-      len -= 1;
-      return [transformToArray(newTarget, len), target.property.name];
-    } else if (target.object.name) {
-      return [[target.object.name], target.property.name];
-    }
-  };
-
   actionKeys.map((key) => {
     Utils.findAstNode(ast, {
-      ExpressionStatement: (path) => {
-        const left = path.node.expression.left;
-        if (
-          left &&
-          left.object &&
-          (left.object.type === "Identifier" ||
-            left.object.type === "MemberExpression")
-        ) {
-          const values = editRecords[key];
-          const valueKeys = Object.keys(values);
-          for (let valueKey of valueKeys) {
-            const keyStrArray = valueKey.split("-");
-            const keyVAlue = values[valueKey];
-            const len = keyStrArray.length;
-            const flatKeys = transformToArray(left, len)
-              .flat(Infinity)
-              .join("-");
+      VariableDeclaration: (path) => {
+        if (path.node.declarations[0].id.name === key) {
+          // 对应key游戏场景元素的相关属性操作
+          const record = editRecords[key];
+          // 操作名数组
+          const recordKeys = Object.keys(record);
+          for (let recordKey of recordKeys) {
+            let isNewExpression = true;
+            const recordKeyArr = recordKey.split("-");
+            const recordValue = record[recordKey];
+            const len = recordKeyArr.length;
 
-            console.log(flatKeys === key + "-" + valueKey);
+            Utils.findAstNode(ast, {
+              // 过滤已有的等号表达式
+              ExpressionStatement: (path) => {
+                const left = path.node.expression.left;
+                if (
+                  left &&
+                  left.object &&
+                  (left.object.type === "Identifier" ||
+                    left.object.type === "MemberExpression")
+                ) {
+                  // 先把MemberExpression转多维数组，然后扁平化进行比对
+                  const flatKeys = transformToArray(left, len)
+                    .flat(Infinity)
+                    .join("-");
+                  if (flatKeys === key + "-" + recordKey) {
+                    isNewExpression = false;
+                    console.log(flatKeys, "update");
+                    path.node.expression.right =
+                      convertGamePropertyToExpression(recordValue);
+                    path.stop();
+                  }
+                }
+              },
 
-            if (flatKeys === key + "-" + valueKey) {
-              path.node.expression.right = T.numericLiteral(keyVAlue);
-            }
+              // 过滤已有的等号表达式
+              CallExpression: (path) => {
+                const memberObject = path.node.callee.object;
+                const operateProperty = path.node.callee.property;
+                if (
+                  memberObject &&
+                  memberObject.type === "MemberExpression" &&
+                  operateProperty
+                ) {
+                  if (
+                    memberObject.object.name === key &&
+                    memberObject.property.name === recordKey
+                  ) {
+                    console.log(key, recordKey);
+                    isNewExpression = false;
+                    path.node.arguments = [
+                      convertGamePropertyToExpression(recordValue.x),
+                      convertGamePropertyToExpression(recordValue.y)
+                    ];
+                    path.stop();
+                  }
+                }
+              }
+            });
+
+            // 插入 赋值表达式
+            isNewExpression &&
+              path.insertAfter(
+                generateExpressionStatement(editRecords, key, recordKey)
+              );
           }
+          path.stop();
         }
       }
     });

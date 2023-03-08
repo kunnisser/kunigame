@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-06 14:48:05
+ * @LastEditTime: 2023-03-08 16:49:28
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -31,6 +31,7 @@ import "editor@/assets/index.styl";
 import { clearEditGameItem } from "editor@/common/gameStore/scene/action";
 import { updateScene } from "editor@/api/request/scene";
 import { EditGameName } from "editor@/page/workbench/canvas";
+import { isObjectEmpty } from "editor@/tool";
 
 export const WrapContext = createContext({});
 
@@ -102,15 +103,17 @@ const WireBoard = (props) => {
       if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
         const editGameItem = store.getState().sceneReducer.editGameItem;
-        const currentScene = store.getState().sceneReducer.currentScene;
-        updateScene({
-          projectName: EditGameName,
-          sceneName: currentScene.id,
-          editRecords: editGameItem
-        });
-        console.log(currentScene.id);
-        console.log(editGameItem);
-        dispatch(clearEditGameItem());
+        if (!isObjectEmpty(editGameItem)) {
+          const currentScene = store.getState().sceneReducer.currentScene;
+
+          updateScene({
+            projectName: EditGameName,
+            sceneName: currentScene.id,
+            editRecords: editGameItem
+          });
+
+          dispatch(clearEditGameItem());
+        }
       }
     });
   }, []);
