@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-19 17:29:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-02 11:29:37
+ * @LastEditTime: 2023-03-09 10:28:37
  * @FilePath: /kunigame/editor/common/gameStore/scene/action.ts
  * @Description: ---- 场景状态action ----
  */
@@ -46,6 +46,7 @@ const getGameItem = (item: any) => {
 };
 
 const updateEditGameItem = (gameItem: any) => {
+  console.log(gameItem);
   return {
     type: UPDATE_EDIT_GAME_ITEM,
     payload: gameItem

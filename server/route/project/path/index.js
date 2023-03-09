@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-03-07 21:38:50
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-08 23:22:11
- * @FilePath: \kunigame\server\route\project\path\index.js
+ * @LastEditTime: 2023-03-09 09:24:32
+ * @FilePath: /kunigame/server/route/project/path/index.js
  * @Description: ---- 项目路径汇总 ----
  */
 const path = require('path');

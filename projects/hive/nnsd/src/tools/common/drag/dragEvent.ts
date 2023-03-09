@@ -2,12 +2,15 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-02 14:20:24
+ * @LastEditTime: 2023-03-09 10:33:20
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
 
-import { GET_GAME_ITEM } from "editor@/common/gameStore/scene/action";
+import {
+  GET_GAME_ITEM,
+  updateEditGameItem
+} from "editor@/common/gameStore/scene/action";
 import DragPosition from ".";
 
 /**
@@ -109,6 +112,7 @@ export const freeMovePosition = (dragContext: DragPosition) => {
       const bootTarget = dragContext.bootTarget;
       const bootTargetPosition = dragContext.bootTarget.position;
 
+      // 撤销堆栈
       dragContext.game.currentScene.cancelActionStack.push({
         position: {
           prevX: dragContext.dragStartX,
@@ -119,6 +123,15 @@ export const freeMovePosition = (dragContext: DragPosition) => {
         target: bootTarget,
         tool: dragContext.moveGroup
       });
+
+      // 添加到编辑记录
+      const game = dragContext.game;
+      const editGameItem =
+        game.redux.store.getState().sceneReducer.editGameItem;
+      editGameItem[bootTarget.id] = editGameItem[bootTarget.id] || {};
+      editGameItem[bootTarget.id].x = bootTargetPosition.x;
+      editGameItem[bootTarget.id].y = bootTargetPosition.y;
+      game.redux.dispatch(updateEditGameItem(editGameItem));
     }
   }
 };
