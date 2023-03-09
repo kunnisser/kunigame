@@ -7,7 +7,7 @@
     "dev": "webpack-dev-server --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "mock": "json-server --watch spellsrc/mock/test.json --routes spellsrc/mock/router.json",
-    "server": "server/node_modules/.bin/nodemon server/bin/www"
+    "server": "nodemon server/bin/www"
   },
   "author": "kunnisser",
   "license": "ISC",
