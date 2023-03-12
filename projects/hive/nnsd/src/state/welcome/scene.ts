@@ -24,7 +24,7 @@ class Welcome extends KnScene {
       logo: '/projects/hive/nnsd/assets/images/logo.png',
       font_a: '/projects/hive/nnsd/assets/fonts/font_a.fnt',
       font_b: '/projects/hive/nnsd/assets/fonts/font_b.fnt',
-      Desyrel: '/projects/hive/nnsd/assets/fonts/desyrel.xml',
+      Desyrel: '/projects/hive/nnsd/assets/fonts/desyrel.xml'
     };
   }
 
@@ -32,18 +32,19 @@ class Welcome extends KnScene {
 
   create() {
     const bg: Sprite = this.game.add.image('bg', this);
+    bg.y = 0;
+    bg.x = 0;
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
     const logo: Sprite = this.game.add.image('logo', this);
-    logo.y = 292;
-    logo.x = 1454;
+    logo.skew.y = 0.48;
+    logo.skew.x = -1;
+    logo.scale.x = 0.8;
+    logo.scale.y = 1;
+    logo.y = 266;
+    logo.x = 450;
     logo.anchor.set(0.5, 0.5);
-    const demoText: KnText = this.game.add.text(
-      'demoText',
-      'WELCOME',
-      {},
-      [0.5, 0.5]
-    );
+    const demoText: KnText = this.game.add.text('demoText', 'WELCOME', {}, [0.5, 0.5]);
     demoText.scale.y = 0.5;
     demoText.scale.x = 0.5;
     demoText.visible = true;
@@ -59,28 +60,19 @@ class Welcome extends KnScene {
     demoText.x = 912;
     demoText.y = 244;
     demoText.style.fontSize = 500;
-    const demo1Text: KnText = this.game.add.text(
-      'demo1Text',
-      '测试',
-      {
-        fontSize: '24',
-        fill: 0xffffff,
-      },
-      [0.5, 0.5]
-    );
+    const demo1Text: KnText = this.game.add.text('demo1Text', '测试', {
+      fontSize: '24',
+      fill: 0xffffff
+    }, [0.5, 0.5]);
     demo1Text.text = 'by.kunnisser';
     demo1Text.x = 1292;
     demo1Text.y = 724;
     demo1Text.scale.y = 1;
     demo1Text.scale.x = 1;
-    const bmText = this.game.add.bitmapText(
-      'bmText',
-      '153112312312313123\n23012313212313\n1',
-      {
-        fontSize: 35,
-        fontName: 'Desyrel',
-      }
-    );
+    const bmText = this.game.add.bitmapText('bmText', '153112312312313123\n23012313212313\n1', {
+      fontSize: 35,
+      fontName: 'Desyrel'
+    });
     bmText.align = 'center';
     bmText.anchor.set(0.5, 0.5);
     bmText.y = 553;
@@ -103,6 +95,7 @@ class Welcome extends KnScene {
       this.removeChildren(1, this.children.length);
     }
   }
+
 }
 
 export default Welcome;

@@ -1,11 +1,16 @@
-.react-dat-gui 
+.react-dat-gui
   font-size 12px
-  font-family Lucida Grande,sans-serif
+  font-family Lucida Grande, sans-serif
   box-sizing border-box
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   -webkit-tap-highlight-color transparent
   padding-bottom 30px
+  .dg-radio-group
+    background #1a1a1a
+    padding 10px 10px 10px 20px
+    & span
+      margin-right 20px
   .radio
     .ant-radio-group
       padding 10px 0
@@ -22,11 +27,11 @@
       right 9px !important
   .cr-item
     padding 10px
-  .dg 
+  .dg
     margin 0
     padding 0
     color #eee
-    ul 
+    ul
       list-style none
       margin 0
       padding 0
@@ -37,32 +42,32 @@
       line-height 1.5
     & .slider
       margin-top 0
-    &.main 
-      &::-webkit-scrollbar 
+    &.main
+      &::-webkit-scrollbar
         width 5px
         background #1a1a1a
-      &::-webkit-scrollbar-corner 
+      &::-webkit-scrollbar-corner
         height 0
         display none
-      &::-webkit-scrollbar-thumb 
+      &::-webkit-scrollbar-thumb
         border-radius 5px
         background #676767
-  .cr 
+  .cr
     display block
     background-color #1a1a1a
     -webkit-user-select none
     -moz-user-select none
     -ms-user-select none
     user-select none
-    &:not(:last-child) 
+    &:not(:last-child)
       border-bottom 1px solid #272727
-    label 
+    label
       display flex
       align-items center
       justify-content flex-start
       width 100%
       padding 1px 2px 1px 8px
-    .label-text 
+    .label-text
       width 40%
       min-width 0
       white-space nowrap
@@ -72,107 +77,107 @@
       -moz-user-select none
       -ms-user-select none
       user-select none
-    &.boolean 
+    &.boolean
       position relative
       border-left 5px solid #806787
-      label 
+      label
         cursor pointer
-      .label-text 
+      .label-text
         display block
         padding 5px 0
-      .checkbox-container 
+      .checkbox-container
         width 100%
-      input[type=checkbox] 
+      input[type=checkbox]
         margin 0
         vertical-align middle
-    &.button 
+    &.button
       border-left 5px solid #e61d5f
-      &:hover 
+      &:hover
         background #111
-      .label-text 
+      .label-text
         display block
         width 100%
         padding 6px 2px 6px 8px
         cursor pointer
-    &.number 
+    &.number
       border-left 5px solid #2fa1d6
-      .slider 
+      .slider
         display block
         position relative
         border 3px solid #1a1a1a
         border-right-width 1px
         background-color #303030
-        background-image linear-gradient(90deg,#66e527,#66e527)
+        background-image linear-gradient(90deg, #66e527, #66e527)
         background-size 0 100%
         background-repeat no-repeat
         cursor ew-resize
         height 25px
-    &.string 
+    &.string
       border-left 5px solid #1ed36f
       input[type=text], textarea
         color #66e527
         padding 2px 5px
         width 100%
-    &.select 
+    &.select
       border-left 5px solid #f4d450
-      label 
+      label
         padding 6px 2px 6px 8px
       & select
         color #000
-    &.color 
+    &.color
       border-left 5px solid #1a1a1a
-      .swatch 
+      .swatch
         text-align center
         font-weight 700
         color #fff
-        text-shadow rgba(0,0,0,.7) 0 1px 1px
+        text-shadow rgba(0, 0, 0, 0.7) 0 1px 1px
         padding 2px 5px
         border 3px solid #1a1a1a
         cursor pointer
-      .popover 
+      .popover
         position absolute
         z-index 2
         right 5px
-      .cover 
+      .cover
         position fixed
         top 0
         right 0
         bottom 0
         left 0
-      .picker 
+      .picker
         background #fff
-        box-shadow 0 0 2px rgba(0,0,0,.3),0 4px 8px rgba(0,0,0,.3)
+        box-shadow 0 0 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)
         box-sizing initial
         width auto
-        font-family Menlo,sans-serif
+        font-family Menlo, sans-serif
         margin-top -3px
-        .body 
+        .body
           padding 0
-          .controls 
+          .controls
             display flex
-            .toggles 
+            .toggles
               flex 1
-              .hue-wrap 
+              .hue-wrap
                 height 10px
                 position relative
-        .saturation-wrap 
+        .saturation-wrap
           width 100%
           padding-bottom 55%
           position relative
           overflow hidden
-      .fields-wrap 
+      .fields-wrap
         display flex
-        .fields 
+        .fields
           flex 1
           display flex
           margin-left -6px
-          .field 
+          .field
             padding-left 6px
             width 100%
             textarea
               font-size 11px
               color #333
-            input 
+            input
               font-size 11px
               color #333
               border-radius 2px
@@ -180,9 +185,9 @@
               box-shadow inset 0 0 0 1px #dadada
               height 21px
               text-align center
-              &:focus 
+              &:focus
                 outline none
-            label 
+            label
               text-transform uppercase
               font-size 11px
               line-height 11px
@@ -190,32 +195,32 @@
               text-align center
               display block
               margin-top 12px
-      .pointer 
+      .pointer
         width 12px
         height 12px
         border-radius 6px
-        transform translate(-6px,-1px)
+        transform translate(-6px, -1px)
         background-color #f8f8f8
-        box-shadow 0 1px 4px 0 rgba(0,0,0,.37)
+        box-shadow 0 1px 4px 0 rgba(0, 0, 0, 0.37)
         position absolute
         z-index 3
-      .pointer-circle 
+      .pointer-circle
         width 12px
         height 12px
         border-radius 6px
         box-shadow inset 0 0 0 1px #fff
-        transform translate(-6px,-6px)
-    &.presets 
+        transform translate(-6px, -6px)
+    &.presets
       border-left 5px solid #dad5cb
-      label 
+      label
         padding 6px 2px 6px 8px
-        select 
+        select
           width 100%
-  li 
-    &.folder 
+  li
+    &.folder
       display block
       padding 0
-      .title 
+      .title
         font-weight 700
         -webkit-user-select none
         -moz-user-select none
@@ -224,26 +229,26 @@
         display block
         cursor pointer
         padding 5px 5px 5px 16px
-        background #000 url('data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==') 6px 48% no-repeat
-      ul 
+        background #000 url('data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==') 6px 48% no-repeat // //Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==') 6px 48% no-repeat // //Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==') 6px 48% no-repeat // //Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==') 6px 48% no-repeat // //Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==') 6px 48% no-repeat // //Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==') 6px 48% no-repeat // //Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==') 6px 48% no-repeat // //Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==') 6px 48% no-repeat
+      ul
         margin-left 4px
         width calc(100% - 4px)
-.react-dat-gui *,.react-dat-gui :after,.react-dat-gui :before 
+.react-dat-gui *, .react-dat-gui :after, .react-dat-gui :before
   box-sizing inherit
-.react-dat-gui .cr input[type=number],.react-dat-gui .cr input[type=text],.react-dat-gui .cr textarea
+.react-dat-gui .cr input[type=number], .react-dat-gui .cr input[type=text], .react-dat-gui .cr textarea
   background #303030
   border 3px solid #1a1a1a
   border-radius 0
   margin 0
   outline none
   font-size inherit
-.react-dat-gui .cr input[type=number]:hover,.react-dat-gui .cr input[type=text]:hover 
+.react-dat-gui .cr input[type=number]:hover, .react-dat-gui .cr input[type=text]:hover
   background #3c3c3c
-.react-dat-gui .cr input[type=number]:focus,.react-dat-gui .cr input[type=text]:focus 
+.react-dat-gui .cr input[type=number]:focus, .react-dat-gui .cr input[type=text]:focus
   background #494949
   color #fff
-.react-dat-gui .cr input[type=number]::-ms-clear,.react-dat-gui .cr input[type=text]::-ms-clear 
+.react-dat-gui .cr input[type=number]::-ms-clear, .react-dat-gui .cr input[type=text]::-ms-clear
   display none
-.react-dat-gui .cr.number input[type=number],.react-dat-gui .cr.number input[type=text] 
+.react-dat-gui .cr.number input[type=number], .react-dat-gui .cr.number input[type=text]
   color #66e527
   height 25px

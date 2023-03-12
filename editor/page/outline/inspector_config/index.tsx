@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-02 14:09:29
- * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
+ * @LastEditTime: 2023-03-12 22:38:18
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
 import React, { useEffect, useState } from "react";
@@ -79,6 +79,7 @@ const Inspector = () => {
         return total[key];
       }, gameItem);
     }
+
     game.editorTools.dragTool.onClickDragging(
       store.getState().sceneReducer.gameItem
     );
