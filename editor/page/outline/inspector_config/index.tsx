@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-12 22:38:18
- * @FilePath: \kunigame\editor\page\outline\inspector_config\index.tsx
+ * @LastEditTime: 2023-03-13 17:27:35
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
 import React, { useEffect, useState } from "react";
@@ -22,6 +22,7 @@ const Inspector = () => {
   useEffect(() => {
     store.subscribe(() => {
       const item = store.getState().sceneReducer.gameItem;
+      console.log(item);
       if (item) {
         const itemType: string = item.constructor.name;
         const configProperties: Array<Array<string>> = filterAllPropertyPath(
@@ -71,6 +72,7 @@ const Inspector = () => {
     const keysArray = Object.keys(newData);
     for (const keysCombine of keysArray) {
       const keys = keysCombine.split("-");
+
       // 链式调用赋值
       keys.reduce((total, key, index) => {
         if (index === keys.length - 1) {
