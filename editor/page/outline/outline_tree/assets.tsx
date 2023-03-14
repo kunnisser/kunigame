@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-02-06 17:05:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-14 17:29:35
- * @FilePath: /kunigame/editor/page/outline/outline_tree/assets.tsx
+ * @LastEditTime: 2023-03-14 22:59:50
+ * @FilePath: \kunigame\editor\page\outline\outline_tree\assets.tsx
  * @Description: ---- 素材列表 ----
  */
 
@@ -17,7 +17,7 @@ import "editor@/assets/index.styl";
 
 const { Panel } = Collapse;
 const AssetsList = () => {
-  const [imagePath, setImagePath] = useState(null);
+  const [imagePath, imageDir] = ['/projects/hive', '/assets/images/'];
   const [imageList, setImageList] = useState([] as any);
   const [prefabList, setPrefabList] = useState([] as any);
 
@@ -32,7 +32,6 @@ const AssetsList = () => {
   );
   useEffect(() => {
     if (currentScene) {
-      console.log(currentScene.resouces);
       const resourceKeys = Object.keys(currentScene.resouces);
       const resources = resourceKeys.map((key) => {
         return {
@@ -46,8 +45,7 @@ const AssetsList = () => {
         assetsType: "images"
       }).then((ret) => {
         if (ret.data) {
-          const { path, assets } = ret.data.data;
-          setImagePath(path);
+          const { assets } = ret.data.data;
           setImageList(assets);
         }
       });
@@ -83,7 +81,7 @@ const AssetsList = () => {
             return (
               <div key={image} draggable={true} onDragStart={dragHandle}>
                 <div className="kn-image-thumb">
-                  <img draggable={false} src={`${imagePath}/${image}`}></img>
+                  <img draggable={false} src={`${imagePath}/${EditGameName}${imageDir}${image}`}></img>
                 </div>
                 <p style={{ textAlign: "center" }}>{image}</p>
               </div>

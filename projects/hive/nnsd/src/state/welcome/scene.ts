@@ -32,7 +32,7 @@ class Welcome extends KnScene {
 
   create() {
     const bg: KnSprite = this.game.add.image('bg', this);
-    bg.tintColor = '#c47e7e';
+    bg.tintColor = "#baa1a1";
     bg.y = 0;
     bg.x = 0;
     bg.width = this.game.config.width;
