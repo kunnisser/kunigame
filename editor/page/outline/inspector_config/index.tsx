@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-13 17:27:35
+ * @LastEditTime: 2023-03-14 09:47:47
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -22,7 +22,6 @@ const Inspector = () => {
   useEffect(() => {
     store.subscribe(() => {
       const item = store.getState().sceneReducer.gameItem;
-      console.log(item);
       if (item) {
         const itemType: string = item.constructor.name;
         const configProperties: Array<Array<string>> = filterAllPropertyPath(

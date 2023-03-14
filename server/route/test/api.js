@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-28 21:12:06
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-06 13:38:27
+ * @LastEditTime: 2023-03-14 14:32:11
  * @FilePath: /kunigame/server/route/test/api.js
  * @Description: ---- 测试接口 ----
  */
@@ -11,6 +11,8 @@ var router = require("koa-router")();
 var path = require("path");
 var routeUtils = require("../../common/route.js");
 var Utils = require("../../common/utils.js");
+var { hivePath } = require("../project/path/index.js");
+const fs = require("fs");
 
 router.get("/", async (ctx) => {
   ctx.body = "testApi";
@@ -52,6 +54,27 @@ router.get("/index", async (ctx) => {
   } catch (error) {
     routeUtils.normalErrorHandler(ctx, error);
   }
+});
+
+// 查询当前项目的资源文件
+router.get("/assets", async (ctx) => {
+  const requestParams = ctx.request.query;
+  const { projectName, assetsType } = requestParams;
+  const assetsPath = path.normalize(
+    path.resolve(hivePath, `${projectName}/assets/${assetsType}`)
+  );
+  const assets = fs.readdirSync(assetsPath, (ret) => {
+    console.warn(ret);
+  });
+  console.log(assets);
+  ctx.body = {
+    code: CODE.SUCCESS,
+    msg: "test OK",
+    data: {
+      path: assetsPath,
+      assets
+    }
+  };
 });
 
 module.exports = router.routes();

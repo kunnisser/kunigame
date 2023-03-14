@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 17:10:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-09 10:30:22
+ * @LastEditTime: 2023-03-14 17:26:33
  * @FilePath: /kunigame/editor/page/workbench/canvas.tsx
  * @Description: ---- 画布编辑 ----
  */
@@ -27,10 +27,18 @@ const StageEditor = (props) => {
     // 保存游戏所有场景列表
 
     dispatch(getSceneList(game.sceneManager.scenes)); // 储存游戏实例
-
     dispatch(getGame(game));
+
+    view.addEventListener("drop", (e) => {
+      e.preventDefault();
+      console.log(123);
+    });
   }, []);
-  return <div id="stage"></div>;
+
+  const dropOver = (e) => {
+    e.preventDefault();
+  };
+  return <div draggable id="stage" onDragOver={dropOver}></div>;
 };
 
 export default StageEditor;

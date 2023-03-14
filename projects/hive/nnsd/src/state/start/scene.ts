@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-07 15:38:59
+ * @LastEditTime: 2023-03-14 10:41:27
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -17,7 +17,10 @@ class Start extends KnScene {
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
-    this.resouces = {};
+    this.resouces = {
+      attack: "/projects/hive/nnsd/assets/images/attack.png",
+      avator_01: "/projects/hive/nnsd/assets/images/avator_01.png"
+    };
   }
 
   boot() {}

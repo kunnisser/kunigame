@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-27 16:51:41
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-28 16:18:00
+ * @LastEditTime: 2023-03-14 10:07:46
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/resource.tsx
  * @Description: ---- inspector - Resource - checkbox ----
  */
@@ -42,7 +42,7 @@ const DatResourcePicker = (props: DefaultProps) => {
         width: labelWidth
       }}
     >
-      <div>
+      <div style={{ paddingTop: "10px" }}>
         <label>{labelText}</label>
       </div>
       <Radio.Group onChange={handleChange} value={defaultVal}>
