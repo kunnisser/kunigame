@@ -26,7 +26,7 @@ module.exports = merge(common, {
     ]
   },
   devServer: {
-    inline: false,
+    inline: true,
     port: 3008,
     host: "localhost"
   },

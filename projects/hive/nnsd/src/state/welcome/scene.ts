@@ -47,7 +47,7 @@ class Welcome extends KnScene {
     logo.scale.y = 0.3;
     logo.y = 269;
     logo.x = 417;
-    logo.anchor.set(0, 0);
+    logo.anchor.set(0.5, 0.5);
     const demoText: KnText = this.game.add.text('demoText', 'WELCOME', {}, [0.5, 0.5]);
     demoText.scale.y = 0.5;
     demoText.scale.x = 0.5;
