@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-15 14:24:39
+ * @LastEditTime: 2023-03-16 11:08:42
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -17,8 +17,9 @@ class Start extends KnScene {
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
-    this.resouces = {
+    this.resources = {
       attack: "/projects/hive/nnsd/assets/images/attack.png",
+      logo: "/projects/hive/nnsd/assets/images/logo.png",
       avator_01: "/projects/hive/nnsd/assets/images/avator_01.png",
       loadingrun: "/projects/hive/nnsd/assets/atlas/loadingrun.json"
     };
@@ -27,21 +28,36 @@ class Start extends KnScene {
   boot() {}
 
   create() {
-    const demoText: KnText = this.game.add.text("测试1", "test1", {
-      fontSize: "24",
-      fill: 0xffffff
-    }, [0.5, 0.5]);
+    const demoText: KnText = this.game.add.text(
+      "测试1",
+      "test1",
+      {
+        fontSize: "24",
+        fill: 0xffffff
+      },
+      [0.5, 0.5]
+    );
     demoText.position.set(this.game.config.half_w, this.game.config.half_h);
     const testGroup = this.game.add.group("group1", this);
-    const demo1Text: KnText = this.game.add.text("测试2", "test2", {
-      fontSize: "24",
-      fill: 0xffffff
-    }, [0.5, 0.5]);
+    const demo1Text: KnText = this.game.add.text(
+      "测试2",
+      "test2",
+      {
+        fontSize: "24",
+        fill: 0xffffff
+      },
+      [0.5, 0.5]
+    );
     demo1Text.position.set(300, 400);
-    const demo2Text: KnText = this.game.add.text("测试3", "test3", {
-      fontSize: "24",
-      fill: 0xffffff
-    }, [0.5, 0.5]);
+    const demo2Text: KnText = this.game.add.text(
+      "测试3",
+      "test3",
+      {
+        fontSize: "24",
+        fill: 0xffffff
+      },
+      [0.5, 0.5]
+    );
     demo2Text.position.set(400, 400);
     testGroup.addChild(demoText);
     testGroup.addChild(demo1Text);
@@ -64,7 +80,6 @@ class Start extends KnScene {
       this.removeChildren(1, this.children.length);
     }
   }
-
 }
 
 export default Start;

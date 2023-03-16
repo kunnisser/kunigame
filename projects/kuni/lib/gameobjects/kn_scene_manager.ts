@@ -40,7 +40,7 @@ class KnSceneManager {
      *  2. 若为加载器场景无需重复进入加载器
      *  3. 目标场景未缓存进入加载器
      * */
-    if (to.isCached || !to.resouces) {
+    if (to.isCached || !to.resources) {
       console.log(to.id, "已缓存");
 
       // 进入加载好的界面 to 为要进入的界面
@@ -49,9 +49,7 @@ class KnSceneManager {
       let globalLoader = this.game.loader;
 
       // 全局loading界面的资源加载
-      for (let key of Object.keys(to.resouces)) {
-        globalLoader = globalLoader.add(key, to.resouces[key]);
-      }
+      globalLoader.filling(to.resources);
       globalLoader.load(() => {
         console.log("preloadScene resource is ready!");
         this.scenes["global_preloader"].enter(this.game.entryHive);
@@ -65,7 +63,7 @@ class KnSceneManager {
 
   // 编辑场景跳转
   dispatchEditScene(to: KnScene) {
-    if (to.isCached || !to.resouces) {
+    if (to.isCached || !to.resources) {
       console.log(to.id, "已缓存");
 
       // 进入加载好的界面 to 为要进入的界面
@@ -81,9 +79,8 @@ class KnSceneManager {
     } else {
       let globalLoader = this.game.loader;
       // 全局loading界面的资源加载
-      for (let key of Object.keys(to.resouces)) {
-        globalLoader = globalLoader.add(key, to.resouces[key]);
-      }
+      globalLoader.filling(to.resources);
+
       return new Promise((resolve) => {
         globalLoader.load(() => {
           console.log(to.id + " resource is ready!");

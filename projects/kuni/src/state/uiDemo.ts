@@ -14,7 +14,7 @@ class UIDemo extends KnScene {
     super(game, key);
     this.game = game;
     this.shootType = 1;
-    this.resouces = {
+    this.resources = {
       "uiBg": "/projects/kuni/assets/images/uibg.png",
       "rankData": "/projects/kuni/assets/data/rankData.json",
       "panelBg": "/projects/kuni/assets/images/panelbg.png",

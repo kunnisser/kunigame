@@ -11,13 +11,13 @@ class Environment extends KnScene {
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
-    this.resouces = {
-      'rain': '/projects/kuni/assets/images/rain.png',
-      'snow': '/projects/kuni/assets/images/snow.png',
-      'envBg': '/projects/kuni/assets/images/env_bg.png',
-      'perlin': '/projects/kuni/assets/shader/frag/perlin.frag',
-      'godray': '/projects/kuni/assets/shader/frag/godray.frag'
-    }
+    this.resources = {
+      "rain": "/projects/kuni/assets/images/rain.png",
+      "snow": "/projects/kuni/assets/images/snow.png",
+      "envBg": "/projects/kuni/assets/images/env_bg.png",
+      "perlin": "/projects/kuni/assets/shader/frag/perlin.frag",
+      "godray": "/projects/kuni/assets/shader/frag/godray.frag"
+    };
   }
 
   boot() {
@@ -34,15 +34,18 @@ class Environment extends KnScene {
   }
 
   dev() {
-    if (this.game.gui.__controllers[0] && this.game.gui.__controllers[0].property === '环境效果') {
+    if (
+      this.game.gui.__controllers[0] &&
+      this.game.gui.__controllers[0].property === "环境效果"
+    ) {
       return;
     }
 
     const dat = {
-      '环境效果': '下雨'
-    },
-      datArr = ['下雨', '下雪', '阳光'];
-    this.dat = this.game.gui.add(dat, '环境效果', datArr);
+        "环境效果": "下雨"
+      },
+      datArr = ["下雨", "下雪", "阳光"];
+    this.dat = this.game.gui.add(dat, "环境效果", datArr);
     this.dat.onChange((v: string) => {
       this.shootType = datArr.indexOf(v) + 1;
       this.toggleEnv(this.shootType);
@@ -74,21 +77,21 @@ class Environment extends KnScene {
   }
 
   addBackground() {
-    const bg = this.game.add.image('envBg', this);
+    const bg = this.game.add.image("envBg", this);
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
   }
 
   // 粒子加载
   generateRains() {
-    this.emitter = this.game.add.emitter(this.game, 200, 'rain');
+    this.emitter = this.game.add.emitter(this.game, 200, "rain");
     this.emitter.shooting = !0;
     this.addChild(this.emitter);
     console.log(this.children);
   }
 
   generateSnows() {
-    this.emitter = this.game.add.emitter(this.game, 200, 'snow');
+    this.emitter = this.game.add.emitter(this.game, 200, "snow");
     this.emitter.shooting = !0;
     this.addChild(this.emitter);
   }

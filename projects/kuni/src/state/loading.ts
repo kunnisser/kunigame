@@ -25,7 +25,7 @@ class Loading extends KnScene {
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
-    this.resouces = {
+    this.resources = {
       "preloader": "/projects/kuni/assets/data/preloader.json",
       "blue": "/projects/kuni/assets/images/blue.png"
     };

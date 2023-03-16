@@ -29,7 +29,7 @@ class Preloader extends KnScene {
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
-    this.resouces = {
+    this.resources = {
       "bg001": "/projects/kuni/assets/images/bg001.jpg",
       "run": "/projects/kuni/assets/data/loadingrun.json",
       "vertex": "/projects/kuni/assets/shader/vertex/default.vert"
@@ -43,8 +43,8 @@ class Preloader extends KnScene {
   }
 
   loading(target: KnScene, isFirstLoad?: Boolean) {
-    if (target && target.resouces) {
-      this.loadScene(target.resouces)
+    if (target && target.resources) {
+      this.loadScene(target.resources)
         .on("progress", this.loadingHandler)
         .load((loader) => {
           // 资源加载完成，进入目标场景
@@ -76,11 +76,11 @@ class Preloader extends KnScene {
   }
 
   // 进行游戏资源场景加载
-  loadScene(resouces: Object) {
-    const keys = Object.keys(resouces);
+  loadScene(resources: Object) {
+    const keys = Object.keys(resources);
     const loader = this.game.loader;
     for (let key of keys) {
-      loader.add(key, resouces[key]);
+      loader.add(key, resources[key]);
     }
     return loader;
   }

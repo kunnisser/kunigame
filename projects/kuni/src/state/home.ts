@@ -1,14 +1,14 @@
 /*
- * @Author: kunnisser 
- * @Date: 2019-08-31 15:01:05 
+ * @Author: kunnisser
+ * @Date: 2019-08-31 15:01:05
  * @Last Modified by: mikey.zhaopeng
  * @Last Modified time: 2020-02-07 16:11:14
  */
 
-import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
-import KnGraphics from 'ts@/kuni/lib/gameobjects/kn_graphics';
-import Game from 'ts@/kuni/lib/core';
-import { TransformImage } from 'ts@/kuni/lib/utils/common';
+import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
+import KnGraphics from "ts@/kuni/lib/gameobjects/kn_graphics";
+import Game from "ts@/kuni/lib/core";
+import { TransformImage } from "ts@/kuni/lib/utils/common";
 
 class Home extends KnScene {
   public loadingTypes: Map<string, Function>;
@@ -22,8 +22,8 @@ class Home extends KnScene {
     super(game, key);
     this.game = game;
     this.clouds = [];
-    this.resouces = {
-      'bg002': '/projects/kuni/assets/images/bg002.jpg',
+    this.resources = {
+      "bg002": "/projects/kuni/assets/images/bg002.jpg"
     };
   }
 
@@ -38,7 +38,7 @@ class Home extends KnScene {
   }
 
   generateBackground() {
-    const bg = this.game.add.image('bg002', this);
+    const bg = this.game.add.image("bg002", this);
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
   }
@@ -54,11 +54,15 @@ class Home extends KnScene {
       drawStage.beginFill(color);
       drawStage.drawCircle(0, 0, radius);
       drawStage.endFill();
-      const cloudBit = TransformImage.transformToSprite(this.game, drawStage, this);
+      const cloudBit = TransformImage.transformToSprite(
+        this.game,
+        drawStage,
+        this
+      );
       cloudBit.anchor.set(0.5);
-      cloudBit.x = cloudBit['targetX'] =
+      cloudBit.x = cloudBit["targetX"] =
         (this.game.config.width - 2 * radius) * Math.random() + radius;
-      cloudBit.y = cloudBit['targetY'] =
+      cloudBit.y = cloudBit["targetY"] =
         (this.game.config.height - 2 * radius) * Math.random() + radius;
       cloudBit.alpha = 0.5;
       this.clouds.push(cloudBit);
@@ -115,7 +119,7 @@ class Home extends KnScene {
         let y = Math.floor(Math.floor(i / currentText.width) / interval);
 
         // 粒子密度，每6颗取一个粒子
-        if (x && x % 6 === 0 && (y && y % 6 === 0)) {
+        if (x && x % 6 === 0 && y && y % 6 === 0) {
           this.textPixels.push({
             x,
             y
@@ -125,26 +129,26 @@ class Home extends KnScene {
     }
     this.textPixels.forEach((o, i) => {
       if (this.clouds[i]) {
-        this.clouds[i]['targetX'] =
-          o['x'] + this.game.config.half_w - currentText.width * 0.5;
-        this.clouds[i]['targetY'] =
-          o['y'] + this.game.config.half_h - currentText.height * 0.5;
-        this.clouds[i]['targetV'] = Math.random() * 0.05 + 0.05;
-        this.clouds[i]['targetA'] = 1;
+        this.clouds[i]["targetX"] =
+          o["x"] + this.game.config.half_w - currentText.width * 0.5;
+        this.clouds[i]["targetY"] =
+          o["y"] + this.game.config.half_h - currentText.height * 0.5;
+        this.clouds[i]["targetV"] = Math.random() * 0.05 + 0.05;
+        this.clouds[i]["targetA"] = 1;
       }
     });
   }
 
   update() {
     for (let c of this.clouds) {
-      if (c.position.x !== c['targetX']) {
-        c.position.x += c['targetV'] * (c['targetX'] - c.position.x);
+      if (c.position.x !== c["targetX"]) {
+        c.position.x += c["targetV"] * (c["targetX"] - c.position.x);
       }
-      if (c.position.y !== c['targetY']) {
-        c.position.y += c['targetV'] * (c['targetY'] - c.position.y);
+      if (c.position.y !== c["targetY"]) {
+        c.position.y += c["targetV"] * (c["targetY"] - c.position.y);
       }
-      if (c.alpha !== c['targetA']) {
-        c.alpha += c['targetV'] * (c['targetA'] - c.alpha);
+      if (c.alpha !== c["targetA"]) {
+        c.alpha += c["targetV"] * (c["targetA"] - c.alpha);
       }
     }
   }

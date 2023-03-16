@@ -71,12 +71,12 @@ const AssetsList = () => {
   );
   useEffect(() => {
     if (currentScene) {
-      const resourceKeys = Object.keys(currentScene.resouces);
+      const resourceKeys = Object.keys(currentScene.resources);
       const resources = resourceKeys.map((key) => {
         return {
           key,
-          origin: currentScene.resouces[key],
-          value: forceToImage(currentScene.resouces[key])
+          origin: currentScene.resources[key],
+          value: forceToImage(currentScene.resources[key])
         };
       });
       setPrefabList(resources);

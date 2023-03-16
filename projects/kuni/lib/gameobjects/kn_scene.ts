@@ -9,7 +9,7 @@ class KnScene extends Container {
   public id: string;
   public name: string;
   public isBoot: boolean;
-  public resouces: object;
+  public resources: object;
   public isCached: boolean;
   public isBinded: boolean; // 用于判断各种事件是否已绑定
   public loader: PIXI.Loader;

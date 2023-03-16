@@ -1,4 +1,3 @@
-import dat from "dat.gui";
 import KnFactory from "../lib/gameobjects/kn_factory";
 import KnLoader from "../lib/loader/kn_loader";
 import KnSceneManager from "../lib/gameobjects/kn_scene_manager";
@@ -16,9 +15,10 @@ interface EnterProps {
   width: number;
   height?: number;
   ratio: number;
-  antialias: boolean;
-  transparent: boolean;
+  antialias?: boolean;
+  transparent?: boolean;
   view: any;
+  isPureCanvas?: boolean;
 }
 
 export default class Game {
@@ -86,9 +86,6 @@ export default class Game {
 
     this.view.appendChild(this.app.view);
 
-    // 注册gui调试实例
-    this.gui = new dat.GUI();
-
     // 添加加载器实例
     this.loader = new KnLoader(this);
 
@@ -116,12 +113,11 @@ export default class Game {
     // 初始化光标
     this.cursor = new KnCursor(this, this.world);
 
-    // 添加游戏容器
-    // this.stage.addChild(this.world);
-
     // 定义和添加游戏编辑层
-    this.coverMask = new CoverMask(this, this.stage);
-    this.coverMask.scale.set(this.size.width / this.config.width);
+    if (!config.isPureCanvas) {
+      this.coverMask = new CoverMask(this, this.stage);
+      this.coverMask.scale.set(this.size.width / this.config.width);
+    }
 
     // 页面尺寸改变
     window.onresize = () => {

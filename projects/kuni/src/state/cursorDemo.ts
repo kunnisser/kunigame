@@ -14,10 +14,10 @@ class CursorDemo extends KnScene {
     super(game, key);
     this.game = game;
     this.shootType = 1;
-    this.resouces = {
-      'star': '/projects/kuni/assets/images/star.png',
-      'weapon': '/projects/kuni/assets/images/titleWeapon_01.png'
-    }
+    this.resources = {
+      "star": "/projects/kuni/assets/images/star.png",
+      "weapon": "/projects/kuni/assets/images/titleWeapon_01.png"
+    };
     this.tween = this.game.add.tween();
   }
 
@@ -33,15 +33,18 @@ class CursorDemo extends KnScene {
   }
 
   dev() {
-    if (this.game.gui.__controllers[0] && this.game.gui.__controllers[0].property === '光标交互效果') {
+    if (
+      this.game.gui.__controllers[0] &&
+      this.game.gui.__controllers[0].property === "光标交互效果"
+    ) {
       return;
     }
 
     const dat = {
-      '光标交互效果': '移动粒子'
-    },
-      datArr = ['移动粒子', '点击粒子', '范围粒子', '点击mark'];
-    this.dat = this.game.gui.add(dat, '光标交互效果', datArr);
+        "光标交互效果": "移动粒子"
+      },
+      datArr = ["移动粒子", "点击粒子", "范围粒子", "点击mark"];
+    this.dat = this.game.gui.add(dat, "光标交互效果", datArr);
     this.dat.onChange((v: string) => {
       this.shootType = datArr.indexOf(v) + 1;
       this.emitter.shooting = this.shootType === 3 ? !0 : !1;
@@ -49,11 +52,11 @@ class CursorDemo extends KnScene {
   }
 
   addBackground() {
-    const bg = this.game.add.image('bg002', this);
+    const bg = this.game.add.image("bg002", this);
     bg.interactive = !0;
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
-    bg.on('pointermove', (e) => {
+    bg.on("pointermove", (e) => {
       if (this.shootType === 1) {
         const pointX = e.data.global.x / this.game.world.scale.x,
           pointY = e.data.global.y / this.game.world.scale.y;
@@ -61,7 +64,7 @@ class CursorDemo extends KnScene {
         this.singleShoot(pointX, pointY);
       }
     });
-    bg.on('pointerdown', (e) => {
+    bg.on("pointerdown", (e) => {
       let pointX = e.data.global.x / this.game.world.scale.x,
         pointY = e.data.global.y / this.game.world.scale.y;
       if (this.shootType === 2) {
@@ -87,14 +90,14 @@ class CursorDemo extends KnScene {
   }
 
   addMark() {
-    this.mark = this.game.add.image('mark', this, [0.5, 0.5]);
+    this.mark = this.game.add.image("mark", this, [0.5, 0.5]);
     this.mark.visible = !1;
     this.mark.width = 32 / this.game.world.scale.x;
     this.mark.height = 32 / this.game.world.scale.x;
   }
 
   addWeapon() {
-    this.weapon = this.game.add.image('weapon', this, [0.5, 0.5]);
+    this.weapon = this.game.add.image("weapon", this, [0.5, 0.5]);
     this.weapon.position.set(this.game.config.half_w, this.game.config.half_h);
     this.weapon.scale.set(0.3);
     this.weapon.interactive = !0;
@@ -103,7 +106,7 @@ class CursorDemo extends KnScene {
 
   // 粒子加载
   generateStar() {
-    this.emitter = this.game.add.emitter(this.game, 100, 'star');
+    this.emitter = this.game.add.emitter(this.game, 100, "star");
     this.addChild(this.emitter);
   }
 
@@ -130,10 +133,14 @@ class CursorDemo extends KnScene {
     this.emitter.throtting -= 2;
     if (this.emitter.throtting < 0) {
       const particle = this.emitter.shoot();
-      particle.x = this.weapon.x + this.game.math.redirect() * ~~(Math.random() * 10) * this.weapon.width;
+      particle.x =
+        this.weapon.x +
+        this.game.math.redirect() * ~~(Math.random() * 10) * this.weapon.width;
       particle.y = this.weapon.y;
       this.tween.instance.to(particle, 1.6, {
-        y: particle.y + this.game.math.redirect() * Math.random() * this.weapon.height,
+        y:
+          particle.y +
+          this.game.math.redirect() * Math.random() * this.weapon.height,
         angle: 100 + this.game.math.redirect() * Math.random() * 300,
         alpha: 0,
         ease: this.tween.linear.easeNone

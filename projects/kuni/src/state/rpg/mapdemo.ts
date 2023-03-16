@@ -1,22 +1,22 @@
-import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
-import Game from 'ts@/kuni/lib/core';
-import TileMap from 'ts@/kuni/lib/gameobjects/kn_tilemap';
-import { Rectangle, Sprite, Point, Texture } from 'pixi.js';
-import { math } from 'ts@/kuni/lib/utils/common';
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
-import PlayerRole from './player/playerRole';
-import EnemyRole from './enemy/enemyRole';
-import KnAvatar from 'ts@/kuni/lib/gameui/kn_avatar';
-import KnMessage from 'ts@/kuni/lib/gameui/kn_message';
-import ExpBar from './gui/expbar';
+import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
+import Game from "ts@/kuni/lib/core";
+import TileMap from "ts@/kuni/lib/gameobjects/kn_tilemap";
+import { Rectangle, Sprite, Point, Texture } from "pixi.js";
+import { math } from "ts@/kuni/lib/utils/common";
+import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import PlayerRole from "./player/playerRole";
+import EnemyRole from "./enemy/enemyRole";
+import KnAvatar from "ts@/kuni/lib/gameui/kn_avatar";
+import KnMessage from "ts@/kuni/lib/gameui/kn_message";
+import ExpBar from "./gui/expbar";
 
 interface Path {
-  pointer: Point,
-  F?: number,
-  G?: number,
-  H?: number,
-  D?: number, // 当前点到open数组中元素的距离
-  prev?: Path
+  pointer: Point;
+  F?: number;
+  G?: number;
+  H?: number;
+  D?: number; // 当前点到open数组中元素的距离
+  prev?: Path;
 }
 
 class MapDemo extends KnScene {
@@ -36,53 +36,56 @@ class MapDemo extends KnScene {
     this.game = game;
     this.obstacles = [];
     this.ticker = null;
-    this.scene = this.game.add.group('scene', this);
+    this.scene = this.game.add.group("scene", this);
     this.scene.pivot.set(0, 0);
     this.drawStage = this.game.add.graphics();
-    this.resouces = {
-      'worldmap': '/projects/kuni/assets/data/rpg.json',
-      'world': '/projects/kuni/assets/images/GrasslandColor.png',
-      'lightmap': '/projects/kuni/assets/images/lightmap.png',
-      'druid_ske': '/projects/kuni/assets/data/deluyi_ske.json',
-      'druid_tex': '/projects/kuni/assets/data/deluyi_tex.json',
-      'druid': '/projects/kuni/assets/images/deluyi_tex.png',
-      'mark': '/projects/kuni/assets/images/mark.png',
-      'rpg_sk_bg': '/projects/kuni/assets/images/rpg_sk_bg.png',
-      'rpg_mask': '/projects/kuni/assets/images/rpg_mask.png',
-      'rpg_druid_weapon': '/projects/kuni/assets/images/rpg_druid_weapon.png',
-      'exp_icon': '/projects/kuni/assets/images/exp.png',
-      'exp_outbar': '/projects/kuni/assets/images/exp_outbar.png',
-      'exp_innerbar': '/projects/kuni/assets/images/exp_innerbar.png',
-      'avatar': '/projects/kuni/assets/images/avator_01.png',
-      'hp_bg': '/projects/kuni/assets/images/hp_bg.png',
-      'player_hp': '/projects/kuni/assets/images/player_hp.png',
-      'enemy_hp': '/projects/kuni/assets/images/enemy_hp.png',
-      'rpg_health_bar': '/projects/kuni/assets/images/rpg_health_bar.png',
-      'rpg_magic_bar': '/projects/kuni/assets/images/rpg_magic_bar.png',
-      'druid_sk_cure': '/projects/kuni/assets/images/druid_sk_cure.png',
-      'druid_bullet': '/projects/kuni/assets/images/druid_bullet.png',
-      'skull_ske': '/projects/kuni/assets/data/skull_ske.json',
-      'skull_tex': '/projects/kuni/assets/data/skull_tex.json',
-      'skull': '/projects/kuni/assets/images/skull_tex.png'
+    this.resources = {
+      "worldmap": "/projects/kuni/assets/data/rpg.json",
+      "world": "/projects/kuni/assets/images/GrasslandColor.png",
+      "lightmap": "/projects/kuni/assets/images/lightmap.png",
+      "druid_ske": "/projects/kuni/assets/data/deluyi_ske.json",
+      "druid_tex": "/projects/kuni/assets/data/deluyi_tex.json",
+      "druid": "/projects/kuni/assets/images/deluyi_tex.png",
+      "mark": "/projects/kuni/assets/images/mark.png",
+      "rpg_sk_bg": "/projects/kuni/assets/images/rpg_sk_bg.png",
+      "rpg_mask": "/projects/kuni/assets/images/rpg_mask.png",
+      "rpg_druid_weapon": "/projects/kuni/assets/images/rpg_druid_weapon.png",
+      "exp_icon": "/projects/kuni/assets/images/exp.png",
+      "exp_outbar": "/projects/kuni/assets/images/exp_outbar.png",
+      "exp_innerbar": "/projects/kuni/assets/images/exp_innerbar.png",
+      "avatar": "/projects/kuni/assets/images/avator_01.png",
+      "hp_bg": "/projects/kuni/assets/images/hp_bg.png",
+      "player_hp": "/projects/kuni/assets/images/player_hp.png",
+      "enemy_hp": "/projects/kuni/assets/images/enemy_hp.png",
+      "rpg_health_bar": "/projects/kuni/assets/images/rpg_health_bar.png",
+      "rpg_magic_bar": "/projects/kuni/assets/images/rpg_magic_bar.png",
+      "druid_sk_cure": "/projects/kuni/assets/images/druid_sk_cure.png",
+      "druid_bullet": "/projects/kuni/assets/images/druid_bullet.png",
+      "skull_ske": "/projects/kuni/assets/data/skull_ske.json",
+      "skull_tex": "/projects/kuni/assets/data/skull_tex.json",
+      "skull": "/projects/kuni/assets/images/skull_tex.png"
     };
   }
 
   dev() {
-    if (this.game.gui.__controllers[0] && this.game.gui.__controllers[0].property === '随机生成地牢') {
+    if (
+      this.game.gui.__controllers[0] &&
+      this.game.gui.__controllers[0].property === "随机生成地牢"
+    ) {
       return;
     }
     const dat = {
-      '随机生成地牢': () => {
+      "随机生成地牢": () => {
         this.boot();
       }
     };
 
     const toggle = {
-      'LightmapVisible': !1,
-    }
+      "LightmapVisible": !1
+    };
 
-    this.game.gui.add(dat, '随机生成地牢');
-    const controller = this.game.gui.add(toggle, 'LightmapVisible');
+    this.game.gui.add(dat, "随机生成地牢");
+    const controller = this.game.gui.add(toggle, "LightmapVisible");
     controller.onChange((flag: boolean) => {
       if (flag) {
         // 加入lightmap
@@ -110,18 +113,33 @@ class MapDemo extends KnScene {
     // 定义瓷砖尺寸
     const tiledSizeX = 32;
     const tiledSizeY = 32;
-    const tileWidth = 64, tileHeight = 64;
-    const limitX = tiledSizeX * tileWidth - (this.game.camera.width / this.game.world.scale.x),
-      limitY = tiledSizeY * tileHeight - (this.game.camera.height / this.game.world.scale.y);
+    const tileWidth = 64,
+      tileHeight = 64;
+    const limitX =
+        tiledSizeX * tileWidth -
+        this.game.camera.width / this.game.world.scale.x,
+      limitY =
+        tiledSizeY * tileHeight -
+        this.game.camera.height / this.game.world.scale.y;
     for (var i = 0, l = 256; i < l; i++) {
-      const rectangle = new Rectangle(i % 16 * tileWidth, ~~(i / 16) * tileHeight, tileWidth, tileHeight);
+      const rectangle = new Rectangle(
+        (i % 16) * tileWidth,
+        ~~(i / 16) * tileHeight,
+        tileWidth,
+        tileHeight
+      );
       const texture = staticWorldTexture.clone();
       texture.frame = rectangle;
       textures.push(texture);
     }
     const aliasData = this.loader.resources.worldmap.data.layers;
 
-    this.tilemap = new TileMap(0, textures, aliasData.slice(0, 4), { tiledSizeX, tiledSizeY, tileWidth, tileHeight });
+    this.tilemap = new TileMap(0, textures, aliasData.slice(0, 4), {
+      tiledSizeX,
+      tiledSizeY,
+      tileWidth,
+      tileHeight
+    });
     this.tilemap.tile.pivot.set(0, 0);
 
     this.scene.addChild(this.tilemap.tile);
@@ -130,19 +148,28 @@ class MapDemo extends KnScene {
     this.initialRoles();
 
     // 添加纵深层
-    this.depthmap = new TileMap(0, textures, aliasData.slice(4, 5), { tiledSizeX, tiledSizeY, tileWidth, tileHeight });
+    this.depthmap = new TileMap(0, textures, aliasData.slice(4, 5), {
+      tiledSizeX,
+      tiledSizeY,
+      tileWidth,
+      tileHeight
+    });
     this.depthmap.tile.pivot.set(0, 0);
     this.scene.addChild(this.depthmap.tile);
 
     // this.addMark(tileWidth, tileHeight);
 
     // 定义地图layer用于点击
-    const layer: any = this.drawStage.generateRect(0xffffff, [0, 0, this.game.camera.width, this.game.camera.height], !1);
+    const layer: any = this.drawStage.generateRect(
+      0xffffff,
+      [0, 0, this.game.camera.width, this.game.camera.height],
+      !1
+    );
     layer.interactive = true;
     layer._events.pointerdown = [];
 
     // 添加点击layerWrap容器
-    const layerWrap = new PIXI['tilemap'].RectTileLayer(1, []);
+    const layerWrap = new PIXI["tilemap"].RectTileLayer(1, []);
     layerWrap.addChild(layer);
     this.tilemap.tile.addChild(layerWrap);
 
@@ -151,7 +178,7 @@ class MapDemo extends KnScene {
     this.gamer.paths = [];
 
     // 监听点击
-    layer.on('pointerdown', (e) => {
+    layer.on("pointerdown", (e) => {
       this.setWalkPath(e, tileWidth, 0);
     });
 
@@ -163,13 +190,14 @@ class MapDemo extends KnScene {
         // 定义初始方向
         this.roleRunning(this.gamer, tileWidth, tileHeight);
       }
-      this.alphaLight && this.alphaLight.position.set(this.gamer.x, this.gamer.y);
+      this.alphaLight &&
+        this.alphaLight.position.set(this.gamer.x, this.gamer.y);
       this.cameraUpdate(limitX, limitY);
 
       if (this.gamer.bullets.length > 0 && this.gamer.target) {
         this.gamer.bullets.forEach((bullet, index) => {
           const atan2 = math.angleToPointer(bullet, null, this.gamer.target);
-          bullet.angle = -180 + 180 * atan2 / Math.PI;
+          bullet.angle = -180 + (180 * atan2) / Math.PI;
           const xDistance = bullet.x - this.gamer.target.x;
           const yDistance = bullet.y - this.gamer.target.y;
           if (Math.abs(xDistance) < 32 && Math.abs(yDistance) < 32) {
@@ -200,7 +228,7 @@ class MapDemo extends KnScene {
     if (e.data) {
       pos.x = e.data.global.x;
       pos.y = e.data.global.y;
-      target = this.transformPointer(pos, tileWidth)
+      target = this.transformPointer(pos, tileWidth);
     } else {
       target = e.pointer;
     }
@@ -256,51 +284,51 @@ class MapDemo extends KnScene {
     // });
 
     // 定义行走动画
-    this.gamer.role.animation.play('walk').timeScale = 2;
+    this.gamer.role.animation.play("walk").timeScale = 2;
   }
 
   // 添加点击标记
   addMark(tileWidth, tileHeight) {
-    this.mark = this.game.add.image('mark', this.scene, [0.5, 0.5]);
+    this.mark = this.game.add.image("mark", this.scene, [0.5, 0.5]);
     this.mark.visible = !1;
     this.mark.width = tileWidth * 0.5;
     this.mark.height = tileHeight * 0.5;
   }
 
   roleRunning(character: PlayerRole, tileWidth: number, tileHeight: number) {
-
     // 每一格方向判断
     const pointer = character.paths[character.step].pointer;
 
     this.setRolesDirect(character, character.pointer, pointer);
     character.pointer.set(pointer.x, pointer.y);
     character.timeline.clear();
-    character.timeline.to(character, 0.24, {
-      x: (pointer.x + 0.5) * tileWidth,
-      y: (pointer.y + 0.5) * tileHeight,
-      ease: character.timeline.linear.easeNone
-    }).call(() => {
-      const nextPath = character.paths[this.gamer.step] || character.end;
-      character.goingPointer.set(nextPath.pointer.x, nextPath.pointer.y);
+    character.timeline
+      .to(character, 0.24, {
+        x: (pointer.x + 0.5) * tileWidth,
+        y: (pointer.y + 0.5) * tileHeight,
+        ease: character.timeline.linear.easeNone
+      })
+      .call(() => {
+        const nextPath = character.paths[this.gamer.step] || character.end;
+        character.goingPointer.set(nextPath.pointer.x, nextPath.pointer.y);
 
-      // 更新gamer的地图坐标
-      this.gamer.reentry || character.pointer.set(pointer.x, pointer.y);
-      character.tweening = false;
-      this.gamer.reentry = false;
+        // 更新gamer的地图坐标
+        this.gamer.reentry || character.pointer.set(pointer.x, pointer.y);
+        character.tweening = false;
+        this.gamer.reentry = false;
 
-      // 当行走至路径终点时
-      if (character.step === character.paths.length) {
-        character.pause ||
-          character.role.animation.play('stay');
-        character.paths = [];
-        character.goingPointer.set(0, 0);
-      }
-    });
+        // 当行走至路径终点时
+        if (character.step === character.paths.length) {
+          character.pause || character.role.animation.play("stay");
+          character.paths = [];
+          character.goingPointer.set(0, 0);
+        }
+      });
     character.step += 1;
   }
 
   addDarkLight() {
-    this.alphaLight = this.game.add.image('lightmap', this.scene, [0.5, 0.5]);
+    this.alphaLight = this.game.add.image("lightmap", this.scene, [0.5, 0.5]);
     this.alphaLight.position.set(this.gamer.x, this.gamer.y);
     this.alphaLight.scale.set(2, 1);
     const tween = this.game.add.tween();
@@ -309,15 +337,16 @@ class MapDemo extends KnScene {
       y: 0.95,
       repeat: 1000,
       ease: tween.cubic.easeInOut,
-      yoyo: true,
+      yoyo: true
     });
   }
 
   cameraUpdate(limitX, limitY) {
-
     // 镜头更新
-    const globalOffsetX = this.gamer.x - this.game.camera.half_w / this.game.world.scale.x;
-    const globalOffsetY = this.gamer.y - this.game.camera.half_h / this.game.world.scale.y;
+    const globalOffsetX =
+      this.gamer.x - this.game.camera.half_w / this.game.world.scale.x;
+    const globalOffsetY =
+      this.gamer.y - this.game.camera.half_h / this.game.world.scale.y;
     if (globalOffsetX >= 0 && globalOffsetX < limitX) {
       this.scene.pivot.x = globalOffsetX;
     } else if (globalOffsetX >= limitX) {
@@ -338,12 +367,12 @@ class MapDemo extends KnScene {
     const stageRes = this.loader.resources;
 
     // 设定敌对角色
-    const skull = new EnemyRole(this, stageRes, 'skull');
+    const skull = new EnemyRole(this, stageRes, "skull");
     skull.initial(20, 3);
-    skull.role.animation.play('stay').timeScale = 1.8;
+    skull.role.animation.play("stay").timeScale = 1.8;
 
     // 定义德鲁伊
-    this.gamer = new PlayerRole(this, stageRes, 'druid');
+    this.gamer = new PlayerRole(this, stageRes, "druid");
     this.gamer.initial(24, 7);
     this.gamer.setFaceToRight();
 
@@ -363,22 +392,26 @@ class MapDemo extends KnScene {
   initialGUI(character: PlayerRole) {
     this.expbar = new ExpBar(this, character);
     this.addSkillGroup(character);
-    const avatar = new KnAvatar(this.game, this, 'avatar', 0xda9e55);
+    const avatar = new KnAvatar(this.game, this, "avatar", 0xda9e55);
     avatar.setPosition(avatar.avatar_w + 4, avatar.avatar_h + 4);
   }
 
   // 技能UI组
   addSkillGroup(character) {
-    const Gui = this.game.add.group('gui', this);
+    const Gui = this.game.add.group("gui", this);
     character.initSkill(Gui);
-    Gui.position.set(this.game.config.width - Gui.width, this.game.config.height - Gui.height * 0.5);
+    Gui.position.set(
+      this.game.config.width - Gui.width,
+      this.game.config.height - Gui.height * 0.5
+    );
   }
 
   // 坐标重叠
   isPointerOverlap(start: Path, end: Path) {
-    return start.pointer.x === end.pointer.x && start.pointer.y === end.pointer.y;
+    return (
+      start.pointer.x === end.pointer.x && start.pointer.y === end.pointer.y
+    );
   }
-
 
   // 点击坐标转换
   transformPointer(pos: Point, tileWidth: number) {
@@ -392,12 +425,17 @@ class MapDemo extends KnScene {
   // A*寻路
   astar(start: Path, end: Path, distance: number = 0) {
     let findFlag: Boolean = true;
-    let opens: Array<Path> = [], closed: Array<Path> = [];
+    let opens: Array<Path> = [],
+      closed: Array<Path> = [];
     closed.push(start);
     let cur: any = start;
 
     // 节点相邻
-    if (Math.abs(start.pointer.x - end.pointer.x) + Math.abs(start.pointer.y - end.pointer.y) === 1) {
+    if (
+      Math.abs(start.pointer.x - end.pointer.x) +
+        Math.abs(start.pointer.y - end.pointer.y) ===
+      1
+    ) {
       closed.push(end);
       end.prev = cur;
       findFlag = false;
@@ -408,22 +446,31 @@ class MapDemo extends KnScene {
       closed.push(cur);
     }
 
-    if (Math.pow(start.pointer.x - end.pointer.x, 2) + Math.pow(start.pointer.y - end.pointer.y, 2) <= Math.pow(distance, 2)) {
+    if (
+      Math.pow(start.pointer.x - end.pointer.x, 2) +
+        Math.pow(start.pointer.y - end.pointer.y, 2) <=
+      Math.pow(distance, 2)
+    ) {
       return [];
     }
 
     // 循环执行
     while (findFlag && cur) {
-
       // 获取当前
-      let rounds: Array<any> = this.getRound(this.tilemap.size_x, this.tilemap.size_y, cur);
+      let rounds: Array<any> = this.getRound(
+        this.tilemap.size_x,
+        this.tilemap.size_y,
+        cur
+      );
       for (let rd of rounds) {
-
         // 存在于open,close数组以及元素为障碍物则排除。
-        if (this.isExistList(opens, rd) || this.isExistList(closed, rd) || this.isobstacle(rd)) {
+        if (
+          this.isExistList(opens, rd) ||
+          this.isExistList(closed, rd) ||
+          this.isobstacle(rd)
+        ) {
           continue;
         } else if (!this.isExistList(closed, rd) && !this.isobstacle(rd)) {
-
           // 满足移动的条件则构造Pointer
           let p: Path = {
             pointer: rd,
@@ -457,7 +504,9 @@ class MapDemo extends KnScene {
       // 如果opens存在多个最小值，选择离当前点最近的。
       if (oMinArray.length > 1) {
         for (let oma of oMinArray) {
-          oma.D = Math.abs(oma.pointer.x - cur.pointer.x) + Math.abs(oma.pointer.y - cur.pointer.y)
+          oma.D =
+            Math.abs(oma.pointer.x - cur.pointer.x) +
+            Math.abs(oma.pointer.y - cur.pointer.y);
         }
         oMinArray.sort((a, b) => a.D ?? 0 - (b.D ?? 0));
         oMinF = oMinArray[0];
@@ -483,7 +532,8 @@ class MapDemo extends KnScene {
       }
     }
 
-    let paths: Array<Path> = [], finalPaths: Array<Path> = [];
+    let paths: Array<Path> = [],
+      finalPaths: Array<Path> = [];
     if (closed.length > 0) {
       let pathdot: any = closed[closed.length - 1];
       while (pathdot) {
@@ -494,7 +544,11 @@ class MapDemo extends KnScene {
 
     // 设定目标远程范围
     for (let path of paths) {
-      if (Math.pow(path.pointer.x - end.pointer.x, 2) + Math.pow(path.pointer.y - end.pointer.y, 2) < Math.pow(distance, 2)) {
+      if (
+        Math.pow(path.pointer.x - end.pointer.x, 2) +
+          Math.pow(path.pointer.y - end.pointer.y, 2) <
+        Math.pow(distance, 2)
+      ) {
         break;
       }
       finalPaths.push(path);
@@ -549,7 +603,10 @@ class MapDemo extends KnScene {
   // 判断是否为障碍
   isobstacle(pointer: Point) {
     const index = pointer.x + this.tilemap.size_x * pointer.y;
-    if (this.tilemap.mapData[2].data[index] > 0 && this.tilemap.mapData[3].data[index] === 0) {
+    if (
+      this.tilemap.mapData[2].data[index] > 0 &&
+      this.tilemap.mapData[3].data[index] === 0
+    ) {
       return true;
     } else {
       return false;
@@ -558,7 +615,6 @@ class MapDemo extends KnScene {
 
   reset() {
     if (this.children.length > 1) {
-
       // 清除grahpics 画布
       this.drawStage.clear();
 

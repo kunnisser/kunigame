@@ -1,6 +1,6 @@
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import Game from "ts@/kuni/lib/core";
-import { GlowFilter } from 'ts@/kuni/src/filter/glow';
+import { GlowFilter } from "ts@/kuni/src/filter/glow";
 import { Sprite } from "pixi.js";
 
 class TweenDemo extends KnScene {
@@ -11,14 +11,14 @@ class TweenDemo extends KnScene {
     super(game, key);
     this.game = game;
     this.shootType = 1;
-    this.resouces = {
-      'wsjBg': '/projects/kuni/assets/images/wsj_bg.png',
-      'staff': '/projects/kuni/assets/images/titleWeapon_02.png',
-      'glow': '/projects/kuni/assets/shader/frag/glow.frag',
-      'pumpkin': '/projects/kuni/assets/images/pumpkin.png',
-      'cannikin': '/projects/kuni/assets/images/cannikin.png',
-      'start': '/projects/kuni/assets/images/start.png'
-    }
+    this.resources = {
+      "wsjBg": "/projects/kuni/assets/images/wsj_bg.png",
+      "staff": "/projects/kuni/assets/images/titleWeapon_02.png",
+      "glow": "/projects/kuni/assets/shader/frag/glow.frag",
+      "pumpkin": "/projects/kuni/assets/images/pumpkin.png",
+      "cannikin": "/projects/kuni/assets/images/cannikin.png",
+      "start": "/projects/kuni/assets/images/start.png"
+    };
   }
 
   boot() {
@@ -32,15 +32,18 @@ class TweenDemo extends KnScene {
   }
 
   dev() {
-    if (this.game.gui.__controllers[0] && this.game.gui.__controllers[0].property === '缓动模式') {
+    if (
+      this.game.gui.__controllers[0] &&
+      this.game.gui.__controllers[0].property === "缓动模式"
+    ) {
       return;
     }
 
     const dat = {
-      '缓动模式': '均匀'
-    },
-      datArr = ['均匀', '正弦', '定时弹动', '摇摆'];
-    this.dat = this.game.gui.add(dat, '缓动模式', datArr);
+        "缓动模式": "均匀"
+      },
+      datArr = ["均匀", "正弦", "定时弹动", "摇摆"];
+    this.dat = this.game.gui.add(dat, "缓动模式", datArr);
     this.dat.onChange((v: string) => {
       this.shootType = datArr.indexOf(v) + 1;
       this.toggleEnv(this.shootType);
@@ -69,7 +72,7 @@ class TweenDemo extends KnScene {
   }
 
   addBackground() {
-    const bg = this.game.add.image('wsjBg', this);
+    const bg = this.game.add.image("wsjBg", this);
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
   }
@@ -83,7 +86,7 @@ class TweenDemo extends KnScene {
 
   // 添加法杖武器
   addStaff() {
-    const staff = this.addSprite('staff');
+    const staff = this.addSprite("staff");
     staff.scale.set(0.2);
     staff.filters = [new GlowFilter(this.loader, 0x31fcc4)];
     staff.angle = 0;
@@ -92,7 +95,7 @@ class TweenDemo extends KnScene {
 
   // 添加南瓜
   addPumpkin() {
-    const pumpkin = this.addSprite('pumpkin');
+    const pumpkin = this.addSprite("pumpkin");
     pumpkin.filters = [new GlowFilter(this.loader, 0x31fcc4)];
     pumpkin.angle = -2;
     this.sineTween(pumpkin);
@@ -100,14 +103,14 @@ class TweenDemo extends KnScene {
 
   // 增加木桶
   addCannikin() {
-    const cannikin = this.addSprite('cannikin');
+    const cannikin = this.addSprite("cannikin");
     this.bounceTween(cannikin);
     this.fallingTween(cannikin);
   }
 
   // 增加开始按钮
   addStart() {
-    const start = this.game.add.button('start', 'cannikin', this, [0.5, 0.5]);
+    const start = this.game.add.button("start", "cannikin", this, [0.5, 0.5]);
     start.position.set(this.game.config.half_w, this.game.config.half_h);
     start.scale.set(0.36);
     this.angleTween(start);
@@ -159,38 +162,36 @@ class TweenDemo extends KnScene {
       onComplete: () => {
         test.restart(true);
       }
-    })
+    });
   }
 
   angleTween(start: Sprite) {
     const tween: any = this.game.add.tween();
     const angle = -8;
     start.angle = 0;
-    const angleTween = tween.instance.to(start, 0.16,
-      {
-        delay: 1.2,
-        angle: Math.abs(angle),
-        ease: tween.sine.easeInOut,
-        startAt: {
-          angle: angle
-        },
-        repeat: 2,
-        yoyo: true,
-        onComplete: () => {
-          tween.instance.to(start, 0.16, {
-            angle: 0,
-            ease: tween.sine.easeInOut,
-            onComplete: () => {
-              angleTween.restart(true);
-            }
-          });
-        }
-      });
+    const angleTween = tween.instance.to(start, 0.16, {
+      delay: 1.2,
+      angle: Math.abs(angle),
+      ease: tween.sine.easeInOut,
+      startAt: {
+        angle: angle
+      },
+      repeat: 2,
+      yoyo: true,
+      onComplete: () => {
+        tween.instance.to(start, 0.16, {
+          angle: 0,
+          ease: tween.sine.easeInOut,
+          onComplete: () => {
+            angleTween.restart(true);
+          }
+        });
+      }
+    });
   }
 
   reset() {
     if (this.children.length > 1) {
-
       // 清除group子对象
       this.removeChildren(1, this.children.length);
     }

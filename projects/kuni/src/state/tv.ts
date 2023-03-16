@@ -21,7 +21,7 @@ class TvDemo extends KnScene {
     super(game, key);
     this.game = game;
     this.shootType = 1;
-    this.resouces = {
+    this.resources = {
       "tv": "/projects/kuni/assets/images/tv.png"
     };
     this.time = 0;

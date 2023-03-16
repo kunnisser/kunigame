@@ -14,13 +14,12 @@ class LaserDemo extends KnScene {
     super(game, key);
     this.game = game;
     this.shootType = 1;
-    this.resouces = {
-      'beams': '/projects/kuni/assets/images/beams.png'
-    }
+    this.resources = {
+      "beams": "/projects/kuni/assets/images/beams.png"
+    };
   }
 
-  boot() {
-  }
+  boot() {}
 
   create() {
     this.laser();
@@ -54,7 +53,6 @@ class LaserDemo extends KnScene {
 
   reset() {
     if (this.children.length > 1) {
-
       // 清除group子对象
       this.removeChildren(1, this.children.length);
     }

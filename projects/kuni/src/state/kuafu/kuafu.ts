@@ -25,7 +25,7 @@ class KuaFu extends KnScene {
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
-    this.resouces = {
+    this.resources = {
       "kuafu_bg": "/projects/kuni/assets/kuafu/kuafu_bg.png",
       "kuafu_near_bg": "/projects/kuni/assets/kuafu/kuafu_near_bg.png",
       "kuafu_far_bg": "/projects/kuni/assets/kuafu/kuafu_far_bg.png",

@@ -16,7 +16,7 @@ class Welcome extends KnScene {
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
-    this.resouces = {};
+    this.resources = {};
   }
 
   boot() {}
