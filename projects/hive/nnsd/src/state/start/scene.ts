@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-16 11:08:42
+ * @LastEditTime: 2023-03-17 10:38:16
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -21,7 +21,8 @@ class Start extends KnScene {
       attack: "/projects/hive/nnsd/assets/images/attack.png",
       logo: "/projects/hive/nnsd/assets/images/logo.png",
       avator_01: "/projects/hive/nnsd/assets/images/avator_01.png",
-      loadingrun: "/projects/hive/nnsd/assets/atlas/loadingrun.json"
+      loadingrun: "/projects/hive/nnsd/assets/atlas/loadingrun.json",
+      boy: "/projects/hive/nnsd/assets/atlas/boy.json"
     };
   }
 

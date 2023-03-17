@@ -14,11 +14,12 @@ import KnGroup from "./gameobjects/kn_group";
 interface EnterProps {
   width: number;
   height?: number;
-  ratio: number;
+  ratio?: number;
   antialias?: boolean;
   transparent?: boolean;
   view: any;
   isPureCanvas?: boolean;
+  dpr?: number;
 }
 
 export default class Game {
@@ -60,18 +61,22 @@ export default class Game {
   }; // 游戏尺寸
   entryHive: any;
   editHive: any;
+  ratio: number;
   constructor(config: EnterProps) {
     window["PIXI"] = PIXI;
     this.view = config.view;
-    this.dpr = window.devicePixelRatio;
-    console.log("dpr = ", this.dpr);
+    this.dpr = config.dpr || window.devicePixelRatio;
     this.camera = {};
+    config.ratio
+      ? (this.ratio = config.ratio)
+      : (this.ratio = config.width / (config.height || 1000));
+
     // 设置游戏画布基本尺寸
     this.config = {
       width: config.width,
-      height: config.width / config.ratio,
+      height: config.width / this.ratio,
       half_w: config.width * 0.5,
-      half_h: (config.width / config.ratio) * 0.5
+      half_h: (config.width / this.ratio) * 0.5
     };
 
     this.app = new Application({
@@ -133,7 +138,7 @@ export default class Game {
 
   // 重置画布尺寸
   resizeStage(view: Element, config: EnterProps) {
-    const RATIO = config.ratio;
+    const RATIO = this.ratio;
     let SCREEN_WIDTH: number | string = window.getComputedStyle(view).width;
     let SCREEN_HEIGHT: number | string = window.getComputedStyle(view).height;
     SCREEN_WIDTH = +SCREEN_WIDTH.substr(0, SCREEN_WIDTH.length - 2);

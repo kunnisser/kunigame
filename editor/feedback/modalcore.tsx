@@ -24,7 +24,9 @@ export interface ModalOptions {
 
 const useModal = (props) => {
   const [modalVisible, setModalVisible] = useState(!1);
-  const closeModal = () => setModalVisible(!1);
+  const closeModal = () => {
+    setModalVisible(!1);
+  };
   const [width, setWidth] = useState(0);
   const [name, setName] = useState("");
   const [content, setContent] = useState("");

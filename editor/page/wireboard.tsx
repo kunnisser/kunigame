@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-08 16:49:28
+ * @LastEditTime: 2023-03-17 16:44:17
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -39,7 +39,9 @@ const { Header, Footer, Sider, Content } = Layout;
 
 const WireBoard = (props) => {
   const [childModal, openChildModal, closeChildModal] = useModal({});
-  const [modal, openModal, closeModal] = useModal({ childModal: childModal });
+  const [modal, openModal, closeModal] = useModal({
+    childModal: childModal
+  });
   const store = useStore();
   const dispatch = useDispatch();
   const [sceneId, setCurrentSceneId] = useState("");

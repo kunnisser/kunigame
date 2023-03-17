@@ -2,31 +2,24 @@
  * @Author: kunnisser
  * @Date: 2023-03-15 09:58:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-16 23:29:48
- * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\texture.tsx
+ * @LastEditTime: 2023-03-17 17:41:16
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/texture.tsx
  * @Description: ---- 纹理选择 ----
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { DefaultProps } from "./interface";
 import isString from "lodash.isstring";
 import cx from "classnames";
 import { Button, Divider, Image, Space } from "antd";
 import { useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
-import { RadioChangeEvent } from "antd/lib/radio";
 import { WrapContext } from "editor@/page/wireboard";
 import { ModalOptions } from "editor@/feedback/modalcore";
 import ModalTexturePicker from "./modal/texturePicker";
+import ModalImagePicker from "./modal/imagePicker";
 const DatTexture = (props: DefaultProps) => {
-  const { openModal }: any = useContext(WrapContext);
-  const handleChange = (e: RadioChangeEvent) => {
-    const { liveUpdate, _onUpdateValue, onUpdate, path } = props;
-    _onUpdateValue && _onUpdateValue(path, e.target.value);
-    if (liveUpdate) {
-      onUpdate && onUpdate(e.target.value);
-    }
-  };
+  const { openModal, closeModal }: any = useContext(WrapContext);
   const currentScene = useSelector(
     (store: CombineReducer) => store.sceneReducer.currentScene
   );
@@ -34,7 +27,19 @@ const DatTexture = (props: DefaultProps) => {
   const labelText = isString(label) ? label : path;
   const labelWidth = "100%";
   const defaultVal = props.data ? props.data[path] : "";
-  console.log(defaultVal);
+  const ref: any = useRef({
+    update: 0
+  });
+
+  const changeTexture = () => {
+    const { liveUpdate, _onUpdateValue, onUpdate, path } = props;
+    const texture = ref.current.pickValue;
+    _onUpdateValue && _onUpdateValue(path, texture);
+    if (liveUpdate) {
+      onUpdate && onUpdate(texture);
+    }
+    closeModal();
+  };
 
   const generateTextureAbleList = () => {
     const gameResources = currentScene.game.loader.resources;
@@ -52,7 +57,8 @@ const DatTexture = (props: DefaultProps) => {
           return atlasList.push({
             type: "atlas",
             key: resourceKey,
-            url: gameResources[resourceKey].url
+            url: gameResources[resourceKey].url,
+            frames: gameResources[resourceKey].data.frames
           });
         } else {
           return imageList.push({
@@ -67,43 +73,47 @@ const DatTexture = (props: DefaultProps) => {
 
   const pickTexture = () => {
     const [imageList, atlasList] = generateTextureAbleList();
-    console.log(imageList);
-
     openModal({
-      width: 800,
+      width: 840,
       name: "选择纹理",
       content: (
         <React.Fragment>
-          <Divider orientation="left">已加载的图片资源</Divider>
-          <Space wrap>
-            {
-              imageList.map((image) => {
-                return <div
-                  key={image.key}
-                >
-                  <div className="kn-image-thumb">
-                    <img
-                      src={image.url}
-                    ></img>
-                  </div>
-                  <p style={{ textAlign: "center" }}>{image.key}</p>
-                </div>;
-              })
-            }
-
+          <Divider orientation="left">已加载的Images</Divider>
+          <ModalImagePicker
+            ref={ref}
+            images={imageList}
+            defaultVal={defaultVal}
+            game={currentScene.game}
+          ></ModalImagePicker>
+          <Divider orientation="left">已加载的Atlas</Divider>
+          <Space key={"modal-atlas-picker"} direction="vertical">
+            {atlasList.map((atlas) => {
+              return (
+                <ModalTexturePicker
+                  key={atlas.key}
+                  atlas={atlas}
+                ></ModalTexturePicker>
+              );
+            })}
           </Space>
-          <ModalTexturePicker
-            textureAbleList={atlasList}
-          ></ModalTexturePicker>
         </React.Fragment>
       ),
       footer: [
-        <Button key="back">取消</Button>,
-        <Button key="submit" type="primary">
+        <Button
+          key="back"
+          onClick={() => {
+            closeModal();
+          }}
+        >
+          取消
+        </Button>,
+        <Button key="submit" type="primary" onClick={changeTexture}>
           选择
         </Button>
       ]
     } as ModalOptions);
+    console.log(ref);
+    ref.current.update += 1;
   };
 
   return (
