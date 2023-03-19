@@ -32,6 +32,7 @@ const useModal = (props) => {
   const [content, setContent] = useState("");
   const [footer, setFooter] = useState(null);
   const [handler, setHandler] = useState(null);
+  const [modalKey, setModalKey] = useState(0);
   const openModal: any = (options: ModalOptions) => {
     setModalVisible(!0);
     /** 设置宽度 */
@@ -43,6 +44,9 @@ const useModal = (props) => {
     setContent(options.content);
     /** modal提交事件 */
     setHandler(options.handler);
+    // 刷新modal
+    let key = modalKey + 1;
+    setModalKey(key);
   };
 
   const dispatchSubmit = () => {
@@ -55,6 +59,7 @@ const useModal = (props) => {
     <Modal
       title={name}
       width={width}
+      key={name + modalKey}
       centered
       closable={false}
       onOk={dispatchSubmit}

@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-14 09:47:47
- * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
+ * @LastEditTime: 2023-03-19 23:18:06
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
 import React, { useEffect, useState } from "react";
@@ -60,13 +60,26 @@ const Inspector = () => {
     return retArr;
   };
 
+  // 处理特殊提交对象
+  const setAdvancedVariables = (val: any) => {
+    if (val.textureCacheIds) {
+      return {
+        type: 'texture',
+        value: val.textureCacheIds
+      }
+    }
+    return val;
+  }
+
   const handleUpdate = (newData: any, path: string) => {
     const game: Game = store.getState().sceneReducer.game;
     const gameItem = store.getState().sceneReducer.gameItem;
     const gameItemName = gameItem.name;
     const editGameItem = store.getState().sceneReducer.editGameItem;
     editGameItem[gameItemName] = editGameItem[gameItemName] || {};
-    editGameItem[gameItemName][path] = newData[path];
+
+    // 提交的更新参数构造
+    editGameItem[gameItemName][path] = setAdvancedVariables(newData[path]);
     dispatch(updateEditGameItem(editGameItem));
     const keysArray = Object.keys(newData);
     for (const keysCombine of keysArray) {

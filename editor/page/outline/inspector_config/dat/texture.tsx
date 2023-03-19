@@ -2,34 +2,36 @@
  * @Author: kunnisser
  * @Date: 2023-03-15 09:58:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-17 17:41:16
- * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/texture.tsx
+ * @LastEditTime: 2023-03-19 20:10:26
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\texture.tsx
  * @Description: ---- 纹理选择 ----
  */
 
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { DefaultProps } from "./interface";
 import isString from "lodash.isstring";
 import cx from "classnames";
-import { Button, Divider, Image, Space } from "antd";
+import { Button } from "antd";
 import { useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
-import { WrapContext } from "editor@/page/wireboard";
 import { ModalOptions } from "editor@/feedback/modalcore";
-import ModalTexturePicker from "./modal/texturePicker";
-import ModalImagePicker from "./modal/imagePicker";
+
+import { WrapContext } from "editor@/page/wireboard";
+import ModalPickerWrapper from "./modal/pickerWrapper";
+import Game from "ts@/kuni/lib/core";
 const DatTexture = (props: DefaultProps) => {
+  const ref = useRef({} as any);
+  const { path, label, className } = props;
+  const [previewSprite, setPreviewSprite] = useState(null as any);
+  const defaultVal = props.data ? props.data[path] : "";
   const { openModal, closeModal }: any = useContext(WrapContext);
   const currentScene = useSelector(
     (store: CombineReducer) => store.sceneReducer.currentScene
   );
-  const { path, label, className } = props;
   const labelText = isString(label) ? label : path;
   const labelWidth = "100%";
-  const defaultVal = props.data ? props.data[path] : "";
-  const ref: any = useRef({
-    update: 0
-  });
+  const previewWidth = 270;
+  const previewHeight = 270;
 
   const changeTexture = () => {
     const { liveUpdate, _onUpdateValue, onUpdate, path } = props;
@@ -77,26 +79,7 @@ const DatTexture = (props: DefaultProps) => {
       width: 840,
       name: "选择纹理",
       content: (
-        <React.Fragment>
-          <Divider orientation="left">已加载的Images</Divider>
-          <ModalImagePicker
-            ref={ref}
-            images={imageList}
-            defaultVal={defaultVal}
-            game={currentScene.game}
-          ></ModalImagePicker>
-          <Divider orientation="left">已加载的Atlas</Divider>
-          <Space key={"modal-atlas-picker"} direction="vertical">
-            {atlasList.map((atlas) => {
-              return (
-                <ModalTexturePicker
-                  key={atlas.key}
-                  atlas={atlas}
-                ></ModalTexturePicker>
-              );
-            })}
-          </Space>
-        </React.Fragment>
+        <ModalPickerWrapper ref={ref} currentScene={currentScene} imageList={imageList} atlasList={atlasList} defaultVal={defaultVal}></ModalPickerWrapper>
       ),
       footer: [
         <Button
@@ -112,9 +95,38 @@ const DatTexture = (props: DefaultProps) => {
         </Button>
       ]
     } as ModalOptions);
-    console.log(ref);
-    ref.current.update += 1;
   };
+
+  useEffect(() => {
+    const textureDom = document.getElementById("texturePreview");
+    const ratio = defaultVal.width / defaultVal.height;
+    const atlasScreen = new Game({
+      width: previewWidth,
+      height: previewHeight,
+      dpr: 1,
+      transparent: true,
+      view: textureDom,
+      isPureCanvas: true
+    });
+    const currentKey = defaultVal.textureCacheIds[0];
+    const sprite = atlasScreen.add.image(currentKey, atlasScreen.stage, [0.5, 0.5]);
+    sprite.x = previewWidth * .5;
+    sprite.y = previewHeight * .5;
+    sprite.width = ratio > 1 ? previewWidth : previewHeight * ratio;
+    sprite.height = ratio > 1 ? previewWidth / ratio : previewHeight;
+    sprite.tint = 0xffffff;
+    setPreviewSprite(sprite);
+  }, []);
+
+  useEffect(() => {
+    if (previewSprite) {
+      const ratio = defaultVal.width / defaultVal.height;
+      previewSprite.width = ratio > 1 ? previewWidth : previewHeight * ratio;
+      previewSprite.height = ratio > 1 ? previewWidth / ratio : previewHeight;
+      previewSprite.texture = defaultVal;
+      setPreviewSprite(previewSprite);
+    }
+  }, [defaultVal]);
 
   return (
     <li
@@ -126,8 +138,8 @@ const DatTexture = (props: DefaultProps) => {
       <div style={{ paddingTop: "10px" }}>
         <label>{labelText}</label>
       </div>
-      <div className="kn-texture">
-        <Image src={defaultVal.baseTexture.resource.url} />
+      <div className="kn-texture" >
+        <div id="texturePreview"></div>
       </div>
       <div className="kn-texture-bar">
         <Button type="primary" block onClick={pickTexture}>
