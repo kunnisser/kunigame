@@ -2,13 +2,13 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-19 19:48:21
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\start\scene.ts
+ * @LastEditTime: 2023-03-20 10:10:42
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
-import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
-import Game from 'ts@/kuni/lib/core';
-import KnText from 'ts@/kuni/lib/gameobjects/kn_text';
+import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
+import Game from "ts@/kuni/lib/core";
+import KnText from "ts@/kuni/lib/gameobjects/kn_text";
 
 class Start extends KnScene {
   game: Game;
@@ -18,45 +18,47 @@ class Start extends KnScene {
     super(game, key);
     this.game = game;
     this.resources = {
-      attack: '/projects/hive/nnsd/assets/images/attack.png',
-      logo: '/projects/hive/nnsd/assets/images/logo.png',
-      avator_01: '/projects/hive/nnsd/assets/images/avator_01.png',
-      loadingrun: '/projects/hive/nnsd/assets/atlas/loadingrun.json',
-      boy: '/projects/hive/nnsd/assets/atlas/boy.json'
+      attack: "/projects/hive/nnsd/assets/images/attack.png",
+      logo: "/projects/hive/nnsd/assets/images/logo.png",
+      avator_01: "/projects/hive/nnsd/assets/images/avator_01.png",
+      loadingrun: "/projects/hive/nnsd/assets/atlas/loadingrun.json",
+      boy: "/projects/hive/nnsd/assets/atlas/boy.json"
     };
   }
 
   boot() {}
 
   create() {
-    const demoText: KnText = this.game.add.text('测试1', 'test1', {
-      fontSize: '24',
+    const demoText: KnText = this.game.add.text("测试1", "test1", {
+      fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
     demoText.position.set(this.game.config.half_w, this.game.config.half_h);
-    const testGroup = this.game.add.group('group1', this);
-    const demo1Text: KnText = this.game.add.text('测试2', 'test2', {
-      fontSize: '24',
+    const testGroup = this.game.add.group("group1", this);
+    const demo1Text: KnText = this.game.add.text("测试2", "test2", {
+      fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
     demo1Text.position.set(300, 400);
-    const demo2Text: KnText = this.game.add.text('测试3', 'test3', {
-      fontSize: '24',
+    const demo2Text: KnText = this.game.add.text("测试3", "test3", {
+      fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
     demo2Text.position.set(400, 400);
     testGroup.addChild(demoText);
     testGroup.addChild(demo1Text);
     testGroup.addChild(demo2Text);
-    const group2 = this.game.add.group('group2', this);
-    this.game.add.group('groupChild', group2);
-    const logo = this.game.add.image('logo', group2);
+    const group2 = this.game.add.group("group2", this);
+    this.game.add.group("groupChild", group2);
+    const logo = this.game.add.image("logo", group2);
+    logo.texture = this.game.add.texture("avator_01");
+    logo.anchor.set(0.5, 0.5);
     logo.blendMode = 3;
     logo.scale.y = 0.5;
     logo.scale.x = 0.5;
-    logo.y = 289;
+    logo.y = 321;
     logo.tintColor = "#ffffff";
-    logo.x = 496;
+    logo.x = 657;
   }
 
   update() {}

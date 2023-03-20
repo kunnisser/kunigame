@@ -2,21 +2,23 @@
  * @Author: kunnisser
  * @Date: 2023-02-06 17:05:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-15 16:39:46
+ * @LastEditTime: 2023-03-20 14:51:04
  * @FilePath: /kunigame/editor/page/outline/outline_tree/assets.tsx
  * @Description: ---- 素材列表 ----
  */
 
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Collapse, Empty, Space, Tag } from "antd";
 import { CombineReducer } from "editor@/common/store";
 import { getProjectAssets } from "editor@/api/request/project";
 import { EditGameName } from "editor@/page/workbench/canvas";
 import "editor@/assets/index.styl";
+import { setDragTarget } from "editor@/common/gameStore/scene/action";
 
 const { Panel } = Collapse;
 const AssetsList = () => {
+  const dispatch = useDispatch();
   const [assetsPath, imageDir, atlasDir, fontDir] = [
     "/projects/hive",
     "/assets/images/",
@@ -94,7 +96,7 @@ const AssetsList = () => {
   }, [currentScene]);
 
   const dragHandle = (path) => {
-    console.log(path);
+    dispatch(setDragTarget(path));
   };
 
   return (
@@ -129,14 +131,17 @@ const AssetsList = () => {
         {imageList.length > 0 ? (
           <Space align="center" wrap>
             {imageList.map((image: string) => {
+              console.log(image);
+              const imageName = image.split(".")[0];
               return (
                 <div
                   key={image}
                   draggable={true}
                   onDragStart={() =>
-                    dragHandle(
-                      `${assetsPath}/${EditGameName}${imageDir}${image}`
-                    )
+                    dragHandle({
+                      key: imageName,
+                      url: `${assetsPath}/${EditGameName}${imageDir}${image}`
+                    })
                   }
                 >
                   <div className="kn-image-thumb">
@@ -158,16 +163,18 @@ const AssetsList = () => {
         {atlasList.length > 0 ? (
           <Space align="center" wrap>
             {atlasList.map((atlas: string) => {
-              const isShow = atlas.split(".")[1] === "png";
+              const [atlasName, fileType] = atlas.split(".");
+              const isShow = fileType === "png";
               return (
                 isShow && (
                   <div
                     key={atlas}
                     draggable={true}
                     onDragStart={() =>
-                      dragHandle(
-                        `${assetsPath}/${EditGameName}${atlasDir}${atlas}`
-                      )
+                      dragHandle({
+                        type: atlasName,
+                        url: `${assetsPath}/${EditGameName}${atlasDir}${atlas}`
+                      })
                     }
                   >
                     <div className="kn-image-thumb">
@@ -190,16 +197,18 @@ const AssetsList = () => {
         {fontList.length > 0 ? (
           <Space align="center" wrap>
             {fontList.map((font: string) => {
-              const isShow = font.split(".")[1] === "png";
+              const [fontName, fileType] = font.split(".");
+              const isShow = fileType === "png";
               return (
                 isShow && (
                   <div
                     key={font}
                     draggable={true}
                     onDragStart={() =>
-                      dragHandle(
-                        `${assetsPath}/${EditGameName}${fontDir}${font}`
-                      )
+                      dragHandle({
+                        key: fontName,
+                        url: `${assetsPath}/${EditGameName}${fontDir}${font}`
+                      })
                     }
                   >
                     <div className="kn-image-thumb">

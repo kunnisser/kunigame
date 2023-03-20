@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-19 22:54:24
- * @FilePath: \kunigame\editor\page\wireboard.tsx
+ * @LastEditTime: 2023-03-20 11:14:57
+ * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
 
@@ -46,6 +46,7 @@ const WireBoard = (props) => {
   const dispatch = useDispatch();
   const [sceneId, setCurrentSceneId] = useState("");
   const [isNewGameEdit, setIsNewGameEdit] = useState(false);
+
   const CommonWidget = {
     openModal,
     closeModal,
@@ -107,7 +108,6 @@ const WireBoard = (props) => {
         const editGameItem = store.getState().sceneReducer.editGameItem;
         if (!isObjectEmpty(editGameItem)) {
           const currentScene = store.getState().sceneReducer.currentScene;
-          console.log(editGameItem);
           updateScene({
             projectName: EditGameName,
             sceneName: currentScene.id,

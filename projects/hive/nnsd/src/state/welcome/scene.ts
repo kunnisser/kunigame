@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-13 23:22:09
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\scene.ts
+ * @LastEditTime: 2023-03-20 16:02:00
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
@@ -24,7 +24,7 @@ class Welcome extends KnScene {
       logo: "/projects/hive/nnsd/assets/images/logo.png",
       font_a: "/projects/hive/nnsd/assets/fonts/font_a.fnt",
       font_b: "/projects/hive/nnsd/assets/fonts/font_b.fnt",
-      Desyrel: "/projects/hive/nnsd/assets/fonts/desyrel.xml"
+      desyrel: "/projects/hive/nnsd/assets/fonts/desyrel.xml"
     };
   }
 

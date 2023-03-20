@@ -2,14 +2,30 @@
  * @Author: kunnisser
  * @Date: 2023-03-07 14:14:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-19 23:23:12
- * @FilePath: \kunigame\server\route\scene\implement\generateElementExpression.js
+ * @LastEditTime: 2023-03-20 10:10:15
+ * @FilePath: /kunigame/server/route/scene/implement/generateElementExpression.js
  * @Description: ---- 游戏属性的ast表达式实现 ----
  */
-const T = require('@babel/types');
+const T = require("@babel/types");
+
+const generateTextureAst = (obj) => {
+  return T.callExpression(
+    T.memberExpression(
+      T.memberExpression(
+        T.memberExpression(T.thisExpression(), T.identifier("game")),
+        T.identifier("add")
+      ),
+      T.identifier(obj.type)
+    ),
+    [convertGamePropertyToExpression(obj.value[0])]
+  );
+};
 
 const generateAdvanceObject = (obj) => {
-  console.log(obj);
+  const advanceMap = {
+    "texture": generateTextureAst
+  };
+  return advanceMap[obj.type](obj);
 };
 
 /**
@@ -22,8 +38,7 @@ const convertGamePropertyToExpression = (val) => {
   const convertMaps = {
     number: T.numericLiteral,
     string: T.stringLiteral,
-    boolean: T.booleanLiteral,
-    object: generateAdvanceObject,
+    boolean: T.booleanLiteral
   };
   return convertMaps[type]
     ? convertMaps[type](val)
@@ -37,7 +52,7 @@ const convertGamePropertyToExpression = (val) => {
  * @return {*}
  */
 const transformToArray = (target, len) => {
-  if (len > 0 && target.object.type === 'MemberExpression') {
+  if (len > 0 && target.object.type === "MemberExpression") {
     const newTarget = target.object;
     len -= 1;
     return [transformToArray(newTarget, len), target.property.name];
@@ -56,7 +71,7 @@ const transformToArray = (target, len) => {
 const generateExpressionStatement = (editRecords, key, recordKey) => {
   const targetRecord = editRecords[key];
   const targetRecordValue = targetRecord[recordKey];
-  const recordKeyArr = recordKey.split('-');
+  const recordKeyArr = recordKey.split("-");
   const memberExpression =
     recordKeyArr.length > 1
       ? T.memberExpression(
@@ -64,24 +79,23 @@ const generateExpressionStatement = (editRecords, key, recordKey) => {
           T.identifier(recordKeyArr[1])
         )
       : T.memberExpression(T.identifier(key), T.identifier(recordKey));
-  if (typeof targetRecordValue === 'object') {
-    console.log(targetRecordValue);
+  if (typeof targetRecordValue === "object" && targetRecordValue.x) {
     // set赋值
     return T.callExpression(
       T.memberExpression(
         T.memberExpression(T.identifier(key), T.identifier(recordKey)),
-        T.identifier('set')
+        T.identifier("set")
       ),
       [
         convertGamePropertyToExpression(targetRecordValue.x),
-        convertGamePropertyToExpression(targetRecordValue.y),
+        convertGamePropertyToExpression(targetRecordValue.y)
       ]
     );
   } else {
     // 等号赋值
     return T.expressionStatement(
       T.assignmentExpression(
-        '=',
+        "=",
         memberExpression,
         convertGamePropertyToExpression(targetRecordValue)
       )
@@ -92,5 +106,5 @@ const generateExpressionStatement = (editRecords, key, recordKey) => {
 module.exports = {
   convertGamePropertyToExpression,
   generateExpressionStatement,
-  transformToArray,
+  transformToArray
 };
