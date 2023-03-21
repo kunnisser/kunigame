@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-15 09:58:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-21 17:46:17
- * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/texture.tsx
+ * @LastEditTime: 2023-03-21 23:25:00
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\texture.tsx
  * @Description: ---- 纹理选择 ----
  */
 
@@ -115,6 +115,7 @@ const DatTexture = (props: DefaultProps) => {
       view: textureDom,
       isPureCanvas: true
     });
+    console.log(atlasScreen);
     const currentKey = defaultVal.textureCacheIds[0];
     const sprite = atlasScreen.add.image(
       currentKey,

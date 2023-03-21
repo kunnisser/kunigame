@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-16 16:55:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-21 17:43:50
- * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/texturePicker.tsx
+ * @LastEditTime: 2023-03-22 00:14:12
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\texturePicker.tsx
  * @Description: ---- 弹窗内容 - 纹理选择 ----
  */
 
@@ -26,13 +26,15 @@ const ModalTexturePicker = forwardRef((props: any, ref: any) => {
   }
 
   function onPointerDown(this: any) {
-    const icon: any = this;
-    setPickValue(icon.texture);
+    const textureKey: any = this;
+
+    const texture = PIXI.utils.TextureCache[textureKey];
+    setPickValue(texture);
   }
 
   useEffect(() => {
     const iconArray: Array<KnSprite> = [];
-
+    console.log(PIXI.utils.TextureCache);
     atlasList.map((atlas) => {
       const atlasDom = document.getElementById(atlas.key);
       const frames = atlas.frames;
@@ -87,7 +89,7 @@ const ModalTexturePicker = forwardRef((props: any, ref: any) => {
         icon.interactive = true;
         icon.on("pointerover", onPointerOver, icon);
         icon.on("pointerout", onPointerOverOut, icon);
-        icon.on("pointerdown", onPointerDown, icon);
+        icon.on("pointerdown", onPointerDown, frameKey);
         icon.tint =
           pickValue.textureCacheIds[0] === icon.texture.textureCacheIds[0]
             ? 0x32bf4c
@@ -95,6 +97,8 @@ const ModalTexturePicker = forwardRef((props: any, ref: any) => {
         iconArray.push(icon);
         i++;
       }
+      atlasScreen.stage.removeChildren();
+      // atlasScreen.app.destroy(true);
       return atlasScreen;
     });
     setIcons(iconArray);

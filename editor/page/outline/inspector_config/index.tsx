@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-19 23:18:06
+ * @LastEditTime: 2023-03-21 23:38:16
  * @FilePath: \kunigame\editor\page\outline\inspector_config\index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */

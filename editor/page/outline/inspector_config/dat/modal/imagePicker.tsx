@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-17 14:08:31
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-19 19:53:24
+ * @LastEditTime: 2023-03-21 22:28:30
  * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\imagePicker.tsx
  * @Description: ---- 图片选择 ----
  */
@@ -34,7 +34,7 @@ const ModalImagePicker = (props: any) => {
             <div className="kn-image-thumb">
               <img src={image.url}></img>
             </div>
-            <p style={{ textAlign: "center" }}>{image.key}</p>
+            <p style={{ textAlign: "center", fontWeight: 'bold' }}>{image.key}</p>
           </div>
         );
       })}

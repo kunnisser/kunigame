@@ -52,7 +52,7 @@ class Start extends KnScene {
     const group2 = this.game.add.group("group2", this);
     this.game.add.group("groupChild", group2);
     const logo = this.game.add.image("logo", group2);
-    logo.texture = this.game.add.texture("Item_Helicopter0000");
+    logo.texture = this.game.add.texture("Item_Cloud0000");
     logo.anchor.set(0.5, 0.5);
     logo.blendMode = 3;
     logo.scale.y = 0.5;
