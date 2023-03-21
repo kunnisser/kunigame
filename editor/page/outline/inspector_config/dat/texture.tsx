@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-15 09:58:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-19 20:10:26
- * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\texture.tsx
+ * @LastEditTime: 2023-03-21 17:46:17
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/texture.tsx
  * @Description: ---- 纹理选择 ----
  */
 
@@ -79,7 +79,13 @@ const DatTexture = (props: DefaultProps) => {
       width: 840,
       name: "选择纹理",
       content: (
-        <ModalPickerWrapper ref={ref} currentScene={currentScene} imageList={imageList} atlasList={atlasList} defaultVal={defaultVal}></ModalPickerWrapper>
+        <ModalPickerWrapper
+          ref={ref}
+          currentScene={currentScene}
+          imageList={imageList}
+          atlasList={atlasList}
+          defaultVal={defaultVal}
+        ></ModalPickerWrapper>
       ),
       footer: [
         <Button
@@ -100,18 +106,23 @@ const DatTexture = (props: DefaultProps) => {
   useEffect(() => {
     const textureDom = document.getElementById("texturePreview");
     const ratio = defaultVal.width / defaultVal.height;
+    const dpr = window.devicePixelRatio;
     const atlasScreen = new Game({
-      width: previewWidth,
-      height: previewHeight,
-      dpr: 1,
+      width: previewWidth / dpr,
+      height: previewHeight / dpr,
+      dpr,
       transparent: true,
       view: textureDom,
       isPureCanvas: true
     });
     const currentKey = defaultVal.textureCacheIds[0];
-    const sprite = atlasScreen.add.image(currentKey, atlasScreen.stage, [0.5, 0.5]);
-    sprite.x = previewWidth * .5;
-    sprite.y = previewHeight * .5;
+    const sprite = atlasScreen.add.image(
+      currentKey,
+      atlasScreen.stage,
+      [0.5, 0.5]
+    );
+    sprite.x = previewWidth * 0.5;
+    sprite.y = previewHeight * 0.5;
     sprite.width = ratio > 1 ? previewWidth : previewHeight * ratio;
     sprite.height = ratio > 1 ? previewWidth / ratio : previewHeight;
     sprite.tint = 0xffffff;
@@ -138,7 +149,7 @@ const DatTexture = (props: DefaultProps) => {
       <div style={{ paddingTop: "10px" }}>
         <label>{labelText}</label>
       </div>
-      <div className="kn-texture" >
+      <div className="kn-texture">
         <div id="texturePreview"></div>
       </div>
       <div className="kn-texture-bar">
