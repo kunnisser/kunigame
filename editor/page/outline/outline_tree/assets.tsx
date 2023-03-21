@@ -2,15 +2,14 @@
  * @Author: kunnisser
  * @Date: 2023-02-06 17:05:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-20 14:51:04
+ * @LastEditTime: 2023-03-21 16:19:13
  * @FilePath: /kunigame/editor/page/outline/outline_tree/assets.tsx
  * @Description: ---- 素材列表 ----
  */
 
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useStore } from "react-redux";
 import { Collapse, Empty, Space, Tag } from "antd";
-import { CombineReducer } from "editor@/common/store";
 import { getProjectAssets } from "editor@/api/request/project";
 import { EditGameName } from "editor@/page/workbench/canvas";
 import "editor@/assets/index.styl";
@@ -19,6 +18,7 @@ import { setDragTarget } from "editor@/common/gameStore/scene/action";
 const { Panel } = Collapse;
 const AssetsList = () => {
   const dispatch = useDispatch();
+  const store = useStore();
   const [assetsPath, imageDir, atlasDir, fontDir] = [
     "/projects/hive",
     "/assets/images/",
@@ -68,32 +68,33 @@ const AssetsList = () => {
     return tagType[typeIndex];
   };
 
-  const currentScene = useSelector(
-    (store: CombineReducer) => store.sceneReducer.currentScene
-  );
   useEffect(() => {
-    if (currentScene) {
-      const resourceKeys = Object.keys(currentScene.resources);
-      const resources = resourceKeys.map((key) => {
-        return {
-          key,
-          origin: currentScene.resources[key],
-          value: forceToImage(currentScene.resources[key])
-        };
-      });
-      setPrefabList(resources);
-      getProjectAssets(void 0, {
-        projectName: EditGameName
-      }).then((ret) => {
-        if (ret.data) {
-          const { assets } = ret.data.data;
-          setImageList(assets.images);
-          setAtlasList(assets.atlas);
-          setFontList(assets.font);
-        }
-      });
-    }
-  }, [currentScene]);
+    store.subscribe(() => {
+      const currentScene = store.getState().sceneReducer.currentScene;
+      if (currentScene) {
+        const resourceKeys = Object.keys(currentScene.resources);
+        const resources = resourceKeys.map((key) => {
+          return {
+            key,
+            origin: currentScene.resources[key],
+            value: forceToImage(currentScene.resources[key])
+          };
+        });
+        setPrefabList(resources);
+      }
+    });
+
+    getProjectAssets(void 0, {
+      projectName: EditGameName
+    }).then((ret) => {
+      if (ret.data) {
+        const { assets } = ret.data.data;
+        setImageList(assets.images);
+        setAtlasList(assets.atlas);
+        setFontList(assets.font);
+      }
+    });
+  }, []);
 
   const dragHandle = (path) => {
     dispatch(setDragTarget(path));
@@ -131,7 +132,6 @@ const AssetsList = () => {
         {imageList.length > 0 ? (
           <Space align="center" wrap>
             {imageList.map((image: string) => {
-              console.log(image);
               const imageName = image.split(".")[0];
               return (
                 <div
@@ -164,7 +164,7 @@ const AssetsList = () => {
           <Space align="center" wrap>
             {atlasList.map((atlas: string) => {
               const [atlasName, fileType] = atlas.split(".");
-              const isShow = fileType === "png";
+              const isShow = ["png", "jpg"].indexOf(fileType) === -1;
               return (
                 isShow && (
                   <div
@@ -172,7 +172,7 @@ const AssetsList = () => {
                     draggable={true}
                     onDragStart={() =>
                       dragHandle({
-                        type: atlasName,
+                        key: atlasName,
                         url: `${assetsPath}/${EditGameName}${atlasDir}${atlas}`
                       })
                     }
@@ -180,7 +180,7 @@ const AssetsList = () => {
                     <div className="kn-image-thumb">
                       <img
                         draggable={false}
-                        src={`${assetsPath}/${EditGameName}${atlasDir}${atlas}`}
+                        src={`${assetsPath}/${EditGameName}${atlasDir}${atlasName}.png`}
                       ></img>
                     </div>
                     <p style={{ textAlign: "center" }}>{atlas}</p>
@@ -198,7 +198,7 @@ const AssetsList = () => {
           <Space align="center" wrap>
             {fontList.map((font: string) => {
               const [fontName, fileType] = font.split(".");
-              const isShow = fileType === "png";
+              const isShow = ["png", "jpg"].indexOf(fileType) === -1;
               return (
                 isShow && (
                   <div
@@ -214,7 +214,7 @@ const AssetsList = () => {
                     <div className="kn-image-thumb">
                       <img
                         draggable={false}
-                        src={`${assetsPath}/${EditGameName}${fontDir}${font}`}
+                        src={`${assetsPath}/${EditGameName}${fontDir}${fontName}.png`}
                       ></img>
                     </div>
                     <p style={{ textAlign: "center" }}>{font}</p>

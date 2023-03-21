@@ -1,0 +1,635 @@
+{
+  "frames": {
+    "Item_Apple0000": {
+      "frame": {
+        "x": 989,
+        "y": 856,
+        "w": 255,
+        "h": 305
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 255,
+        "h": 305
+      },
+      "sourceSize": {
+        "w": 255,
+        "h": 305
+      }
+    },
+    "Item_Balloon0000": {
+      "frame": {
+        "x": 1802,
+        "y": 1158,
+        "w": 224,
+        "h": 292
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 224,
+        "h": 292
+      },
+      "sourceSize": {
+        "w": 224,
+        "h": 292
+      }
+    },
+    "Item_Bee0000": {
+      "frame": {
+        "x": 1246,
+        "y": 1121,
+        "w": 258,
+        "h": 269
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 258,
+        "h": 269
+      },
+      "sourceSize": {
+        "w": 258,
+        "h": 269
+      }
+    },
+    "Item_Candle0000": {
+      "frame": {
+        "x": 1049,
+        "y": 1163,
+        "w": 174,
+        "h": 282
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 174,
+        "h": 282
+      },
+      "sourceSize": {
+        "w": 174,
+        "h": 282
+      }
+    },
+    "Item_Cat0000": {
+      "frame": {
+        "x": 1552,
+        "y": 827,
+        "w": 280,
+        "h": 288
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 280,
+        "h": 288
+      },
+      "sourceSize": {
+        "w": 280,
+        "h": 288
+      }
+    },
+    "Item_Chair0000": {
+      "frame": {
+        "x": 1552,
+        "y": 1117,
+        "w": 248,
+        "h": 288
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 248,
+        "h": 288
+      },
+      "sourceSize": {
+        "w": 248,
+        "h": 288
+      }
+    },
+    "Item_Cheese0000": {
+      "frame": {
+        "x": 463,
+        "y": 1388,
+        "w": 284,
+        "h": 196
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 284,
+        "h": 196
+      },
+      "sourceSize": {
+        "w": 284,
+        "h": 196
+      }
+    },
+    "Item_Cloud0000": {
+      "frame": {
+        "x": 353,
+        "y": 655,
+        "w": 352,
+        "h": 246
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 352,
+        "h": 246
+      },
+      "sourceSize": {
+        "w": 352,
+        "h": 246
+      }
+    },
+    "Item_Cow0000": {
+      "frame": {
+        "x": 1430,
+        "y": 1,
+        "w": 394,
+        "h": 295
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 394,
+        "h": 295
+      },
+      "sourceSize": {
+        "w": 394,
+        "h": 295
+      }
+    },
+    "Item_Crown0000": {
+      "frame": {
+        "x": 1365,
+        "y": 298,
+        "w": 358,
+        "h": 283
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 358,
+        "h": 283
+      },
+      "sourceSize": {
+        "w": 358,
+        "h": 283
+      }
+    },
+    "Item_Dinosaure0000": {
+      "frame": {
+        "x": 604,
+        "y": 339,
+        "w": 304,
+        "h": 314
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 304,
+        "h": 314
+      },
+      "sourceSize": {
+        "w": 304,
+        "h": 314
+      }
+    },
+    "Item_Dog0000": {
+      "frame": {
+        "x": 1834,
+        "y": 826,
+        "w": 200,
+        "h": 330
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 330
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 330
+      }
+    },
+    "Item_Egg0000": {
+      "frame": {
+        "x": 1006,
+        "y": 289,
+        "w": 357,
+        "h": 301
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 357,
+        "h": 301
+      },
+      "sourceSize": {
+        "w": 357,
+        "h": 301
+      }
+    },
+    "Item_Elephant0000": {
+      "frame": {
+        "x": 1006,
+        "y": 1,
+        "w": 422,
+        "h": 286
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 422,
+        "h": 286
+      },
+      "sourceSize": {
+        "w": 422,
+        "h": 286
+      }
+    },
+    "Item_Eyes0000": {
+      "frame": {
+        "x": 589,
+        "y": 1138,
+        "w": 270,
+        "h": 248
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 270,
+        "h": 248
+      },
+      "sourceSize": {
+        "w": 270,
+        "h": 248
+      }
+    },
+    "Item_Finger0000": {
+      "frame": {
+        "x": 1225,
+        "y": 1392,
+        "w": 146,
+        "h": 300
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 146,
+        "h": 300
+      },
+      "sourceSize": {
+        "w": 146,
+        "h": 300
+      }
+    },
+    "Item_Fish0000": {
+      "frame": {
+        "x": 910,
+        "y": 592,
+        "w": 344,
+        "h": 262
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 344,
+        "h": 262
+      },
+      "sourceSize": {
+        "w": 344,
+        "h": 262
+      }
+    },
+    "Item_Flower0000": {
+      "frame": {
+        "x": 1769,
+        "y": 556,
+        "w": 271,
+        "h": 268
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 271,
+        "h": 268
+      },
+      "sourceSize": {
+        "w": 271,
+        "h": 268
+      }
+    },
+    "Item_Four0000": {
+      "frame": {
+        "x": 253,
+        "y": 1163,
+        "w": 208,
+        "h": 310
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 208,
+        "h": 310
+      },
+      "sourceSize": {
+        "w": 208,
+        "h": 310
+      }
+    },
+    "Item_Grape0000": {
+      "frame": {
+        "x": 1,
+        "y": 1112,
+        "w": 250,
+        "h": 286
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 286
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 286
+      }
+    },
+    "Item_Hamburger0000": {
+      "frame": {
+        "x": 304,
+        "y": 903,
+        "w": 283,
+        "h": 258
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 283,
+        "h": 258
+      },
+      "sourceSize": {
+        "w": 283,
+        "h": 258
+      }
+    },
+    "Item_Helicopter0000": {
+      "frame": {
+        "x": 1365,
+        "y": 583,
+        "w": 402,
+        "h": 242
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 402,
+        "h": 242
+      },
+      "sourceSize": {
+        "w": 402,
+        "h": 242
+      }
+    },
+    "Item_Hippo0000": {
+      "frame": {
+        "x": 1725,
+        "y": 298,
+        "w": 322,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 322,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 322,
+        "h": 256
+      }
+    },
+    "Item_House0000": {
+      "frame": {
+        "x": 1256,
+        "y": 827,
+        "w": 294,
+        "h": 292
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 294,
+        "h": 292
+      },
+      "sourceSize": {
+        "w": 294,
+        "h": 292
+      }
+    },
+    "Item_Ice_Cream0000": {
+      "frame": {
+        "x": 861,
+        "y": 1163,
+        "w": 186,
+        "h": 330
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 186,
+        "h": 330
+      },
+      "sourceSize": {
+        "w": 186,
+        "h": 330
+      }
+    },
+    "Item_Igloo0000": {
+      "frame": {
+        "x": 1,
+        "y": 602,
+        "w": 350,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 350,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 350,
+        "h": 256
+      }
+    },
+    "Item_Jewel0000": {
+      "frame": {
+        "x": 1,
+        "y": 860,
+        "w": 301,
+        "h": 250
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 301,
+        "h": 250
+      },
+      "sourceSize": {
+        "w": 301,
+        "h": 250
+      }
+    },
+    "Item_Kangaroo0000": {
+      "frame": {
+        "x": 604,
+        "y": 1,
+        "w": 400,
+        "h": 336
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 400,
+        "h": 336
+      },
+      "sourceSize": {
+        "w": 400,
+        "h": 336
+      }
+    },
+    "Item_Key0000": {
+      "frame": {
+        "x": 707,
+        "y": 856,
+        "w": 280,
+        "h": 280
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 280,
+        "h": 280
+      },
+      "sourceSize": {
+        "w": 280,
+        "h": 280
+      }
+    },
+    "Item_Kilo0000": {
+      "frame": {
+        "x": 1826,
+        "y": 1,
+        "w": 202,
+        "h": 270
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 202,
+        "h": 270
+      },
+      "sourceSize": {
+        "w": 202,
+        "h": 270
+      }
+    },
+    "Rays0000": {
+      "frame": {
+        "x": 1,
+        "y": 1,
+        "w": 601,
+        "h": 599
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 601,
+        "h": 599
+      },
+      "sourceSize": {
+        "w": 601,
+        "h": 599
+      }
+    }
+  },
+  "meta": {
+    "app": "Adobe Flash Professional",
+    "version": "15.0.1.179",
+    "image": "icon.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2048,
+      "h": 2048
+    },
+    "scale": "1"
+  }
+}

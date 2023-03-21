@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 17:10:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-20 16:14:30
+ * @LastEditTime: 2023-03-21 16:45:35
  * @FilePath: /kunigame/editor/page/workbench/canvas.tsx
  * @Description: ---- 画布编辑 ----
  */
@@ -10,7 +10,11 @@ import React, { useEffect } from "react";
 import Game from "ts@/kuni/lib/core";
 import GameInitial from "ts@/hive/nnsd/main";
 import { useDispatch, useStore } from "react-redux";
-import { getGame, getSceneList } from "editor@/common/gameStore/scene/action";
+import {
+  getGame,
+  getSceneList,
+  setCurrentScene
+} from "editor@/common/gameStore/scene/action";
 import { message } from "antd";
 import { addAssetsScene } from "editor@/api/request/scene";
 export const EditGameName = "nnsd";
@@ -31,20 +35,31 @@ const StageEditor = (props: any) => {
     dispatch(getSceneList(game.sceneManager.scenes)); // 储存游戏实例
     dispatch(getGame(game));
 
-    view.addEventListener("drop", (e) => {
+    view.addEventListener("drop", async (e) => {
       e.preventDefault();
       const { dragTarget, currentScene } = store.getState().sceneReducer;
-      console.log(currentScene.resources, dragTarget.key);
+      if (!currentScene) {
+        message.warning("先选择场景");
+        return;
+      }
       if (currentScene.resources[dragTarget.key]) {
         message.warning("资源已存在");
       } else {
-        console.log(dragTarget);
-        addAssetsScene(
+        const ret = await addAssetsScene(
           Object.assign(
             { projectName: EditGameName, sceneName: currentScene.id },
             dragTarget
           )
         );
+        if (ret.data.status === "success") {
+          game.loader.filling({
+            [dragTarget.key]: dragTarget.url
+          });
+          game.loader.load(() => {
+            currentScene.resources[dragTarget.key] = dragTarget.url;
+            dispatch(setCurrentScene(currentScene));
+          });
+        }
       }
     });
   }, []);

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-20 10:10:42
+ * @LastEditTime: 2023-03-21 14:36:53
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -22,7 +22,8 @@ class Start extends KnScene {
       logo: "/projects/hive/nnsd/assets/images/logo.png",
       avator_01: "/projects/hive/nnsd/assets/images/avator_01.png",
       loadingrun: "/projects/hive/nnsd/assets/atlas/loadingrun.json",
-      boy: "/projects/hive/nnsd/assets/atlas/boy.json"
+      boy: "/projects/hive/nnsd/assets/atlas/boy.json",
+      icon: "/projects/hive/nnsd/assets/atlas/icon.json"
     };
   }
 
@@ -51,7 +52,7 @@ class Start extends KnScene {
     const group2 = this.game.add.group("group2", this);
     this.game.add.group("groupChild", group2);
     const logo = this.game.add.image("logo", group2);
-    logo.texture = this.game.add.texture("avator_01");
+    logo.texture = this.game.add.texture("Item_Helicopter0000");
     logo.anchor.set(0.5, 0.5);
     logo.blendMode = 3;
     logo.scale.y = 0.5;

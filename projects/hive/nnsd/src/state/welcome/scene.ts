@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-20 16:02:00
+ * @LastEditTime: 2023-03-21 14:42:41
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -22,9 +22,12 @@ class Welcome extends KnScene {
     this.resources = {
       bg: "/projects/hive/nnsd/assets/images/bg002.jpg",
       logo: "/projects/hive/nnsd/assets/images/logo.png",
-      font_a: "/projects/hive/nnsd/assets/fonts/font_a.fnt",
       font_b: "/projects/hive/nnsd/assets/fonts/font_b.fnt",
-      desyrel: "/projects/hive/nnsd/assets/fonts/desyrel.xml"
+      desyrel: "/projects/hive/nnsd/assets/fonts/desyrel.xml",
+      attack: "/projects/hive/nnsd/assets/images/attack.png",
+      font_a: "/projects/hive/nnsd/assets/fonts/font_a.fnt",
+      avator: "/projects/hive/nnsd/assets/images/avator.jpg",
+      loadingrun: "/projects/hive/nnsd/assets/atlas/loadingrun.json"
     };
   }
 
@@ -38,22 +41,18 @@ class Welcome extends KnScene {
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
     const logo: KnSprite = this.game.add.image("logo", this);
+    logo.texture = this.game.add.texture("loadingrun_01.png");
     logo.tintColor = "#ffffff";
     logo.blendMode = 0;
     logo.angle = 0;
     logo.skew.y = 0;
     logo.skew.x = 0;
-    logo.scale.x = 0.3;
-    logo.scale.y = 0.3;
-    logo.y = 269;
-    logo.x = 417;
+    logo.scale.x = 1;
+    logo.scale.y = 1;
+    logo.y = 248;
+    logo.x = 314;
     logo.anchor.set(0.5, 0.5);
-    const demoText: KnText = this.game.add.text(
-      "demoText",
-      "WELCOME",
-      {},
-      [0.5, 0.5]
-    );
+    const demoText: KnText = this.game.add.text("demoText", "WELCOME", {}, [0.5, 0.5]);
     demoText.scale.y = 0.5;
     demoText.scale.x = 0.5;
     demoText.visible = true;
@@ -69,36 +68,27 @@ class Welcome extends KnScene {
     demoText.x = 912;
     demoText.y = 244;
     demoText.style.fontSize = 500;
-    const demo1Text: KnText = this.game.add.text(
-      "demo1Text",
-      "测试",
-      {
-        fontSize: "24",
-        fill: 0xffffff
-      },
-      [0.5, 0.5]
-    );
+    const demo1Text: KnText = this.game.add.text("demo1Text", "测试", {
+      fontSize: "24",
+      fill: 0xffffff
+    }, [0.5, 0.5]);
     demo1Text.text = "by.kunnisser";
     demo1Text.x = 1292;
     demo1Text.y = 724;
     demo1Text.scale.y = 1;
     demo1Text.scale.x = 1;
-    const bmText = this.game.add.bitmapText(
-      "bmText",
-      "153112312312313123\n23012313212313\n1",
-      {
-        fontSize: 35,
-        fontName: "Desyrel"
-      }
-    );
+    const bmText = this.game.add.bitmapText("bmText", "153112312312313123\n23012313212313\n1", {
+      fontSize: 35,
+      fontName: "desyrel"
+    });
     bmText.align = "center";
-    bmText.anchor.set(0.5, 0.5);
+    bmText.anchor.set(0.5, 0);
     bmText.y = 553;
     bmText.x = 870;
     bmText.letterSpacing = 11;
     bmText.fontSize = 100;
-    bmText.fontName = "Desyrel";
-    bmText.text = "somewhere over\nthe rainbow";
+    bmText.fontName = "desyrel";
+    bmText.text = "dododdodoodo";
     this.addChild(demoText);
     this.addChild(demo1Text);
     this.addChild(bmText);
@@ -113,6 +103,7 @@ class Welcome extends KnScene {
       this.removeChildren(1, this.children.length);
     }
   }
+
 }
 
 export default Welcome;
