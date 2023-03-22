@@ -17,7 +17,7 @@ interface EnterProps {
   ratio?: number;
   antialias?: boolean;
   transparent?: boolean;
-  view: any;
+  view?: any;
   isPureCanvas?: boolean;
   dpr?: number;
 }
@@ -89,7 +89,7 @@ export default class Game {
 
     globalThis.__PIXI_APP__ = this.app;
 
-    this.view.appendChild(this.app.view);
+    this.view && this.view.appendChild(this.app.view);
 
     // 添加加载器实例
     this.loader = new KnLoader(this);

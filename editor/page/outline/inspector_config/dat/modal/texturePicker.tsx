@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-16 16:55:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-22 00:14:12
- * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\texturePicker.tsx
+ * @LastEditTime: 2023-03-22 16:22:33
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/texturePicker.tsx
  * @Description: ---- 弹窗内容 - 纹理选择 ----
  */
 
@@ -34,8 +34,8 @@ const ModalTexturePicker = forwardRef((props: any, ref: any) => {
 
   useEffect(() => {
     const iconArray: Array<KnSprite> = [];
-    console.log(PIXI.utils.TextureCache);
-    atlasList.map((atlas) => {
+
+    const atlasScreens = atlasList.map((atlas) => {
       const atlasDom = document.getElementById(atlas.key);
       const frames = atlas.frames;
       const LINE_NUMBER = 6;
@@ -97,12 +97,24 @@ const ModalTexturePicker = forwardRef((props: any, ref: any) => {
         iconArray.push(icon);
         i++;
       }
-      atlasScreen.stage.removeChildren();
-      // atlasScreen.app.destroy(true);
+      console.log(PIXI.utils.TextureCache);
+
       return atlasScreen;
     });
     setIcons(iconArray);
+    return () => {
+      removeGame(atlasScreens);
+    };
   }, []);
+
+  const removeGame = (atlasScreens) => {
+    for (let atlasScreen of atlasScreens) {
+      atlasScreen.app.destroy(true, {
+        children: true
+      });
+    }
+    console.log(PIXI.utils.TextureCache);
+  };
 
   useEffect(() => {
     for (const icon of icons) {
