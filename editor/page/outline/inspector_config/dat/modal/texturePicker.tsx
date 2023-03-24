@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-16 16:55:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-22 16:22:33
+ * @LastEditTime: 2023-03-24 16:27:56
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/texturePicker.tsx
  * @Description: ---- 弹窗内容 - 纹理选择 ----
  */
@@ -27,7 +27,6 @@ const ModalTexturePicker = forwardRef((props: any, ref: any) => {
 
   function onPointerDown(this: any) {
     const textureKey: any = this;
-
     const texture = PIXI.utils.TextureCache[textureKey];
     setPickValue(texture);
   }
@@ -97,23 +96,23 @@ const ModalTexturePicker = forwardRef((props: any, ref: any) => {
         iconArray.push(icon);
         i++;
       }
-      console.log(PIXI.utils.TextureCache);
-
       return atlasScreen;
     });
     setIcons(iconArray);
     return () => {
-      removeGame(atlasScreens);
+      removeGameContext(atlasScreens);
     };
   }, []);
 
-  const removeGame = (atlasScreens) => {
+  const removeGameContext = (atlasScreens) => {
     for (let atlasScreen of atlasScreens) {
+      atlasScreen.app.renderer.context.gl
+        .getExtension("WEBGL_lose_context")
+        .loseContext();
       atlasScreen.app.destroy(true, {
         children: true
       });
     }
-    console.log(PIXI.utils.TextureCache);
   };
 
   useEffect(() => {
