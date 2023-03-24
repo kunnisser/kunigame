@@ -43,7 +43,7 @@ class Welcome extends KnScene {
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
     const logo: KnSprite = this.game.add.image("logo", this);
-    logo.texture = this.game.add.texture("Item_Balloon0000");
+    logo.texture = this.game.add.texture("Item_Grape0000");
     logo.tintColor = "#ffffff";
     logo.blendMode = 0;
     logo.angle = 0;
@@ -54,12 +54,7 @@ class Welcome extends KnScene {
     logo.y = 371;
     logo.x = 1477;
     logo.anchor.set(0.5, 0.5);
-    const demoText: KnText = this.game.add.text(
-      "demoText",
-      "WELCOME",
-      {},
-      [0.5, 0.5]
-    );
+    const demoText: KnText = this.game.add.text("demoText", "WELCOME", {}, [0.5, 0.5]);
     demoText.scale.y = 0.5;
     demoText.scale.x = 0.5;
     demoText.visible = true;
@@ -75,28 +70,19 @@ class Welcome extends KnScene {
     demoText.x = 898;
     demoText.y = 339;
     demoText.style.fontSize = 500;
-    const demo1Text: KnText = this.game.add.text(
-      "demo1Text",
-      "测试",
-      {
-        fontSize: "24",
-        fill: 0xffffff
-      },
-      [0.5, 0.5]
-    );
+    const demo1Text: KnText = this.game.add.text("demo1Text", "测试", {
+      fontSize: "24",
+      fill: 0xffffff
+    }, [0.5, 0.5]);
     demo1Text.text = "by.kunnisser";
     demo1Text.x = 1551;
     demo1Text.y = 770;
     demo1Text.scale.y = 1;
     demo1Text.scale.x = 1;
-    const bmText = this.game.add.bitmapText(
-      "bmText",
-      "153112312312313123\n23012313212313\n1",
-      {
-        fontSize: 35,
-        fontName: "desyrel"
-      }
-    );
+    const bmText = this.game.add.bitmapText("bmText", "153112312312313123\n23012313212313\n1", {
+      fontSize: 35,
+      fontName: "desyrel"
+    });
     bmText.align = "center";
     bmText.anchor.set(0.5, 0);
     bmText.y = 564;
@@ -119,6 +105,7 @@ class Welcome extends KnScene {
       this.removeChildren(1, this.children.length);
     }
   }
+
 }
 
 export default Welcome;

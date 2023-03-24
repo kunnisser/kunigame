@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-15 09:58:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-21 23:25:00
- * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\texture.tsx
+ * @LastEditTime: 2023-03-24 16:39:54
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/texture.tsx
  * @Description: ---- 纹理选择 ----
  */
 
@@ -33,14 +33,12 @@ const DatTexture = (props: DefaultProps) => {
   const previewWidth = 270;
   const previewHeight = 270;
 
-  const changeTexture = () => {
+  const changeTexture = (texture) => {
     const { liveUpdate, _onUpdateValue, onUpdate, path } = props;
-    const texture = ref.current.pickValue;
     _onUpdateValue && _onUpdateValue(path, texture);
     if (liveUpdate) {
       onUpdate && onUpdate(texture);
     }
-    closeModal();
   };
 
   const generateTextureAbleList = () => {
@@ -85,21 +83,10 @@ const DatTexture = (props: DefaultProps) => {
           imageList={imageList}
           atlasList={atlasList}
           defaultVal={defaultVal}
+          changeTexture={changeTexture}
         ></ModalPickerWrapper>
       ),
-      footer: [
-        <Button
-          key="back"
-          onClick={() => {
-            closeModal();
-          }}
-        >
-          取消
-        </Button>,
-        <Button key="submit" type="primary" onClick={changeTexture}>
-          选择
-        </Button>
-      ]
+      footer: []
     } as ModalOptions);
   };
 
