@@ -2,18 +2,16 @@
  * @Author: kunnisser
  * @Date: 2023-03-17 14:08:31
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-24 16:41:35
- * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/imagePicker.tsx
+ * @LastEditTime: 2023-03-26 22:26:47
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\imagePicker.tsx
  * @Description: ---- 图片选择 ----
  */
 import { Space } from "antd";
 import React, { useContext } from "react";
-import { TextureContext } from "./pickerWrapper";
 import { WrapContext } from "editor@/page/wireboard";
 const ModalImagePicker = (props: any) => {
-  const { images, game, changeTexture } = props;
+  const { images, game, changeTexture, pickValue } = props;
   const { closeModal }: any = useContext(WrapContext);
-  const { pickValue }: any = useContext(TextureContext);
 
   return (
     <Space wrap key={"modal-images-picker"}>

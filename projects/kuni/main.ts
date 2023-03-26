@@ -1,6 +1,6 @@
-import Game from "./lib/core";
-import { GuiScene } from "./lib/utils/gui";
-import StateHive from "./src/state/hive";
+import Game from './lib/core';
+import { GuiScene } from './lib/utils/gui';
+import StateHive from './src/state/hive';
 
 const GameInitial = (view) => {
   const game = new Game({
@@ -8,24 +8,24 @@ const GameInitial = (view) => {
     ratio: 2,
     antialias: true,
     transparent: false,
-    view
+    view,
   });
   // 定义全局Mask
   const GameHive = StateHive(game);
   const dat = new GuiScene();
   const gui = game.gui;
-  const folder = gui.addFolder("场景");
+  const folder = gui.addFolder('场景');
 
   // 场景切换
   const AllStateKeys = Object.keys(GameHive);
   AllStateKeys.shift();
-  const selector = folder.add(dat, "场景选择", AllStateKeys);
+  const selector = folder.add(dat, '场景选择', AllStateKeys);
   selector.onChange((v: string) => {
     game.sceneManager.changeScene(game.currentScene, GameHive[v]);
   });
 
-  game.entryHive = GameHive["tweendemo"];
-  game.sceneManager.changeScene(null, GameHive["global_preloader"]);
+  game.entryHive = GameHive['tweendemo'];
+  game.sceneManager.changeScene(null, GameHive['global_preloader']);
   return game;
 };
 

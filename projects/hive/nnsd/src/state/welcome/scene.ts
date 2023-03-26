@@ -43,16 +43,16 @@ class Welcome extends KnScene {
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
     const logo: KnSprite = this.game.add.image("logo", this);
-    logo.texture = this.game.add.texture("Item_Grape0000");
+    logo.texture = this.game.add.texture("attack");
     logo.tintColor = "#ffffff";
     logo.blendMode = 0;
     logo.angle = 0;
     logo.skew.y = 0;
     logo.skew.x = 0;
-    logo.scale.x = 1;
-    logo.scale.y = 1;
-    logo.y = 371;
-    logo.x = 1477;
+    logo.scale.x = 3.3;
+    logo.scale.y = 3.3;
+    logo.y = 370;
+    logo.x = 483;
     logo.anchor.set(0.5, 0.5);
     const demoText: KnText = this.game.add.text("demoText", "WELCOME", {}, [0.5, 0.5]);
     demoText.scale.y = 0.5;
@@ -67,8 +67,8 @@ class Welcome extends KnScene {
     demoText.style.strokeThickness = 20;
     demoText.style.stroke = "#2a5860";
     demoText.text = "cams";
-    demoText.x = 898;
-    demoText.y = 339;
+    demoText.x = 861;
+    demoText.y = 343;
     demoText.style.fontSize = 500;
     const demo1Text: KnText = this.game.add.text("demo1Text", "测试", {
       fontSize: "24",

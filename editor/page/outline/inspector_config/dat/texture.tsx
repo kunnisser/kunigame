@@ -2,12 +2,12 @@
  * @Author: kunnisser
  * @Date: 2023-03-15 09:58:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-24 16:39:54
- * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/texture.tsx
+ * @LastEditTime: 2023-03-27 00:00:25
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\texture.tsx
  * @Description: ---- 纹理选择 ----
  */
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DefaultProps } from "./interface";
 import isString from "lodash.isstring";
 import cx from "classnames";
@@ -15,16 +15,15 @@ import { Button } from "antd";
 import { useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import { ModalOptions } from "editor@/feedback/modalcore";
-
 import { WrapContext } from "editor@/page/wireboard";
 import ModalPickerWrapper from "./modal/pickerWrapper";
 import Game from "ts@/kuni/lib/core";
+
 const DatTexture = (props: DefaultProps) => {
-  const ref = useRef({} as any);
   const { path, label, className } = props;
   const [previewSprite, setPreviewSprite] = useState(null as any);
   const defaultVal = props.data ? props.data[path] : "";
-  const { openModal, closeModal }: any = useContext(WrapContext);
+  const { openModal }: any = useContext(WrapContext);
   const currentScene = useSelector(
     (store: CombineReducer) => store.sceneReducer.currentScene
   );
@@ -78,7 +77,6 @@ const DatTexture = (props: DefaultProps) => {
       name: "选择纹理",
       content: (
         <ModalPickerWrapper
-          ref={ref}
           currentScene={currentScene}
           imageList={imageList}
           atlasList={atlasList}

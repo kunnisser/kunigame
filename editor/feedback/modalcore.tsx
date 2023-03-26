@@ -59,7 +59,6 @@ const useModal = (props) => {
     <Modal
       title={name}
       width={width}
-      key={name + modalKey}
       centered
       closable={false}
       onOk={dispatchSubmit}
