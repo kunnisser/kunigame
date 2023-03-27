@@ -3,6 +3,7 @@ import EditorTools from "ts@/hive/nnsd/src/tools";
 import Game from "../core";
 import KnScene from "../gameobjects/kn_scene";
 import KnTranstion from "../gameui/kn_transtion";
+import KnLoader from "../loader/kn_loader";
 
 class KnSceneManager {
   public game: Game;
@@ -50,7 +51,7 @@ class KnSceneManager {
 
       // 全局loading界面的资源加载
       globalLoader.filling(to.resources);
-      globalLoader.load(() => {
+      globalLoader.preloader.load(() => {
         console.log("preloadScene resource is ready!");
         this.scenes["global_preloader"].enter(this.game.entryHive);
       });
@@ -82,7 +83,7 @@ class KnSceneManager {
       globalLoader.filling(to.resources);
 
       return new Promise((resolve) => {
-        globalLoader.load(() => {
+        globalLoader.preloader.load(() => {
           console.log(to.id + " resource is ready!");
           to.isCached = true;
           this.game.currentScene = to;

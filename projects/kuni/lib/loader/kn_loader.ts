@@ -3,19 +3,19 @@ import Game from "../core";
 
 class KnLoader extends Loader {
   public game: Game;
+  public preloader: any;
   loader: any;
   constructor(game: Game) {
     super();
     this.game = game;
+    this.preloader = Loader.shared;
   }
-
-  static preloader = Loader.shared;
 
   // 队列载入
   filling(resources: any) {
     for (let key of Object.keys(resources)) {
-      if (!this.game.loader.resources[key]) {
-        this.add(key, resources[key]);
+      if (!this.preloader[key]) {
+        this.preloader.add(key, resources[key]);
       }
     }
   }

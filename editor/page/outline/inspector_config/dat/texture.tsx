@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-15 09:58:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-27 00:00:25
- * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\texture.tsx
+ * @LastEditTime: 2023-03-27 16:06:56
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/texture.tsx
  * @Description: ---- 纹理选择 ----
  */
 
@@ -41,7 +41,7 @@ const DatTexture = (props: DefaultProps) => {
   };
 
   const generateTextureAbleList = () => {
-    const gameResources = currentScene.game.loader.resources;
+    const gameResources = currentScene.game.loader.preloader.resources;
     const resourceKeys = Object.keys(currentScene.resources);
     const imageList: Array<any> = [];
     const atlasList: Array<any> = [];
@@ -100,10 +100,9 @@ const DatTexture = (props: DefaultProps) => {
       view: textureDom,
       isPureCanvas: true
     });
-    console.log(atlasScreen);
-    const currentKey = defaultVal.textureCacheIds[0];
+    console.log(defaultVal);
     const sprite = atlasScreen.add.image(
-      currentKey,
+      defaultVal,
       atlasScreen.stage,
       [0.5, 0.5]
     );
@@ -112,6 +111,7 @@ const DatTexture = (props: DefaultProps) => {
     sprite.width = ratio > 1 ? previewWidth : previewHeight * ratio;
     sprite.height = ratio > 1 ? previewWidth / ratio : previewHeight;
     sprite.tint = 0xffffff;
+    console.log(sprite);
     setPreviewSprite(sprite);
   }, []);
 
