@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-19 17:33:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-26 22:26:52
+ * @LastEditTime: 2023-03-28 23:44:57
  * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\pickerWrapper.tsx
  * @Description: ---- 选择内容外层 ----
  */
@@ -32,6 +32,7 @@ const ModalPickerWrapper = (props: any) => {
         pickValue={defaultVal}
         changeTexture={changeTexture}
         atlasList={atlasList}
+        currentScene={currentScene}
       ></ModalTexturePicker>
     </>
   );

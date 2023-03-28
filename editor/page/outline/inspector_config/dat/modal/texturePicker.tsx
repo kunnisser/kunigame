@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-16 16:55:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-28 17:35:51
- * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/texturePicker.tsx
+ * @LastEditTime: 2023-03-29 00:02:06
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\texturePicker.tsx
  * @Description: ---- 弹窗内容 - 纹理选择 ----
  */
 
@@ -13,13 +13,11 @@ import Game from "ts@/kuni/lib/core";
 import { WrapContext } from "editor@/page/wireboard";
 
 const ModalTexturePicker = (props: any) => {
-  const { atlasList, changeTexture, pickValue } = props;
+  const { atlasList, changeTexture, pickValue, currentScene } = props;
   const { closeModal }: any = useContext(WrapContext);
   const dpr = 2;
   const ref: any = useRef({
     atlasScreen: null,
-    spritePool: null,
-    icons: []
   });
   function onPointerOver(this: any) {
     this.alpha = 0.5;
@@ -47,29 +45,33 @@ const ModalTexturePicker = (props: any) => {
       isPureCanvas: true
     });
     PIXI.settings.GC_MODE = PIXI.GC_MODES.MANUAL;
-    ref.current.spritePool = ref.current.atlasScreen.add.spritePool();
   }, []);
 
   useEffect(() => {
+    console.log(currentScene.id);
+  }, [currentScene]);
+
+  useEffect(() => {
     const { atlasScreen } = ref.current;
-    console.log(pickValue);
+    console.log(currentScene);
     // icons && ref.current.spritePool.releaseSprite(icons);
-    const icons = atlasScreen.stage.getChildByName("icons");
-    icons && icons.removeChildren();
+    const iconsContainer = atlasScreen.stage.getChildByName("icons");
+    iconsContainer && iconsContainer.removeChildren();
     console.log(PIXI.utils.TextureCache);
     // 内容渲染切换到微任务，减少卡顿
     setTimeout(() => {
       let screenHeight = 0;
-      if (ref.current.icons.length > 0) {
-        ref.current.icons.map((icon) => {
+      if (currentScene.pool.length > 0) {
+        currentScene.pool.map((icon) => {
           icon.tint =
             pickValue.textureCacheIds[0] === icon.texture.textureCacheIds[0]
               ? 0x32bf4c
               : 0xffffff;
-          icons.addChild(icon);
+          iconsContainer.addChild(icon);
         });
       } else {
-        const iconGroup = atlasScreen.add.group("icons", atlasScreen.stage);
+        atlasScreen.stage.removeChildren();
+        const iconGroup = atlasScreen.add.group('icons', atlasScreen.stage);
         atlasList.map((atlas) => {
           const frames = atlas.frames;
           const LINE_NUMBER = 6;
@@ -102,11 +104,7 @@ const ModalTexturePicker = (props: any) => {
               i = 0;
               j++;
             }
-            const icon = ref.current.spritePool.getSprite();
-            icon.texture = PIXI.utils.TextureCache[frameKey];
-            icon.anchor.set(0.5);
-            iconGroup.addChild(icon);
-
+            const icon = atlasScreen.add.image(frameKey, iconGroup, [0.5, 0.5]);
             const tip = atlasScreen.add.text(
               frameKey,
               frameKey,
@@ -138,7 +136,7 @@ const ModalTexturePicker = (props: any) => {
               pickValue.textureCacheIds[0] === icon.texture.textureCacheIds[0]
                 ? 0x32bf4c
                 : 0xffffff;
-            ref.current.icons.push(icon);
+            currentScene.pool.push(icon);
             i++;
           }
           screenHeight += atlasHeight;
