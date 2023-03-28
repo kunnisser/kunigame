@@ -3,7 +3,6 @@ import EditorTools from "ts@/hive/nnsd/src/tools";
 import Game from "../core";
 import KnScene from "../gameobjects/kn_scene";
 import KnTranstion from "../gameui/kn_transtion";
-import KnLoader from "../loader/kn_loader";
 
 class KnSceneManager {
   public game: Game;

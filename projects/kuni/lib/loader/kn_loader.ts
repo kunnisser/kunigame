@@ -14,7 +14,7 @@ class KnLoader extends Loader {
   // 队列载入
   filling(resources: any) {
     for (let key of Object.keys(resources)) {
-      if (!this.preloader[key]) {
+      if (!this.preloader.resources[key]) {
         this.preloader.add(key, resources[key]);
       }
     }

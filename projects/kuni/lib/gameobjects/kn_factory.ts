@@ -21,10 +21,11 @@ import KnTiling from "../gameui/kn_tiling";
 import Game from "../core";
 import { TransformImage } from "../utils/common";
 import { knTweenLine, KnTween } from "../gameobjects/kn_tween";
-import { Texture, AnimatedSprite, utils } from "pixi.js";
+import { AnimatedSprite, utils } from "pixi.js";
 import KnScene from "./kn_scene";
 import KnSprite from "./kn_sprite";
 import KnBitMapText from "./kn_bitmap_text";
+import SpritePool from "../gameui/kn_spritepool";
 
 class KnFactory {
   public game: Game;
@@ -138,7 +139,7 @@ class KnFactory {
   };
 
   texture(key) {
-    return Texture.from(key);
+    return PIXI.utils.TextureCache[key];
   }
 
   animation(frames: Array<PIXI.Texture>, speed: number) {
@@ -272,6 +273,10 @@ class KnFactory {
         });
       }
     });
+  }
+
+  spritePool() {
+    return new SpritePool();
   }
 }
 
