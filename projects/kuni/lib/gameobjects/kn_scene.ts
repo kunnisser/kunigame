@@ -1,8 +1,8 @@
 /* 场景基础类 */
 
-import { Container } from 'pixi.js';
-import KnGraphics from './kn_graphics';
-import KnMessage from '../gameui/kn_message';
+import { Container } from "pixi.js";
+import KnGraphics from "./kn_graphics";
+import KnMessage from "../gameui/kn_message";
 
 class KnScene extends Container {
   public game: any;
@@ -18,7 +18,7 @@ class KnScene extends Container {
   public tip: KnMessage;
   public cancelActionStack: Array<any>; // 工具撤销操作栈
   public resumeActionStack: Array<any>; // 工具恢复操作栈
-  public pool: Array<any>; //对象池
+  public pool: Object; //对象池
   constructor(game: object, key: string) {
     super();
     this.game = game;
@@ -37,7 +37,6 @@ class KnScene extends Container {
     const world = this.game.world;
     this.width = world.width;
     this.height = world.height;
-    this.pool = [];
   }
 
   // 进入场景
@@ -63,7 +62,7 @@ class KnScene extends Container {
   }
 
   loading(nextTarget: KnScene) {
-    throw new Error('Method not implemented.');
+    throw new Error("Method not implemented.");
   }
 
   // 离开场景
