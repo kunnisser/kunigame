@@ -53,14 +53,14 @@ class Start extends KnScene {
     const group2 = this.game.add.group("group2", this);
     this.game.add.group("groupChild", group2);
     const logo = this.game.add.image("logo", group2);
-    logo.texture = this.game.add.texture("loadingrun_03.png");
+    logo.texture = this.game.add.texture("loadingrun_02");
     logo.anchor.set(0.5, 0.5);
     logo.blendMode = 0;
-    logo.scale.y = 1.8;
-    logo.scale.x = 1.8;
-    logo.y = 486;
+    logo.scale.y = 0.3;
+    logo.scale.x = 0.3;
+    logo.y = 441;
     logo.tintColor = "#ffffff";
-    logo.x = 883;
+    logo.x = 970;
     console.log(PIXI.utils.TextureCache);
   }
 

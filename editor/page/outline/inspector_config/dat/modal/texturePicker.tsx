@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-16 16:55:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-29 16:29:29
+ * @LastEditTime: 2023-03-30 15:03:10
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/texturePicker.tsx
  * @Description: ---- 弹窗内容 - 纹理选择 ----
  */
@@ -21,7 +21,8 @@ const ModalTexturePicker = (props: any) => {
   const ref: any = useRef({
     atlasScreen: null,
     spritePool: currentScene.game.add.spritePool(),
-    icons: []
+    icons: [],
+    texts: []
   });
   function onPointerOver(this: any) {
     this.alpha = 0.5;
@@ -52,13 +53,19 @@ const ModalTexturePicker = (props: any) => {
 
   useEffect(() => {
     const { atlasScreen, icons } = ref.current;
+    // 回收icon
     ref.current.spritePool.releaseSprite(icons);
+    for (const text of ref.current.texts) {
+      // 清空文字对象及纹理缓存pixiid
+      text.destroy(true);
+    }
+    ref.current.icons = [];
+    ref.current.texts = [];
     atlasScreen.stage.removeChildren();
-    console.log(PIXI.utils.TextureCache);
 
     // 内容渲染切换到微任务，减少卡顿
     setTimeout(() => {
-      console.time();
+      console.time("resourceRender");
       let screenHeight = 0;
       atlasList.map((atlas) => {
         const frames = atlas.frames;
@@ -72,27 +79,28 @@ const ModalTexturePicker = (props: any) => {
         const atlasHeight = rows * (frameHeight + frameMarginBottom);
         let i = 0;
         let j = 0;
-        // const title = atlasScreen.add.text(
-        //   atlas.key,
-        //   "- " + atlas.key + " -",
-        //   {
-        //     fontSize: 24,
-        //     fontWeight: "bold",
-        //     fill: 0x32bf4c,
-        //     stroke: 0xbbf6bc,
-        //     strokeThickness: 10
-        //   },
-        //   [0, 0]
-        // );
-        // title.position.set(0, screenHeight);
-        // screenHeight += title.height * 1.5;
-        // atlasScreen.stage.addChild(title);
+        const title = atlasScreen.add.text(
+          atlas.key,
+          "- " + atlas.key + " -",
+          {
+            fontSize: 24,
+            fontWeight: "bold",
+            fill: 0x32bf4c,
+            stroke: 0xbbf6bc,
+            strokeThickness: 10
+          },
+          [0, 0]
+        );
+        title.position.set(0, screenHeight);
+        screenHeight += title.height * 1.5;
+        atlasScreen.stage.addChild(title);
+        ref.current.texts.push(title);
+
         for (const frameKey of Object.keys(frames)) {
           if (i >= LINE_NUMBER) {
             i = 0;
             j++;
           }
-
           const icon = ref.current.spritePool.getSprite();
           const isNewcreatedTexture = !icon.texture.valid;
           icon.texture = PIXI.utils.TextureCache[frameKey];
@@ -120,18 +128,19 @@ const ModalTexturePicker = (props: any) => {
 
           atlasScreen.stage.addChild(icon);
           ref.current.icons.push(icon);
-          // const tip = atlasScreen.add.text(
-          //   frameKey,
-          //   frameKey,
-          //   {
-          //     fontSize: 12,
-          //     fontWeight: "bold"
-          //   },
-          //   [0.5, 0]
-          // );
-          // tip.x = currentScene.pool[frameKey].x;
-          // tip.y = currentScene.pool[frameKey].y + frameHeight * 0.5 + 10;
-          // atlasScreen.stage.addChild(tip);
+          const tip = atlasScreen.add.text(
+            frameKey,
+            frameKey,
+            {
+              fontSize: 12,
+              fontWeight: "bold"
+            },
+            [0.5, 0]
+          );
+          tip.x = icon.x;
+          tip.y = icon.y + frameHeight * 0.5 + 10;
+          atlasScreen.stage.addChild(tip);
+          ref.current.texts.push(tip);
           i++;
         }
         screenHeight += atlasHeight;
@@ -139,23 +148,10 @@ const ModalTexturePicker = (props: any) => {
       atlasScreen.app.view.style.width = 768 + "px";
       atlasScreen.app.view.style.height = screenHeight + "px";
       atlasScreen.app.renderer.resize(768, screenHeight);
-      console.timeEnd();
-    }, 100);
+      console.timeEnd("resourceRender");
+    }, 0);
   }, [pickValue, atlasList]);
 
-  // const removeGameContext = (atlasScreens) => {
-  //   for (let atlasScreen of atlasScreens) {
-  //     if (!atlasScreen.app.renderer) {
-  //       return;
-  //     }
-  //     atlasScreen.app.renderer.context.gl
-  //       .getExtension("WEBGL_lose_context")
-  //       .loseContext();
-  //     atlasScreen.app.destroy(true, {
-  //       children: true
-  //     });
-  //   }
-  // };
   return (
     <>
       {atlasList && atlasList.length > 0 ? (

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-23 15:32:41
+ * @LastEditTime: 2023-03-30 15:42:49
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -27,6 +27,10 @@ class EditorTools {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  reset() {
+    this.dragTool.moveGroup.visible = false;
   }
 }
 
