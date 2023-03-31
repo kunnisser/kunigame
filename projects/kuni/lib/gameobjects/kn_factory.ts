@@ -33,7 +33,7 @@ class KnFactory {
     this.game = game;
   }
 
-  group(key: string, parent: PIXI.Container) {
+  group(key: string, parent?: PIXI.Container) {
     return new KnGroup(this.game, key, parent);
   }
 

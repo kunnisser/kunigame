@@ -3,11 +3,11 @@ import { Container } from "pixi.js";
 class KnGroup extends Container {
   public game: object;
   public name: string;
-  constructor(game: object, name: string, parent: any) {
+  constructor(game: object, name: string, parent?: any) {
     super();
     this.game = game;
     this.name = name;
-    parent.addChild(this);
+    parent && parent.addChild(this);
     this.x = 0;
     this.y = 0;
   }

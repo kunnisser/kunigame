@@ -2,13 +2,13 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-01 16:30:02
+ * @LastEditTime: 2023-03-31 16:45:13
  * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
  * @Description: ---- 场景元素列表 ----
  */
 import React, { useState, useEffect } from "react";
 import { message, Tree } from "antd";
-import { useSelector } from "react-redux";
+import { useSelector, useStore } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import Icon from "@ant-design/icons";
 import TextIcon from "editor@/assets/icon/text.svg";
@@ -20,6 +20,7 @@ import { DataNode } from "antd/lib/tree";
 const ContainerTree = () => {
   const [displayList, setDisplayList] = useState([] as any);
   const [expandedKeys, setExpandedKeys] = useState([]);
+  const store = useStore();
   const onExpand = (expandedKeys) => {
     setExpandedKeys(expandedKeys);
   };
@@ -229,7 +230,9 @@ const ContainerTree = () => {
           }
         }
       }
-      console.log(data);
+      game.editorTools.dragTool.onClickDragging(
+        store.getState().sceneReducer.gameItem
+      );
       setDisplayList(data);
     } else {
       message.warning("不可移动到根节点!");

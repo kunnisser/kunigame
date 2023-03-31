@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-09 10:33:20
+ * @LastEditTime: 2023-03-31 11:18:52
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
@@ -70,8 +70,10 @@ export const freeMovePosition = (dragContext: DragPosition) => {
         moveGroup.position.set(x, y);
         bootTarget.position.set(x - relativeX, y - relativeY); // 画布内对象还原为相对坐标
       }
-      dragTarget.id === "xAxis" && ((moveGroup.x = x), (bootTarget.x = x));
-      dragTarget.id === "yAxis" && ((moveGroup.y = y), (bootTarget.y = y));
+      dragTarget.id === "xAxis" &&
+        ((moveGroup.x = x), (bootTarget.x = x - relativeX));
+      dragTarget.id === "yAxis" &&
+        ((moveGroup.y = y), (bootTarget.y = y - relativeY));
 
       // 动态变更gameItem对象
       game.redux.dispatch({

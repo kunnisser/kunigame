@@ -42,6 +42,8 @@ class AST extends KnScene {
     testGroup.addChild(demo1Text);
     testGroup.addChild(demo2Text);
     const group2 = this.game.add.group("group2", this);
+    group2.y = 274;
+    group2.x = 486;
     this.game.add.group("groupChild", group2);
   }
 

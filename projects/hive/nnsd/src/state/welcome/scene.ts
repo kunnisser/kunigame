@@ -43,7 +43,7 @@ class Welcome extends KnScene {
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
     const logo: KnSprite = this.game.add.image("logo", this);
-    logo.texture = this.game.add.texture("Item_Hamburger0000");
+    logo.texture = this.game.add.texture("Item_Dinosaure0000");
     logo.tintColor = "#ffffff";
     logo.blendMode = 0;
     logo.angle = 0;
