@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-02-06 17:05:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-21 16:19:13
- * @FilePath: /kunigame/editor/page/outline/outline_tree/assets.tsx
+ * @LastEditTime: 2023-04-02 00:52:59
+ * @FilePath: \kunigame\editor\page\outline\outline_tree\assets.tsx
  * @Description: ---- 素材列表 ----
  */
 
@@ -12,8 +12,8 @@ import { useDispatch, useStore } from "react-redux";
 import { Collapse, Empty, Space, Tag } from "antd";
 import { getProjectAssets } from "editor@/api/request/project";
 import { EditGameName } from "editor@/page/workbench/canvas";
-import "editor@/assets/index.styl";
 import { setDragTarget } from "editor@/common/gameStore/scene/action";
+import "editor@/assets/index.styl";
 
 const { Panel } = Collapse;
 const AssetsList = () => {

@@ -1,3 +1,4 @@
+@import '~antd/dist/antd.dark.less';
 @import '~antd/dist/antd.compact.less';
 
 @primary-color: #11b234; // 全局主色
@@ -7,11 +8,12 @@
 @error-color: #f5222d; // 错误色
 @font-size-base: 14px; // 主字号
 @heading-color: #11b234; // 标题色
-@text-color: rgba(0, 0, 0, 0.65); // 主文本色
-@text-color-secondary: rgba(0, 0, 0, 0.45); // 次文本色
+@body-background: #1c1c1c;
+// @text-color: rgba(0, 0, 0, 0.65); // 主文本色
+@text-color-secondary: #f2f2f2; // 次文本色
 @disabled-color: rgba(0, 0, 0, 0.25); // 失效色
 @border-radius-base: 2px; // 组件/浮层圆角
-@border-color-base: #d9d9d9; // 边框色
+// @border-color-base: #d9d9d9; // 边框色
 @box-shadow-base: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08),
   0 9px 28px 8px rgba(0, 0, 0, 0.05); // 浮层阴影
 
@@ -28,8 +30,9 @@ body {
   width: 200px;
   height: 100%;
   text-align: center;
-  background-color: #fff;
+  background-color: #1f1f1f;
   color: #52c41a;
+  font-weight: bold;
 }
 
 .logo img {
@@ -47,7 +50,7 @@ body {
   align-items: center;
   width: calc(100vw - 400px);
   height: calc(100vh - 364px);
-  background-color: #696565;
+  background-color: #1f1f1f;
 }
 
 .kn-footer {
@@ -58,15 +61,11 @@ body {
   color: #52c41a;
 }
 
-.ant-layout {
-  background-color: #f0f2f5;
-}
-
 .ant-layout-header {
-  height: 36px;
+  height: auto;
   line-height: 36px;
   padding: 0;
-  background-color: #fff;
+  // background-color: #fff;
 }
 
 .ant-modal-title {

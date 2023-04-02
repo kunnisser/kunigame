@@ -2,12 +2,12 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-26 01:29:40
+ * @LastEditTime: 2023-04-03 00:37:03
  * @FilePath: \kunigame\editor\page\wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
 
-import { Layout } from "antd";
+import { Divider, Layout } from "antd";
 import React, { createContext, useEffect, useState } from "react";
 import KnHeader from "./header";
 import KnTabs from "./outline";
@@ -32,6 +32,7 @@ import { clearEditGameItem } from "editor@/common/gameStore/scene/action";
 import { updateScene } from "editor@/api/request/scene";
 import { EditGameName } from "editor@/page/workbench/canvas";
 import { isObjectEmpty } from "editor@/tool";
+import AlignHeader from "./header/align";
 
 export const WrapContext = createContext({});
 
@@ -137,8 +138,13 @@ const WireBoard = (props) => {
       <ErrorBoundary>
         <Layout>
           <Header style={{ marginBottom: "6px" }}>
-            <div className="logo">Kuni(kunigame)</div>
-            <KnHeader />
+            <div>
+              <div className="logo">Kuni(kunigame)</div>
+              <KnHeader />
+            </div>
+            <Divider style={{ margin: '2px 0' }} dashed></Divider>
+            <AlignHeader></AlignHeader>
+
           </Header>
           <Layout className="vh-scroll">
             <aside
@@ -148,10 +154,10 @@ const WireBoard = (props) => {
                 flexDirection: "column"
               }}
             >
-              <Sider theme="light">
+              <Sider>
                 <KnTabs initialKey="tab_form" tabs={formTabs} />
               </Sider>
-              <Sider theme="light">
+              <Sider>
                 <KnTabs initialKey="tab_scene" tabs={sceneTabs} />
               </Sider>
             </aside>
@@ -163,7 +169,7 @@ const WireBoard = (props) => {
                 <KnTabs initialKey="tab_footer" tabs={footerTabs} />
               </Footer>
             </Layout>
-            <Sider theme="light" width={300}>
+            <Sider width={300}>
               <KnTabs initialKey="tab_scene" tabs={inspectorTabs} />
             </Sider>
           </Layout>

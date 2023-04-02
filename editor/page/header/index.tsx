@@ -2,19 +2,19 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 16:00:13
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-02 16:39:13
- * @FilePath: /kunigame/editor/page/header/index.tsx
+ * @LastEditTime: 2023-04-03 00:13:32
+ * @FilePath: \kunigame\editor\page\header\index.tsx
  * @Description: ---- KN编辑器菜单 ----
  */
 
 import React, { useContext, useState } from "react";
 import { Button, Space, Form, Card, Tooltip, message } from "antd";
 import {
-  PlusCircleOutlined,
   PlayCircleOutlined,
   UnorderedListOutlined,
   SettingOutlined,
-  DeleteOutlined
+  DeleteOutlined,
+  AppstoreAddOutlined
 } from "@ant-design/icons";
 import { WrapContext } from "editor@/page/wireboard";
 import { ModalOptions } from "editor@/feedback/modalcore";
@@ -229,24 +229,27 @@ const KnHeader = () => {
   return (
     <React.Fragment>
       <Space>
-        <Button
-          icon={<PlusCircleOutlined />}
-          key="addProject"
-          onClick={createProjectFile}
-        >
-          创建项目
-        </Button>
-        <Button
-          icon={<UnorderedListOutlined />}
-          key="projectList"
-          onClick={showProjectList}
-          loading={listLoading}
-        >
-          项目列表
-        </Button>
-        <Button icon={<PlayCircleOutlined />} key="play">
-          播放
-        </Button>
+        <Tooltip placement="bottom" title="新建游戏">
+          <Button
+            icon={<AppstoreAddOutlined />}
+            key="addProject"
+            onClick={createProjectFile}
+          />
+        </Tooltip>
+        <Tooltip placement="bottom" title="查看游戏列表">
+          <Button
+            icon={<UnorderedListOutlined />}
+            key="projectList"
+            onClick={showProjectList}
+            loading={listLoading}
+          />
+        </Tooltip>
+        <Tooltip placement="bottom" title="预览游戏">
+          <Button
+            icon={<PlayCircleOutlined />}
+            key="play"
+          />
+        </Tooltip>
       </Space>
     </React.Fragment>
   );

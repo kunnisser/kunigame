@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-16 16:55:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-30 15:03:10
- * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/texturePicker.tsx
+ * @LastEditTime: 2023-04-01 01:02:01
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\texturePicker.tsx
  * @Description: ---- 弹窗内容 - 纹理选择 ----
  */
 
@@ -102,7 +102,7 @@ const ModalTexturePicker = (props: any) => {
             j++;
           }
           const icon = ref.current.spritePool.getSprite();
-          const isNewcreatedTexture = !icon.texture.valid;
+          const isNewCreatedTexture = !icon.texture.valid;
           icon.texture = PIXI.utils.TextureCache[frameKey];
           icon.anchor.set(0.5);
 
@@ -119,7 +119,7 @@ const ModalTexturePicker = (props: any) => {
             pickValue.textureCacheIds[0] === icon.texture.textureCacheIds[0]
               ? 0x32bf4c
               : 0xffffff;
-          if (isNewcreatedTexture) {
+          if (isNewCreatedTexture) {
             icon.interactive = true;
             icon.on("pointerover", onPointerOver, icon);
             icon.on("pointerout", onPointerOverOut, icon);
