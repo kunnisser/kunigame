@@ -86,7 +86,7 @@ class Loading extends KnScene {
 
   create() {
     this.position.set(this.game.config.half_w, this.game.config.half_h);
-    this.bg = this.game.add.image("Preloader_Background0000", this);
+    this.bg = this.game.add.image("", "Preloader_Background0000", this);
     this.bg.width = this.game.config.width;
     this.bg.height = this.game.config.height;
     this.bg.anchor.set(0.5);
@@ -101,12 +101,14 @@ class Loading extends KnScene {
     this.maskView = this.game.add.group("loadMask", this);
     this.maskView.visible = !1;
     const outBar = this.game.add.image(
+      "",
       "Preloader_Back0000",
       this.maskView,
       [0.5, 0.5]
     );
     outBar.scale.set(0.4);
     const innerBar = this.game.add.image(
+      "",
       "Preloader_Front0000",
       this.maskView,
       [0.5, 0.5]

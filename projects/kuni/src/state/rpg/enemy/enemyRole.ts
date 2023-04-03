@@ -1,5 +1,5 @@
 import BaseRole from "../roles/baseRole";
-import * as RoleConfig from './roleConfig';
+import * as RoleConfig from "./roleConfig";
 import Game from "ts@/kuni/lib/core";
 import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
 import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
@@ -17,12 +17,12 @@ interface Player {
 }
 
 interface Path {
-  pointer: Point,
-  F?: number,
-  G?: number,
-  H?: number,
-  D?: number, // 当前点到open数组中元素的距离
-  prev?: Path
+  pointer: Point;
+  F?: number;
+  G?: number;
+  H?: number;
+  D?: number; // 当前点到open数组中元素的距离
+  prev?: Path;
 }
 
 class EnemyRole extends BaseRole {
@@ -67,7 +67,11 @@ class EnemyRole extends BaseRole {
 
     if (this.config.remote) {
       // 如是远程角色
-      this.emitter = this.game.add.emitter(this.game, 10, this.config.remote.bullet);
+      this.emitter = this.game.add.emitter(
+        this.game,
+        10,
+        this.config.remote.bullet
+      );
       this.parent.addChild(this.emitter);
       this.emitter.position.set(0, 0);
 
@@ -76,14 +80,17 @@ class EnemyRole extends BaseRole {
     }
 
     // 设置生命条
-    const hpBg = this.game.add.image('hp_bg', this, [0, 0.5]);
+    const hpBg = this.game.add.image("", "hp_bg", this, [0, 0.5]);
     hpBg.scale.set(2.4);
     hpBg.y -= 160;
     hpBg.x -= hpBg.width * 0.5;
-    this.hpbar = this.game.add.image('enemy_hp', this, [0, 0.5]);
+    this.hpbar = this.game.add.image("", "enemy_hp", this, [0, 0.5]);
     this.hpbar.width = hpBg.width - 12;
     this.hpbar.height = hpBg.height - 10;
-    this.hpbar.position.set(hpBg.x + (hpBg.width - this.hpbar.width) * 0.5, hpBg.y);
+    this.hpbar.position.set(
+      hpBg.x + (hpBg.width - this.hpbar.width) * 0.5,
+      hpBg.y
+    );
 
     // 设置初始生命值
     this.maxHp = this.config.hp;
@@ -100,18 +107,17 @@ class EnemyRole extends BaseRole {
   pointActive() {
     const role = this.role.armature.getDisplay();
     role.interactive = true;
-    role.on('pointerover', () => {
-      role.cursor = 'hover';
+    role.on("pointerover", () => {
+      role.cursor = "hover";
     });
-    role.on('pointerdown', () => {
+    role.on("pointerdown", () => {
       this.state.gamer.target = this;
       this.sign || this.targetSign();
     });
   }
 
   // 初始化技能
-  initSkill() {
-  }
+  initSkill() {}
 
   // 暂停运动
   pauseWalking() {
@@ -123,12 +129,12 @@ class EnemyRole extends BaseRole {
 
   // 标记
   targetSign() {
-    this.sign = this.game.add.image('mark', this, [0.5, 0.5]);
+    this.sign = this.game.add.image("", "mark", this, [0.5, 0.5]);
     this.sign.scale.set(1.8);
-    this.sign.y = - 100;
+    this.sign.y = -100;
     this.sign.visible = !0;
-    this.sign['flash'] = this.game.add.tween().instance;
-    this.sign['flash'].to(this.sign, 0.4, {
+    this.sign["flash"] = this.game.add.tween().instance;
+    this.sign["flash"].to(this.sign, 0.4, {
       alpha: 0.5,
       repeat: 1e3,
       yoyo: true

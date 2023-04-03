@@ -82,6 +82,7 @@ class KnTradeModal extends KnGroup {
 
     // 定义背景
     const bg = this.game.add.image(
+      "",
       this.options.modalBg,
       panelModal,
       [0.5, 0.5]
@@ -91,6 +92,7 @@ class KnTradeModal extends KnGroup {
 
     // 定义标题框
     const title = this.game.add.image(
+      "",
       this.options.titleBg,
       panelModal,
       [0.5, 0.5]

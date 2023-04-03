@@ -1,5 +1,5 @@
 import BaseRole from "../roles/baseRole";
-import * as RoleConfig from './roleConfig';
+import * as RoleConfig from "./roleConfig";
 import Game from "ts@/kuni/lib/core";
 import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
 import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
@@ -18,12 +18,12 @@ interface Player {
 }
 
 interface Path {
-  pointer: Point,
-  F?: number,
-  G?: number,
-  H?: number,
-  D?: number, // 当前点到open数组中元素的距离
-  prev?: Path
+  pointer: Point;
+  F?: number;
+  G?: number;
+  H?: number;
+  D?: number; // 当前点到open数组中元素的距离
+  prev?: Path;
 }
 
 class PlayerRole extends BaseRole {
@@ -72,7 +72,11 @@ class PlayerRole extends BaseRole {
 
     if (this.config.remote) {
       // 如是远程角色
-      this.emitter = this.game.add.emitter(this.game, 10, this.config.remote.bullet);
+      this.emitter = this.game.add.emitter(
+        this.game,
+        10,
+        this.config.remote.bullet
+      );
       this.parent.addChild(this.emitter);
       this.emitter.position.set(0, 0);
 
@@ -81,13 +85,16 @@ class PlayerRole extends BaseRole {
     }
 
     // 设置生命条
-    const hpBg = this.game.add.image('hp_bg', this, [0, 0.5]);
+    const hpBg = this.game.add.image("", "hp_bg", this, [0, 0.5]);
     hpBg.scale.set(2.4);
     hpBg.y -= 160;
     hpBg.x -= hpBg.width * 0.5;
-    this.hpbar = this.game.add.image('player_hp', this, [0, 0.5]);
+    this.hpbar = this.game.add.image("", "player_hp", this, [0, 0.5]);
     this.hpbar.scale.set(2.4);
-    this.hpbar.position.set(hpBg.x + (hpBg.width - this.hpbar.width) * 0.5, hpBg.y);
+    this.hpbar.position.set(
+      hpBg.x + (hpBg.width - this.hpbar.width) * 0.5,
+      hpBg.y
+    );
   }
 
   initSkill(gui: KnGroup) {
@@ -98,7 +105,7 @@ class PlayerRole extends BaseRole {
         cd: sk.cd,
         action: (cb) => {
           if (!this.target) {
-            this.state.tip.showMessage('请选择目标');
+            this.state.tip.showMessage("请选择目标");
             return false;
           }
           this.state.setWalkPath(this.target, 64, sk.distance);
@@ -109,29 +116,40 @@ class PlayerRole extends BaseRole {
           const direct = this.setAttackDirect(this);
           this.role.animation.play(sk.animate, 1);
           this.role.hasDBEventListener(this.DB.EventObject.COMPLETE) > 0 ||
-            this.role.addDBEventListener(this.DB.EventObject.COMPLETE, () => {
-              this.role.removeDBEventListener(this.DB.EventObject.COMPLETE);
+            this.role.addDBEventListener(
+              this.DB.EventObject.COMPLETE,
+              () => {
+                this.role.removeDBEventListener(this.DB.EventObject.COMPLETE);
 
-              // 执行CD
-              cb();
-              this.attack(direct, this.config);
+                // 执行CD
+                cb();
+                this.attack(direct, this.config);
 
-              // 计算伤害
-              sk.action(sk.attack, this.config.crit, this.config.critVal, this.target);
-              const roleState = this.tweening ? 'walk' : 'stay';
-              this.role.animation.play(roleState);
-            }, this);
+                // 计算伤害
+                sk.action(
+                  sk.attack,
+                  this.config.crit,
+                  this.config.critVal,
+                  this.target
+                );
+                const roleState = this.tweening ? "walk" : "stay";
+                this.role.animation.play(roleState);
+              },
+              this
+            );
           return this;
         }
-      }
+      };
 
       const skillBtnGp = new KnSkButton(this.game, gui, sk.icon, btnConfig);
       skillBtnGp.position.set((index + 0.5) * skillBtnGp.width, 0);
-      keySkills[index + 49] = () => { skillBtnGp.dispatchSkill.bind(skillBtnGp)(btnConfig); }
+      keySkills[index + 49] = () => {
+        skillBtnGp.dispatchSkill.bind(skillBtnGp)(btnConfig);
+      };
     });
 
     // 绑定键盘事件
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener("keydown", (e) => {
       keySkills[e.keyCode] && keySkills[e.keyCode]();
     });
   }

@@ -52,7 +52,7 @@ class CursorDemo extends KnScene {
   }
 
   addBackground() {
-    const bg = this.game.add.image("bg002", this);
+    const bg = this.game.add.image("", "bg002", this);
     bg.interactive = !0;
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
@@ -90,14 +90,14 @@ class CursorDemo extends KnScene {
   }
 
   addMark() {
-    this.mark = this.game.add.image("mark", this, [0.5, 0.5]);
+    this.mark = this.game.add.image("", "mark", this, [0.5, 0.5]);
     this.mark.visible = !1;
     this.mark.width = 32 / this.game.world.scale.x;
     this.mark.height = 32 / this.game.world.scale.x;
   }
 
   addWeapon() {
-    this.weapon = this.game.add.image("weapon", this, [0.5, 0.5]);
+    this.weapon = this.game.add.image("", "weapon", this, [0.5, 0.5]);
     this.weapon.position.set(this.game.config.half_w, this.game.config.half_h);
     this.weapon.scale.set(0.3);
     this.weapon.interactive = !0;

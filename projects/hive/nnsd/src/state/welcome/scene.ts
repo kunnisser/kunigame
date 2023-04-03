@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-23 10:19:42
+ * @LastEditTime: 2023-04-03 15:48:15
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -36,14 +36,13 @@ class Welcome extends KnScene {
   boot() {}
 
   create() {
-    const bg: KnSprite = this.game.add.image("bg", this);
+    const bg: KnSprite = this.game.add.image("bg", "bg", this);
     bg.tintColor = "#ffffff";
     bg.y = 0;
     bg.x = 0;
-    bg.width = this.game.config.width;
-    bg.height = this.game.config.height;
-    const logo: KnSprite = this.game.add.image("logo", this);
-    logo.texture = this.game.add.texture("Item_Dinosaure0000");
+    bg.width = 1920;
+    bg.height = 960;
+    const logo: KnSprite = this.game.add.image("logo", "Item_Kangaroo0000", this);
     logo.tintColor = "#ffffff";
     logo.blendMode = 0;
     logo.angle = 0;
@@ -90,7 +89,7 @@ class Welcome extends KnScene {
     bmText.letterSpacing = 11;
     bmText.fontSize = 100;
     bmText.fontName = "desyrel";
-    bmText.text = "dododdodoodo";
+    bmText.text = "dododdodoodo1";
     this.addChild(demoText);
     this.addChild(demo1Text);
     this.addChild(bmText);

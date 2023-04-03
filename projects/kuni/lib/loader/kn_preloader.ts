@@ -67,7 +67,7 @@ class Preloader extends KnScene {
     this.addChild(tmpText);
     this.removeChild(tmpText);
     this.position.set(this.game.config.half_w, this.game.config.half_h);
-    this.bg = this.game.add.image("bg001", this);
+    this.bg = this.game.add.image("", "bg001", this);
     this.bg.width = this.game.config.width;
     this.bg.height = this.game.config.height;
     this.bg.anchor.set(0.5);

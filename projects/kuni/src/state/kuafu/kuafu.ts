@@ -188,7 +188,7 @@ class KuaFu extends KnScene {
 
     const cityTip = this.game.add.group("cityTip", modal.children[1]);
     cityTip.y = scrollMenu.menusGp.height;
-    const cityTipBg = this.game.add.image("textarea", cityTip, [0.5, 0.5]);
+    const cityTipBg = this.game.add.image("", "textarea", cityTip, [0.5, 0.5]);
     cityTipBg.scale.y = 2;
     scrollMenu.menusGp.y -= cityTipBg.height * 0.5;
     this.cityTipText = this.game.add.text(

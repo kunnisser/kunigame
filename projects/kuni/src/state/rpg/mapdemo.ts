@@ -289,7 +289,7 @@ class MapDemo extends KnScene {
 
   // 添加点击标记
   addMark(tileWidth, tileHeight) {
-    this.mark = this.game.add.image("mark", this.scene, [0.5, 0.5]);
+    this.mark = this.game.add.image("", "mark", this.scene, [0.5, 0.5]);
     this.mark.visible = !1;
     this.mark.width = tileWidth * 0.5;
     this.mark.height = tileHeight * 0.5;
@@ -328,7 +328,12 @@ class MapDemo extends KnScene {
   }
 
   addDarkLight() {
-    this.alphaLight = this.game.add.image("lightmap", this.scene, [0.5, 0.5]);
+    this.alphaLight = this.game.add.image(
+      "",
+      "lightmap",
+      this.scene,
+      [0.5, 0.5]
+    );
     this.alphaLight.position.set(this.gamer.x, this.gamer.y);
     this.alphaLight.scale.set(2, 1);
     const tween = this.game.add.tween();

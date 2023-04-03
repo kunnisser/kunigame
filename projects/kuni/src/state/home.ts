@@ -38,7 +38,7 @@ class Home extends KnScene {
   }
 
   generateBackground() {
-    const bg = this.game.add.image("bg002", this);
+    const bg = this.game.add.image("", "bg002", this);
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
   }

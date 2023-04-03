@@ -33,7 +33,7 @@ class KnAvatar extends KnGroup {
       .generateCircle(0xffffff, [0, 0, this.avatar_w * this.inner_scale]);
     this.addChild(bg);
     this.addChild(mask);
-    const avatarIcon = this.game.add.image(key, this, [0.5, 0.5]);
+    const avatarIcon = this.game.add.image("", key, this, [0.5, 0.5]);
     avatarIcon.width = this.avatar_w * 2;
     avatarIcon.height = this.avatar_h * 2;
     avatarIcon.mask = mask;
@@ -61,7 +61,7 @@ class KnAvatar extends KnGroup {
     this.addChild(healthBg);
     this.addChild(powerBg);
 
-    this.hpbar = this.game.add.image("rpg_health_bar", this, [0, 0.5]);
+    this.hpbar = this.game.add.image("", "rpg_health_bar", this, [0, 0.5]);
     this.hpbar.width = 0.96 * healthBg.width;
     this.hpbar.height = healthBg.height * 0.8;
     this.hpbar.position.set(
@@ -69,7 +69,7 @@ class KnAvatar extends KnGroup {
       healthBg.y + this.avatar_h * 0.3
     );
 
-    this.mpbar = this.game.add.image("rpg_magic_bar", this, [0, 0.5]);
+    this.mpbar = this.game.add.image("", "rpg_magic_bar", this, [0, 0.5]);
     this.mpbar.width = 0.96 * powerBg.width;
     this.mpbar.position.set(
       powerBg.x + powerBg.width * 0.02,

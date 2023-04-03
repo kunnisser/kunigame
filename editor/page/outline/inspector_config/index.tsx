@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-21 23:38:16
- * @FilePath: \kunigame\editor\page\outline\inspector_config\index.tsx
+ * @LastEditTime: 2023-04-03 16:06:29
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
 import React, { useEffect, useState } from "react";
@@ -64,12 +64,12 @@ const Inspector = () => {
   const setAdvancedVariables = (val: any) => {
     if (val.textureCacheIds) {
       return {
-        type: 'texture',
+        type: "texture",
         value: val.textureCacheIds
-      }
+      };
     }
     return val;
-  }
+  };
 
   const handleUpdate = (newData: any, path: string) => {
     const game: Game = store.getState().sceneReducer.game;
@@ -93,7 +93,10 @@ const Inspector = () => {
         return total[key];
       }, gameItem);
     }
-
+    if (gameItem._width && gameItem._height) {
+      gameItem.width = gameItem._width;
+      gameItem.height = gameItem._height;
+    }
     game.editorTools.dragTool.onClickDragging(
       store.getState().sceneReducer.gameItem
     );

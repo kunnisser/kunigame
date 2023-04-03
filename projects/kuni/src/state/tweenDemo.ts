@@ -72,14 +72,14 @@ class TweenDemo extends KnScene {
   }
 
   addBackground() {
-    const bg = this.game.add.image("wsjBg", this);
+    const bg = this.game.add.image("", "wsjBg", this);
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
   }
 
   // 居中构建添加
   addSprite(spritekey: string) {
-    const demo = this.game.add.image(spritekey, this, [0.5, 0.5]);
+    const demo = this.game.add.image("", spritekey, this, [0.5, 0.5]);
     demo.position.set(this.game.config.half_w, this.game.config.half_h);
     return demo;
   }

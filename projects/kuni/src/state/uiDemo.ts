@@ -55,7 +55,7 @@ class UIDemo extends KnScene {
   }
 
   addBackground() {
-    const bg = this.game.add.image("uiBg", this);
+    const bg = this.game.add.image("", "uiBg", this);
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
   }
@@ -151,12 +151,12 @@ class UIDemo extends KnScene {
   };
 
   addFriends = (modal) => {
-    const tmpImg = this.game.add.image("profile", modal.content);
+    const tmpImg = this.game.add.image("", "profile", modal.content);
     tmpImg.width = modal.contentWidth;
   };
 
   addInfo = (modal) => {
-    const thumb = this.game.add.image("weapon_able", modal.content);
+    const thumb = this.game.add.image("", "weapon_able", modal.content);
     const thumbTitle = this.game.add.section(
       "奥布莱恩之剑",
       "",

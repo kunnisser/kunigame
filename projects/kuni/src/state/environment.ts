@@ -77,7 +77,7 @@ class Environment extends KnScene {
   }
 
   addBackground() {
-    const bg = this.game.add.image("envBg", this);
+    const bg = this.game.add.image("", "envBg", this);
     bg.width = this.game.config.width;
     bg.height = this.game.config.height;
   }

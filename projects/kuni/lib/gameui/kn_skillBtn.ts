@@ -17,9 +17,9 @@ class KnSkButton extends KnGroup {
   }
 
   initial(key, config) {
-    const skBg = this.game.add.image("rpg_sk_bg", this, [0.5, 0.5]);
+    const skBg = this.game.add.image("", "rpg_sk_bg", this, [0.5, 0.5]);
     skBg.scale.set(0.8);
-    this.skillBtn = this.game.add.image(key, this, [0.5, 0.5]);
+    this.skillBtn = this.game.add.image("", key, this, [0.5, 0.5]);
     this.originScale = skBg.width / 110;
     this.skillBtn.scale.set(this.originScale);
     this.skillBtn["skillAble"] = true;

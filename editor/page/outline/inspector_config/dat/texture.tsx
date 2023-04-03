@@ -102,6 +102,7 @@ const DatTexture = (props: DefaultProps) => {
     });
     console.log(defaultVal);
     const sprite = atlasScreen.add.image(
+      "",
       defaultVal,
       atlasScreen.stage,
       [0.5, 0.5]

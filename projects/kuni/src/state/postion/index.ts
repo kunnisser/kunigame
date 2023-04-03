@@ -191,7 +191,7 @@ class Triangulation extends KnScene {
   }
 
   addBackground() {
-    // const bg = this.game.add.image('wsjBg', this);
+    // const bg = this.game.add.image("",'wsjBg', this);
     // bg.width = this.game.config.width;
     // bg.height = this.game.config.height;
   }

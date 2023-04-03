@@ -37,7 +37,12 @@ class KnFactory {
     return new KnGroup(this.game, key, parent);
   }
 
-  image = (key: any, parent: PIXI.Container, align?: Array<number>) => {
+  image = (
+    name: string,
+    key: any,
+    parent: PIXI.Container,
+    align?: Array<number>
+  ) => {
     let texture: any = null,
       imageKey: any = null;
     if (Object.prototype.toString.call(key) === "[object String]") {
@@ -47,21 +52,7 @@ class KnFactory {
       texture = key;
       imageKey = key.textureCacheIds ? key.textureCacheIds[0] : key;
     }
-    const sprite = new KnSprite(imageKey, texture);
-    align && sprite.anchor.set(...align);
-    parent || (parent = this.game.world);
-    return parent.addChild(sprite), sprite;
-  };
-
-  atlas = (
-    key: string,
-    frameKey: string,
-    parent: PIXI.Container,
-    align?: Array<number>
-  ) => {
-    const resources: any = this.game.loader.preloader.resources[key];
-    const texture = resources.textures[frameKey];
-    const sprite = new KnSprite(frameKey, texture);
+    const sprite = new KnSprite(name, imageKey, texture);
     align && sprite.anchor.set(...align);
     parent || (parent = this.game.world);
     return parent.addChild(sprite), sprite;
@@ -85,7 +76,7 @@ class KnFactory {
       key = btnTexture;
     }
 
-    btn = this.image(key, parent, align);
+    btn = this.image("", key, parent, align);
 
     btn.interactive = !0;
 
@@ -133,7 +124,7 @@ class KnFactory {
     });
 
     if (tipkey) {
-      btn["tip"] = this.image(tipkey, parent, [0.5, 0.5]);
+      btn["tip"] = this.image("", tipkey, parent, [0.5, 0.5]);
     }
     return btn;
   };

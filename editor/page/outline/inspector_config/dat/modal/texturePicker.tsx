@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-16 16:55:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-01 01:02:01
- * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\texturePicker.tsx
+ * @LastEditTime: 2023-04-03 09:25:18
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/texturePicker.tsx
  * @Description: ---- 弹窗内容 - 纹理选择 ----
  */
 
@@ -133,7 +133,8 @@ const ModalTexturePicker = (props: any) => {
             frameKey,
             {
               fontSize: 12,
-              fontWeight: "bold"
+              fontWeight: "bold",
+              fill: 0xffffff
             },
             [0.5, 0]
           );

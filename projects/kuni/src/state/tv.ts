@@ -34,7 +34,7 @@ class TvDemo extends KnScene {
   }
 
   createTv() {
-    const tv = this.game.add.image("tv", this, [0.5, 0.5]);
+    const tv = this.game.add.image("", "tv", this, [0.5, 0.5]);
     tv.position.set(this.game.config.half_w, this.game.config.half_h);
     const screen: KnGraphics = this.game.add
       .graphics()
