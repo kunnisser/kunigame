@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-16 16:55:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-03 09:25:18
- * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/texturePicker.tsx
+ * @LastEditTime: 2023-04-05 23:55:19
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\texturePicker.tsx
  * @Description: ---- 弹窗内容 - 纹理选择 ----
  */
 
@@ -81,18 +81,18 @@ const ModalTexturePicker = (props: any) => {
         let j = 0;
         const title = atlasScreen.add.text(
           atlas.key,
-          "- " + atlas.key + " -",
+          "" + atlas.key,
           {
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: "bold",
-            fill: 0x32bf4c,
-            stroke: 0xbbf6bc,
-            strokeThickness: 10
+            fill: 0xbbf6bc,
+            stroke: 0x32bf4c,
+            strokeThickness: 4
           },
           [0, 0]
         );
         title.position.set(0, screenHeight);
-        screenHeight += title.height * 1.5;
+        screenHeight += title.height + 20;
         atlasScreen.stage.addChild(title);
         ref.current.texts.push(title);
 

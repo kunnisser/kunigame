@@ -2,12 +2,12 @@
  * @Author: kunnisser
  * @Date: 2023-03-28 14:37:07
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-29 16:21:09
- * @FilePath: /kunigame/projects/kuni/lib/gameobjects/kn_spritepool.ts
+ * @LastEditTime: 2023-04-03 23:57:59
+ * @FilePath: \kunigame\projects\kuni\lib\gameobjects\kn_spritepool.ts
  * @Description: ---- 精灵对象池 ----
  */
 
-import KnSprite from "./kn_sprite";
+import KnSprite from './kn_sprite';
 
 class SpritePool {
   public pool: Array<KnSprite>;
@@ -21,7 +21,7 @@ class SpritePool {
       sprite && (sprite.visible = true);
       return sprite;
     } else {
-      return new KnSprite("", PIXI.Texture.EMPTY);
+      return new KnSprite('', '', PIXI.Texture.EMPTY);
     }
   }
 
