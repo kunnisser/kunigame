@@ -42,7 +42,7 @@ class Welcome extends KnScene {
     bg.x = 0;
     bg.width = 1920;
     bg.height = 960;
-    const logo: KnSprite = this.game.add.image("logo", "Item_Kangaroo0000", this);
+    const logo: KnSprite = this.game.add.image("logo", "Item_Cow0000", this);
     logo.tintColor = "#ffffff";
     logo.blendMode = 0;
     logo.angle = 0;

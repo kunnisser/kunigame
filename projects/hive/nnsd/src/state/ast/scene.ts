@@ -15,7 +15,11 @@ class AST extends KnScene {
     super(game, key);
     this.game = game;
     this.resources = {
-      icon: "/projects/hive/nnsd/assets/atlas/icon.json"
+      icon: "/projects/hive/nnsd/assets/atlas/icon.json",
+      logo: "/projects/hive/nnsd/assets/images/logo.png",
+      bg002: "/projects/hive/nnsd/assets/images/bg002.jpg",
+      attack: "/projects/hive/nnsd/assets/images/attack.png",
+      desyrel: "/projects/hive/nnsd/assets/fonts/desyrel.xml"
     };
   }
 
