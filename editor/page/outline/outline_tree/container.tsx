@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-03 14:43:32
+ * @LastEditTime: 2023-04-23 16:00:54
  * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
  * @Description: ---- 场景元素列表 ----
  */
@@ -11,10 +11,10 @@ import { message, Tree } from "antd";
 import { useSelector, useStore } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import Icon from "@ant-design/icons";
-import TextIcon from "editor@/assets/icon/text.svg";
-import SpriteIcon from "editor@/assets/icon/sprite.svg";
-import GroupIcon from "editor@/assets/icon/group.svg";
-import GraphicsIcon from "editor@/assets/icon/graphics.svg";
+import { ReactComponent as TextIcon } from "editor@/assets/icon/text.svg";
+import { ReactComponent as SpriteIcon } from "editor@/assets/icon/sprite.svg";
+import { ReactComponent as GroupIcon } from "editor@/assets/icon/group.svg";
+import { ReactComponent as GraphicsIcon } from "editor@/assets/icon/graphics.svg";
 import { DataNode } from "antd/lib/tree";
 
 const ContainerTree = () => {

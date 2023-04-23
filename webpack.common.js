@@ -112,10 +112,10 @@ module.exports = {
           },
           {
             loader: "@svgr/webpack",
-            options: {
-              babel: false,
-              icon: true
-            }
+            options: { namedExport: "ReactComponent", babel: false, icon: true }
+          },
+          {
+            loader: "url-loader"
           }
         ]
       }
