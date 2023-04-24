@@ -2,11 +2,11 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-23 15:50:18
+ * @LastEditTime: 2023-04-24 17:27:08
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
-import React from "react";
+import React, { useState } from "react";
 import { Button, Space, Tooltip } from "antd";
 import {
   BorderLeftOutlined,
@@ -23,32 +23,71 @@ import { ReactComponent as PickCursor } from "editor@/assets/icon/pickCursor.svg
 import { ReactComponent as RotateCursor } from "editor@/assets/icon/rotateCursor.svg";
 
 const Cursor = (props: any) => {
-  const { Component, key } = props;
+  const { Component, id, operationType, ...prop } = props;
+  const isActive = id === operationType;
   return (
     <Button
       icon={
         <span className="anticon">
-          <Component fill="#11b234" stroke="#11b234" />
+          <Component
+            fill={isActive ? "#11b234" : "#fff"}
+            stroke={isActive ? "#11b234" : "#fff"}
+          />
         </span>
       }
-      key={`item-${key}`}
+      key={`item-${id}`}
+      {...prop}
     ></Button>
   );
 };
 
 const AlignHeader = () => {
+  const [operationType, setOperationType] = useState("pick");
+  const operationArray = [
+    {
+      key: "pick",
+      component: PickCursor
+    },
+    {
+      key: "drag",
+      component: DragCursor
+    },
+    {
+      key: "scale",
+      component: ScaleCursor
+    },
+    {
+      key: "rotate",
+      component: RotateCursor
+    }
+  ];
+
+  const onChangeOperation = (key: string) => {
+    setOperationType(key);
+  };
   return (
     <div className="kn-flex">
       <Space>
         <Space>
-          <Cursor Component={PickCursor} key="picker"></Cursor>
-          <Cursor Component={DragCursor} key="drag"></Cursor>
-          <Cursor Component={ScaleCursor} key="scale"></Cursor>
-          <Cursor Component={RotateCursor} key="rotate"></Cursor>
+          {operationArray.map((operation) => {
+            return (
+              <Cursor
+                Component={operation.component}
+                key={operation.key}
+                id={operation.key}
+                operationType={operationType}
+                onClick={() => onChangeOperation(operation.key)}
+              ></Cursor>
+            );
+          })}
         </Space>
         <Space align="center">
           <Tooltip placement="bottom" title="向左对齐">
-            <Button icon={<BorderLeftOutlined />} key="item-left-align" />
+            <Button
+              type="primary"
+              icon={<BorderLeftOutlined />}
+              key="item-left-align"
+            />
           </Tooltip>
           <Tooltip placement="bottom" title="向右对齐">
             <Button icon={<BorderRightOutlined />} key="item-right-align" />
