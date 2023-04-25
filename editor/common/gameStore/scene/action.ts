@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-19 17:29:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-20 11:07:25
+ * @LastEditTime: 2023-04-25 11:33:58
  * @FilePath: /kunigame/editor/common/gameStore/scene/action.ts
  * @Description: ---- 场景状态action ----
  */
@@ -17,7 +17,9 @@ const GET_GAME_ITEM = Symbol();
 const UPDATE_EDIT_GAME_ITEM = Symbol();
 const CLEAR_EDIT_GAME_ITEM = Symbol();
 const SET_DRAG_TARGET = Symbol();
+const SET_OPERATION_TYPE = Symbol();
 
+// 储存场景列表
 const getSceneList = (list: Array<KnScene>) => {
   return {
     type: GET_SCENE_LIST,
@@ -25,6 +27,7 @@ const getSceneList = (list: Array<KnScene>) => {
   };
 };
 
+// 设置当前场景列表
 const setCurrentScene = (scene: KnScene | null) => {
   return {
     type: SET_CURRENT_SCENE,
@@ -32,6 +35,7 @@ const setCurrentScene = (scene: KnScene | null) => {
   };
 };
 
+// 储存当前游戏实例
 const getGame = (game: Game | null) => {
   return {
     type: GET_GAME,
@@ -39,6 +43,7 @@ const getGame = (game: Game | null) => {
   };
 };
 
+// 储存当前选中游戏对象实例
 const getGameItem = (item: any) => {
   return {
     type: GET_GAME_ITEM,
@@ -46,6 +51,7 @@ const getGameItem = (item: any) => {
   };
 };
 
+// 更新编辑选中的游戏对象实例
 const updateEditGameItem = (gameItem: any) => {
   return {
     type: UPDATE_EDIT_GAME_ITEM,
@@ -53,6 +59,7 @@ const updateEditGameItem = (gameItem: any) => {
   };
 };
 
+// 清空选中的游戏对象
 const clearEditGameItem = () => {
   return {
     type: CLEAR_EDIT_GAME_ITEM,
@@ -60,6 +67,15 @@ const clearEditGameItem = () => {
   };
 };
 
+// 设置当前操作类型
+const setCurrentOperationType = (type: string) => {
+  return {
+    type: SET_OPERATION_TYPE,
+    payload: type
+  };
+};
+
+// 设置拖动的对象
 const setDragTarget = (target: any) => {
   return {
     type: SET_DRAG_TARGET,
@@ -81,5 +97,7 @@ export {
   CLEAR_EDIT_GAME_ITEM,
   clearEditGameItem,
   SET_DRAG_TARGET,
-  setDragTarget
+  setDragTarget,
+  SET_OPERATION_TYPE,
+  setCurrentOperationType
 };

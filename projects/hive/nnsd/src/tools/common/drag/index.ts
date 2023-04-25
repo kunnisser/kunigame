@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-24 10:32:12
+ * @LastEditTime: 2023-04-25 17:37:14
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
  * @Description: ---- 公共拖动 ----
  */
@@ -47,10 +47,6 @@ class DragPosition {
   }
 
   initial(game: Game) {
-    // 设置画布可交互
-    this.game.stage.interactive = true;
-    this.game.stage.hitArea = this.game.app.screen;
-
     // 创建拖动组
     this.moveGroup = this.game.add.group("moveContainer", this.parent);
     // 创建拖动边框
@@ -237,7 +233,9 @@ class DragPosition {
     }
     this.bootTarget = item;
     this.game.editorTools.editTargetElement = item;
-    this.moveGroup.visible = true;
+
+    // 符合操作类型，则显示对应的操作模块
+    this.game.editorTools.type === "drag" && (this.moveGroup.visible = true);
     this.moveGroup.position.set(cloneItem.x, cloneItem.y);
     const borderSize = this.drawPositionEditorBorder(cloneItem);
     this.drawEditorAnchor(cloneItem, borderSize);

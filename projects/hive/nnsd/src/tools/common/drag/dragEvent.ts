@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-31 11:18:52
+ * @LastEditTime: 2023-04-25 15:36:03
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
@@ -27,17 +27,23 @@ export const freeMovePosition = (dragContext: DragPosition) => {
   const centerPointer = dragContext.anchorHandler;
   centerPointer.interactive = true;
   centerPointer.cursor = "pointer";
-  centerPointer.on("pointerdown", startDragMove, centerPointer);
+  centerPointer
+    .off("pointerdown")
+    .on("pointerdown", startDragMove, centerPointer);
 
   const xAxisHandler = dragContext.anchorArrowX;
   xAxisHandler.interactive = true;
   xAxisHandler.cursor = "pointer";
-  xAxisHandler.on("pointerdown", startDragMove, xAxisHandler);
+  xAxisHandler
+    .off("pointerdown")
+    .on("pointerdown", startDragMove, xAxisHandler);
 
   const yAxisHandler = dragContext.anchorArrowY;
   yAxisHandler.interactive = true;
   yAxisHandler.cursor = "pointer";
-  yAxisHandler.on("pointerdown", startDragMove, yAxisHandler);
+  yAxisHandler
+    .off("pointerdown")
+    .on("pointerdown", startDragMove, yAxisHandler);
 
   // 定义解绑触发事件
   dragContext.game.stage.off("pointerup").on("pointerup", dragEnd);
@@ -92,7 +98,7 @@ export const freeMovePosition = (dragContext: DragPosition) => {
     dragTarget = this;
     if (dragTarget) {
       dragTarget.alpha = 0.75;
-      dragTarget.on("pointermove", onDragMove, dragTarget);
+      dragTarget.off("pointermove").on("pointermove", onDragMove, dragTarget);
 
       const bootTargetPosition = dragContext.bootTarget.position;
 
