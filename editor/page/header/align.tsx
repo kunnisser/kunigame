@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-25 17:38:31
+ * @LastEditTime: 2023-04-26 09:26:54
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
@@ -77,6 +77,7 @@ const AlignHeader = () => {
     dispatch(setCurrentOperationType(key));
     tool.switchOperationType.bind(tool)(key);
   };
+
   return (
     <div className="kn-flex">
       <Space>

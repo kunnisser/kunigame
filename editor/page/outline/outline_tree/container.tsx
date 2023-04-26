@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-23 16:00:54
+ * @LastEditTime: 2023-04-26 16:23:38
  * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
  * @Description: ---- 场景元素列表 ----
  */
@@ -140,7 +140,7 @@ const ContainerTree = () => {
   };
 
   const selectElementTarget = (keys: Array<string>, element: any) => {
-    game.editorTools.dragTool.onClickDragging(element.node.item);
+    game.editorTools.onClickHandler(element.node.item);
   };
 
   const dropHandler = (info) => {
@@ -230,9 +230,7 @@ const ContainerTree = () => {
           }
         }
       }
-      game.editorTools.dragTool.onClickDragging(
-        store.getState().sceneReducer.gameItem
-      );
+      game.editorTools.onClickHandler(store.getState().sceneReducer.gameItem);
       setDisplayList(data);
     } else {
       message.warning("不可移动到根节点!");

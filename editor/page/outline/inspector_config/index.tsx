@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-03 16:06:29
+ * @LastEditTime: 2023-04-26 15:41:26
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -97,9 +97,7 @@ const Inspector = () => {
       gameItem.width = gameItem._width;
       gameItem.height = gameItem._height;
     }
-    game.editorTools.dragTool.onClickDragging(
-      store.getState().sceneReducer.gameItem
-    );
+    game.editorTools.onClickHandler(store.getState().sceneReducer.gameItem);
     setGameItem({ ...newData });
   };
 

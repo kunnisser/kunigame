@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-25 15:36:03
+ * @LastEditTime: 2023-04-26 14:47:35
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
@@ -69,7 +69,8 @@ export const freeMovePosition = (dragContext: DragPosition) => {
    * @return {*}
    */
   function onDragMove(event: any) {
-    const { moveGroup, game, bootTarget, relativeX, relativeY } = dragContext;
+    const { moveGroup, game, bootTarget } = dragContext;
+    const { relativeX, relativeY } = game.editorTools;
     if (moveGroup) {
       const [x, y] = game.coverMask.translateWheelScalePosition(event);
       if (dragTarget.id === "handler") {
