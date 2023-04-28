@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-02-20 17:08:26
+ * @LastEditTime: 2023-04-28 14:58:49
  * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
@@ -187,8 +187,6 @@ class CoverMask extends KnGroup {
     //   mouseIn = true;
     //   posTextTip.visible = mouseIn;
     // });
-
-    mask.interactive = true;
 
     mask.on("mousemove", (e) => {
       // if (!mouseIn) {
