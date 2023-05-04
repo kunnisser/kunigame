@@ -19,43 +19,28 @@ class AST extends KnScene {
       logo: '/projects/hive/nnsd/assets/images/logo.png',
       bg002: '/projects/hive/nnsd/assets/images/bg002.jpg',
       attack: '/projects/hive/nnsd/assets/images/attack.png',
-      desyrel: '/projects/hive/nnsd/assets/fonts/desyrel.xml',
+      desyrel: '/projects/hive/nnsd/assets/fonts/desyrel.xml'
     };
   }
 
   boot() {}
 
   create() {
-    const demoText: KnText = this.game.add.text(
-      'text1',
-      'test1',
-      {
-        fontSize: '24',
-        fill: 0xffffff,
-      },
-      [0.5, 0.5]
-    );
+    const demoText: KnText = this.game.add.text('text1', 'test1', {
+      fontSize: '24',
+      fill: 0xffffff
+    }, [0.5, 0.5]);
     demoText.position.set(this.game.config.half_w, this.game.config.half_h);
     const testGroup = this.game.add.group('group1', this);
-    const demo1Text: KnText = this.game.add.text(
-      '测试2',
-      'test2',
-      {
-        fontSize: '24',
-        fill: 0xffffff,
-      },
-      [0.5, 0.5]
-    );
+    const demo1Text: KnText = this.game.add.text('测试2', 'test2', {
+      fontSize: '24',
+      fill: 0xffffff
+    }, [0.5, 0.5]);
     demo1Text.position.set(300, 400);
-    const demo2Text: KnText = this.game.add.text(
-      '测试3',
-      'test3',
-      {
-        fontSize: '24',
-        fill: 0xffffff,
-      },
-      [0.5, 0.5]
-    );
+    const demo2Text: KnText = this.game.add.text('测试3', 'test3', {
+      fontSize: '24',
+      fill: 0xffffff
+    }, [0.5, 0.5]);
     demo2Text.position.set(400, 400);
     testGroup.addChild(demoText);
     testGroup.addChild(demo1Text);
@@ -74,6 +59,7 @@ class AST extends KnScene {
       this.removeChildren(1, this.children.length);
     }
   }
+
 }
 
 export default AST;

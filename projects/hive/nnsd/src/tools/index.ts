@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-26 16:23:33
+ * @LastEditTime: 2023-05-04 10:32:55
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -90,6 +90,16 @@ class EditorTools {
 
   // 定义拖拽撤销恢复功能,覆盖式
   intialCancelandResume() {
+    // 定义覆盖式取消事件
+    document.onkeyup = (e: KeyboardEvent) => {
+      e.key === "Escape" &&
+        ((this.groupMap[this.type].container.visible = false),
+        // 同时清空选中元素
+        this.game.redux.dispatch({
+          type: GET_GAME_ITEM,
+          payload: null
+        }));
+    };
     document.onkeydown = (e) => {
       const currentActionStack = this.game.currentScene.cancelActionStack;
       const resumeActionStack = this.game.currentScene.resumeActionStack;
