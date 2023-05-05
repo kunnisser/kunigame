@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-04 10:32:55
+ * @LastEditTime: 2023-05-05 14:43:49
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -183,21 +183,21 @@ class EditorTools {
   // 绘制对应的操作组件
   drawOperationComponent(item) {
     // 获取点击元素的全局坐标（考虑画布缩放）
-    this.relativeX = 0;
-    this.relativeY = 0;
-    const loopGlobalCoord = (item) => {
+    const loopGlobalCoord = (item, x, y) => {
+      let [relativeX, relativeY] = [x, y];
       if (item.parent.constructor.name === "KnGroup") {
-        this.relativeX += item.parent.x;
-        this.relativeY += item.parent.y;
-        loopGlobalCoord(item.parent);
+        relativeX += item.parent.x;
+        relativeY += item.parent.y;
+        loopGlobalCoord(item.parent, relativeX, relativeY);
       }
+      return [relativeX, relativeY];
     };
-    loopGlobalCoord(item);
+    const [x, y] = loopGlobalCoord(item, 0, 0);
 
     // 克隆目标的宽高和初始坐标
     const cloneItem: any = {
-      x: item.x + this.relativeX,
-      y: item.y + this.relativeY,
+      x: item.x + x,
+      y: item.y + y,
       width: item.width,
       height: item.height,
       anchor: null
@@ -219,6 +219,7 @@ class EditorTools {
   reset() {
     this.dragTool.moveGroup.visible = false;
     this.pickTool.pickGroup.visible = false;
+    this.pickTool.isPulling = false;
     this.rotateTool.rotateGroup.visible = false;
     this.scaleTool.scaleGroup.visible = false;
   }

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-27 10:30:17
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-04 10:55:12
+ * @LastEditTime: 2023-05-05 11:02:04
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/pick/boxSelection.ts
  * @Description: ---- 框选功能 ----
  */
@@ -27,6 +27,24 @@ const drawBoxSelection = (pickTool: PickTool, positionArray: Array<number>) => {
   pickTool.pickBox.drawPolygon(positionArray);
 };
 
+const rectBoundsContains = (rect, other): Boolean => {
+  if (other.width <= 0 || other.height <= 0) {
+    return (
+      other.x > rect.x &&
+      other.y > rect.y &&
+      other.right < rect.right &&
+      other.bottom < rect.bottom
+    );
+  }
+  console.log(rect, other);
+  return (
+    other.x >= rect.x &&
+    other.y >= rect.y &&
+    other.right <= rect.right &&
+    other.bottom <= rect.bottom
+  );
+};
+
 export const boxSelection = (game: Game, pickTool: PickTool) => {
   const canvas: any = game.view.children[0];
   let [startX, startY, endX, endY] = [0, 0, 0, 0];
@@ -35,6 +53,7 @@ export const boxSelection = (game: Game, pickTool: PickTool) => {
     if (!isPickType) {
       return;
     }
+    console.log("down");
     const [x, y] = game.coverMask.translateWheelScalePosition(
       eventFormat(event.offsetX, event.offsetY)
     );
@@ -62,7 +81,6 @@ export const boxSelection = (game: Game, pickTool: PickTool) => {
         endX,
         startY
       ];
-      console.log(positionArray);
       drawBoxSelection(pickTool, positionArray);
     }
   };
@@ -72,10 +90,15 @@ export const boxSelection = (game: Game, pickTool: PickTool) => {
       return;
     }
     const test = game.currentScene.getChildByName("text1", true);
-    console.log(pickTool.pickBox.getLocalBounds().contains(test.x, test.y));
-    if (pickTool.pickBox.getLocalBounds().contains(test.x, test.y)) {
+    console.log(test);
+    test &&
+      console.log(
+        rectBoundsContains(pickTool.pickBox.getLocalBounds(), test.getBounds())
+      );
+    if (test && pickTool.pickBox.getLocalBounds().contains(test.x, test.y)) {
       game.editorTools.drawOperationComponent(test);
     }
+    console.log("up");
     pickTool.isPulling = false;
     pickTool.pickBox.visible = false;
     pickTool.pickBox.clear();
