@@ -1,5 +1,5 @@
-import { Text } from "pixi.js";
-import Game from "../core";
+import { Text } from 'pixi.js';
+import Game from '../core';
 
 class KnText extends Text {
   game: Game;
@@ -13,7 +13,6 @@ class KnText extends Text {
   ) {
     super(content, style);
     this.game = game;
-    this.resolution = window.devicePixelRatio;
     this.anchor.set(...anchor);
     this.id = id;
     this.name = id;
