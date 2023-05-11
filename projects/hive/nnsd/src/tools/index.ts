@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-05 14:43:49
+ * @LastEditTime: 2023-05-11 11:32:23
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -162,11 +162,16 @@ class EditorTools {
   bootDrag = (item: any) => {
     item.interactive = true;
 
-    const bootDragClick = () => {
-      this.onClickHandler(item);
-    };
     // 注意，由于scene被缓存，需要先清空绑定事件
-    item.off("click").on("click", bootDragClick);
+    item.off("click").on("click", () => {
+      if (
+        this.groupMap[this.type].context.checkClickUnAble &&
+        this.groupMap[this.type].context.checkClickUnAble()
+      ) {
+        return;
+      }
+      this.onClickHandler(item);
+    });
   };
 
   onClickHandler = (item: any) => {

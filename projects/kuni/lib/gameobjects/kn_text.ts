@@ -1,5 +1,5 @@
-import { Text } from 'pixi.js';
-import Game from '../core';
+import { Text } from "pixi.js";
+import Game from "../core";
 
 class KnText extends Text {
   game: Game;

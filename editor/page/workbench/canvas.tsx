@@ -10,11 +10,7 @@ import React, { useEffect } from "react";
 import Game from "ts@/kuni/lib/core";
 import GameInitial from "ts@/hive/nnsd/main";
 import { useDispatch, useStore } from "react-redux";
-import {
-  getGame,
-  getSceneList,
-  setCurrentScene
-} from "editor@/common/gameStore/scene/action";
+import { getGame, getSceneList, setCurrentScene } from "editor@/common/gameStore/scene/action";
 import { message } from "antd";
 import { addAssetsScene } from "editor@/api/request/scene";
 export const EditGameName = "nnsd";
@@ -22,9 +18,9 @@ export const EditGameName = "nnsd";
 const StageEditor = (props: any) => {
   const dispatch = useDispatch();
   const store = useStore();
-
   useEffect(() => {
     const view: any = document.getElementById("stage"); // 初始化游戏场景列表
+
     const game: Game = GameInitial(view);
     console.log("created");
     game.redux = {
@@ -34,24 +30,28 @@ const StageEditor = (props: any) => {
     // 保存游戏所有场景列表
 
     dispatch(getSceneList(game.sceneManager.scenes)); // 储存游戏实例
-    dispatch(getGame(game));
 
-    view.addEventListener("drop", async (e) => {
+    dispatch(getGame(game));
+    view.addEventListener("drop", async e => {
       e.preventDefault();
-      const { dragTarget, currentScene } = store.getState().sceneReducer;
+      const {
+        dragTarget,
+        currentScene
+      } = store.getState().sceneReducer;
+
       if (!currentScene) {
         message.warning("先选择场景");
         return;
       }
+
       if (currentScene.resources[dragTarget.key]) {
         message.warning("资源已存在");
       } else {
-        const ret = await addAssetsScene(
-          Object.assign(
-            { projectName: EditGameName, sceneName: currentScene.id },
-            dragTarget
-          )
-        );
+        const ret = await addAssetsScene(Object.assign({
+          projectName: EditGameName,
+          sceneName: currentScene.id
+        }, dragTarget));
+
         if (ret.data.status === "success") {
           game.loader.filling({
             [dragTarget.key]: dragTarget.url
@@ -65,7 +65,7 @@ const StageEditor = (props: any) => {
     });
   }, []);
 
-  const dropOver = (e) => {
+  const dropOver = e => {
     e.preventDefault();
   };
 

@@ -2,31 +2,34 @@
  * @Author: kunnisser
  * @Date: 2023-04-27 10:30:17
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-08 00:29:23
- * @FilePath: \kunigame\projects\hive\nnsd\src\tools\common\pick\boxSelection.ts
+ * @LastEditTime: 2023-05-11 16:44:13
+ * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/pick/boxSelection.ts
  * @Description: ---- 框选功能 ----
  */
 
-import Game from 'ts@/kuni/lib/core';
-import PickTool from '.';
+import Game from "ts@/kuni/lib/core";
+import PickTool from ".";
 
+// 将canvas的坐标转为pixi的事件坐标
 const eventFormat = (x, y) => {
   return {
     data: {
       global: {
         x,
-        y,
-      },
-    },
+        y
+      }
+    }
   };
 };
 
+// 绘制绿色的选择框
 const drawBoxSelection = (pickTool: PickTool, positionArray: Array<number>) => {
   pickTool.pickBox.clear();
   pickTool.pickBox.lineStyle(2, 0x11b234);
   pickTool.pickBox.drawPolygon(positionArray);
 };
 
+// 判断other的矩形边界包含在rect的矩形边界中
 const rectBoundsContains = (rect, other): Boolean => {
   if (other.width <= 0 || other.height <= 0) {
     return (
@@ -45,15 +48,54 @@ const rectBoundsContains = (rect, other): Boolean => {
   );
 };
 
+// 获取文字对象的bounds信息，需要计算文字的resolution缩放，见KnText的factory
+const getItemDprBounds = (item) => {
+  const localBounds = item.getLocalBounds();
+  console.log(localBounds.x);
+  const x = localBounds.x / 2 + item.x;
+  const y = localBounds.y / 2 + item.y;
+  console.log(item, item.width);
+  return {
+    x,
+    y,
+    right: x + item.width,
+    bottom: y + item.height
+  };
+};
+
+// 获取对象的bounds信息，叠加对象的坐标
+const getItemBounds = (item) => {
+  const localBounds = item.getLocalBounds();
+  const x = localBounds.x + item.x;
+  const y = localBounds.y + item.y;
+  return {
+    x,
+    y,
+    right: x + item.width,
+    bottom: y + item.height
+  };
+};
+
+// 遍历非KnGroup的对象
+const recursionItems = (items: Array<any>, ret: Array<any>) => {
+  items.map((item: any) => {
+    if (item.constructor.name === "KnGroup") {
+      recursionItems(item.children, ret);
+    } else {
+      ret.push(item);
+    }
+  });
+  return ret;
+};
+
 export const boxSelection = (game: Game, pickTool: PickTool) => {
   const canvas: any = game.view.children[0];
   let [startX, startY, endX, endY] = [0, 0, 0, 0];
   canvas.onmousedown = (event: MouseEvent) => {
-    const isPickType = game.editorTools.type === 'pick';
+    const isPickType = game.editorTools.type === "pick";
     if (!isPickType) {
       return;
     }
-    console.log('down');
     const [x, y] = game.coverMask.translateWheelScalePosition(
       eventFormat(event.offsetX, event.offsetY)
     );
@@ -79,41 +121,33 @@ export const boxSelection = (game: Game, pickTool: PickTool) => {
         endX,
         endY,
         endX,
-        startY,
+        startY
       ];
       drawBoxSelection(pickTool, positionArray);
+      pickTool.isMovingAbleCount++;
     }
-  };
-
-  const getItemDprBounds = (item) => {
-    const localBounds = item.getLocalBounds();
-    const x = localBounds.x / 4 + item.x;
-    const y = localBounds.y / 4 + item.y;
-    return {
-      x,
-      y,
-      right: x + item.width,
-      bottom: y + item.height,
-    };
   };
 
   canvas.onmouseup = (event: MouseEvent) => {
     if (!pickTool.isPulling) {
       return;
     }
-    const test = game.currentScene.getChildByName('text1', true);
-    if (
-      test &&
-      rectBoundsContains(
-        pickTool.pickBox.getLocalBounds(),
-        getItemDprBounds(test)
-      )
-    ) {
-      game.editorTools.drawOperationComponent(test);
-    }
-    console.log('up');
+    const childrenWithoutGroup = recursionItems(game.currentScene.children, []);
+    childrenWithoutGroup.map((child: any) => {
+      const isKnText = child.constructor.name === "KnText";
+      if (
+        rectBoundsContains(
+          pickTool.pickBox.getLocalBounds(),
+          isKnText ? getItemDprBounds(child) : getItemBounds(child)
+        )
+      ) {
+        game.editorTools.drawOperationComponent(child);
+      }
+    });
+
     pickTool.isPulling = false;
     pickTool.pickBox.visible = false;
     pickTool.pickBox.clear();
+    pickTool.isMovingAbleCount = 0;
   };
 };
