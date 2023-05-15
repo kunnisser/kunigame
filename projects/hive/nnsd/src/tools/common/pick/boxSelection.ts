@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-27 10:30:17
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-11 16:44:13
+ * @LastEditTime: 2023-05-15 17:27:45
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/pick/boxSelection.ts
  * @Description: ---- 框选功能 ----
  */
@@ -39,7 +39,6 @@ const rectBoundsContains = (rect, other): Boolean => {
       other.bottom < rect.bottom
     );
   }
-  console.log(rect, other);
   return (
     other.x >= rect.x &&
     other.y >= rect.y &&
@@ -48,13 +47,11 @@ const rectBoundsContains = (rect, other): Boolean => {
   );
 };
 
-// 获取文字对象的bounds信息，需要计算文字的resolution缩放，见KnText的factory
+// 获取文字对象的bounds信息，bounds的localBounds坐标会根据scale变化缩放，见KnText的factory
 const getItemDprBounds = (item) => {
   const localBounds = item.getLocalBounds();
-  console.log(localBounds.x);
-  const x = localBounds.x / 2 + item.x;
-  const y = localBounds.y / 2 + item.y;
-  console.log(item, item.width);
+  const x = localBounds.x * item.scale.x + item.x;
+  const y = localBounds.y * item.scale.y + item.y;
   return {
     x,
     y,
