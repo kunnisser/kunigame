@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-26 16:31:26
+ * @LastEditTime: 2023-05-16 16:39:06
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
  * @Description: ---- 公共拖动 ----
  */
@@ -125,7 +125,7 @@ class DragPosition {
     return BorderWidth + StrokeWidth * 2;
   }
 
-  onBoot = (cloneItem: any) => {
+  onBoot = ([cloneItem]: any) => {
     this.bootTarget = this.game.editorTools.editTargetElement;
 
     // 符合操作类型，则显示对应的操作模块

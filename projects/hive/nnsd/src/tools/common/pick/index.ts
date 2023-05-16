@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-24 17:30:40
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-11 11:33:52
+ * @LastEditTime: 2023-05-16 16:42:07
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/pick/index.ts
  * @Description: ---- 选中模块 ----
  */
@@ -41,24 +41,26 @@ class PickTool {
     boxSelection(game, this);
   }
 
-  drawPickBorder(item: any) {
+  drawPickBorder(items: any) {
     const BorderWidth: number = 2;
     const StrokeWidth: number = 1;
     this.pickBorder.clear();
-    this.pickBorder.generateRectLineStyle(
-      [BorderWidth, StrokeWidth],
-      0x65eee8,
-      0x000000,
-      [0, 0, item.width, item.height],
-      item.anchor
-    );
+    items.map((item: any) => {
+      this.pickBorder.generateRectLineStyle(
+        [BorderWidth, StrokeWidth],
+        0x65eee8,
+        0x000000,
+        [item.x, item.y, item.width, item.height],
+        item.anchor
+      );
+    });
+
     return BorderWidth + StrokeWidth * 2;
   }
 
-  onBoot(cloneItem: any) {
+  onBoot(cloneItems: any) {
     this.pickGroup.visible = true;
-    this.pickGroup.position.set(cloneItem.x, cloneItem.y);
-    this.drawPickBorder(cloneItem);
+    this.drawPickBorder(cloneItems);
   }
 }
 

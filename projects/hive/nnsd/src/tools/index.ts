@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-11 11:32:23
+ * @LastEditTime: 2023-05-16 17:15:29
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -85,7 +85,7 @@ class EditorTools {
     this.type = type;
     const gameItem: any =
       this.game.redux.store.getState().sceneReducer.gameItem;
-    gameItem && this.drawOperationComponent(gameItem);
+    gameItem && this.drawOperationComponent([gameItem]);
   }
 
   // 定义拖拽撤销恢复功能,覆盖式
@@ -161,7 +161,6 @@ class EditorTools {
 
   bootDrag = (item: any) => {
     item.interactive = true;
-
     // 注意，由于scene被缓存，需要先清空绑定事件
     item.off("click").on("click", () => {
       if (
@@ -182,43 +181,48 @@ class EditorTools {
       payload: item
     });
     this.editTargetElement = item;
-    this.drawOperationComponent(item);
+    this.drawOperationComponent([item]);
   };
 
-  // 绘制对应的操作组件
-  drawOperationComponent(item) {
-    // 获取点击元素的全局坐标（考虑画布缩放）
-    const loopGlobalCoord = (item, x, y) => {
-      let [relativeX, relativeY] = [x, y];
-      if (item.parent.constructor.name === "KnGroup") {
-        relativeX += item.parent.x;
-        relativeY += item.parent.y;
-        loopGlobalCoord(item.parent, relativeX, relativeY);
-      }
-      return [relativeX, relativeY];
-    };
-    const [x, y] = loopGlobalCoord(item, 0, 0);
-
-    // 克隆目标的宽高和初始坐标
-    const cloneItem: any = {
-      x: item.x + x,
-      y: item.y + y,
-      width: item.width,
-      height: item.height,
-      anchor: null
-    };
-
-    // 适配容器container里没有anchor, 同时根据容器的bounds重新定义cloneItem的数据
-    if (!item.anchor) {
-      cloneItem.anchor = new Point(0, 0);
-      const bounds = item.getLocalBounds();
-      cloneItem.width = bounds.x + bounds.width;
-      cloneItem.height = bounds.y + bounds.height;
-    } else {
-      cloneItem.anchor = item.anchor;
+  // 获取点击元素的全局坐标（考虑画布缩放）
+  loopGlobalCoord(item, x, y) {
+    let [relativeX, relativeY] = [x, y];
+    if (item.parent.constructor.name === "KnGroup") {
+      relativeX += item.parent.x;
+      relativeY += item.parent.y;
+      this.loopGlobalCoord(item.parent, relativeX, relativeY);
     }
+    return [relativeX, relativeY];
+  }
+
+  // 绘制对应的操作组件
+  drawOperationComponent(items) {
+    const cloneItems: Array<any> = items.map((item: any) => {
+      const [x, y] = this.loopGlobalCoord(item, 0, 0);
+      // 克隆目标的宽高和初始坐标
+      const cloneItem: any = {
+        x: item.x + x,
+        y: item.y + y,
+        width: item.width,
+        height: item.height,
+        anchor: null
+      };
+
+      // 适配容器container里没有anchor, 同时根据容器的bounds重新定义cloneItem的数据
+      if (!item.anchor) {
+        cloneItem.anchor = new Point(0, 0);
+        const bounds = item.getLocalBounds();
+        cloneItem.width = bounds.x + bounds.width;
+        cloneItem.height = bounds.y + bounds.height;
+      } else {
+        cloneItem.anchor = item.anchor;
+      }
+
+      return cloneItem;
+    });
+
     const { context, boot } = this.groupMap[this.type];
-    boot && boot.bind(context)(cloneItem);
+    boot && boot.bind(context)(cloneItems);
   }
 
   reset() {

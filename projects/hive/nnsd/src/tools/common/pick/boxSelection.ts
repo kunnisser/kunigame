@@ -2,13 +2,14 @@
  * @Author: kunnisser
  * @Date: 2023-04-27 10:30:17
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-15 17:27:45
+ * @LastEditTime: 2023-05-16 17:15:56
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/pick/boxSelection.ts
  * @Description: ---- 框选功能 ----
  */
 
 import Game from "ts@/kuni/lib/core";
 import PickTool from ".";
+import { GET_GAME_ITEM } from "editor@/common/gameStore/scene/action";
 
 // 将canvas的坐标转为pixi的事件坐标
 const eventFormat = (x, y) => {
@@ -129,7 +130,9 @@ export const boxSelection = (game: Game, pickTool: PickTool) => {
     if (!pickTool.isPulling) {
       return;
     }
+
     const childrenWithoutGroup = recursionItems(game.currentScene.children, []);
+    const pickChildren: Array<any> = [];
     childrenWithoutGroup.map((child: any) => {
       const isKnText = child.constructor.name === "KnText";
       if (
@@ -138,9 +141,26 @@ export const boxSelection = (game: Game, pickTool: PickTool) => {
           isKnText ? getItemDprBounds(child) : getItemBounds(child)
         )
       ) {
-        game.editorTools.drawOperationComponent(child);
+        pickChildren.push(child);
       }
     });
+    // 判断操作为框选而非点击
+    if (pickTool.checkClickUnAble()) {
+      game.editorTools.drawOperationComponent(pickChildren);
+      if (pickChildren.length === 1) {
+        game.redux.dispatch({
+          type: GET_GAME_ITEM,
+          payload: pickChildren[0]
+        });
+        game.editorTools.editTargetElement = pickChildren[0];
+      } else {
+        // 清空选中元素
+        game.redux.dispatch({
+          type: GET_GAME_ITEM,
+          payload: null
+        });
+      }
+    }
 
     pickTool.isPulling = false;
     pickTool.pickBox.visible = false;
