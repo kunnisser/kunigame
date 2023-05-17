@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-27 10:30:17
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-16 17:15:56
+ * @LastEditTime: 2023-05-17 16:37:52
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/pick/boxSelection.ts
  * @Description: ---- 框选功能 ----
  */
@@ -157,7 +157,7 @@ export const boxSelection = (game: Game, pickTool: PickTool) => {
         // 清空选中元素
         game.redux.dispatch({
           type: GET_GAME_ITEM,
-          payload: null
+          payload: pickChildren
         });
       }
     }

@@ -55,7 +55,7 @@ class Welcome extends KnScene {
     const demoText: KnText = this.game.add.text("demoText", "WELCOME", {
       fontSize: 300
     }, [0.5, 0.5]);
-    demoText.style.fontSize = 267;
+    demoText.style.fontSize = 211;
     demoText.anchor.set(0.5, 0.5);
     demoText.scale.y = 0.5;
     demoText.scale.x = 0.5;

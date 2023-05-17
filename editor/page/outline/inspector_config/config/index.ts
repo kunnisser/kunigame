@@ -2,11 +2,12 @@
  * @Author: kunnisser
  * @Date: 2023-02-27 00:17:14
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-13 15:29:28
+ * @LastEditTime: 2023-05-17 16:15:34
  * @FilePath: /kunigame/editor/page/outline/inspector_config/config/index.ts
  * @Description: ---- 配置集合 ----
  */
 
+import DatAdmixtureConfig from "./admixture";
 import DatBitMapTextPropertyConfig from "./bitmapText";
 import DatGroupPropertyConfig from "./group";
 import DatSpritePropertyConfig from "./sprite";
@@ -29,7 +30,8 @@ const InspectorConfig = {
   KnText: DatTextPropertyConfig,
   KnGroup: DatGroupPropertyConfig,
   KnSprite: DatSpritePropertyConfig,
-  KnBitMapText: DatBitMapTextPropertyConfig
+  KnBitMapText: DatBitMapTextPropertyConfig,
+  Admixture: DatAdmixtureConfig
 };
 
 export { InspectorConfig };

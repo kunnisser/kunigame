@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-16 17:15:29
+ * @LastEditTime: 2023-05-17 15:39:26
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -186,13 +186,12 @@ class EditorTools {
 
   // 获取点击元素的全局坐标（考虑画布缩放）
   loopGlobalCoord(item, x, y) {
-    let [relativeX, relativeY] = [x, y];
     if (item.parent.constructor.name === "KnGroup") {
-      relativeX += item.parent.x;
-      relativeY += item.parent.y;
-      this.loopGlobalCoord(item.parent, relativeX, relativeY);
+      x += item.parent.x;
+      y += item.parent.y;
+      this.loopGlobalCoord(item.parent, x, y);
     }
-    return [relativeX, relativeY];
+    return [x, y];
   }
 
   // 绘制对应的操作组件
@@ -217,6 +216,9 @@ class EditorTools {
       } else {
         cloneItem.anchor = item.anchor;
       }
+
+      this.relativeX = x;
+      this.relativeY = y;
 
       return cloneItem;
     });

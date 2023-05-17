@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-26 15:41:26
+ * @LastEditTime: 2023-05-17 16:41:02
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -23,7 +23,11 @@ const Inspector = () => {
     store.subscribe(() => {
       const item = store.getState().sceneReducer.gameItem;
       if (item) {
-        const itemType: string = item.constructor.name;
+        const isMixture = item.length && item.length > 0;
+        const itemType: string = isMixture
+          ? "Admixture"
+          : item.constructor.name;
+
         const configProperties: Array<Array<string>> = filterAllPropertyPath(
           InspectorConfig[itemType],
           []
