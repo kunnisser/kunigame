@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-17 16:41:02
+ * @LastEditTime: 2023-05-18 17:18:18
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -23,11 +23,13 @@ const Inspector = () => {
     store.subscribe(() => {
       const item = store.getState().sceneReducer.gameItem;
       if (item) {
-        const isMixture = item.length && item.length > 0;
-        const itemType: string = isMixture
+        console.log(item);
+        const isMultiPick =
+          Object.prototype.toString.call(item) === "[object Array]";
+        const itemType: string = isMultiPick
           ? "Admixture"
           : item.constructor.name;
-
+        console.log(itemType);
         const configProperties: Array<Array<string>> = filterAllPropertyPath(
           InspectorConfig[itemType],
           []
@@ -47,7 +49,7 @@ const Inspector = () => {
         setGameItem(item);
       }
     });
-  }, [gameItemType]);
+  }, []);
 
   // 过滤递归获取所有的path
   const filterAllPropertyPath = (
@@ -112,8 +114,13 @@ const Inspector = () => {
    */
   const generateConfigCard = (configs?: Array<DatProperties>) => {
     const gameItem = store.getState().sceneReducer.gameItem;
+    const isMultiPick =
+      Object.prototype.toString.call(gameItem) === "[object Array]";
+    const configTypeName = isMultiPick
+      ? "Admixture"
+      : gameItem.constructor.name;
     const itemConfigs: Array<DatProperties> =
-      configs || InspectorConfig[gameItem.constructor.name];
+      configs || InspectorConfig[configTypeName];
     return itemConfigs.map((config: DatProperties) => {
       if (config.children) {
         const { component: Folder, label, ...props } = config;

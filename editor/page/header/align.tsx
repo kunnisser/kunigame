@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-26 09:26:54
+ * @LastEditTime: 2023-05-19 15:12:00
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
@@ -24,6 +24,8 @@ import { ReactComponent as RotateCursor } from "editor@/assets/icon/rotateCursor
 import { useDispatch, useStore } from "react-redux";
 import { setCurrentOperationType } from "editor@/common/gameStore/scene/action";
 import EditorTools from "ts@/hive/nnsd/src/tools";
+import { transformAllToArray } from "editor@/tool";
+import Game from "ts@/kuni/lib/core";
 
 const Cursor = (props: any) => {
   const { Component, id, operationType, ...prop } = props;
@@ -78,6 +80,68 @@ const AlignHeader = () => {
     tool.switchOperationType.bind(tool)(key);
   };
 
+  const commonAlignHandler = (alignCallback) => {
+    const game: Game = store.getState().sceneReducer.game;
+    const gameItems = transformAllToArray(
+      store.getState().sceneReducer.gameItem
+    );
+    const alignGameItems = gameItems.map((item: any) => {
+      alignCallback(item, game);
+      return item;
+    });
+    game.editorTools.pickTool.drawPickBorder(alignGameItems);
+  };
+
+  // 水平居中
+  const onHorizontalAlignCenter = () => {
+    commonAlignHandler((item, game: Game) => {
+      item.x = game.config.half_w;
+    });
+  };
+
+  // 向左对齐
+  const onLeftAlign = () => {
+    commonAlignHandler((item, game: Game) => {
+      item.x = 0;
+    });
+  };
+
+  // 向右对齐
+  const onRightAlign = () => {
+    commonAlignHandler((item, game: Game) => {
+      item.x = game.config.width;
+    });
+  };
+
+  // 向上对齐
+  const onTopAlign = () => {
+    commonAlignHandler((item, game: Game) => {
+      item.y = 0;
+    });
+  };
+
+  // 向下对齐
+  const onBottomAlign = () => {
+    commonAlignHandler((item, game: Game) => {
+      item.y = game.config.height;
+    });
+  };
+
+  // 垂直居中
+  const onVerticleAlignCenter = () => {
+    commonAlignHandler((item, game: Game) => {
+      item.y = game.config.half_h;
+    });
+  };
+
+  // 画布居中
+  const onAlignCenter = () => {
+    commonAlignHandler((item, game: Game) => {
+      item.x = game.config.half_w;
+      item.y = game.config.half_h;
+    });
+  };
+
   return (
     <div className="kn-flex">
       <Space>
@@ -96,32 +160,54 @@ const AlignHeader = () => {
         </Space>
         <Space align="center">
           <Tooltip placement="bottom" title="向左对齐">
-            <Button icon={<BorderLeftOutlined />} key="item-left-align" />
+            <Button
+              icon={<BorderLeftOutlined />}
+              key="item-left-align"
+              onClick={onLeftAlign}
+            />
           </Tooltip>
           <Tooltip placement="bottom" title="向右对齐">
-            <Button icon={<BorderRightOutlined />} key="item-right-align" />
+            <Button
+              icon={<BorderRightOutlined />}
+              key="item-right-align"
+              onClick={onRightAlign}
+            />
           </Tooltip>
           <Tooltip placement="bottom" title="水平居中">
             <Button
               icon={<BorderHorizontalOutlined />}
               key="item-horizontal-align"
+              onClick={onHorizontalAlignCenter}
             />
           </Tooltip>
 
           <Tooltip placement="bottom" title="向上对齐">
-            <Button icon={<BorderTopOutlined />} key="item-top-align" />
+            <Button
+              icon={<BorderTopOutlined />}
+              key="item-top-align"
+              onClick={onTopAlign}
+            />
           </Tooltip>
           <Tooltip placement="bottom" title="向下对齐">
-            <Button icon={<BorderBottomOutlined />} key="item-bottom-align" />
+            <Button
+              icon={<BorderBottomOutlined />}
+              key="item-bottom-align"
+              onClick={onBottomAlign}
+            />
           </Tooltip>
           <Tooltip placement="bottom" title="垂直居中">
             <Button
               icon={<BorderVerticleOutlined />}
               key="item-verticle-align"
+              onClick={onVerticleAlignCenter}
             />
           </Tooltip>
           <Tooltip placement="bottom" title="画布居中">
-            <Button icon={<BorderInnerOutlined />} key="item-center-align" />
+            <Button
+              icon={<BorderInnerOutlined />}
+              key="item-center-align"
+              onClick={onAlignCenter}
+            />
           </Tooltip>
         </Space>
       </Space>

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-17 15:39:26
+ * @LastEditTime: 2023-05-18 16:32:39
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -85,7 +85,7 @@ class EditorTools {
     this.type = type;
     const gameItem: any =
       this.game.redux.store.getState().sceneReducer.gameItem;
-    gameItem && this.drawOperationComponent([gameItem]);
+    gameItem && this.drawOperationComponent(gameItem);
   }
 
   // 定义拖拽撤销恢复功能,覆盖式
@@ -181,7 +181,7 @@ class EditorTools {
       payload: item
     });
     this.editTargetElement = item;
-    this.drawOperationComponent([item]);
+    this.drawOperationComponent(item);
   };
 
   // 获取点击元素的全局坐标（考虑画布缩放）
@@ -195,7 +195,9 @@ class EditorTools {
   }
 
   // 绘制对应的操作组件
-  drawOperationComponent(items) {
+  drawOperationComponent(item) {
+    const items =
+      Object.prototype.toString.call(item) === "[object Array]" ? item : [item];
     const cloneItems: Array<any> = items.map((item: any) => {
       const [x, y] = this.loopGlobalCoord(item, 0, 0);
       // 克隆目标的宽高和初始坐标

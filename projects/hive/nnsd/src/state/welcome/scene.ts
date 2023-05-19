@@ -74,6 +74,7 @@ class Welcome extends KnScene {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
+    demo1Text.anchor.set(0.5, 0.5)
     demo1Text.text = "by.kunnisser";
     demo1Text.x = 831;
     demo1Text.y = 770;
