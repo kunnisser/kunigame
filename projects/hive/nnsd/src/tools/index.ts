@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-18 16:32:39
+ * @LastEditTime: 2023-05-19 17:25:30
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -14,6 +14,7 @@ import ScaleTool from "./common/scale";
 import Game from "ts@/kuni/lib/core";
 import { GET_GAME_ITEM } from "editor@/common/gameStore/scene/action";
 import { Point } from "pixi.js";
+import { isMulitPick } from "editor@/tool";
 class EditorTools {
   public game: Game;
   public toolGroup: KnGroup;
@@ -85,7 +86,8 @@ class EditorTools {
     this.type = type;
     const gameItem: any =
       this.game.redux.store.getState().sceneReducer.gameItem;
-    gameItem && this.drawOperationComponent(gameItem);
+    // 点击单个元素或者框选单个
+    gameItem && !isMulitPick(gameItem) && this.drawOperationComponent(gameItem);
   }
 
   // 定义拖拽撤销恢复功能,覆盖式

@@ -53,7 +53,7 @@ class Start extends KnScene {
     testGroup.addChild(demo2Text);
     this.game.add.group("groupChild", group2);
     const logo2 = this.game.add.image("logo2", "loadingrun_04.png", group2);
-    logo2.anchor.set(0, 0);
+    logo2.anchor.set(0.5, 0.5);
     logo2.y = 415;
     logo2.x = 866;
     logo2.scale.x = 1;
