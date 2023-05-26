@@ -63,6 +63,7 @@ export default class Game {
   editHive: any;
   ratio: number;
   constructor(config: EnterProps) {
+    console.log("created", config.isPureCanvas);
     window["PIXI"] = PIXI;
     this.view = config.view;
     this.dpr = config.dpr || window.devicePixelRatio;
@@ -113,7 +114,7 @@ export default class Game {
     this.sceneManager = new KnSceneManager(this);
 
     // 初始化渲染器
-    this.app.renderer.render(this.stage);
+    // this.app.renderer.render(this.stage);
 
     // 初始化光标
     this.cursor = new KnCursor(this, this.world);

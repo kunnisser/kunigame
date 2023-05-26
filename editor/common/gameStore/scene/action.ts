@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-19 17:29:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-25 11:33:58
+ * @LastEditTime: 2023-05-26 11:24:25
  * @FilePath: /kunigame/editor/common/gameStore/scene/action.ts
  * @Description: ---- 场景状态action ----
  */

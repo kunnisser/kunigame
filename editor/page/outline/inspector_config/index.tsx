@@ -2,54 +2,55 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-18 17:18:18
+ * @LastEditTime: 2023-05-26 16:16:03
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
 import React, { useEffect, useState } from "react";
 import DatGui from "react-dat-gui";
 import "editor@/assets/dat-gui.styl";
-import { useDispatch, useStore } from "react-redux";
+import { useDispatch, useSelector, useStore } from "react-redux";
 import Game from "ts@/kuni/lib/core";
 import { DatProperties, InspectorConfig } from "./config";
 import { updateEditGameItem } from "editor@/common/gameStore/scene/action";
+import { CombineReducer } from "editor@/common/store";
 
 const Inspector = () => {
   const [gameItem, setGameItem] = useState(null as any);
   const [gameItemType, setGameItemType] = useState(null as any);
   const store = useStore();
   const dispatch = useDispatch();
-  useEffect(() => {
-    store.subscribe(() => {
-      const item = store.getState().sceneReducer.gameItem;
-      if (item) {
-        console.log(item);
-        const isMultiPick =
-          Object.prototype.toString.call(item) === "[object Array]";
-        const itemType: string = isMultiPick
-          ? "Admixture"
-          : item.constructor.name;
-        console.log(itemType);
-        const configProperties: Array<Array<string>> = filterAllPropertyPath(
-          InspectorConfig[itemType],
-          []
-        );
-        const configItems: any = {};
-        configProperties.map((keys: Array<string>) => {
-          const keysCombine = keys.join("-");
-          const prop = keys.reduce((total, key) => {
-            return total[key];
-          }, item);
-          configItems[keysCombine] = prop;
-        });
+  const listenGameItem = useSelector((store: CombineReducer) => {
+    return store.sceneReducer.gameItem;
+  });
 
-        setGameItem(configItems);
-        setGameItemType(itemType);
-      } else {
-        setGameItem(item);
-      }
-    });
-  }, []);
+  useEffect(() => {
+    const item = store.getState().sceneReducer.gameItem;
+    console.log(item);
+    if (item) {
+      const isMultiPick =
+        Object.prototype.toString.call(item) === "[object Array]";
+      const itemType: string = isMultiPick
+        ? "Admixture"
+        : item.constructor.name;
+      const configProperties: Array<Array<string>> = filterAllPropertyPath(
+        InspectorConfig[itemType],
+        []
+      );
+      const configItems: any = {};
+      configProperties.map((keys: Array<string>) => {
+        const keysCombine = keys.join("-");
+        const prop = keys.reduce((total, key) => {
+          return total[key];
+        }, item);
+        configItems[keysCombine] = prop;
+      });
+      setGameItem(configItems);
+      setGameItemType(itemType);
+    } else {
+      setGameItem(item);
+    }
+  }, [listenGameItem]);
 
   // 过滤递归获取所有的path
   const filterAllPropertyPath = (
@@ -82,11 +83,13 @@ const Inspector = () => {
     const gameItem = store.getState().sceneReducer.gameItem;
     const gameItemName = gameItem.name;
     const editGameItem = store.getState().sceneReducer.editGameItem;
-    editGameItem[gameItemName] = editGameItem[gameItemName] || {};
+    const cloneEditGameItem = Object.assign({}, editGameItem);
+    cloneEditGameItem[gameItemName] = cloneEditGameItem[gameItemName] || {};
 
     // 提交的更新参数构造
-    editGameItem[gameItemName][path] = setAdvancedVariables(newData[path]);
-    dispatch(updateEditGameItem(editGameItem));
+    cloneEditGameItem[gameItemName][path] = setAdvancedVariables(newData[path]);
+    dispatch(updateEditGameItem(cloneEditGameItem));
+
     const keysArray = Object.keys(newData);
     for (const keysCombine of keysArray) {
       const keys = keysCombine.split("-");
@@ -103,7 +106,9 @@ const Inspector = () => {
       gameItem.width = gameItem._width;
       gameItem.height = gameItem._height;
     }
-    game.editorTools.onClickHandler(store.getState().sceneReducer.gameItem);
+    game.editorTools.drawOperationComponent(
+      store.getState().sceneReducer.gameItem
+    );
     setGameItem({ ...newData });
   };
 
@@ -139,7 +144,10 @@ const Inspector = () => {
     });
   };
 
-  return gameItem && gameItemType ? (
+  return listenGameItem &&
+    gameItem &&
+    listenGameItem.name === gameItem.name &&
+    gameItemType ? (
     <DatGui data={gameItem} onUpdate={handleUpdate}>
       {generateConfigCard()}
     </DatGui>

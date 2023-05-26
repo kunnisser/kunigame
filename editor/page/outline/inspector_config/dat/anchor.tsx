@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-24 14:14:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-08 15:45:48
+ * @LastEditTime: 2023-05-24 14:23:38
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/anchor.tsx
  * @Description: ----  ----
  */

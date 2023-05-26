@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-03 00:37:03
- * @FilePath: \kunigame\editor\page\wireboard.tsx
+ * @LastEditTime: 2023-05-26 16:28:32
+ * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
 
@@ -100,9 +100,6 @@ const WireBoard = (props) => {
   ];
 
   useEffect(() => {
-    store.subscribe(() => {
-      checkEditTodoList();
-    });
     document.addEventListener("keydown", (e: KeyboardEvent) => {
       if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
@@ -119,6 +116,9 @@ const WireBoard = (props) => {
         }
       }
     });
+    store.subscribe(() => {
+      checkEditTodoList();
+    });
   }, []);
 
   useEffect(() => {
@@ -130,7 +130,9 @@ const WireBoard = (props) => {
   const checkEditTodoList = () => {
     const editGameItem = store.getState().sceneReducer.editGameItem;
     const bool = Object.keys(editGameItem).length > 0;
-    setIsNewGameEdit(bool);
+    if (bool !== isNewGameEdit || !bool) {
+      setIsNewGameEdit(bool);
+    }
   };
 
   return (
@@ -142,10 +144,10 @@ const WireBoard = (props) => {
               <div className="logo">Kuni(kunigame)</div>
               <KnHeader />
             </div>
-            <Divider style={{ margin: '2px 0' }} dashed></Divider>
+            <Divider style={{ margin: "2px 0" }} dashed></Divider>
             <AlignHeader></AlignHeader>
-
           </Header>
+          <>{console.log("redner")}</>
           <Layout className="vh-scroll">
             <aside
               style={{

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-15 09:58:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-27 16:06:56
+ * @LastEditTime: 2023-05-23 17:20:17
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/texture.tsx
  * @Description: ---- 纹理选择 ----
  */
@@ -19,6 +19,7 @@ import { WrapContext } from "editor@/page/wireboard";
 import ModalPickerWrapper from "./modal/pickerWrapper";
 import Game from "ts@/kuni/lib/core";
 
+let previewGame: any = null;
 const DatTexture = (props: DefaultProps) => {
   const { path, label, className } = props;
   const [previewSprite, setPreviewSprite] = useState(null as any);
@@ -89,22 +90,27 @@ const DatTexture = (props: DefaultProps) => {
   };
 
   useEffect(() => {
-    const textureDom = document.getElementById("texturePreview");
+    const textureDom: any = document.getElementById("texturePreview");
+    if (!previewGame) {
+      const dpr = window.devicePixelRatio;
+      previewGame = new Game({
+        width: previewWidth / dpr,
+        height: previewHeight / dpr,
+        dpr,
+        transparent: true,
+        view: textureDom,
+        isPureCanvas: true
+      });
+    } else {
+      textureDom.appendChild(previewGame.app.view);
+      previewGame.stage.removeChildren();
+    }
+
     const ratio = defaultVal.width / defaultVal.height;
-    const dpr = window.devicePixelRatio;
-    const atlasScreen = new Game({
-      width: previewWidth / dpr,
-      height: previewHeight / dpr,
-      dpr,
-      transparent: true,
-      view: textureDom,
-      isPureCanvas: true
-    });
-    console.log(defaultVal);
-    const sprite = atlasScreen.add.image(
+    const sprite = previewGame.add.image(
       "",
       defaultVal,
-      atlasScreen.stage,
+      previewGame.stage,
       [0.5, 0.5]
     );
     sprite.x = previewWidth * 0.5;

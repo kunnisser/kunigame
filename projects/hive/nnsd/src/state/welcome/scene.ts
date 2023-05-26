@@ -42,6 +42,7 @@ class Welcome extends KnScene {
     bg.width = 1920;
     bg.height = 960;
     const logo: KnSprite = this.game.add.image("logo", "Item_Cow0000", this);
+    logo.visible = true;
     logo.tintColor = "#ffffff";
     logo.blendMode = 0;
     logo.angle = 0;
@@ -55,6 +56,7 @@ class Welcome extends KnScene {
     const demoText: KnText = this.game.add.text("demoText", "WELCOME", {
       fontSize: 300
     }, [0.5, 0.5]);
+    demoText.text = "WELCOME123";
     demoText.style.fontSize = 211;
     demoText.anchor.set(0.5, 0.5);
     demoText.scale.y = 0.5;
@@ -74,7 +76,7 @@ class Welcome extends KnScene {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
-    demo1Text.anchor.set(0.5, 0.5)
+    demo1Text.anchor.set(0.5, 0.5);
     demo1Text.text = "by.kunnisser";
     demo1Text.x = 831;
     demo1Text.y = 770;
