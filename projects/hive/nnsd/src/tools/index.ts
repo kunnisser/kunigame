@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-19 17:25:30
+ * @LastEditTime: 2023-05-29 15:45:31
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -87,7 +87,12 @@ class EditorTools {
     const gameItem: any =
       this.game.redux.store.getState().sceneReducer.gameItem;
     // 点击单个元素或者框选单个
-    gameItem && !isMulitPick(gameItem) && this.drawOperationComponent(gameItem);
+    gameItem && !isMulitPick(gameItem)
+      ? this.drawOperationComponent(gameItem)
+      : this.game.redux.dispatch({
+          type: GET_GAME_ITEM,
+          payload: null
+        });
   }
 
   // 定义拖拽撤销恢复功能,覆盖式

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-26 16:28:32
+ * @LastEditTime: 2023-05-29 16:30:37
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -129,7 +129,7 @@ const WireBoard = (props) => {
 
   const checkEditTodoList = () => {
     const editGameItem = store.getState().sceneReducer.editGameItem;
-    const bool = Object.keys(editGameItem).length > 0;
+    const bool = editGameItem && Object.keys(editGameItem).length > 0;
     if (bool !== isNewGameEdit || !bool) {
       setIsNewGameEdit(bool);
     }

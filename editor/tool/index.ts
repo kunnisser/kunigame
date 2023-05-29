@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-02 16:09:37
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-19 17:25:00
+ * @LastEditTime: 2023-05-29 14:46:32
  * @FilePath: /kunigame/editor/tool/index.ts
  * @Description: ---- 函数工具集 ----
  */
@@ -12,9 +12,12 @@ export const isObjectEmpty = (obj: Object) => {
 };
 
 export const transformAllToArray = (item: any): Array<any> => {
+  // item可能为null
   return Object.prototype.toString.call(item) === "[object Array]"
     ? item
-    : [item];
+    : item
+    ? [item]
+    : null;
 };
 
 export const isMulitPick = (item: any) => {

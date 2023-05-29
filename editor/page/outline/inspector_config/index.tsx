@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-26 16:16:03
+ * @LastEditTime: 2023-05-29 16:36:20
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -22,6 +22,9 @@ const Inspector = () => {
   const dispatch = useDispatch();
   const listenGameItem = useSelector((store: CombineReducer) => {
     return store.sceneReducer.gameItem;
+  });
+  const listenEditGameItem = useSelector((store: CombineReducer) => {
+    return store.sceneReducer.editGameItem;
   });
 
   useEffect(() => {
@@ -50,7 +53,7 @@ const Inspector = () => {
     } else {
       setGameItem(item);
     }
-  }, [listenGameItem]);
+  }, [listenGameItem, listenEditGameItem]);
 
   // 过滤递归获取所有的path
   const filterAllPropertyPath = (
@@ -83,12 +86,11 @@ const Inspector = () => {
     const gameItem = store.getState().sceneReducer.gameItem;
     const gameItemName = gameItem.name;
     const editGameItem = store.getState().sceneReducer.editGameItem;
-    const cloneEditGameItem = Object.assign({}, editGameItem);
-    cloneEditGameItem[gameItemName] = cloneEditGameItem[gameItemName] || {};
+    editGameItem[gameItemName] = editGameItem[gameItemName] || {};
 
     // 提交的更新参数构造
-    cloneEditGameItem[gameItemName][path] = setAdvancedVariables(newData[path]);
-    dispatch(updateEditGameItem(cloneEditGameItem));
+    editGameItem[gameItemName][path] = setAdvancedVariables(newData[path]);
+    dispatch(updateEditGameItem(editGameItem));
 
     const keysArray = Object.keys(newData);
     for (const keysCombine of keysArray) {
@@ -149,6 +151,7 @@ const Inspector = () => {
     listenGameItem.name === gameItem.name &&
     gameItemType ? (
     <DatGui data={gameItem} onUpdate={handleUpdate}>
+      <>{console.log("render")}</>
       {generateConfigCard()}
     </DatGui>
   ) : (

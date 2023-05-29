@@ -2,13 +2,14 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-17 15:10:01
+ * @LastEditTime: 2023-05-29 16:45:43
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
 
 import {
   GET_GAME_ITEM,
+  getGameItem,
   updateEditGameItem
 } from "editor@/common/gameStore/scene/action";
 import DragPosition from ".";
@@ -70,12 +71,6 @@ export const freeMovePosition = (dragContext: DragPosition) => {
         ((moveGroup.x = x), (bootTarget.x = x - relativeX));
       dragTarget.id === "yAxis" &&
         ((moveGroup.y = y), (bootTarget.y = y - relativeY));
-
-      // 动态变更gameItem对象
-      game.redux.dispatch({
-        type: GET_GAME_ITEM,
-        payload: bootTarget
-      });
     }
   }
 
@@ -103,8 +98,11 @@ export const freeMovePosition = (dragContext: DragPosition) => {
    */
   function dragEnd() {
     if (dragTarget) {
-      dragTarget.alpha = 1;
       dragTarget.off("pointermove", onDragMove);
+
+      if (dragTarget.alpha === 1) {
+        return;
+      }
       // 对操作栈插入拖拽前的数据
       const bootTarget = dragContext.bootTarget;
       const bootTargetPosition = dragContext.bootTarget.position;
@@ -128,7 +126,9 @@ export const freeMovePosition = (dragContext: DragPosition) => {
       editGameItem[bootTarget.id] = editGameItem[bootTarget.id] || {};
       editGameItem[bootTarget.id].x = bootTargetPosition.x;
       editGameItem[bootTarget.id].y = bootTargetPosition.y;
-      game.redux.dispatch(updateEditGameItem(editGameItem));
+      const cloneEditGameItem = Object.assign({}, editGameItem);
+      game.redux.dispatch(updateEditGameItem(cloneEditGameItem));
+      dragTarget.alpha = 1;
     }
   }
 };

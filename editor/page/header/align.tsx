@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-19 15:12:00
+ * @LastEditTime: 2023-05-29 17:17:17
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
@@ -22,7 +22,10 @@ import { ReactComponent as ScaleCursor } from "editor@/assets/icon/scaleCursor.s
 import { ReactComponent as PickCursor } from "editor@/assets/icon/pickCursor.svg";
 import { ReactComponent as RotateCursor } from "editor@/assets/icon/rotateCursor.svg";
 import { useDispatch, useStore } from "react-redux";
-import { setCurrentOperationType } from "editor@/common/gameStore/scene/action";
+import {
+  setCurrentOperationType,
+  updateEditGameItem
+} from "editor@/common/gameStore/scene/action";
 import EditorTools from "ts@/hive/nnsd/src/tools";
 import { transformAllToArray } from "editor@/tool";
 import Game from "ts@/kuni/lib/core";
@@ -85,11 +88,26 @@ const AlignHeader = () => {
     const gameItems = transformAllToArray(
       store.getState().sceneReducer.gameItem
     );
-    const alignGameItems = gameItems.map((item: any) => {
-      alignCallback(item, game);
-      return item;
-    });
-    game.editorTools.pickTool.drawPickBorder(alignGameItems);
+    const alignGameItems = gameItems
+      ? gameItems.map((item: any) => {
+          alignCallback(item, game);
+          return item;
+        })
+      : [];
+
+    // 更新单个对象表单信息
+    if (alignGameItems.length === 1) {
+      const [currentItem] = alignGameItems;
+      const editGameItem = store.getState().sceneReducer.editGameItem;
+      const newEditGameItem = Object.assign({}, editGameItem, {
+        x: currentItem.x,
+        y: currentItem.y
+      });
+      dispatch(updateEditGameItem(newEditGameItem));
+    }
+
+    //更新辅助工具线框
+    game.editorTools.drawOperationComponent(alignGameItems);
   };
 
   // 水平居中
