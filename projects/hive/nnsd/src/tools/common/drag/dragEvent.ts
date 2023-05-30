@@ -2,16 +2,12 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-29 16:45:43
+ * @LastEditTime: 2023-05-30 14:11:36
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
 
-import {
-  GET_GAME_ITEM,
-  getGameItem,
-  updateEditGameItem
-} from "editor@/common/gameStore/scene/action";
+import { updateEditGameItem } from "editor@/common/gameStore/scene/action";
 import DragPosition from ".";
 
 /**
@@ -109,14 +105,16 @@ export const freeMovePosition = (dragContext: DragPosition) => {
 
       // 撤销堆栈
       dragContext.game.currentScene.cancelActionStack.push({
-        position: {
-          prevX: dragContext.dragStartX,
-          prevY: dragContext.dragStartY,
-          nextX: bootTargetPosition.x,
-          nextY: bootTargetPosition.y
-        },
-        target: bootTarget,
-        tool: dragContext.moveGroup
+        position: [
+          {
+            prevX: dragContext.dragStartX,
+            prevY: dragContext.dragStartY,
+            nextX: bootTargetPosition.x,
+            nextY: bootTargetPosition.y
+          }
+        ],
+        target: [bootTarget],
+        type: dragContext.game.editorTools.type
       });
 
       // 添加到编辑记录

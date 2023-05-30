@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-29 15:45:31
+ * @LastEditTime: 2023-05-30 15:55:27
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -117,16 +117,14 @@ class EditorTools {
         (e.ctrlKey || e.metaKey)
       ) {
         const prevAction = currentActionStack.pop();
-
         resumeActionStack.push(prevAction);
         if (prevAction) {
-          const { prevX, prevY } = prevAction?.position;
-          this.onClickHandler(prevAction?.target);
-          prevAction?.target.position.set(
-            prevX - this.relativeX,
-            prevY - this.relativeY
-          );
-          this.groupMap[this.type].container.position.set(prevX, prevY);
+          const targets = prevAction?.target.map((target, index) => {
+            const { prevX, prevY } = prevAction?.position[index];
+            target.position.set(prevX - this.relativeX, prevY - this.relativeY);
+            return target;
+          });
+          this.drawOperationComponent(targets, prevAction.type);
         }
       } else if (
         resumeActionStack &&
@@ -135,16 +133,14 @@ class EditorTools {
         (e.ctrlKey || e.metaKey)
       ) {
         const resumeAction = resumeActionStack.pop();
-
         currentActionStack.push(resumeAction);
         if (resumeAction) {
-          const { nextX, nextY } = resumeAction?.position;
-          this.onClickHandler(resumeAction?.target);
-          resumeAction?.target.position.set(
-            nextX - this.relativeX,
-            nextY - this.relativeY
-          );
-          this.groupMap[this.type].container.position.set(nextX, nextY);
+          const targets = resumeAction?.target.map((target, index) => {
+            const { nextX, nextY } = resumeAction?.position[index];
+            target.position.set(nextX - this.relativeX, nextY - this.relativeY);
+            return target;
+          });
+          this.drawOperationComponent(targets, resumeAction.type);
         }
       }
     };
@@ -180,7 +176,7 @@ class EditorTools {
     });
   };
 
-  onClickHandler = (item: any) => {
+  onClickHandler = (item: any, type?: string) => {
     // inspector注入目标
     // 设置选中的元素
     this.game.redux.dispatch({
@@ -188,7 +184,7 @@ class EditorTools {
       payload: item
     });
     this.editTargetElement = item;
-    this.drawOperationComponent(item);
+    this.drawOperationComponent(item, type);
   };
 
   // 获取点击元素的全局坐标（考虑画布缩放）
@@ -202,7 +198,7 @@ class EditorTools {
   }
 
   // 绘制对应的操作组件
-  drawOperationComponent(item) {
+  drawOperationComponent(item, type?: any) {
     const items =
       Object.prototype.toString.call(item) === "[object Array]" ? item : [item];
     const cloneItems: Array<any> = items.map((item: any) => {
@@ -232,7 +228,8 @@ class EditorTools {
       return cloneItem;
     });
 
-    const { context, boot } = this.groupMap[this.type];
+    this.reset();
+    const { context, boot } = this.groupMap[type || this.type];
     boot && boot.bind(context)(cloneItems);
   }
 
