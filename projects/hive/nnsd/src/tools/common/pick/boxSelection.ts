@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-27 10:30:17
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-18 17:19:07
+ * @LastEditTime: 2023-06-01 11:50:54
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/pick/boxSelection.ts
  * @Description: ---- 框选功能 ----
  */
@@ -147,18 +147,12 @@ export const boxSelection = (game: Game, pickTool: PickTool) => {
     // 判断操作为框选而非点击
     if (pickTool.checkClickUnAble()) {
       game.editorTools.drawOperationComponent(pickChildren);
-      if (pickChildren.length === 1) {
-        game.redux.dispatch({
-          type: GET_GAME_ITEM,
-          payload: pickChildren[0]
-        });
-        game.editorTools.editTargetElement = pickChildren[0];
-      } else if (pickChildren.length === 0) {
-        // 未选择
+      if (pickChildren.length === 0) {
         game.redux.dispatch({
           type: GET_GAME_ITEM,
           payload: null
         });
+        game.editorTools.editTargetElement = pickChildren[0];
       } else {
         // 多选
         game.redux.dispatch({

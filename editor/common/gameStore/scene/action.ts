@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-19 17:29:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-26 11:24:25
+ * @LastEditTime: 2023-06-01 11:40:32
  * @FilePath: /kunigame/editor/common/gameStore/scene/action.ts
  * @Description: ---- 场景状态action ----
  */
@@ -44,7 +44,8 @@ const getGame = (game: Game | null) => {
 };
 
 // 储存当前选中游戏对象实例
-const getGameItem = (item: any) => {
+// item 传数组
+const getGameItem = (item: Array<any>) => {
   return {
     type: GET_GAME_ITEM,
     payload: item

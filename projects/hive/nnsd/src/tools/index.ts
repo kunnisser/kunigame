@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-30 15:55:27
+ * @LastEditTime: 2023-06-01 14:28:00
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -124,7 +124,8 @@ class EditorTools {
             target.position.set(prevX - this.relativeX, prevY - this.relativeY);
             return target;
           });
-          this.drawOperationComponent(targets, prevAction.type);
+          this.onClickHandler(targets, prevAction.type);
+          // this.drawOperationComponent(targets, prevAction.type);
         }
       } else if (
         resumeActionStack &&
@@ -140,7 +141,9 @@ class EditorTools {
             target.position.set(nextX - this.relativeX, nextY - this.relativeY);
             return target;
           });
-          this.drawOperationComponent(targets, resumeAction.type);
+
+          this.onClickHandler(targets, resumeAction.type);
+          // this.drawOperationComponent(targets, resumeAction.type);
         }
       }
     };
@@ -172,19 +175,20 @@ class EditorTools {
       ) {
         return;
       }
-      this.onClickHandler(item);
+      this.onClickHandler([item]);
     });
   };
 
-  onClickHandler = (item: any, type?: string) => {
+  onClickHandler = (items: any, type?: string) => {
     // inspector注入目标
     // 设置选中的元素
     this.game.redux.dispatch({
       type: GET_GAME_ITEM,
-      payload: item
+      payload: items
     });
-    this.editTargetElement = item;
-    this.drawOperationComponent(item, type);
+    const itemSingle = items.length > 1 ? null : items[0];
+    this.editTargetElement = itemSingle;
+    this.drawOperationComponent(items, type);
   };
 
   // 获取点击元素的全局坐标（考虑画布缩放）
