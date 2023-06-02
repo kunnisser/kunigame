@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-26 16:23:38
+ * @LastEditTime: 2023-06-02 11:04:41
  * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
  * @Description: ---- 场景元素列表 ----
  */
@@ -140,7 +140,7 @@ const ContainerTree = () => {
   };
 
   const selectElementTarget = (keys: Array<string>, element: any) => {
-    game.editorTools.onClickHandler(element.node.item);
+    game.editorTools.onClickHandler([element.node.item]);
   };
 
   const dropHandler = (info) => {

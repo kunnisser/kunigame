@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-01 14:28:00
+ * @LastEditTime: 2023-06-02 11:05:29
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -179,7 +179,7 @@ class EditorTools {
     });
   };
 
-  onClickHandler = (items: any, type?: string) => {
+  onClickHandler = (items: Array<any>, type?: string) => {
     // inspector注入目标
     // 设置选中的元素
     this.game.redux.dispatch({

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-03 14:38:25
+ * @LastEditTime: 2023-06-02 11:19:26
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -34,30 +34,30 @@ class Start extends KnScene {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
-    demoText.y = 400;
-    demoText.x = 194;
+    demoText.y = 503;
+    demoText.x = 1452;
     const demo1Text: KnText = this.game.add.text("demo1Text", "test2", {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
-    demo1Text.position.set(300, 400);
+    demo1Text.y = 477;
+    demo1Text.x = 728;
     const demo2Text: KnText = this.game.add.text("demo2Text", "test3", {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
     demo2Text.visible = true;
-    demo2Text.y = 400;
-    demo2Text.x = 548;
-    demo2Text.position.set(400, 400);
+    demo2Text.y = 688;
+    demo2Text.x = 435;
     testGroup.addChild(demoText);
     testGroup.addChild(demo1Text);
     testGroup.addChild(demo2Text);
     this.game.add.group("groupChild", group2);
-    const logo2 = this.game.add.image("logo2", "loadingrun_01.png", group2);
+    const logo2 = this.game.add.image("logo2", "avator_01", group2);
     logo2.alpha = 1;
     logo2.visible = true;
     logo2.anchor.set(0.5, 0.5);
-    logo2.y = 327;
+    logo2.y = 275;
     logo2.x = 883;
     logo2.scale.x = 1;
     logo2.tintColor = "#a5a5a5";

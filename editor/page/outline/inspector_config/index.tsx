@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-01 14:54:06
+ * @LastEditTime: 2023-06-02 10:59:22
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -143,15 +143,18 @@ const Inspector = () => {
     });
   };
 
-  return gameItemType === "Admixture" ? (
-    <Admixture items={listenGameItem} />
-  ) : listenGameItem && gameItem && listenGameItem[0].name === gameItem.name ? (
-    <DatGui data={gameItem} onUpdate={handleUpdate}>
-      <>{console.log("render", gameItemType)}</>
-      {generateConfigCard()}
-    </DatGui>
+  return listenGameItem ? (
+    gameItemType === "Admixture" ? (
+      <Admixture items={listenGameItem} />
+    ) : gameItem && listenGameItem[0].name === gameItem.name ? (
+      <DatGui data={gameItem} onUpdate={handleUpdate}>
+        {generateConfigCard()}
+      </DatGui>
+    ) : (
+      <></>
+    )
   ) : (
-    <></>
+    <>空</>
   );
 };
 
