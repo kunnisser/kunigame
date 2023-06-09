@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-30 14:53:35
+ * @LastEditTime: 2023-06-09 16:24:19
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
@@ -84,49 +84,26 @@ const AlignHeader = () => {
   };
 
   const commonAlignHandler = (alignCallback) => {
+    const tool: EditorTools = store.getState().sceneReducer.game.editorTools;
     const game: Game = store.getState().sceneReducer.game;
     const gameItems = transformAllToArray(
       store.getState().sceneReducer.gameItem
     );
-    const stackPositions: Array<any> = [];
-    const alignGameItems = gameItems
-      ? gameItems.map((item: any) => {
-          const pos: any = {};
-          pos["prevX"] = item.x;
-          pos["prevY"] = item.y;
-          alignCallback(item, game);
-          pos["nextX"] = item.x;
-          pos["nextY"] = item.y;
-          stackPositions.push(pos);
-          return item;
-        })
-      : [];
+    const editGameItem = store.getState().sceneReducer.editGameItem;
 
-    // 更新单个对象表单信息
-    if (alignGameItems.length === 1) {
-      const [currentItem] = alignGameItems;
-      const editGameItem = store.getState().sceneReducer.editGameItem;
-      const newEditGameItem = Object.assign({}, editGameItem, {
-        x: currentItem.x,
-        y: currentItem.y
-      });
-      dispatch(updateEditGameItem(newEditGameItem));
-    }
-
-    // 撤销堆栈
-    game.currentScene.cancelActionStack.push({
-      position: stackPositions,
-      target: alignGameItems,
-      type: game.editorTools.type
+    tool.recordOperationStep(gameItems || [], (item: any, record) => {
+      record.prev = { x: item.x, y: item.y };
+      alignCallback(item, game);
+      record.next = { x: item.x, y: item.y };
+      editGameItem[item.name] = record.next;
+      dispatch(updateEditGameItem(editGameItem));
+      return record;
     });
-
-    //更新辅助工具线框
-    game.editorTools.drawOperationComponent(alignGameItems);
   };
 
   // 水平居中
   const onHorizontalAlignCenter = () => {
-    commonAlignHandler((item, game: Game) => {
+    commonAlignHandler((item, game: Game, record) => {
       item.x = game.config.half_w;
     });
   };

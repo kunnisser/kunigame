@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-02 11:05:29
+ * @LastEditTime: 2023-06-09 16:20:35
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -12,7 +12,10 @@ import PickTool from "./common/pick";
 import RotateTool from "./common/rotate";
 import ScaleTool from "./common/scale";
 import Game from "ts@/kuni/lib/core";
-import { GET_GAME_ITEM } from "editor@/common/gameStore/scene/action";
+import {
+  GET_GAME_ITEM,
+  updateEditGameItem
+} from "editor@/common/gameStore/scene/action";
 import { Point } from "pixi.js";
 import { isMulitPick } from "editor@/tool";
 class EditorTools {
@@ -119,13 +122,15 @@ class EditorTools {
         const prevAction = currentActionStack.pop();
         resumeActionStack.push(prevAction);
         if (prevAction) {
+          const editors: any = [];
           const targets = prevAction?.target.map((target, index) => {
-            const { prevX, prevY } = prevAction?.position[index];
-            target.position.set(prevX - this.relativeX, prevY - this.relativeY);
-            return target;
+            console.log(prevAction);
+            const { prev } = prevAction?.stack[index];
+            editors.push(prev);
+            return Object.assign(target, prev);
           });
           this.onClickHandler(targets, prevAction.type);
-          // this.drawOperationComponent(targets, prevAction.type);
+          this.updateEditGameItemHandler(targets, editors);
         }
       } else if (
         resumeActionStack &&
@@ -136,17 +141,51 @@ class EditorTools {
         const resumeAction = resumeActionStack.pop();
         currentActionStack.push(resumeAction);
         if (resumeAction) {
+          const editors: any = [];
           const targets = resumeAction?.target.map((target, index) => {
-            const { nextX, nextY } = resumeAction?.position[index];
-            target.position.set(nextX - this.relativeX, nextY - this.relativeY);
-            return target;
+            const { next } = resumeAction?.stack[index];
+            editors.push(next);
+            return Object.assign(target, next);
           });
 
           this.onClickHandler(targets, resumeAction.type);
-          // this.drawOperationComponent(targets, resumeAction.type);
+          this.updateEditGameItemHandler(targets, editors);
         }
       }
     };
+  }
+
+  // 对外提供公用记录操作步骤
+  recordOperationStep(items: Array<any>, operation: Function) {
+    const stack: Array<any> = [];
+    const offsetGameItems: Array<any> = items.map((item: any) => {
+      const record: any = operation(item, {});
+      stack.push(record);
+      return item;
+    });
+
+    // 撤销堆栈记录
+    this.game.currentScene.cancelActionStack.push({
+      stack: stack,
+      target: offsetGameItems,
+      type: this.game.editorTools.type
+    });
+
+    //更新辅助工具线框
+    this.drawOperationComponent(offsetGameItems);
+    // this.updateEditGameItemHandler(offsetGameItems);
+    return offsetGameItems;
+  }
+
+  updateEditGameItemHandler(targets, editors) {
+    // 更新编辑对象信息
+    let newEditGameItem: any =
+      this.game.redux.store.getState().sceneReducer.editGameItem;
+    targets.map((target, index) => {
+      newEditGameItem[target.name] = editors[index];
+    });
+
+    this.game.redux.dispatch(updateEditGameItem(newEditGameItem));
   }
 
   // 给当前场景元素遍历绑定选中操作

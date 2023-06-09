@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-02 11:04:41
+ * @LastEditTime: 2023-06-05 11:07:20
  * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
  * @Description: ---- 场景元素列表 ----
  */
@@ -239,11 +239,6 @@ const ContainerTree = () => {
 
   return (
     <div>
-      {/* <Input
-        style={{ marginBottom: 8 }}
-        placeholder="Search"
-        onChange={onChange}
-      /> */}
       <Tree
         showIcon
         draggable

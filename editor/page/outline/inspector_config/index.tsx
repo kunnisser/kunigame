@@ -2,11 +2,11 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-02 10:59:22
+ * @LastEditTime: 2023-06-09 16:14:42
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DatGui from "react-dat-gui";
 import "editor@/assets/dat-gui.styl";
 import { useDispatch, useSelector, useStore } from "react-redux";
@@ -15,10 +15,15 @@ import { DatProperties, InspectorConfig } from "./config";
 import { updateEditGameItem } from "editor@/common/gameStore/scene/action";
 import { CombineReducer } from "editor@/common/store";
 import Admixture from "./dat/admixture";
+import { debounce } from "ts@/kuni/lib/utils/common";
 
 const Inspector = () => {
   const [gameItem, setGameItem] = useState(null as any);
   const [gameItemType, setGameItemType] = useState(null as any);
+  const ref = useRef({
+    update: true,
+    recordPrev: {}
+  });
   const store = useStore();
   const dispatch = useDispatch();
   const listenGameItem = useSelector((store: CombineReducer) => {
@@ -51,6 +56,7 @@ const Inspector = () => {
         }, item[0]);
         configItems[keysCombine] = prop;
       });
+
       setGameItem(configItems);
     }
     setGameItemType(itemType);
@@ -90,6 +96,10 @@ const Inspector = () => {
     editGameItem[gameItemName] = editGameItem[gameItemName] || {};
 
     // 提交的更新参数构造
+    // 只记录更新前的第一个状态快照，在防抖记录变更后的状态再变更update判断
+    ref.current.update && (ref.current.recordPrev[path] = gameItem[path]);
+    ref.current.update = false;
+
     editGameItem[gameItemName][path] = setAdvancedVariables(newData[path]);
     dispatch(updateEditGameItem(editGameItem));
 
@@ -112,6 +122,24 @@ const Inspector = () => {
     game.editorTools.drawOperationComponent(
       store.getState().sceneReducer.gameItem
     );
+    const recordNext = { [path]: editGameItem[gameItemName][path] };
+
+    debounce.handler(() => {
+      ref.current.update = true;
+      console.log("old", ref.current.recordPrev);
+
+      console.log("new", recordNext);
+
+      game.editorTools.recordOperationStep(
+        [gameItem] || [],
+        (item: any, record) => {
+          record.prev = ref.current.recordPrev;
+          record.next = recordNext;
+          return record;
+        }
+      );
+      ref.current.recordPrev = {};
+    });
     setGameItem({ ...newData });
   };
 
