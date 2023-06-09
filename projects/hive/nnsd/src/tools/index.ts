@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-09 16:20:35
+ * @LastEditTime: 2023-06-09 16:56:33
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -14,6 +14,7 @@ import ScaleTool from "./common/scale";
 import Game from "ts@/kuni/lib/core";
 import {
   GET_GAME_ITEM,
+  clearEditGameItem,
   updateEditGameItem
 } from "editor@/common/gameStore/scene/action";
 import { Point } from "pixi.js";
@@ -113,15 +114,10 @@ class EditorTools {
     document.onkeydown = (e) => {
       const currentActionStack = this.game.currentScene.cancelActionStack;
       const resumeActionStack = this.game.currentScene.resumeActionStack;
-      if (
-        currentActionStack &&
-        currentActionStack.length > 0 &&
-        e.key === "z" &&
-        (e.ctrlKey || e.metaKey)
-      ) {
+      if (currentActionStack && e.key === "z" && (e.ctrlKey || e.metaKey)) {
         const prevAction = currentActionStack.pop();
         resumeActionStack.push(prevAction);
-        if (prevAction) {
+        if (prevAction && currentActionStack.length > 0) {
           const editors: any = [];
           const targets = prevAction?.target.map((target, index) => {
             console.log(prevAction);
@@ -131,6 +127,10 @@ class EditorTools {
           });
           this.onClickHandler(targets, prevAction.type);
           this.updateEditGameItemHandler(targets, editors);
+        } else {
+          // 如果操作步骤池为空，则清空编辑记录
+          console.log("没操作了");
+          this.game.redux.dispatch(clearEditGameItem());
         }
       } else if (
         resumeActionStack &&
@@ -173,12 +173,11 @@ class EditorTools {
 
     //更新辅助工具线框
     this.drawOperationComponent(offsetGameItems);
-    // this.updateEditGameItemHandler(offsetGameItems);
     return offsetGameItems;
   }
 
+  // 更新编辑对象信息
   updateEditGameItemHandler(targets, editors) {
-    // 更新编辑对象信息
     let newEditGameItem: any =
       this.game.redux.store.getState().sceneReducer.editGameItem;
     targets.map((target, index) => {

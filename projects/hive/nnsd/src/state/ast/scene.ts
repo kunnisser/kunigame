@@ -29,6 +29,7 @@ class AST extends KnScene {
     const demoText: KnText = this.game.add.text("demoText", "WELCOME", {
       fontSize: 100
     }, [0.5, 0.5]);
+    demoText.alpha = 1;
     demoText.scale.y = 0.3;
     demoText.scale.x = 0.3;
     demoText.text = "WELCOME";
@@ -42,7 +43,7 @@ class AST extends KnScene {
     demoText.style.fill = "#ffffff";
     demoText.style.strokeThickness = 20;
     demoText.style.stroke = "#2a5860";
-    demoText.x = 960;
+    demoText.x = 693;
     demoText.y = 480;
     const testGroup = this.game.add.group("group1", this);
     testGroup.addChild(demoText);
