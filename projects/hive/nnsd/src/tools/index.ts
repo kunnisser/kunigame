@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-09 16:56:33
+ * @LastEditTime: 2023-06-12 16:53:48
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -19,6 +19,7 @@ import {
 } from "editor@/common/gameStore/scene/action";
 import { Point } from "pixi.js";
 import { isMulitPick } from "editor@/tool";
+import * as _ from "lodash";
 class EditorTools {
   public game: Game;
   public toolGroup: KnGroup;
@@ -116,14 +117,16 @@ class EditorTools {
       const resumeActionStack = this.game.currentScene.resumeActionStack;
       if (currentActionStack && e.key === "z" && (e.ctrlKey || e.metaKey)) {
         const prevAction = currentActionStack.pop();
-        resumeActionStack.push(prevAction);
-        if (prevAction && currentActionStack.length > 0) {
+        if (prevAction) {
+          resumeActionStack.push(prevAction);
           const editors: any = [];
           const targets = prevAction?.target.map((target, index) => {
             console.log(prevAction);
             const { prev } = prevAction?.stack[index];
             editors.push(prev);
-            return Object.assign(target, prev);
+            const [key] = Object.keys(prev);
+            _.set(target, key, prev[key]);
+            return target;
           });
           this.onClickHandler(targets, prevAction.type);
           this.updateEditGameItemHandler(targets, editors);
@@ -134,22 +137,25 @@ class EditorTools {
         }
       } else if (
         resumeActionStack &&
-        resumeActionStack.length > 0 &&
         e.key === "y" &&
         (e.ctrlKey || e.metaKey)
       ) {
         const resumeAction = resumeActionStack.pop();
-        currentActionStack.push(resumeAction);
         if (resumeAction) {
+          currentActionStack.push(resumeAction);
           const editors: any = [];
           const targets = resumeAction?.target.map((target, index) => {
             const { next } = resumeAction?.stack[index];
             editors.push(next);
-            return Object.assign(target, next);
+            const [key] = Object.keys(next);
+            _.set(target, key, next[key]);
+            return target;
           });
 
           this.onClickHandler(targets, resumeAction.type);
           this.updateEditGameItemHandler(targets, editors);
+        } else {
+          console.log("已经到当前一步操作");
         }
       }
     };

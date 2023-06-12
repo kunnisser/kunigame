@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-09 16:14:42
+ * @LastEditTime: 2023-06-12 16:50:28
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -22,8 +22,8 @@ const Inspector = () => {
   const [gameItemType, setGameItemType] = useState(null as any);
   const ref = useRef({
     update: true,
-    recordPrev: {}
-  });
+    recordPrev: null
+  } as any);
   const store = useStore();
   const dispatch = useDispatch();
   const listenGameItem = useSelector((store: CombineReducer) => {
@@ -88,20 +88,39 @@ const Inspector = () => {
     return val;
   };
 
+  // 将带-字符串的属性名解构成嵌套对象
+  // isFinal 是否跳过解构
+  const disAssembleGameItem = (path, gameItem, isFinal?: boolean) => {
+    const pathArray = path.split("-");
+    const pathLodash = pathArray.join(".");
+    let factorValue: any = gameItem;
+
+    if (!isFinal) {
+      for (const path of pathArray) {
+        factorValue = factorValue[path];
+      }
+    }
+    return { [pathLodash]: factorValue };
+  };
+
   const handleUpdate = (newData: any, path: string) => {
     const game: Game = store.getState().sceneReducer.game;
     const [gameItem] = store.getState().sceneReducer.gameItem;
     const gameItemName = gameItem.name;
     const editGameItem = store.getState().sceneReducer.editGameItem;
     editGameItem[gameItemName] = editGameItem[gameItemName] || {};
+    editGameItem[gameItemName][path] = setAdvancedVariables(newData[path]);
+    const recordNext = disAssembleGameItem(
+      path,
+      editGameItem[gameItemName][path],
+      true
+    );
 
     // 提交的更新参数构造
     // 只记录更新前的第一个状态快照，在防抖记录变更后的状态再变更update判断
-    ref.current.update && (ref.current.recordPrev[path] = gameItem[path]);
+    ref.current.update &&
+      (ref.current.recordPrev = disAssembleGameItem(path, gameItem));
     ref.current.update = false;
-
-    editGameItem[gameItemName][path] = setAdvancedVariables(newData[path]);
-    dispatch(updateEditGameItem(editGameItem));
 
     const keysArray = Object.keys(newData);
     for (const keysCombine of keysArray) {
@@ -122,7 +141,6 @@ const Inspector = () => {
     game.editorTools.drawOperationComponent(
       store.getState().sceneReducer.gameItem
     );
-    const recordNext = { [path]: editGameItem[gameItemName][path] };
 
     debounce.handler(() => {
       ref.current.update = true;
@@ -139,6 +157,8 @@ const Inspector = () => {
         }
       );
       ref.current.recordPrev = {};
+
+      dispatch(updateEditGameItem(editGameItem));
     });
     setGameItem({ ...newData });
   };
