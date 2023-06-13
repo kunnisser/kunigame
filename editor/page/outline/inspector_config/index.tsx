@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-12 16:50:28
+ * @LastEditTime: 2023-06-13 17:02:20
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -16,6 +16,7 @@ import { updateEditGameItem } from "editor@/common/gameStore/scene/action";
 import { CombineReducer } from "editor@/common/store";
 import Admixture from "./dat/admixture";
 import { debounce } from "ts@/kuni/lib/utils/common";
+import * as _ from "lodash";
 
 const Inspector = () => {
   const [gameItem, setGameItem] = useState(null as any);
@@ -50,7 +51,7 @@ const Inspector = () => {
       );
       const configItems: any = {};
       configProperties.map((keys: Array<string>) => {
-        const keysCombine = keys.join("-");
+        const keysCombine = keys.join(".");
         const prop = keys.reduce((total, key) => {
           return total[key];
         }, item[0]);
@@ -91,8 +92,7 @@ const Inspector = () => {
   // 将带-字符串的属性名解构成嵌套对象
   // isFinal 是否跳过解构
   const disAssembleGameItem = (path, gameItem, isFinal?: boolean) => {
-    const pathArray = path.split("-");
-    const pathLodash = pathArray.join(".");
+    const pathArray = path.split(".");
     let factorValue: any = gameItem;
 
     if (!isFinal) {
@@ -100,7 +100,10 @@ const Inspector = () => {
         factorValue = factorValue[path];
       }
     }
-    return { [pathLodash]: factorValue };
+
+    return {
+      [path]: factorValue
+    };
   };
 
   const handleUpdate = (newData: any, path: string) => {
@@ -124,7 +127,7 @@ const Inspector = () => {
 
     const keysArray = Object.keys(newData);
     for (const keysCombine of keysArray) {
-      const keys = keysCombine.split("-");
+      const keys = keysCombine.split(".");
 
       // 链式调用赋值
       keys.reduce((total, key, index) => {
@@ -183,7 +186,7 @@ const Inspector = () => {
         );
       } else {
         const { component: DatItem, label, path, ...props } = config;
-        const paths = path ? path.join("-") : "";
+        const paths = path ? path.join(".") : "";
         return (
           <DatItem key={paths} path={paths} label={label} {...props}></DatItem>
         );

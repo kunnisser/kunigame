@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-24 14:14:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-24 14:23:38
+ * @LastEditTime: 2023-06-13 17:00:17
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/anchor.tsx
  * @Description: ----  ----
  */
@@ -27,7 +27,10 @@ import { DefaultProps } from "./interface";
 const DatAnchor = (props: DefaultProps) => {
   const handleChange = (val) => {
     const { liveUpdate, _onUpdateValue, onUpdate, path } = props;
+    console.time();
     _onUpdateValue && _onUpdateValue(path, val);
+    console.timeEnd();
+
     if (liveUpdate) {
       onUpdate && onUpdate(val);
     }
