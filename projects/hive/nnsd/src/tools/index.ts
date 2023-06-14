@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 14:58:19
+ * @LastEditTime: 2023-06-14 16:40:56
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -124,11 +124,14 @@ class EditorTools {
           resumeActionStack.push(prevAction);
           const editors: any = [];
           const targets = prevAction?.target.map((target, index) => {
-            console.log(prevAction);
             const { prev } = prevAction?.stack[index];
             editors.push(prev);
-            const [key] = Object.keys(prev);
-            _.set(target, key, prev[key]);
+            const keys = Object.keys(prev);
+            console.log(prev);
+            keys.map((key) => {
+              return _.set(target, key, prev[key]);
+            });
+            console.log(target);
             return target;
           });
           this.onClickHandler(targets, prevAction.type);
@@ -186,6 +189,8 @@ class EditorTools {
       target: offsetGameItems,
       type: this.game.editorTools.type
     });
+
+    console.log(cancelActionStack);
     this.game.redux.dispatch(setCancelActionStack(cancelActionStack));
 
     //更新辅助工具线框

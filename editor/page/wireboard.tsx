@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 15:00:33
+ * @LastEditTime: 2023-06-14 16:45:30
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -138,8 +138,7 @@ const WireBoard = (props) => {
   }, [selector]);
 
   const checkEditTodoList = () => {
-    const actionStack =
-      store.getState().sceneReducer.currentScene.cancelActionStack;
+    const actionStack = store.getState().sceneReducer.cancelActionStack;
     const bool = actionStack && Object.keys(actionStack).length > 0;
     if (bool !== isNewGameEdit || !bool) {
       // 更新是否有操作记录

@@ -43,7 +43,7 @@ class AST extends KnScene {
     demoText.style.fill = "#ffffff";
     demoText.style.strokeThickness = 20;
     demoText.style.stroke = "#2a5860";
-    demoText.x = 693;
+    demoText.x = 0;
     demoText.y = 480;
     const testGroup = this.game.add.group("group1", this);
     testGroup.addChild(demoText);

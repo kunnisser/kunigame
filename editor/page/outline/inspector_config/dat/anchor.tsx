@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-24 14:14:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 09:35:58
+ * @LastEditTime: 2023-06-14 16:29:16
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/anchor.tsx
  * @Description: ----  ----
  */
@@ -28,7 +28,6 @@ const DatAnchor = (props: DefaultProps) => {
   const handleChange = (val) => {
     const { liveUpdate, _onUpdateValue, onUpdate, path } = props;
     _onUpdateValue && _onUpdateValue(path, val);
-
     if (liveUpdate) {
       onUpdate && onUpdate(val);
     }

@@ -36,22 +36,22 @@ class Start extends KnScene {
     }, [0.5, 0.5]);
     demoText.text = "test123";
     demoText.anchor.set(0.5, 0);
-    demoText.y = 480;
-    demoText.x = 645;
+    demoText.y = 380;
+    demoText.x = 845;
     const demo1Text: KnText = this.game.add.text("demo1Text", "test2", {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
     demo1Text.text = "test234";
     demo1Text.y = 380;
-    demo1Text.x = 860;
+    demo1Text.x = 1060;
     const demo2Text: KnText = this.game.add.text("demo2Text", "test3", {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
     demo2Text.visible = true;
-    demo2Text.y = 480;
-    demo2Text.x = 960;
+    demo2Text.y = 380;
+    demo2Text.x = 1160;
     testGroup.addChild(demoText);
     testGroup.addChild(demo1Text);
     testGroup.addChild(demo2Text);
@@ -60,8 +60,8 @@ class Start extends KnScene {
     logo2.alpha = 1;
     logo2.visible = true;
     logo2.anchor.set(0.5, 0.5);
-    logo2.y = 480;
-    logo2.x = 335;
+    logo2.y = 408;
+    logo2.x = 549;
     logo2.scale.x = 1;
     logo2.tintColor = "#a5a5a5";
     this.addChild(testGroup);

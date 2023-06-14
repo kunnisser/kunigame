@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 14:08:51
+ * @LastEditTime: 2023-06-14 16:31:52
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
@@ -103,7 +103,7 @@ const AlignHeader = () => {
 
   // 水平居中
   const onHorizontalAlignCenter = () => {
-    commonAlignHandler((item, game: Game, record) => {
+    commonAlignHandler((item, game: Game) => {
       item.x = game.config.half_w;
     });
   };

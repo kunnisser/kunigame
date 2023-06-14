@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-24 21:50:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-09 15:56:58
+ * @LastEditTime: 2023-06-14 16:46:27
  * @FilePath: /kunigame/editor/page/outline/outline_tree/index.tsx
  * @Description: ---- 大纲树状结构 ----
  */
@@ -16,7 +16,9 @@ import { MenuOperation } from "../menu_operation/index";
 import {
   clearEditGameItem,
   getGameItem,
-  setCurrentScene
+  setCancelActionStack,
+  setCurrentScene,
+  setResumeActionStack
 } from "editor@/common/gameStore/scene/action";
 import {
   BarsOutlined,
@@ -214,7 +216,8 @@ const OutlineTree = () => {
                         editRecords: editGameItem
                       });
                       dispatch(clearEditGameItem());
-
+                      dispatch(setCancelActionStack([]));
+                      dispatch(setResumeActionStack([]));
                       changeAppointScene(pickedScene);
                     }
                   });
