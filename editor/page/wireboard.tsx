@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-09 16:48:50
+ * @LastEditTime: 2023-06-14 15:00:33
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -28,7 +28,11 @@ import {
   DesktopOutlined
 } from "@ant-design/icons";
 import "editor@/assets/index.styl";
-import { clearEditGameItem } from "editor@/common/gameStore/scene/action";
+import {
+  clearEditGameItem,
+  setCancelActionStack,
+  setResumeActionStack
+} from "editor@/common/gameStore/scene/action";
 import { updateScene } from "editor@/api/request/scene";
 import { EditGameName } from "editor@/page/workbench/canvas";
 import { isObjectEmpty } from "editor@/tool";
@@ -111,11 +115,14 @@ const WireBoard = (props) => {
             sceneName: currentScene.id,
             editRecords: editGameItem
           });
-          const { cancelActionStack, resumeActionStack } = currentScene;
+          const { cancelActionStack, resumeActionStack } =
+            store.getState().sceneReducer;
           cancelActionStack.length = 0;
           resumeActionStack.length = 0;
           setIsNewGameEdit(false);
           dispatch(clearEditGameItem());
+          dispatch(setCancelActionStack(cancelActionStack));
+          dispatch(setResumeActionStack(resumeActionStack));
         }
       }
     });

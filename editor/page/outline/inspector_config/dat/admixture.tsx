@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-01 14:44:58
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-09 16:28:47
+ * @LastEditTime: 2023-06-14 14:09:06
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/admixture.tsx
  * @Description: ---- 多对象排列 ----
  */
@@ -33,7 +33,7 @@ const Admixture = (props: any) => {
 
   const onArrangement = () => {
     const editGameItem = store.getState().sceneReducer.editGameItem;
-    tool.recordOperationStep(items, (item: any, record: any) => {
+    tool.recordOperationStep(items, (record: any, item: any) => {
       record.prev = {
         x: item.x,
         y: item.y

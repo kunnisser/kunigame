@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-09 16:24:19
+ * @LastEditTime: 2023-06-14 14:08:51
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
@@ -91,7 +91,7 @@ const AlignHeader = () => {
     );
     const editGameItem = store.getState().sceneReducer.editGameItem;
 
-    tool.recordOperationStep(gameItems || [], (item: any, record) => {
+    tool.recordOperationStep(gameItems || [], (record, item?: any) => {
       record.prev = { x: item.x, y: item.y };
       alignCallback(item, game);
       record.next = { x: item.x, y: item.y };

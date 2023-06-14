@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-13 17:02:20
+ * @LastEditTime: 2023-06-14 15:01:39
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -90,19 +90,11 @@ const Inspector = () => {
   };
 
   // 将带-字符串的属性名解构成嵌套对象
-  // isFinal 是否跳过解构
-  const disAssembleGameItem = (path, gameItem, isFinal?: boolean) => {
-    const pathArray = path.split(".");
-    let factorValue: any = gameItem;
-
-    if (!isFinal) {
-      for (const path of pathArray) {
-        factorValue = factorValue[path];
-      }
-    }
-
+  const disAssembleGameItem = (path, gameItem) => {
+    const factorValue: any = _.cloneDeep(gameItem);
+    const ret = _.get(factorValue, path);
     return {
-      [path]: factorValue
+      [path]: ret
     };
   };
 
@@ -113,11 +105,6 @@ const Inspector = () => {
     const editGameItem = store.getState().sceneReducer.editGameItem;
     editGameItem[gameItemName] = editGameItem[gameItemName] || {};
     editGameItem[gameItemName][path] = setAdvancedVariables(newData[path]);
-    const recordNext = disAssembleGameItem(
-      path,
-      editGameItem[gameItemName][path],
-      true
-    );
 
     // 提交的更新参数构造
     // 只记录更新前的第一个状态快照，在防抖记录变更后的状态再变更update判断
@@ -147,19 +134,18 @@ const Inspector = () => {
 
     debounce.handler(() => {
       ref.current.update = true;
+      const recordNext = { [path]: editGameItem[gameItemName][path] };
+
       console.log("old", ref.current.recordPrev);
 
       console.log("new", recordNext);
 
-      game.editorTools.recordOperationStep(
-        [gameItem] || [],
-        (item: any, record) => {
-          record.prev = ref.current.recordPrev;
-          record.next = recordNext;
-          return record;
-        }
-      );
-      ref.current.recordPrev = {};
+      game.editorTools.recordOperationStep([gameItem] || [], (record) => {
+        record.prev = ref.current.recordPrev;
+        record.next = recordNext;
+        return record;
+      });
+      ref.current.recordPrev = null;
 
       dispatch(updateEditGameItem(editGameItem));
     });

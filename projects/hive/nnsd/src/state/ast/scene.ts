@@ -33,7 +33,7 @@ class AST extends KnScene {
     demoText.scale.y = 0.3;
     demoText.scale.x = 0.3;
     demoText.text = "WELCOME";
-    demoText.anchor.set(0.5, 0);
+    demoText.anchor.set(0, 0.5);
     demoText.visible = true;
     demoText.style.dropShadowDistance = 16;
     demoText.style.dropShadowBlur = 10;

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-08 17:43:57
+ * @LastEditTime: 2023-06-14 14:09:21
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
@@ -106,7 +106,7 @@ export const freeMovePosition = (dragContext: DragPosition) => {
       // 撤销堆栈
       dragContext.game.editorTools.recordOperationStep(
         [bootTarget],
-        (item: any, record: any) => {
+        (record: any, item: any) => {
           record.prev = {
             x: dragContext.dragStartX,
             y: dragContext.dragStartY

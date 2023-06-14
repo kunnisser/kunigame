@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-19 17:29:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-09 15:56:51
+ * @LastEditTime: 2023-06-14 14:48:54
  * @FilePath: /kunigame/editor/common/gameStore/scene/action.ts
  * @Description: ---- 场景状态action ----
  */
@@ -18,6 +18,8 @@ const UPDATE_EDIT_GAME_ITEM = Symbol();
 const CLEAR_EDIT_GAME_ITEM = Symbol();
 const SET_DRAG_TARGET = Symbol();
 const SET_OPERATION_TYPE = Symbol();
+const SET_CANCEL_ACTION_STACK = Symbol();
+const SET_RESUME_ACTION_STACK = Symbol();
 
 // 储存场景列表
 const getSceneList = (list: Array<KnScene>) => {
@@ -85,6 +87,21 @@ const setDragTarget = (target: any) => {
   };
 };
 
+// 设置撤销操作栈
+const setCancelActionStack = (stack) => {
+  return {
+    type: SET_CANCEL_ACTION_STACK,
+    payload: stack
+  };
+};
+
+const setResumeActionStack = (stack) => {
+  return {
+    type: SET_RESUME_ACTION_STACK,
+    payload: stack
+  };
+};
+
 export {
   GET_SCENE_LIST,
   getSceneList,
@@ -101,5 +118,9 @@ export {
   SET_DRAG_TARGET,
   setDragTarget,
   SET_OPERATION_TYPE,
-  setCurrentOperationType
+  setCurrentOperationType,
+  setCancelActionStack,
+  setResumeActionStack,
+  SET_CANCEL_ACTION_STACK,
+  SET_RESUME_ACTION_STACK
 };

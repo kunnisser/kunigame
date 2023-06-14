@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-12 16:53:48
+ * @LastEditTime: 2023-06-14 14:58:19
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -15,7 +15,9 @@ import Game from "ts@/kuni/lib/core";
 import {
   GET_GAME_ITEM,
   clearEditGameItem,
-  updateEditGameItem
+  updateEditGameItem,
+  setCancelActionStack,
+  setResumeActionStack
 } from "editor@/common/gameStore/scene/action";
 import { Point } from "pixi.js";
 import { isMulitPick } from "editor@/tool";
@@ -113,10 +115,11 @@ class EditorTools {
         }));
     };
     document.onkeydown = (e) => {
-      const currentActionStack = this.game.currentScene.cancelActionStack;
-      const resumeActionStack = this.game.currentScene.resumeActionStack;
-      if (currentActionStack && e.key === "z" && (e.ctrlKey || e.metaKey)) {
-        const prevAction = currentActionStack.pop();
+      const { cancelActionStack, resumeActionStack } =
+        this.game.redux.store.getState().sceneReducer;
+
+      if (cancelActionStack && e.key === "z" && (e.ctrlKey || e.metaKey)) {
+        const prevAction = cancelActionStack.pop();
         if (prevAction) {
           resumeActionStack.push(prevAction);
           const editors: any = [];
@@ -135,6 +138,8 @@ class EditorTools {
           console.log("没操作了");
           this.game.redux.dispatch(clearEditGameItem());
         }
+        this.game.redux.dispatch(setCancelActionStack(cancelActionStack));
+        this.game.redux.dispatch(setResumeActionStack(resumeActionStack));
       } else if (
         resumeActionStack &&
         e.key === "y" &&
@@ -142,7 +147,7 @@ class EditorTools {
       ) {
         const resumeAction = resumeActionStack.pop();
         if (resumeAction) {
-          currentActionStack.push(resumeAction);
+          cancelActionStack.push(resumeAction);
           const editors: any = [];
           const targets = resumeAction?.target.map((target, index) => {
             const { next } = resumeAction?.stack[index];
@@ -157,6 +162,8 @@ class EditorTools {
         } else {
           console.log("已经到当前一步操作");
         }
+        this.game.redux.dispatch(setCancelActionStack(cancelActionStack));
+        this.game.redux.dispatch(setResumeActionStack(resumeActionStack));
       }
     };
   }
@@ -165,17 +172,21 @@ class EditorTools {
   recordOperationStep(items: Array<any>, operation: Function) {
     const stack: Array<any> = [];
     const offsetGameItems: Array<any> = items.map((item: any) => {
-      const record: any = operation(item, {});
+      const recordFactor = {};
+      const record: any = _.clone(operation(recordFactor, item));
       stack.push(record);
       return item;
     });
 
+    const { cancelActionStack } = this.game.redux.store.getState().sceneReducer;
+
     // 撤销堆栈记录
-    this.game.currentScene.cancelActionStack.push({
+    cancelActionStack.push({
       stack: stack,
       target: offsetGameItems,
       type: this.game.editorTools.type
     });
+    this.game.redux.dispatch(setCancelActionStack(cancelActionStack));
 
     //更新辅助工具线框
     this.drawOperationComponent(offsetGameItems);

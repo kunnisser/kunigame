@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-22 09:21:27
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-26 11:35:08
+ * @LastEditTime: 2023-06-14 14:51:55
  * @FilePath: /kunigame/editor/common/gameStore/scene/reducer.ts
  * @Description: ---- 操作scene状态 ----
  */
@@ -15,7 +15,9 @@ import {
   SET_CURRENT_SCENE,
   SET_DRAG_TARGET,
   SET_OPERATION_TYPE,
-  UPDATE_EDIT_GAME_ITEM
+  UPDATE_EDIT_GAME_ITEM,
+  SET_RESUME_ACTION_STACK,
+  SET_CANCEL_ACTION_STACK
 } from "./action";
 import Game from "ts@/kuni/lib/core";
 
@@ -27,6 +29,8 @@ export interface SceneState {
   editGameItem: any; // 编辑游戏对象信息
   dragTarget: any; // 拖拽对象
   operationType: string; // 操作类型
+  resumeActionStack: Array<any>; // 撤销操作栈
+  cancelActionStack: Array<any>; // 还原操作栈
 }
 
 const initialState: SceneState = {
@@ -36,7 +40,9 @@ const initialState: SceneState = {
   gameItem: null,
   editGameItem: {},
   dragTarget: null,
-  operationType: "pick"
+  operationType: "pick",
+  resumeActionStack: [],
+  cancelActionStack: []
 };
 
 const _getSceneList = (state: SceneState, action) => {
@@ -95,6 +101,20 @@ const _setOperationType = (state: SceneState, action) => {
   };
 };
 
+const _setCancelActionStack = (state: SceneState, action) => {
+  return {
+    ...state,
+    cancelActionStack: action.payload
+  };
+};
+
+const _setResumeActionStack = (state: SceneState, action) => {
+  return {
+    ...state,
+    resumeActionStack: action.payload
+  };
+};
+
 const SceneMap = {};
 SceneMap[GET_SCENE_LIST] = _getSceneList;
 SceneMap[SET_CURRENT_SCENE] = _setCurrentScene;
@@ -104,6 +124,8 @@ SceneMap[UPDATE_EDIT_GAME_ITEM] = _updateEditGameItem;
 SceneMap[CLEAR_EDIT_GAME_ITEM] = _clearEditGameItem;
 SceneMap[SET_DRAG_TARGET] = _setDragTarget;
 SceneMap[SET_OPERATION_TYPE] = _setOperationType;
+SceneMap[SET_CANCEL_ACTION_STACK] = _setCancelActionStack;
+SceneMap[SET_RESUME_ACTION_STACK] = _setResumeActionStack;
 
 const sceneReducer = (state = initialState, action) => {
   if (SceneMap[action.type]) {
