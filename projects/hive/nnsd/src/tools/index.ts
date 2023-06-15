@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 16:40:56
+ * @LastEditTime: 2023-06-15 16:02:41
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -106,6 +106,10 @@ class EditorTools {
   intialCancelandResume() {
     // 定义覆盖式取消事件
     document.onkeyup = (e: KeyboardEvent) => {
+      e.preventDefault();
+      if (e.key === "Shift") {
+        this.pickTool.isMulitple = false;
+      }
       e.key === "Escape" &&
         ((this.groupMap[this.type].container.visible = false),
         // 同时清空选中元素
@@ -115,9 +119,13 @@ class EditorTools {
         }));
     };
     document.onkeydown = (e) => {
+      e.preventDefault();
       const { cancelActionStack, resumeActionStack } =
         this.game.redux.store.getState().sceneReducer;
 
+      if (e.key === "Shift") {
+        this.pickTool.isMulitple = true;
+      }
       if (cancelActionStack && e.key === "z" && (e.ctrlKey || e.metaKey)) {
         const prevAction = cancelActionStack.pop();
         if (prevAction) {
@@ -127,7 +135,6 @@ class EditorTools {
             const { prev } = prevAction?.stack[index];
             editors.push(prev);
             const keys = Object.keys(prev);
-            console.log(prev);
             keys.map((key) => {
               return _.set(target, key, prev[key]);
             });
@@ -235,7 +242,24 @@ class EditorTools {
       ) {
         return;
       }
-      this.onClickHandler([item]);
+      let clickItems: any = null;
+      const storeItems: any =
+        this.game.redux.store.getState().sceneReducer.gameItem || [];
+      // shift点击多选事件
+      if (this.groupMap[this.type].context["isMulitple"]) {
+        const index: number = storeItems.findIndex((store: any) => {
+          return store.name === item.name;
+        });
+        if (index >= 0) {
+          storeItems.splice(index, 1);
+          clickItems = [...storeItems];
+        } else {
+          clickItems = storeItems.concat([item]);
+        }
+      } else {
+        clickItems = [item];
+      }
+      this.onClickHandler(clickItems);
     });
   };
 

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-10 16:24:18
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 14:09:21
+ * @LastEditTime: 2023-06-15 10:39:03
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/dragEvent.ts
  * @Description: ---- 绑定移动事件 ----
  */
@@ -125,9 +125,9 @@ export const freeMovePosition = (dragContext: DragPosition) => {
       const game = dragContext.game;
       const editGameItem =
         game.redux.store.getState().sceneReducer.editGameItem;
-      editGameItem[bootTarget.id] = editGameItem[bootTarget.id] || {};
-      editGameItem[bootTarget.id].x = bootTargetPosition.x;
-      editGameItem[bootTarget.id].y = bootTargetPosition.y;
+      editGameItem[bootTarget.name] = editGameItem[bootTarget.name] || {};
+      editGameItem[bootTarget.name].x = bootTargetPosition.x;
+      editGameItem[bootTarget.name].y = bootTargetPosition.y;
       const cloneEditGameItem = Object.assign({}, editGameItem);
       game.redux.dispatch(updateEditGameItem(cloneEditGameItem));
       dragTarget.alpha = 1;

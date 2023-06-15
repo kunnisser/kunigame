@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-24 17:30:40
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-16 16:42:07
+ * @LastEditTime: 2023-06-15 11:15:26
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/pick/index.ts
  * @Description: ---- 选中模块 ----
  */
@@ -18,6 +18,7 @@ class PickTool {
   public pickBox: KnGraphics;
   public game: Game;
   public isPulling: Boolean;
+  public isMulitple: Boolean; //是否连选
   // 记录移动的系数，判读是否可点击
   public isMovingAbleCount: number;
   constructor(game: Game, parent: KnGroup) {
@@ -26,6 +27,7 @@ class PickTool {
     this.pickBox = game.add.graphics("pick_box");
     parent.addChild(this.pickBox);
     this.isPulling = false;
+    this.isMulitple = false;
     this.isMovingAbleCount = 0;
     this.initial(game);
   }

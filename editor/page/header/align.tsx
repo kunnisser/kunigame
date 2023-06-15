@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 16:31:52
+ * @LastEditTime: 2023-06-15 10:25:03
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
@@ -23,6 +23,7 @@ import { ReactComponent as PickCursor } from "editor@/assets/icon/pickCursor.svg
 import { ReactComponent as RotateCursor } from "editor@/assets/icon/rotateCursor.svg";
 import { useDispatch, useStore } from "react-redux";
 import {
+  getGameItem,
   setCurrentOperationType,
   updateEditGameItem
 } from "editor@/common/gameStore/scene/action";
@@ -95,8 +96,12 @@ const AlignHeader = () => {
       record.prev = { x: item.x, y: item.y };
       alignCallback(item, game);
       record.next = { x: item.x, y: item.y };
-      editGameItem[item.name] = record.next;
+      editGameItem[item.name] = Object.assign(
+        editGameItem[item.name],
+        record.next
+      );
       dispatch(updateEditGameItem(editGameItem));
+      dispatch(getGameItem([item]));
       return record;
     });
   };

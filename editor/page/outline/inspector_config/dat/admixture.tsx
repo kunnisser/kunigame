@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-01 14:44:58
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 14:09:06
+ * @LastEditTime: 2023-06-15 10:31:59
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/admixture.tsx
  * @Description: ---- 多对象排列 ----
  */
@@ -44,7 +44,10 @@ const Admixture = (props: any) => {
         x: item.x,
         y: item.y
       };
-      editGameItem[item.name] = record.next;
+      editGameItem[item.name] = Object.assign(
+        editGameItem[item.name] || {},
+        record.next
+      );
       return record;
     });
     dispatch(updateEditGameItem(editGameItem));
