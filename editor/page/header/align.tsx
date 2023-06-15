@@ -2,11 +2,11 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-15 10:25:03
+ * @LastEditTime: 2023-06-15 17:38:05
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Space, Tooltip, message } from "antd";
 import {
   BorderLeftOutlined,
@@ -21,7 +21,7 @@ import { ReactComponent as DragCursor } from "editor@/assets/icon/dragCursor.svg
 import { ReactComponent as ScaleCursor } from "editor@/assets/icon/scaleCursor.svg";
 import { ReactComponent as PickCursor } from "editor@/assets/icon/pickCursor.svg";
 import { ReactComponent as RotateCursor } from "editor@/assets/icon/rotateCursor.svg";
-import { useDispatch, useStore } from "react-redux";
+import { useDispatch, useSelector, useStore } from "react-redux";
 import {
   getGameItem,
   setCurrentOperationType,
@@ -30,6 +30,7 @@ import {
 import EditorTools from "ts@/hive/nnsd/src/tools";
 import { transformAllToArray } from "editor@/tool";
 import Game from "ts@/kuni/lib/core";
+import { CombineReducer } from "editor@/common/store";
 
 const Cursor = (props: any) => {
   const { Component, id, operationType, ...prop } = props;
@@ -72,6 +73,19 @@ const AlignHeader = () => {
       component: RotateCursor
     }
   ];
+
+  const listenStack = useSelector((store: CombineReducer) => {
+    return store.sceneReducer.cancelActionStack;
+  });
+
+  useEffect(() => {
+    if (listenStack) {
+      console.log(
+        store.getState().sceneReducer.game &&
+          store.getState().sceneReducer.game.editorTools.type
+      );
+    }
+  }, [listenStack.length]);
 
   const onChangeOperation = (key: string) => {
     const tool: EditorTools = store.getState().sceneReducer.game.editorTools;

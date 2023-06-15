@@ -21,7 +21,8 @@ class Start extends KnScene {
       attack: "/projects/hive/nnsd/assets/images/attack.png",
       logo: "/projects/hive/nnsd/assets/images/logo.png",
       avator_01: "/projects/hive/nnsd/assets/images/avator_01.png",
-      loadingrun: "/projects/hive/nnsd/assets/atlas/loadingrun.json"
+      loadingrun: "/projects/hive/nnsd/assets/atlas/loadingrun.json",
+      icon: "/projects/hive/nnsd/assets/atlas/icon.json"
     };
   }
 
@@ -56,14 +57,14 @@ class Start extends KnScene {
     testGroup.addChild(demo1Text);
     testGroup.addChild(demo2Text);
     this.game.add.group("groupChild", group2);
-    const logo2 = this.game.add.image("logo2", "logo", group2);
+    const logo2 = this.game.add.image("logo2", "Item_Dinosaure0000", group2);
     logo2.alpha = 1;
     logo2.visible = true;
     logo2.anchor.set(0.5, 0.5);
     logo2.y = 412;
     logo2.x = 594;
     logo2.scale.x = 1;
-    logo2.tintColor = "#a5a5a5";
+    logo2.tintColor = "#ffffff";
     this.addChild(testGroup);
   }
 

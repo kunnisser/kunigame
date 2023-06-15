@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-15 16:02:41
+ * @LastEditTime: 2023-06-15 17:42:08
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -142,6 +142,7 @@ class EditorTools {
             return target;
           });
           this.onClickHandler(targets, prevAction.type);
+          this.game.editorTools.type = prevAction.type;
           this.updateEditGameItemHandler(targets, editors);
         } else {
           // 如果操作步骤池为空，则清空编辑记录
@@ -166,7 +167,7 @@ class EditorTools {
             _.set(target, key, next[key]);
             return target;
           });
-
+          this.game.editorTools.type = resumeAction.type;
           this.onClickHandler(targets, resumeAction.type);
           this.updateEditGameItemHandler(targets, editors);
         } else {

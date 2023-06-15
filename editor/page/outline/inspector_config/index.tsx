@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 15:01:39
+ * @LastEditTime: 2023-06-15 16:23:33
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -104,7 +104,6 @@ const Inspector = () => {
     const gameItemName = gameItem.name;
     const editGameItem = store.getState().sceneReducer.editGameItem;
     editGameItem[gameItemName] = editGameItem[gameItemName] || {};
-    editGameItem[gameItemName][path] = setAdvancedVariables(newData[path]);
 
     // 提交的更新参数构造
     // 只记录更新前的第一个状态快照，在防抖记录变更后的状态再变更update判断
@@ -134,10 +133,10 @@ const Inspector = () => {
 
     debounce.handler(() => {
       ref.current.update = true;
-      const recordNext = { [path]: editGameItem[gameItemName][path] };
+      const recordNext = { [path]: newData[path] };
+      editGameItem[gameItemName][path] = setAdvancedVariables(newData[path]);
 
       console.log("old", ref.current.recordPrev);
-
       console.log("new", recordNext);
 
       game.editorTools.recordOperationStep([gameItem] || [], (record) => {
