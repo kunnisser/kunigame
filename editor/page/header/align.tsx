@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-15 17:38:05
+ * @LastEditTime: 2023-06-16 15:19:51
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
@@ -75,17 +75,15 @@ const AlignHeader = () => {
   ];
 
   const listenStack = useSelector((store: CombineReducer) => {
-    return store.sceneReducer.cancelActionStack;
+    return store.sceneReducer.cancelActionStack.length;
   });
 
   useEffect(() => {
-    if (listenStack) {
-      console.log(
-        store.getState().sceneReducer.game &&
-          store.getState().sceneReducer.game.editorTools.type
-      );
-    }
-  }, [listenStack.length]);
+    const type: string =
+      store.getState().sceneReducer.game &&
+      store.getState().sceneReducer.game.editorTools.type;
+    operationType !== type && setOperationType(type);
+  }, [listenStack]);
 
   const onChangeOperation = (key: string) => {
     const tool: EditorTools = store.getState().sceneReducer.game.editorTools;

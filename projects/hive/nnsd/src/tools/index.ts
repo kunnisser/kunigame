@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-15 17:42:08
+ * @LastEditTime: 2023-06-16 15:30:19
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -15,9 +15,7 @@ import Game from "ts@/kuni/lib/core";
 import {
   GET_GAME_ITEM,
   clearEditGameItem,
-  updateEditGameItem,
-  setCancelActionStack,
-  setResumeActionStack
+  updateEditGameItem
 } from "editor@/common/gameStore/scene/action";
 import { Point } from "pixi.js";
 import { isMulitPick } from "editor@/tool";
@@ -119,7 +117,6 @@ class EditorTools {
         }));
     };
     document.onkeydown = (e) => {
-      e.preventDefault();
       const { cancelActionStack, resumeActionStack } =
         this.game.redux.store.getState().sceneReducer;
 
@@ -127,18 +124,19 @@ class EditorTools {
         this.pickTool.isMulitple = true;
       }
       if (cancelActionStack && e.key === "z" && (e.ctrlKey || e.metaKey)) {
+        const prevType = cancelActionStack[cancelActionStack.length - 1];
+        prevType && (this.game.editorTools.type = prevType.type);
         const prevAction = cancelActionStack.pop();
         if (prevAction) {
           resumeActionStack.push(prevAction);
           const editors: any = [];
           const targets = prevAction?.target.map((target, index) => {
             const { prev } = prevAction?.stack[index];
-            editors.push(prev);
             const keys = Object.keys(prev);
             keys.map((key) => {
               return _.set(target, key, prev[key]);
             });
-            console.log(target);
+            editors.push(prev);
             return target;
           });
           this.onClickHandler(targets, prevAction.type);
@@ -149,32 +147,33 @@ class EditorTools {
           console.log("没操作了");
           this.game.redux.dispatch(clearEditGameItem());
         }
-        this.game.redux.dispatch(setCancelActionStack(cancelActionStack));
-        this.game.redux.dispatch(setResumeActionStack(resumeActionStack));
+        // this.game.redux.dispatch(setCancelActionStack(cancelActionStack));
+        // this.game.redux.dispatch(setResumeActionStack(resumeActionStack));
       } else if (
         resumeActionStack &&
         e.key === "y" &&
         (e.ctrlKey || e.metaKey)
       ) {
+        const resumeType = resumeActionStack[resumeActionStack.length - 1];
+        resumeType && (this.game.editorTools.type = resumeType.type);
         const resumeAction = resumeActionStack.pop();
         if (resumeAction) {
           cancelActionStack.push(resumeAction);
           const editors: any = [];
           const targets = resumeAction?.target.map((target, index) => {
             const { next } = resumeAction?.stack[index];
-            editors.push(next);
             const [key] = Object.keys(next);
             _.set(target, key, next[key]);
+            editors.push(next);
             return target;
           });
-          this.game.editorTools.type = resumeAction.type;
           this.onClickHandler(targets, resumeAction.type);
           this.updateEditGameItemHandler(targets, editors);
         } else {
           console.log("已经到当前一步操作");
         }
-        this.game.redux.dispatch(setCancelActionStack(cancelActionStack));
-        this.game.redux.dispatch(setResumeActionStack(resumeActionStack));
+        // this.game.redux.dispatch(setCancelActionStack(cancelActionStack));
+        // this.game.redux.dispatch(setResumeActionStack(resumeActionStack));
       }
     };
   }
@@ -199,7 +198,7 @@ class EditorTools {
     });
 
     console.log(cancelActionStack);
-    this.game.redux.dispatch(setCancelActionStack(cancelActionStack));
+    // this.game.redux.dispatch(setCancelActionStack(cancelActionStack));
 
     //更新辅助工具线框
     this.drawOperationComponent(offsetGameItems);
@@ -211,7 +210,11 @@ class EditorTools {
     let newEditGameItem: any =
       this.game.redux.store.getState().sceneReducer.editGameItem;
     targets.map((target, index) => {
-      newEditGameItem[target.name] = editors[index];
+      console.log("editors", editors);
+      newEditGameItem[target.name] = Object.assign(
+        newEditGameItem[target.name] || {},
+        editors[index]
+      );
     });
 
     this.game.redux.dispatch(updateEditGameItem(newEditGameItem));
