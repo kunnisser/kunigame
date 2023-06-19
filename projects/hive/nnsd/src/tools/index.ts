@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-16 15:30:19
+ * @LastEditTime: 2023-06-19 17:01:32
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -20,6 +20,7 @@ import {
 import { Point } from "pixi.js";
 import { isMulitPick } from "editor@/tool";
 import * as _ from "lodash";
+const DEFAULT_TYPE: string = "pick";
 class EditorTools {
   public game: Game;
   public toolGroup: KnGroup;
@@ -43,7 +44,7 @@ class EditorTools {
       // 设置画布可交互
       game.stage.interactive = true;
       game.stage.hitArea = game.app.screen;
-
+      this.type = DEFAULT_TYPE;
       this.editTargetElement = null;
       this.toolGroup = game.add.group("tool", game.world);
       this.dragTool = new DragPosition(game, this.toolGroup);
@@ -69,7 +70,7 @@ class EditorTools {
         "scale": {
           context: this.scaleTool,
           container: this.scaleTool.scaleGroup,
-          boot: null
+          boot: this.scaleTool.onBoot
         }
       };
 

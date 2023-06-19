@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-16 15:19:51
+ * @LastEditTime: 2023-06-19 15:56:44
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
@@ -33,8 +33,10 @@ import Game from "ts@/kuni/lib/core";
 import { CombineReducer } from "editor@/common/store";
 
 const Cursor = (props: any) => {
+  const store: any = useStore();
   const { Component, id, operationType, ...prop } = props;
-  const isActive = id === operationType;
+  const currentScene = store.getState().sceneReducer.currentScene;
+  const isActive = id === (operationType || "pick") && currentScene;
   return (
     <Button
       icon={
@@ -109,13 +111,13 @@ const AlignHeader = () => {
       alignCallback(item, game);
       record.next = { x: item.x, y: item.y };
       editGameItem[item.name] = Object.assign(
-        editGameItem[item.name],
+        editGameItem[item.name] || {},
         record.next
       );
       dispatch(updateEditGameItem(editGameItem));
-      dispatch(getGameItem([item]));
       return record;
     });
+    dispatch(getGameItem([...gameItems]));
   };
 
   // 水平居中
