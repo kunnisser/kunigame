@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-07 10:12:37
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-15 17:20:46
+ * @LastEditTime: 2023-06-20 15:06:45
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/ast/scene.ts
  * @Description: ----  ----
  */
@@ -29,14 +29,13 @@ class AST extends KnScene {
     const demoText: KnText = this.game.add.text("demoText", "WELCOME", {
       fontSize: 100
     }, [0.5, 0.5]);
+    demoText.scale.set(0.1979999999999999, 0.1979999999999999);
     demoText.style.fontSize = 500;
     demoText.style.fontSize = 258;
     demoText.style.fontSize = 267;
     demoText.alpha = 1;
-    demoText.scale.y = 0.3;
-    demoText.scale.x = 0.3;
     demoText.text = "WELCOME";
-    demoText.anchor.set(0.5, 0.5);
+    demoText.anchor.set(1, 1);
     demoText.visible = true;
     demoText.style.dropShadowDistance = 16;
     demoText.style.dropShadowBlur = 10;
