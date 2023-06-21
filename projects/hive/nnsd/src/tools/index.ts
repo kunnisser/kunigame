@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-19 17:01:32
+ * @LastEditTime: 2023-06-21 14:48:31
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -65,7 +65,7 @@ class EditorTools {
         "rotate": {
           context: this.rotateTool,
           container: this.rotateTool.rotateGroup,
-          boot: null
+          boot: this.rotateTool.onBoot
         },
         "scale": {
           context: this.scaleTool,
