@@ -145,22 +145,23 @@ class KnGraphics extends Graphics {
    * @description: 绘制三角形
    * @return {*}
    */
-  generateTriangle(fillColor, strokeColor, strokeWidth, target) {
+  generateTriangle(fillColor, strokeColor, strokeWidth, target, size?: number) {
+    const triangleSize = size || 4;
     this.beginFill(fillColor);
     this.setBorder({ width: strokeWidth, color: strokeColor, alpha: 1 });
     const triangleType: boolean = this.width > this.height;
     const SPACE_MAR: number = 2;
     if (triangleType) {
       const baseX = target.x + this.width - SPACE_MAR;
-      this.moveTo(baseX + 8, target.y);
-      this.lineTo(baseX, target.y - 4);
-      this.lineTo(baseX, target.y + 4);
+      this.moveTo(baseX + triangleSize * 2, target.y);
+      this.lineTo(baseX, target.y - triangleSize);
+      this.lineTo(baseX, target.y + triangleSize);
       this.closePath();
     } else {
       const baseY = target.y + this.height - SPACE_MAR;
-      this.moveTo(target.x, baseY + 8);
-      this.lineTo(target.x + 4, baseY);
-      this.lineTo(target.x - 4, baseY);
+      this.moveTo(target.x, baseY + triangleSize * 2);
+      this.lineTo(target.x + triangleSize, baseY);
+      this.lineTo(target.x - triangleSize, baseY);
       this.closePath();
     }
 
@@ -179,12 +180,17 @@ class KnGraphics extends Graphics {
   }
 
   // 绘制空心圆
-  generateLineCircle(color: number, points: Array<number>, alpha?: number) {
+  generateLineCircle(
+    color: number,
+    points: Array<number>,
+    border?: number,
+    alpha?: number
+  ) {
     this.beginFill(color, typeof alpha === 'number' ? alpha : 1);
     // 锚点居中
     this.drawCircle(...(points as [number, number, number]));
     this.beginHole();
-    this.drawCircle(points[0], points[1], points[2] - 10);
+    this.drawCircle(points[0], points[1], points[2] - (border || 10));
     this.endHole();
     this.endFill();
     return this;
