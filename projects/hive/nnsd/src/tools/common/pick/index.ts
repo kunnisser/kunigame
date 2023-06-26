@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-24 17:30:40
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-15 11:15:26
+ * @LastEditTime: 2023-06-26 13:49:45
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/pick/index.ts
  * @Description: ---- 选中模块 ----
  */
@@ -48,11 +48,14 @@ class PickTool {
     const StrokeWidth: number = 1;
     this.pickBorder.clear();
     items.map((item: any) => {
+      const { x, y } = item;
+      this.pickBorder.position.set(x, y);
+      this.pickBorder.angle = item.angle;
       this.pickBorder.generateRectLineStyle(
         [BorderWidth, StrokeWidth],
         0x65eee8,
         0x000000,
-        [item.x, item.y, item.width, item.height],
+        [0, 0, item.width, item.height],
         item.anchor
       );
     });

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-25 17:08:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-26 16:29:46
+ * @LastEditTime: 2023-06-26 13:02:09
  * @FilePath: /kunigame/editor/page/outline/inspector_config/config/text.ts
  * @Description: ---- inspector 元素类型的配置 ----
  */
@@ -109,8 +109,8 @@ const DatTextPropertyConfig: Array<DatProperties> = [
         path: ["angle"],
         label: "旋转角度",
         component: DatNumber,
-        min: 0,
-        max: 360,
+        min: -180,
+        max: 180,
         step: 1
       },
       {

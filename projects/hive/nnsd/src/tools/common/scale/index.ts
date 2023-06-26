@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-26 09:55:54
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-20 14:30:50
+ * @LastEditTime: 2023-06-26 16:07:09
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/scale/index.ts
  * @Description: ---- 缩放模块 ----
  */
@@ -56,15 +56,15 @@ class ScaleTool {
         [BorderWidth, StrokeWidth],
         0xf4d450,
         0x000000,
-        [item.x, item.y, item.width, item.height],
+        [0, 0, item.width, item.height],
         item.anchor
       );
       this.scaleButton.setBorder(borderStyle);
       this.scaleButton.generateRect(
         0xe98566,
         [
-          item.x + BorderWidth + item.width * (1 - item.anchor.x),
-          item.y + BorderWidth + item.height * (1 - item.anchor.y),
+          BorderWidth + item.width * (1 - item.anchor.x),
+          BorderWidth + item.height * (1 - item.anchor.y),
           ButtonSize,
           ButtonSize
         ],
@@ -74,8 +74,8 @@ class ScaleTool {
       this.scaleButtonX.generateRect(
         0xf4d450,
         [
-          item.x + BorderWidth + item.width * (1 - item.anchor.x),
-          item.y + BorderWidth + item.height * (0.5 - item.anchor.y),
+          BorderWidth + item.width * (1 - item.anchor.x),
+          BorderWidth + item.height * (0.5 - item.anchor.y),
           ButtonSize,
           ButtonSize
         ],
@@ -85,8 +85,8 @@ class ScaleTool {
       this.scaleButtonY.generateRect(
         0xf4d450,
         [
-          item.x + BorderWidth + item.width * (0.5 - item.anchor.x),
-          item.y + BorderWidth + item.height * (1 - item.anchor.y),
+          BorderWidth + item.width * (0.5 - item.anchor.x),
+          BorderWidth + item.height * (1 - item.anchor.y),
           ButtonSize,
           ButtonSize
         ],
@@ -97,7 +97,12 @@ class ScaleTool {
   }
 
   onBoot(cloneItems: any) {
+    const [cloneItem] = cloneItems;
     this.scaleGroup.visible = true;
+    this.scaleGroup.position.set(cloneItem.x, cloneItem.y);
+    this.scaleGroup.angle = cloneItem.angle;
+    this.scaleGroup.scale.x = cloneItem.scale.x >= 0 ? 1 : -1;
+    this.scaleGroup.scale.y = cloneItem.scale.y >= 0 ? 1 : -1;
     this.drawScaleBorder(cloneItems);
   }
 }

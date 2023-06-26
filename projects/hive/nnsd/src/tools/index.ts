@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-21 14:48:31
+ * @LastEditTime: 2023-06-26 16:02:46
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -302,7 +302,12 @@ class EditorTools {
         y: item.y + y,
         width: item.width,
         height: item.height,
-        anchor: null
+        anchor: null,
+        angle: item.angle,
+        scale: {
+          x: item.scale.x,
+          y: item.scale.y
+        }
       };
 
       // 适配容器container里没有anchor, 同时根据容器的bounds重新定义cloneItem的数据

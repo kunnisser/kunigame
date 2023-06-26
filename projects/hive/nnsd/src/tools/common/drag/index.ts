@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-29 15:12:16
+ * @LastEditTime: 2023-06-26 17:21:22
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
  * @Description: ---- 公共拖动 ----
  */
@@ -122,6 +122,7 @@ class DragPosition {
       [0, 0, item.width, item.height],
       item.anchor
     );
+    this.dragBorder.angle = item.angle;
     return BorderWidth + StrokeWidth * 2;
   }
 

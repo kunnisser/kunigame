@@ -35,6 +35,8 @@ class Start extends KnScene {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
+    demoText.angle = 8;
+    demoText.scale.set(0.5256201742799509, 0.6073624667437026);
     demoText.text = "充电桩";
     demoText.anchor.set(0.5, 0.5);
     demoText.y = 412;
@@ -59,6 +61,8 @@ class Start extends KnScene {
     testGroup.addChild(demo2Text);
     this.game.add.group("groupChild", group2);
     const logo2 = this.game.add.image("logo2", "Item_Cloud0000", group2);
+    logo2.scale.set(1.0300000000000002, 1.2524539231364777);
+    logo2.angle = 0;
     logo2.alpha = 1;
     logo2.visible = true;
     logo2.anchor.set(0.5, 0.5);

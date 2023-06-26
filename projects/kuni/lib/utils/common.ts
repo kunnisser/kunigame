@@ -69,7 +69,16 @@ const math: IMath = {
     } else {
       return Math.atan2(source.y - target.y, source.x - target.x);
     }
+  },
+  angleBetweenPoints(point1, point2) {
+    return Math.atan2(point2.y - point1.y, point2.x - point1.x);
   }
+};
+
+const distance = (point1, point2) => {
+  return Math.sqrt(
+    Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2)
+  );
 };
 
 /* 纹理精灵图 */
@@ -150,5 +159,6 @@ export {
   events,
   TransformImage,
   Throtte,
-  TransformAncientDate
+  TransformAncientDate,
+  distance
 };

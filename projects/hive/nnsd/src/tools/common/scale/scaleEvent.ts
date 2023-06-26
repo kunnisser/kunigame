@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-20 10:54:17
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-21 10:14:57
+ * @LastEditTime: 2023-06-26 16:07:46
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/scale/scaleEvent.ts
  * @Description: ---- 绑定缩放事件 ----
  */
@@ -33,14 +33,24 @@ const bindScaleEvent = (target, game, type) => {
     target.on("pointermove", (event: any) => {
       const [x, y] = game.coverMask.translateWheelScalePosition(event);
       storeFlag || ((originX = x), (originY = y), (storeFlag = true));
+
+      // 增加旋转后的缩放计算
       const ratioScaleX =
         type === SCALE_MODE_Y
           ? originScaleX
-          : originScaleX + (x - originX + (y - originY)) / 1000;
+          : originScaleX +
+            (Math.cos((currentGameItem.angle * Math.PI) / 180) * (x - originX) +
+              Math.sin((currentGameItem.angle * Math.PI) / 180) *
+                (y - originY)) /
+              100;
       const ratioScaleY =
         type === SCALE_MODE_X
           ? originScaleY
-          : originScaleY + (x - originX + (y - originY)) / 1000;
+          : originScaleY +
+            (Math.cos((currentGameItem.angle * Math.PI) / 180) * (y - originY) +
+              Math.sin(((currentGameItem.angle - 180) * Math.PI) / 180) *
+                (x - originX)) /
+              100;
       currentGameItem.scale.set(ratioScaleX, ratioScaleY);
       game.editorTools.scaleTool.onBoot([currentGameItem]);
     });
