@@ -81,6 +81,22 @@ const distance = (point1, point2) => {
   );
 };
 
+const computedAngleToPointer = (x, y, angle) => {
+  const rotate = (Math.PI * angle) / 180;
+  return [
+    x * Math.cos(rotate) - y * Math.sin(rotate),
+    x * Math.sin(rotate) + y * Math.cos(rotate)
+  ];
+};
+const rotatePointers = (paths, angle) => {
+  const [x1, y1, x2, y2, x3, y3, x4, y4] = paths;
+  const pointer1 = computedAngleToPointer(x1, y1, angle);
+  const pointer2 = computedAngleToPointer(x2, y2, angle);
+  const pointer3 = computedAngleToPointer(x3, y3, angle);
+  const pointer4 = computedAngleToPointer(x4, y4, angle);
+  return [...pointer1, ...pointer2, ...pointer3, ...pointer4];
+};
+
 /* 纹理精灵图 */
 
 const TransformImage = {
@@ -160,5 +176,6 @@ export {
   TransformImage,
   Throtte,
   TransformAncientDate,
-  distance
+  distance,
+  rotatePointers
 };

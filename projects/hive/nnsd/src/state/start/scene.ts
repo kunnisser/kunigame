@@ -35,19 +35,19 @@ class Start extends KnScene {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
-    demoText.angle = 8;
+    demoText.angle = 46.739919993534755;
     demoText.scale.set(0.5256201742799509, 0.6073624667437026);
     demoText.text = "充电桩";
     demoText.anchor.set(0.5, 0.5);
     demoText.y = 412;
-    demoText.x = 872.125;
+    demoText.x = 1045.6893050963129;
     const demo1Text: KnText = this.game.add.text("demo1Text", "test2", {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
     demo1Text.text = "配发";
     demo1Text.y = 412;
-    demo1Text.x = 1024.375;
+    demo1Text.x = 1345.3786101926257;
     const demo2Text: KnText = this.game.add.text("demo2Text", "test3", {
       fontSize: "24",
       fill: 0xffffff
@@ -55,7 +55,7 @@ class Start extends KnScene {
     demo2Text.text = "特斯拉";
     demo2Text.visible = true;
     demo2Text.y = 412;
-    demo2Text.x = 1176.625;
+    demo2Text.x = 1605.3786101926257;
     testGroup.addChild(demoText);
     testGroup.addChild(demo1Text);
     testGroup.addChild(demo2Text);

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-26 11:04:24
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-26 17:08:32
+ * @LastEditTime: 2023-06-27 10:52:13
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/rotate/rotateEvent.ts
  * @Description: ---- 旋转事件绑定 ----
  */
@@ -57,7 +57,6 @@ const initialRotate = (arrow: KnGraphics, game: Game) => {
         (math.angleBetweenPoints({ x: arrow.x, y: arrow.y }, { x, y }) /
           Math.PI) *
         180;
-      console.log(angle);
       arrow.angle = angle;
       currentGameItem.angle = angle;
       game.editorTools.rotateTool.onBoot([currentGameItem]);

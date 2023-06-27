@@ -1,5 +1,6 @@
-import { Graphics } from 'pixi.js';
-import Game from '../core';
+import { Graphics } from "pixi.js";
+import Game from "../core";
+import { rotatePointers } from "../utils/common";
 
 class KnGraphics extends Graphics {
   public game: Game;
@@ -8,7 +9,7 @@ class KnGraphics extends Graphics {
   constructor(game: Game, id?: string) {
     super();
     this.game = game;
-    this.id = id || '';
+    this.id = id || "";
   }
 
   setBorder(border: IBorder) {
@@ -28,7 +29,7 @@ class KnGraphics extends Graphics {
     anchor?: boolean,
     alpha?: number
   ) {
-    this.beginFill(color, typeof alpha === 'number' ? alpha : 1);
+    this.beginFill(color, typeof alpha === "number" ? alpha : 1);
 
     // 锚点居中
     anchor && ((points[0] -= points[2] * 0.5), (points[1] -= points[3] * 0.5));
@@ -62,7 +63,7 @@ class KnGraphics extends Graphics {
     this.setBorder({
       width: lineWidth,
       color: strokeColor,
-      alpha: 1,
+      alpha: 1
     } as IBorder);
 
     // 根据绘制的矩形图形宽高比来决定锚点修正
@@ -142,6 +143,80 @@ class KnGraphics extends Graphics {
   }
 
   /**
+   * @description: 绘制带stroke描边的多边形框
+   * @param x 目标下x坐标
+   * @param y 目标y坐标
+   * @param paths 基于锚点0坐标的四个边角顶点坐标
+   * @param borderWidth 边线宽度
+   * @param strokeWidth 描边宽度
+   * @param borderColor 边线颜色
+   * @param strokeColor 描边底色
+   * @param angle 旋转角度
+   * @return {KnGraphics} this
+   * */
+  generatePolygonLineStyle(
+    x,
+    y,
+    paths,
+    borderWidth,
+    strokeWidth,
+    borderColor,
+    strokeColor,
+    angle
+  ) {
+    const paddingPath = (padding: number) => {
+      let [
+        topLeftX,
+        topLeftY,
+        topRightX,
+        topRightY,
+        bottomRightX,
+        bottomRightY,
+        bottomLeftX,
+        bottomLeftY
+      ] = paths;
+      topLeftX -= padding;
+      topLeftY -= padding;
+      topRightX += padding;
+      topRightY -= padding;
+      bottomRightX += padding;
+      bottomRightY += padding;
+      bottomLeftX -= padding;
+      bottomLeftY += padding;
+      return [
+        topLeftX,
+        topLeftY,
+        topRightX,
+        topRightY,
+        bottomRightX,
+        bottomRightY,
+        bottomLeftX,
+        bottomLeftY
+      ];
+    };
+    // 处理边框的内边距
+    paths = paddingPath(borderWidth);
+    // 计算在0点坐标下的旋转边界4坐标变化
+    paths = rotatePointers(paths, angle);
+    // 叠加目标本身的坐标
+    paths = paths.map((path, index) => {
+      if (index % 2 > 0) {
+        path += y;
+      } else {
+        path += x;
+      }
+      return path;
+    });
+
+    // 绘制旋转后的多边形
+    this.lineStyle(borderWidth + strokeWidth * 2, strokeColor);
+    this.drawPolygon(paths);
+    this.lineStyle(borderWidth, borderColor);
+    this.drawPolygon(paths);
+    return this;
+  }
+
+  /**
    * @description: 绘制三角形
    * @return {*}
    */
@@ -171,7 +246,7 @@ class KnGraphics extends Graphics {
 
   // 绘制圆
   generateCircle(color: number, points: Array<number>, alpha?: number) {
-    this.beginFill(color, typeof alpha === 'number' ? alpha : 1);
+    this.beginFill(color, typeof alpha === "number" ? alpha : 1);
 
     // 锚点居中
     this.drawCircle(...(points as [number, number, number]));
@@ -186,7 +261,7 @@ class KnGraphics extends Graphics {
     border?: number,
     alpha?: number
   ) {
-    this.beginFill(color, typeof alpha === 'number' ? alpha : 1);
+    this.beginFill(color, typeof alpha === "number" ? alpha : 1);
     // 锚点居中
     this.drawCircle(...(points as [number, number, number]));
     this.beginHole();

@@ -29,7 +29,7 @@ class AST extends KnScene {
     const demoText: KnText = this.game.add.text("demoText", "WELCOME", {
       fontSize: 100
     }, [0.5, 0.5]);
-    demoText.angle = 28.99800637677518;
+    demoText.angle = -5;
     demoText.scale.y = 0.3;
     demoText.scale.set(0.30699999999999983, 0.35199999999999987);
     demoText.style.fontSize = 500;
@@ -37,7 +37,7 @@ class AST extends KnScene {
     demoText.style.fontSize = 267;
     demoText.alpha = 1;
     demoText.text = "WELCOME";
-    demoText.anchor.set(0, 0);
+    demoText.anchor.set(0.5, 0.5);
     demoText.visible = true;
     demoText.style.dropShadowDistance = 16;
     demoText.style.dropShadowBlur = 10;
