@@ -1,0 +1,83 @@
+{"frames": {
+
+  "BG_10000":
+  {
+    "frame": {"x":652,"y":1,"w":551,"h":671},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":551,"h":671},
+    "sourceSize": {"w":551,"h":671}
+  },
+  "BG_20000":
+  {
+    "frame": {"x":1205,"y":1,"w":551,"h":671},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":551,"h":671},
+    "sourceSize": {"w":551,"h":671}
+  },
+  "BG_30000":
+  {
+    "frame": {"x":1205,"y":674,"w":551,"h":671},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":551,"h":671},
+    "sourceSize": {"w":551,"h":671}
+  },
+  "BG_40000":
+  {
+    "frame": {"x":1,"y":1027,"w":551,"h":671},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":551,"h":671},
+    "sourceSize": {"w":551,"h":671}
+  },
+  "BG_50000":
+  {
+    "frame": {"x":652,"y":674,"w":551,"h":671},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":551,"h":671},
+    "sourceSize": {"w":551,"h":671}
+  },
+  "BG_60000":
+  {
+    "frame": {"x":554,"y":1347,"w":551,"h":671},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":551,"h":671},
+    "sourceSize": {"w":551,"h":671}
+  },
+  "BG_70000":
+  {
+    "frame": {"x":1519,"y":1347,"w":400,"h":487},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":400,"h":487},
+    "sourceSize": {"w":400,"h":487}
+  },
+  "_Items0000":
+  {
+    "frame": {"x":1,"y":1,"w":649,"h":1024},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":649,"h":1024},
+    "sourceSize": {"w":649,"h":1024}
+  },
+  "_Vignette0000":
+  {
+    "frame": {"x":1107,"y":1347,"w":410,"h":480},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":410,"h":480},
+    "sourceSize": {"w":410,"h":480}
+  }},
+  "meta": {
+    "app": "Adobe Flash Professional",
+    "version": "15.0.1.179",
+    "image": "background.png",
+    "format": "RGBA8888",
+    "size": {"w":2048,"h":2048},
+    "scale": "1"
+  }
+  }

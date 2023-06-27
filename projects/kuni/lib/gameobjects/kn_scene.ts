@@ -38,6 +38,7 @@ class KnScene extends Container {
   // 进入场景
   enter(nextTarget?: KnScene, isFirstLoad?: Boolean) {
     this.game.world.addChild(this);
+    this.position.set(this.game.editX, this.game.editY);
     isFirstLoad && this.game.overlay.entryScene();
     this.game.currentScene = this;
     if (this.game.overlay) {

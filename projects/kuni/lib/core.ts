@@ -10,9 +10,12 @@ import CoverMask from "./dev/editor_mask/cover";
 import * as PIXI from "pixi.js";
 import EditorTools from "ts@/hive/nnsd/src/tools";
 import KnGroup from "./gameobjects/kn_group";
+import KnGraphics from "./gameobjects/kn_graphics";
 
 interface EnterProps {
   width: number;
+  editorWidth?: number;
+  editorHeight?: number;
   height?: number;
   ratio?: number;
   antialias?: boolean;
@@ -47,6 +50,7 @@ export default class Game {
   };
   public stage: PIXI.Container;
   public world: PIXI.Container;
+  public editBounds: KnGraphics;
   public coverMask: CoverMask;
   public sceneManager: KnSceneManager;
   public app: Application;
@@ -55,6 +59,8 @@ export default class Game {
   public currentScene: KnScene; // 当前场景
   public overlay: KnTranstion; // 转场遮罩
   public cursor: KnCursor; // 游戏光标
+  public editX: number; // 编辑区的坐标
+  public editY: number; // 编辑区的坐标
   public size: {
     width: number;
     height: number;
@@ -71,6 +77,11 @@ export default class Game {
     config.ratio
       ? (this.ratio = config.ratio)
       : (this.ratio = config.width / (config.height || 1000));
+    this.editX = (config.width - (config.editorWidth || config.width)) * 0.5;
+    this.editY =
+      (config.width / this.ratio -
+        (config.editorHeight || config.width / this.ratio)) *
+      0.5;
 
     // 设置游戏画布基本尺寸
     this.config = {
@@ -100,9 +111,21 @@ export default class Game {
 
     // 初始化画布
     this.stage = this.app.stage;
+    this.editBounds = new KnGraphics(this, "edit_bounds");
 
     // 定义游戏容器
     this.world = new KnGroup(this, "world", this.stage);
+    this.world.addChild(this.editBounds);
+    console.log(this.editX, this.editY);
+    config.editorWidth &&
+      config.editorHeight &&
+      this.editBounds.generateRectLineStyle(
+        [6, 2],
+        0xffffff,
+        0x000000,
+        [this.editX, this.editY, config.editorWidth, config.editorHeight],
+        { x: 0, y: 0 }
+      );
 
     // 载入相关math方法
     this.math = math;

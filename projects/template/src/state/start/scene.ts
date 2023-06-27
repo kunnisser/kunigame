@@ -65,9 +65,9 @@ class Start extends KnScene {
     logo2.angle = 0;
     logo2.alpha = 1;
     logo2.visible = true;
-    logo2.anchor.set(0, 0);
-    logo2.y = 239;
-    logo2.x = 279;
+    logo2.anchor.set(0.5, 0.5);
+    logo2.y = 412;
+    logo2.x = 594;
     logo2.scale.x = 1;
     logo2.tintColor = "#ffffff";
     this.addChild(testGroup);

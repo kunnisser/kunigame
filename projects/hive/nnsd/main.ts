@@ -1,13 +1,15 @@
-import Game from 'ts@/kuni/lib/core';
-import StateHive from './src/state/hive';
-import Config from './schema/game.json';
+import Game from "ts@/kuni/lib/core";
+import StateHive from "./src/state/hive";
+import Config from "./schema/game.json";
 const GameInitial = (view) => {
   const game = new Game({
-    width: Config.width,
-    ratio: Config.ratio,
+    width: view.clientWidth * window.devicePixelRatio * 2, // Config.width,
+    ratio: view.clientWidth / view.clientHeight, // Config.ratio,
     antialias: Config.antialias,
     transparent: Config.transparent,
     view,
+    editorWidth: Config.width,
+    editorHeight: Config.width / Config.ratio
   });
   // 定义全局Mask
   const GameHive = StateHive(game);

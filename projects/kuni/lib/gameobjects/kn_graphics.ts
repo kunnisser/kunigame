@@ -225,7 +225,7 @@ class KnGraphics extends Graphics {
     this.beginFill(fillColor);
     this.setBorder({ width: strokeWidth, color: strokeColor, alpha: 1 });
     const triangleType: boolean = this.width > this.height;
-    const SPACE_MAR: number = 2;
+    const SPACE_MAR: number = strokeWidth * 2;
     if (triangleType) {
       const baseX = target.x + this.width - SPACE_MAR;
       this.moveTo(baseX + triangleSize * 2, target.y);
