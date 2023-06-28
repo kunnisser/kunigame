@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-27 14:10:46
+ * @LastEditTime: 2023-06-27 16:57:28
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -47,6 +47,7 @@ class EditorTools {
       this.type = DEFAULT_TYPE;
       this.editTargetElement = null;
       this.toolGroup = game.add.group("tool", game.world);
+      this.toolGroup.position.set(game.editX, game.editY);
       this.dragTool = new DragPosition(game, this.toolGroup);
       this.pickTool = new PickTool(game, this.toolGroup);
       this.rotateTool = new RotateTool(game, this.toolGroup);

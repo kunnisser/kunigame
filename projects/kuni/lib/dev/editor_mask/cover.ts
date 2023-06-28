@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-27 17:00:36
+ * @LastEditTime: 2023-06-28 14:26:03
  * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
@@ -138,9 +138,11 @@ class CoverMask extends KnGroup {
    */
   translateWheelScalePosition(event) {
     this.curTip_X =
-      event.data.global.x / (CoverMask.COVER_SCALE * this.scaleRatio);
+      event.data.global.x / (CoverMask.COVER_SCALE * this.scaleRatio) -
+      this.game.editX;
     this.curTip_Y =
-      event.data.global.y / (CoverMask.COVER_SCALE * this.scaleRatio);
+      event.data.global.y / (CoverMask.COVER_SCALE * this.scaleRatio) -
+      this.game.editY;
 
     this.cursorX = ~~(this.move_X + this.curTip_X);
     this.cursorY = ~~(this.move_Y + this.curTip_Y);

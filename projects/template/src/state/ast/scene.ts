@@ -29,14 +29,15 @@ class AST extends KnScene {
     const demoText: KnText = this.game.add.text("demoText", "WELCOME", {
       fontSize: 100
     }, [0.5, 0.5]);
-    demoText.angle = -5;
+    demoText.style.fill = "#ff6161";
+    demoText.angle = 39.68877351551748;
     demoText.scale.y = 0.3;
-    demoText.scale.set(0.30699999999999983, 0.35199999999999987);
+    demoText.scale.set(0.6137024262748128, 0.6830838195772531);
     demoText.style.fontSize = 500;
     demoText.style.fontSize = 258;
     demoText.style.fontSize = 267;
     demoText.alpha = 1;
-    demoText.text = "WELCOME";
+    demoText.text = "CAMS-CHARING";
     demoText.anchor.set(0.5, 0.5);
     demoText.visible = true;
     demoText.style.dropShadowDistance = 16;
@@ -47,8 +48,8 @@ class AST extends KnScene {
     demoText.style.fill = "#ffffff";
     demoText.style.strokeThickness = 20;
     demoText.style.stroke = "#2a5860";
-    demoText.x = 656;
-    demoText.y = 317;
+    demoText.x = 877;
+    demoText.y = 406;
     const testGroup = this.game.add.group("group1", this);
     testGroup.addChild(demoText);
     const group2 = this.game.add.group("group2", this);

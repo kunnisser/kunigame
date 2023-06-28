@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-25 17:30:35
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-26 13:27:36
+ * @LastEditTime: 2023-06-27 14:59:42
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/rotate/index.ts
  * @Description: ---- 旋转模块 ----
  */
@@ -65,12 +65,12 @@ class RotateTool {
     this.rotateOriginPointer.generateCircle(0x000000, [
       currentGameItem.x,
       currentGameItem.y,
-      radius * 0.02 * 1.2
+      radius * 0.03 * 1.5
     ]);
     this.rotateOriginPointer.generateCircle(0x806787, [
       currentGameItem.x,
       currentGameItem.y,
-      radius * 0.02
+      radius * 0.03
     ]);
   }
 
@@ -79,29 +79,30 @@ class RotateTool {
     const radius = width > height ? width : height;
     const border = borderSize * 0.01;
     this.originArrow.clear();
-    this.originArrow.generateStrokeLine(2, 0x806787, 0x000000, [
+    this.originArrow.generateStrokeLine(border, 0x806787, 0x000000, [
       x,
       y,
       radius * 0.5 + 16,
-      border * 1.5
+      border * 2
     ]);
   }
 
   drawArrow(item, borderSize) {
-    let { x, y }: { x: number; y: number } = { x: item.x, y: item.y };
-    const radius = borderSize * 0.01;
+    let { x, y, width, height }: any = item;
+    const radius = width > height ? width : height;
+    const border = borderSize * 0.01;
     this.anchorArrow.clear();
     this.anchorArrow.position.set(x, y);
-    this.anchorArrow.generateStrokeLine(2, 0xd10311, 0x000000, [
+    this.anchorArrow.generateStrokeLine(border, 0xd10311, 0x000000, [
       0,
       0,
-      radius * 50,
-      radius * 1.5
+      radius * 0.5 + 16,
+      border * 2
     ]);
     this.anchorArrow.generateTriangle(
       0xd10311,
       0x000000,
-      2,
+      border,
       { x: 0, y: 0 },
       borderSize * 0.04
     );
