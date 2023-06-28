@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-28 14:26:03
+ * @LastEditTime: 2023-06-28 15:31:50
  * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
@@ -217,16 +217,19 @@ class CoverMask extends KnGroup {
       this.scale.set(CoverMask.COVER_SCALE * this.scaleRatio);
       this.game.world.scale.set(CoverMask.COVER_SCALE * this.scaleRatio);
 
+      const editCursorX = this.cursorX + this.game.editX;
+      const editCursorY = this.cursorY + this.game.editY;
+
       // 改变缩放锚点
-      this.pivot.set(this.cursorX, this.cursorY);
+      this.pivot.set(editCursorX, editCursorY);
       this.position.set(
-        this.cursorX * CoverMask.COVER_SCALE,
-        this.cursorY * CoverMask.COVER_SCALE
+        editCursorX * CoverMask.COVER_SCALE,
+        editCursorY * CoverMask.COVER_SCALE
       );
-      this.game.world.pivot.set(this.cursorX, this.cursorY);
+      this.game.world.pivot.set(editCursorX, editCursorY);
       this.game.world.position.set(
-        this.cursorX * CoverMask.COVER_SCALE,
-        this.cursorY * CoverMask.COVER_SCALE
+        editCursorX * CoverMask.COVER_SCALE,
+        editCursorY * CoverMask.COVER_SCALE
       );
 
       // 计算缩放产生的相对位置偏离

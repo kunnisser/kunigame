@@ -30,7 +30,7 @@ class AST extends KnScene {
       fontSize: 100
     }, [0.5, 0.5]);
     demoText.style.fill = "#ff6161";
-    demoText.angle = 39.68877351551748;
+    demoText.angle = 0;
     demoText.scale.y = 0.3;
     demoText.scale.set(0.6137024262748128, 0.6830838195772531);
     demoText.style.fontSize = 500;
@@ -48,8 +48,8 @@ class AST extends KnScene {
     demoText.style.fill = "#ffffff";
     demoText.style.strokeThickness = 20;
     demoText.style.stroke = "#2a5860";
-    demoText.x = 877;
-    demoText.y = 406;
+    demoText.x = 960;
+    demoText.y = 480;
     const testGroup = this.game.add.group("group1", this);
     testGroup.addChild(demoText);
     const group2 = this.game.add.group("group2", this);

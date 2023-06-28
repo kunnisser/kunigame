@@ -39,23 +39,23 @@ class Start extends KnScene {
     demoText.scale.set(0.5256201742799509, 0.6073624667437026);
     demoText.text = "充电桩";
     demoText.anchor.set(0.5, 0.5);
-    demoText.y = 412;
-    demoText.x = 1045.6893050963129;
+    demoText.y = 239;
+    demoText.x = 1006.6893050963129;
     const demo1Text: KnText = this.game.add.text("demo1Text", "test2", {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
     demo1Text.text = "配发";
-    demo1Text.y = 412;
-    demo1Text.x = 1345.3786101926257;
+    demo1Text.y = 239;
+    demo1Text.x = 1406.3786101926257;
     const demo2Text: KnText = this.game.add.text("demo2Text", "test3", {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
     demo2Text.text = "特斯拉";
     demo2Text.visible = true;
-    demo2Text.y = 412;
-    demo2Text.x = 1605.3786101926257;
+    demo2Text.y = 239;
+    demo2Text.x = 1766.3786101926257;
     testGroup.addChild(demoText);
     testGroup.addChild(demo1Text);
     testGroup.addChild(demo2Text);

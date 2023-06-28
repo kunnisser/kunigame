@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-19 15:56:44
+ * @LastEditTime: 2023-06-28 15:52:33
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
@@ -123,7 +123,7 @@ const AlignHeader = () => {
   // 水平居中
   const onHorizontalAlignCenter = () => {
     commonAlignHandler((item, game: Game) => {
-      item.x = game.config.half_w;
+      item.x = game.config.halfEditorWidth;
     });
   };
 
@@ -137,7 +137,7 @@ const AlignHeader = () => {
   // 向右对齐
   const onRightAlign = () => {
     commonAlignHandler((item, game: Game) => {
-      item.x = game.config.width;
+      item.x = game.config.editorWidth;
     });
   };
 
@@ -151,22 +151,22 @@ const AlignHeader = () => {
   // 向下对齐
   const onBottomAlign = () => {
     commonAlignHandler((item, game: Game) => {
-      item.y = game.config.height;
+      item.y = game.config.editorHeight;
     });
   };
 
   // 垂直居中
   const onVerticleAlignCenter = () => {
     commonAlignHandler((item, game: Game) => {
-      item.y = game.config.half_h;
+      item.y = game.config.halfEditorHeight;
     });
   };
 
   // 画布居中
   const onAlignCenter = () => {
     commonAlignHandler((item, game: Game) => {
-      item.x = game.config.half_w;
-      item.y = game.config.half_h;
+      item.x = game.config.halfEditorWidth;
+      item.y = game.config.halfEditorHeight;
     });
   };
 

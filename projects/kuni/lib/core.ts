@@ -47,6 +47,10 @@ export default class Game {
     height: number;
     half_w: number;
     half_h: number;
+    editorWidth: number;
+    editorHeight: number;
+    halfEditorWidth: number;
+    halfEditorHeight: number;
   };
   public stage: PIXI.Container;
   public world: PIXI.Container;
@@ -88,7 +92,11 @@ export default class Game {
       width: config.width,
       height: config.width / this.ratio,
       half_w: config.width * 0.5,
-      half_h: (config.width / this.ratio) * 0.5
+      half_h: (config.width / this.ratio) * 0.5,
+      editorWidth: config.editorWidth || config.width,
+      editorHeight: config.editorHeight || config.width / this.ratio,
+      halfEditorWidth: (config.editorWidth || config.width) * 0.5,
+      halfEditorHeight: (config.editorHeight || config.width / this.ratio) * 0.5
     };
 
     this.app = new Application({

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:04
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-26 17:21:22
+ * @LastEditTime: 2023-06-28 15:09:00
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/drag/index.ts
  * @Description: ---- 公共拖动 ----
  */
@@ -75,8 +75,8 @@ class DragPosition {
     x += (item.anchor.x - 0.5) * borderSize;
     y += (item.anchor.y - 0.5) * borderSize;
     this.anchorArrowX.clear();
-    this.anchorArrowX.generateStrokeLine(1, 0xd10311, 0x000000, [x, y, 80, 2]);
-    this.anchorArrowX.generateTriangle(0xd10311, 0x000000, 1, { x, y });
+    this.anchorArrowX.generateStrokeLine(1, 0xd10311, 0x000000, [x, y, 180, 4]);
+    this.anchorArrowX.generateTriangle(0xd10311, 0x000000, 4, { x, y }, 16);
   }
 
   drawArrowY(item, borderSize) {
@@ -84,8 +84,8 @@ class DragPosition {
     x += (item.anchor.x - 0.5) * borderSize;
     y += (item.anchor.y - 0.5) * borderSize;
     this.anchorArrowY.clear();
-    this.anchorArrowY.generateStrokeLine(1, 0xabf2bc, 0x000000, [x, y, 2, 80]);
-    this.anchorArrowY.generateTriangle(0xabf2bc, 0x000000, 1, { x, y });
+    this.anchorArrowY.generateStrokeLine(1, 0xabf2bc, 0x000000, [x, y, 4, 180]);
+    this.anchorArrowY.generateTriangle(0xabf2bc, 0x000000, 4, { x, y }, 16);
   }
   drawEditorAnchor(item, borderSize) {
     this.drawArrowX(item, borderSize);
@@ -96,7 +96,7 @@ class DragPosition {
       [
         (item.anchor.x - 0.5) * borderSize,
         (item.anchor.y - 0.5) * borderSize,
-        5
+        16
       ],
       1
     );
@@ -105,7 +105,7 @@ class DragPosition {
       [
         (item.anchor.x - 0.5) * borderSize,
         (item.anchor.y - 0.5) * borderSize,
-        4
+        12
       ],
       1
     );
