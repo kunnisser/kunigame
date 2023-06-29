@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 16:45:30
+ * @LastEditTime: 2023-06-29 15:00:18
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -25,7 +25,8 @@ import {
   BuildOutlined,
   SettingOutlined,
   BulbOutlined,
-  DesktopOutlined
+  DesktopOutlined,
+  RocketOutlined
 } from "@ant-design/icons";
 import "editor@/assets/index.styl";
 import {
@@ -37,6 +38,7 @@ import { updateScene } from "editor@/api/request/scene";
 import { EditGameName } from "editor@/page/workbench/canvas";
 import { isObjectEmpty } from "editor@/tool";
 import AlignHeader from "./header/align";
+import TweenEditor from "./workbench/tween";
 
 export const WrapContext = createContext({});
 
@@ -84,6 +86,11 @@ const WireBoard = (props) => {
       childComponent: StageEditor,
       icon: <DesktopOutlined />,
       suffixIcon: isNewGameEdit ? "*" : ""
+    },
+    {
+      name: sceneId + "Tween",
+      childComponent: TweenEditor,
+      icon: <RocketOutlined />
     }
   ];
 
