@@ -19,7 +19,8 @@ class AST extends KnScene {
       logo: "/projects/hive/nnsd/assets/images/logo.png",
       bg002: "/projects/hive/nnsd/assets/images/bg002.jpg",
       attack: "/projects/hive/nnsd/assets/images/attack.png",
-      desyrel: "/projects/hive/nnsd/assets/fonts/desyrel.xml"
+      desyrel: "/projects/hive/nnsd/assets/fonts/desyrel.xml",
+      avator_01: "/projects/hive/nnsd/assets/images/avator_01.png"
     };
   }
 
@@ -30,7 +31,7 @@ class AST extends KnScene {
       fontSize: 100
     }, [0.5, 0.5]);
     demoText.style.fill = "#ff6161";
-    demoText.angle = 0;
+    demoText.angle = 19.756000997464586;
     demoText.scale.y = 0.3;
     demoText.scale.set(0.6137024262748128, 0.6830838195772531);
     demoText.style.fontSize = 500;

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-28 15:31:50
+ * @LastEditTime: 2023-06-29 13:51:52
  * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
@@ -70,6 +70,8 @@ class CoverMask extends KnGroup {
 
     const texts_x: Array<Text> = [];
     const texts_y: Array<Text> = [];
+    const editX: number = ~~this.game.editX;
+    const editY: number = ~~this.game.editY;
 
     // 绘制横向线
     for (let y = size, l = height; y < l; y += size) {
@@ -77,7 +79,7 @@ class CoverMask extends KnGroup {
       lines.lineTo(width, y);
       const scaleText = this.game.add.text(
         "",
-        `${y - this.game.editY}`,
+        `${y - editY}`,
         {
           fontSize: 14,
           fontWeight: "bold",
@@ -96,7 +98,7 @@ class CoverMask extends KnGroup {
       this.addChild(lines);
       const scaleText = this.game.add.text(
         "",
-        `${x - this.game.editX}`,
+        `${x - editX}`,
         {
           fontSize: 14,
           fontWeight: "bold",
