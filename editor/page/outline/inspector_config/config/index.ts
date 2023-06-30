@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-27 00:17:14
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-01 14:48:18
+ * @LastEditTime: 2023-06-30 16:51:45
  * @FilePath: /kunigame/editor/page/outline/inspector_config/config/index.ts
  * @Description: ---- 配置集合 ----
  */

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-07 10:12:37
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-20 15:06:45
+ * @LastEditTime: 2023-06-30 14:58:39
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/ast/scene.ts
  * @Description: ----  ----
  */
@@ -30,13 +30,15 @@ class AST extends KnScene {
     const demoText: KnText = this.game.add.text("demoText", "WELCOME", {
       fontSize: 100
     }, [0.5, 0.5]);
+    demoText.style.fontSize = 166;
+    demoText.style.fill = "#c08484";
+    demoText.style.fill = "#ce9797";
+    demoText.style.fontSize = 215;
+    demoText.style.fontSize = 105;
     demoText.style.fill = "#ff6161";
-    demoText.angle = 19.756000997464586;
+    demoText.angle = 0;
     demoText.scale.y = 0.3;
     demoText.scale.set(0.6137024262748128, 0.6830838195772531);
-    demoText.style.fontSize = 500;
-    demoText.style.fontSize = 258;
-    demoText.style.fontSize = 267;
     demoText.alpha = 1;
     demoText.text = "CAMS-CHARING";
     demoText.anchor.set(0.5, 0.5);
@@ -46,10 +48,9 @@ class AST extends KnScene {
     demoText.style.dropShadowAngle = 0.6;
     demoText.style.dropShadow = true;
     demoText.style.dropShadowColor = "#57d8d8";
-    demoText.style.fill = "#ffffff";
     demoText.style.strokeThickness = 20;
     demoText.style.stroke = "#2a5860";
-    demoText.x = 960;
+    demoText.x = 728;
     demoText.y = 480;
     const testGroup = this.game.add.group("group1", this);
     testGroup.addChild(demoText);

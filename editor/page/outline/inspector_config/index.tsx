@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-15 16:23:33
+ * @LastEditTime: 2023-06-30 16:49:39
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -17,8 +17,9 @@ import { CombineReducer } from "editor@/common/store";
 import Admixture from "./dat/admixture";
 import { debounce } from "ts@/kuni/lib/utils/common";
 import * as _ from "lodash";
+import TweenDatGui from "./tween";
 
-const Inspector = () => {
+const Inspector = (props: any) => {
   const [gameItem, setGameItem] = useState(null as any);
   const [gameItemType, setGameItemType] = useState(null as any);
   const ref = useRef({
@@ -179,19 +180,26 @@ const Inspector = () => {
     });
   };
 
-  return listenGameItem ? (
-    gameItemType === "Admixture" ? (
-      <Admixture items={listenGameItem} />
-    ) : gameItem && listenGameItem[0].name === gameItem.name ? (
-      <DatGui data={gameItem} onUpdate={handleUpdate}>
-        {generateConfigCard()}
-      </DatGui>
-    ) : (
-      <></>
-    )
-  ) : (
-    <>空</>
-  );
+  const renderer = () => {
+    return {
+      "scene": listenGameItem ? (
+        gameItemType === "Admixture" ? (
+          <Admixture items={listenGameItem} />
+        ) : gameItem && listenGameItem[0].name === gameItem.name ? (
+          <DatGui data={gameItem} onUpdate={handleUpdate}>
+            {generateConfigCard()}
+          </DatGui>
+        ) : (
+          <></>
+        )
+      ) : (
+        <>空</>
+      ),
+      "tween": <TweenDatGui></TweenDatGui>
+    };
+  };
+
+  return renderer()[props.type];
 };
 
 export default Inspector;

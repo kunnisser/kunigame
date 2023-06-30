@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-29 15:00:18
+ * @LastEditTime: 2023-06-30 16:33:35
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -53,6 +53,12 @@ const WireBoard = (props) => {
   const dispatch = useDispatch();
   const [sceneId, setCurrentSceneId] = useState("");
   const [isNewGameEdit, setIsNewGameEdit] = useState(false);
+  const [editorType, setEditorType] = useState("scene");
+
+  const inspectorMap = {
+    "scene": "场景元素",
+    "tween": "缓动动画"
+  };
 
   const CommonWidget = {
     openModal,
@@ -62,16 +68,18 @@ const WireBoard = (props) => {
   };
   const sceneTabs = [
     {
+      key: "leftScene",
       name: "场景元素",
-      childComponent: ContainerTree,
+      childComponent: <ContainerTree />,
       icon: <BuildOutlined />
     }
   ];
 
   const inspectorTabs = [
     {
-      name: "元素配置",
-      childComponent: Inspector,
+      key: "inspector",
+      name: inspectorMap[editorType],
+      childComponent: <Inspector type={editorType} />,
       icon: <SettingOutlined />
     }
   ];
@@ -82,30 +90,34 @@ const WireBoard = (props) => {
 
   const editorTabs = [
     {
+      key: "scene",
       name: sceneId,
-      childComponent: StageEditor,
+      childComponent: <StageEditor />,
       icon: <DesktopOutlined />,
       suffixIcon: isNewGameEdit ? "*" : ""
     },
     {
+      key: "tween",
       name: sceneId + "Tween",
-      childComponent: TweenEditor,
+      childComponent: <TweenEditor />,
       icon: <RocketOutlined />
     }
   ];
 
   const formTabs = [
     {
+      key: "sceneResource",
       name: "场景",
-      childComponent: OutlineTree,
+      childComponent: <OutlineTree />,
       icon: <AppstoreOutlined></AppstoreOutlined>
     }
   ];
 
   const footerTabs = [
     {
+      key: "assets",
       name: "素材列表",
-      childComponent: AssetsList,
+      childComponent: <AssetsList />,
       icon: <BulbOutlined />
     }
   ];
@@ -175,22 +187,28 @@ const WireBoard = (props) => {
               }}
             >
               <Sider>
-                <KnTabs initialKey="tab_form" tabs={formTabs} />
+                <KnTabs initialKey="sceneResource" tabs={formTabs} />
               </Sider>
               <Sider>
-                <KnTabs initialKey="tab_scene" tabs={sceneTabs} />
+                <KnTabs initialKey="leftScene" tabs={sceneTabs} />
               </Sider>
             </aside>
             <Layout>
               <Content style={{ margin: "0 6px" }}>
-                <KnTabs initialKey="tab_editor" tabs={editorTabs} />
+                <KnTabs
+                  initialKey="scene"
+                  tabs={editorTabs}
+                  onChange={(key) => {
+                    setEditorType(key);
+                  }}
+                />
               </Content>
               <Footer className="kn-footer" style={{ marginTop: "6px" }}>
-                <KnTabs initialKey="tab_footer" tabs={footerTabs} />
+                <KnTabs initialKey="assets" tabs={footerTabs} />
               </Footer>
             </Layout>
             <Sider width={300}>
-              <KnTabs initialKey="tab_scene" tabs={inspectorTabs} />
+              <KnTabs initialKey="inspector" tabs={inspectorTabs} />
             </Sider>
           </Layout>
           {modal}

@@ -2,9 +2,12 @@ import Game from "ts@/kuni/lib/core";
 import StateHive from "./src/state/hive";
 import Config from "./schema/game.json";
 const GameInitial = (view) => {
+  const dpr = window.devicePixelRatio;
+  console.log(view.clientWidth * dpr * 2);
   const game = new Game({
-    width: view.clientWidth * window.devicePixelRatio * 2, // Config.width,
+    width: view.clientWidth * dpr * 2, // Config.width,
     ratio: view.clientWidth / view.clientHeight, // Config.ratio,
+    dpr: dpr,
     antialias: Config.antialias,
     transparent: Config.transparent,
     view,

@@ -52,10 +52,12 @@ class Welcome extends KnScene {
     logo.scale.y = 1;
     logo.y = 366;
     logo.x = 489;
-    logo.anchor.set(0.5, 0.5);
+    logo.anchor.set(0, 0);
     const demoText: KnText = this.game.add.text("demoText", "WELCOME", {
       fontSize: 300
     }, [0.5, 0.5]);
+    demoText.angle = 55.036902453963506;
+    demoText.style.fontSize = 96;
     demoText.text = "WELCOME123";
     demoText.style.fontSize = 211;
     demoText.anchor.set(0.5, 0.5);
