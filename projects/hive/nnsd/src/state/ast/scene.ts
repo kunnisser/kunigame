@@ -36,7 +36,7 @@ class AST extends KnScene {
     demoText.style.fontSize = 215;
     demoText.style.fontSize = 105;
     demoText.style.fill = "#ff6161";
-    demoText.angle = 0;
+    demoText.angle = 73;
     demoText.scale.y = 0.3;
     demoText.scale.set(0.6137024262748128, 0.6830838195772531);
     demoText.alpha = 1;

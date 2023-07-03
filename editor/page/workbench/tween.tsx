@@ -2,19 +2,20 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-30 17:34:29
+ * @LastEditTime: 2023-07-03 14:05:57
  * @FilePath: /kunigame/editor/page/workbench/tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
 import { CombineReducer } from "editor@/common/store";
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Game from "ts@/kuni/lib/core";
 import * as _ from "lodash";
+import { setTweenGameItem } from "editor@/common/gameStore/scene/action";
 let previewGame: any = null;
 let tweenCotainer: any = null;
 const TweenEditor = () => {
-  // const store = useStore();
+  const dispatch = useDispatch();
   const currentScene = useSelector(
     (store: CombineReducer) => store.sceneReducer.currentScene
   );
@@ -52,23 +53,17 @@ const TweenEditor = () => {
     }
   }, []);
 
-  const generateTween = (target) => {
-    const tween = previewGame.add.tween();
-    tween.instance.to(target, 1, {
-      angle: 96,
-      ease: tween.linear.easeNone,
-      repeat: -1,
-      yoyo: true
-    });
+  const generateTween = (targets) => {
+    dispatch(setTweenGameItem(targets));
   };
 
   useEffect(() => {
     if (currentScene && tweenCotainer) {
-      if (currentGameItem && currentGameItem.length === 1) {
-        const cloneGameItem: any = _.cloneDeep(currentGameItem[0]);
+      if (currentGameItem) {
+        const cloneGameItems: any = _.cloneDeep(currentGameItem);
         tweenCotainer.removeChildren();
-        tweenCotainer.addChild(cloneGameItem);
-        generateTween(cloneGameItem);
+        tweenCotainer.addChild(...cloneGameItems);
+        generateTween(cloneGameItems);
       } else {
         tweenCotainer.removeChildren();
       }

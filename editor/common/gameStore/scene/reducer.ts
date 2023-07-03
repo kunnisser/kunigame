@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-22 09:21:27
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 14:51:55
+ * @LastEditTime: 2023-07-03 14:02:53
  * @FilePath: /kunigame/editor/common/gameStore/scene/reducer.ts
  * @Description: ---- 操作scene状态 ----
  */
@@ -17,7 +17,8 @@ import {
   SET_OPERATION_TYPE,
   UPDATE_EDIT_GAME_ITEM,
   SET_RESUME_ACTION_STACK,
-  SET_CANCEL_ACTION_STACK
+  SET_CANCEL_ACTION_STACK,
+  SET_TWEEN_GAME_ITEM
 } from "./action";
 import Game from "ts@/kuni/lib/core";
 
@@ -26,6 +27,7 @@ export interface SceneState {
   currentScene: KnScene | null;
   game: Game | null;
   gameItem: any; // 当前编辑对象
+  tweenGameItems: any; // 当前缓动游戏对象
   editGameItem: any; // 编辑游戏对象信息
   dragTarget: any; // 拖拽对象
   operationType: string; // 操作类型
@@ -38,6 +40,7 @@ const initialState: SceneState = {
   currentScene: null,
   game: null,
   gameItem: null,
+  tweenGameItems: null,
   editGameItem: {},
   dragTarget: null,
   operationType: "pick",
@@ -67,6 +70,7 @@ const _getGame = (state: SceneState, action) => {
 };
 
 const _getGameItem = (state: SceneState, action) => {
+  console.log(action.payload);
   return {
     ...state,
     gameItem: action.payload
@@ -115,6 +119,13 @@ const _setResumeActionStack = (state: SceneState, action) => {
   };
 };
 
+const _setTweenGameItem = (state: SceneState, action) => {
+  return {
+    ...state,
+    tweenGameItems: action.payload
+  };
+};
+
 const SceneMap = {};
 SceneMap[GET_SCENE_LIST] = _getSceneList;
 SceneMap[SET_CURRENT_SCENE] = _setCurrentScene;
@@ -126,6 +137,7 @@ SceneMap[SET_DRAG_TARGET] = _setDragTarget;
 SceneMap[SET_OPERATION_TYPE] = _setOperationType;
 SceneMap[SET_CANCEL_ACTION_STACK] = _setCancelActionStack;
 SceneMap[SET_RESUME_ACTION_STACK] = _setResumeActionStack;
+SceneMap[SET_TWEEN_GAME_ITEM] = _setTweenGameItem;
 
 const sceneReducer = (state = initialState, action) => {
   if (SceneMap[action.type]) {

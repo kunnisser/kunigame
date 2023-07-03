@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-19 17:29:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 14:48:54
+ * @LastEditTime: 2023-07-03 14:01:23
  * @FilePath: /kunigame/editor/common/gameStore/scene/action.ts
  * @Description: ---- 场景状态action ----
  */
@@ -20,7 +20,7 @@ const SET_DRAG_TARGET = Symbol();
 const SET_OPERATION_TYPE = Symbol();
 const SET_CANCEL_ACTION_STACK = Symbol();
 const SET_RESUME_ACTION_STACK = Symbol();
-
+const SET_TWEEN_GAME_ITEM = Symbol();
 // 储存场景列表
 const getSceneList = (list: Array<KnScene>) => {
   return {
@@ -102,6 +102,14 @@ const setResumeActionStack = (stack) => {
   };
 };
 
+// 设置tween对象
+const setTweenGameItem = (targets) => {
+  return {
+    type: SET_TWEEN_GAME_ITEM,
+    payload: targets
+  };
+};
+
 export {
   GET_SCENE_LIST,
   getSceneList,
@@ -122,5 +130,7 @@ export {
   setCancelActionStack,
   setResumeActionStack,
   SET_CANCEL_ACTION_STACK,
-  SET_RESUME_ACTION_STACK
+  SET_RESUME_ACTION_STACK,
+  setTweenGameItem,
+  SET_TWEEN_GAME_ITEM
 };
