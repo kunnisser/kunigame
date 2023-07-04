@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-27 00:17:14
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-30 16:51:45
+ * @LastEditTime: 2023-07-04 15:37:01
  * @FilePath: /kunigame/editor/page/outline/inspector_config/config/index.ts
  * @Description: ---- 配置集合 ----
  */
@@ -22,6 +22,7 @@ export interface DatProperties {
   step?: number;
   options?: Array<string | number>;
   optionLabels?: Array<any>;
+  onClick?: any;
 }
 
 const InspectorConfig = {

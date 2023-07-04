@@ -2,13 +2,19 @@
  * @Author: kunnisser
  * @Date: 2023-06-30 16:45:01
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-03 17:26:14
+ * @LastEditTime: 2023-07-04 15:57:50
  * @FilePath: /kunigame/editor/page/outline/inspector_config/tween/config.ts
  * @Description: ---- tween 配置信息 ----
  */
-import { DatNumber, DatFolder, DatBoolean, DatSelect } from "react-dat-gui";
+import {
+  DatNumber,
+  DatFolder,
+  DatBoolean,
+  DatSelect,
+  DatButton
+} from "react-dat-gui";
 import { DatProperties } from "../config";
-const DatTweenPropertyConfig: Array<DatProperties> = [
+const DatTweenPropertyConfig = (ref): Array<DatProperties> => [
   {
     label: "tween配置",
     component: DatFolder,
@@ -18,12 +24,17 @@ const DatTweenPropertyConfig: Array<DatProperties> = [
         label: "耗时",
         component: DatNumber,
         min: 0,
-        max: 5,
+        max: 3,
         step: 0.1
       },
       {
         path: ["yoyo"],
         label: "来回模式",
+        component: DatBoolean
+      },
+      {
+        path: ["scaleloop"],
+        label: "缩放循环播放",
         component: DatBoolean
       },
       {
@@ -49,6 +60,14 @@ const DatTweenPropertyConfig: Array<DatProperties> = [
         min: 0,
         max: 1000,
         step: 1
+      },
+      {
+        path: ["delay"],
+        label: "延时",
+        component: DatNumber,
+        min: 0,
+        max: 10,
+        step: 0.1
       },
       {
         path: ["x"],
@@ -97,6 +116,21 @@ const DatTweenPropertyConfig: Array<DatProperties> = [
             min: -1,
             max: 2,
             step: 0.1
+          }
+        ]
+      },
+      {
+        label: "操作",
+        component: DatFolder,
+        children: [
+          {
+            label: "播放",
+            component: DatButton,
+            onClick: () => {
+              console.log(ref);
+              ref.current.defaultTween.restart(true);
+              ref.current.scaleTween.restart(true);
+            }
           }
         ]
       }

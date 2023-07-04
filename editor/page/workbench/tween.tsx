@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-03 14:05:57
+ * @LastEditTime: 2023-07-04 17:29:44
  * @FilePath: /kunigame/editor/page/workbench/tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
@@ -14,7 +14,7 @@ import * as _ from "lodash";
 import { setTweenGameItem } from "editor@/common/gameStore/scene/action";
 let previewGame: any = null;
 let tweenCotainer: any = null;
-const TweenEditor = () => {
+const TweenEditor = (props: any) => {
   const dispatch = useDispatch();
   const currentScene = useSelector(
     (store: CombineReducer) => store.sceneReducer.currentScene
@@ -23,11 +23,9 @@ const TweenEditor = () => {
     (store: CombineReducer) => store.sceneReducer.gameItem
   );
 
-  const cancelActionStack = useSelector(
-    (store: CombineReducer) => store.sceneReducer.cancelActionStack
-  );
-
   const game = useSelector((store: CombineReducer) => store.sceneReducer.game);
+
+  const { type } = props;
 
   useEffect(() => {
     const previewTweenDom: any = document.getElementById("previewTween");
@@ -68,7 +66,7 @@ const TweenEditor = () => {
         tweenCotainer.removeChildren();
       }
     }
-  }, [currentScene, currentGameItem, cancelActionStack]);
+  }, [currentScene, currentGameItem, type]);
   return (
     <>
       <div id="previewTween"></div>

@@ -4,13 +4,13 @@ import { Graphics, Container } from "pixi.js";
 // 防抖函数
 const debounce: any = {
   tick: null,
-  handler: (next: Function) => {
+  handler: (next: Function, delay?: number) => {
     if (debounce.tick) {
       clearTimeout(debounce.tick);
     }
     debounce.tick = setTimeout(() => {
       next();
-    }, 200);
+    }, delay || 200);
   }
 };
 

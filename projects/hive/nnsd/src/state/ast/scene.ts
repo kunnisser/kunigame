@@ -36,11 +36,11 @@ class AST extends KnScene {
     demoText.style.fontSize = 215;
     demoText.style.fontSize = 105;
     demoText.style.fill = "#ff6161";
-    demoText.angle = 73;
+    demoText.angle = 0;
     demoText.scale.y = 0.3;
     demoText.scale.set(0.6137024262748128, 0.6830838195772531);
     demoText.alpha = 1;
-    demoText.text = "CAMS-CHARING";
+    demoText.text = "CAMS-CHARING1";
     demoText.anchor.set(0.5, 0.5);
     demoText.visible = true;
     demoText.style.dropShadowDistance = 16;
