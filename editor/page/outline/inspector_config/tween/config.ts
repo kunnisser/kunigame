@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-30 16:45:01
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-04 15:57:50
+ * @LastEditTime: 2023-07-05 17:38:21
  * @FilePath: /kunigame/editor/page/outline/inspector_config/tween/config.ts
  * @Description: ---- tween 配置信息 ----
  */
@@ -127,10 +127,17 @@ const DatTweenPropertyConfig = (ref): Array<DatProperties> => [
             label: "播放",
             component: DatButton,
             onClick: () => {
-              console.log(ref);
               ref.current.defaultTween.restart(true);
               ref.current.scaleTween.restart(true);
             }
+          },
+          {
+            label: "进度",
+            path: ["progress"],
+            component: DatNumber,
+            min: 0,
+            max: 1,
+            step: 0.01
           }
         ]
       }
