@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-30 16:44:49
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-06 15:46:35
+ * @LastEditTime: 2023-07-06 16:40:06
  * @FilePath: /kunigame/editor/page/outline/inspector_config/tween/index.tsx
  * @Description: ---- 缓动配置 ----
  */
@@ -58,9 +58,12 @@ const TweenDatGui = () => {
   );
 
   useEffect(() => {
+    ref.current.tween = game.add.tween();
+  }, []);
+
+  useEffect(() => {
     console.log("tween's obj changed");
     if (targets) {
-      ref.current.tween = game.add.tween();
       [originTarget] = _.cloneDeep(targets);
     }
   }, [targets]);

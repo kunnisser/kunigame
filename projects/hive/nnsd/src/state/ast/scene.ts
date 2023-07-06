@@ -40,7 +40,7 @@ class AST extends KnScene {
     demoText.scale.y = 0.3;
     demoText.scale.set(0.6137024262748128, 0.6830838195772531);
     demoText.alpha = 1;
-    demoText.text = "CAMSCHARING";
+    demoText.text = "CAMSCHARING123";
     demoText.anchor.set(0.5, 0.5);
     demoText.visible = true;
     demoText.style.dropShadowDistance = 16;

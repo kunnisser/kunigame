@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-04 17:29:44
+ * @LastEditTime: 2023-07-06 17:08:07
  * @FilePath: /kunigame/editor/page/workbench/tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
@@ -58,10 +58,11 @@ const TweenEditor = (props: any) => {
   useEffect(() => {
     if (currentScene && tweenCotainer) {
       if (currentGameItem) {
-        const cloneGameItems: any = _.cloneDeep(currentGameItem);
+        const [cloneGameItem]: any = _.cloneDeep(currentGameItem);
+        cloneGameItem.interactive = false;
         tweenCotainer.removeChildren();
-        tweenCotainer.addChild(...cloneGameItems);
-        generateTween(cloneGameItems);
+        tweenCotainer.addChild(cloneGameItem);
+        generateTween([cloneGameItem]);
       } else {
         tweenCotainer.removeChildren();
       }
