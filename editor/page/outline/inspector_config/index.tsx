@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-30 16:49:39
+ * @LastEditTime: 2023-07-07 16:01:28
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -18,6 +18,7 @@ import Admixture from "./dat/admixture";
 import { debounce } from "ts@/kuni/lib/utils/common";
 import * as _ from "lodash";
 import TweenDatGui from "./tween";
+import ParticleDatGui from "./particle";
 
 const Inspector = (props: any) => {
   const [gameItem, setGameItem] = useState(null as any);
@@ -195,7 +196,8 @@ const Inspector = (props: any) => {
       ) : (
         <>空</>
       ),
-      "tween": <TweenDatGui></TweenDatGui>
+      "tween": <TweenDatGui></TweenDatGui>,
+      "particle": <ParticleDatGui></ParticleDatGui>
     };
   };
 

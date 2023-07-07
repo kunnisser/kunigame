@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-22 09:21:27
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-03 14:02:53
+ * @LastEditTime: 2023-07-07 17:31:16
  * @FilePath: /kunigame/editor/common/gameStore/scene/reducer.ts
  * @Description: ---- 操作scene状态 ----
  */
@@ -18,7 +18,9 @@ import {
   UPDATE_EDIT_GAME_ITEM,
   SET_RESUME_ACTION_STACK,
   SET_CANCEL_ACTION_STACK,
-  SET_TWEEN_GAME_ITEM
+  SET_TWEEN_GAME_ITEM,
+  SET_PARTICLE_GAME_ITEM,
+  SET_DEFAULT_TWEEN
 } from "./action";
 import Game from "ts@/kuni/lib/core";
 
@@ -27,7 +29,9 @@ export interface SceneState {
   currentScene: KnScene | null;
   game: Game | null;
   gameItem: any; // 当前编辑对象
-  tweenGameItems: any; // 当前缓动游戏对象
+  defaultTween; // tween实例
+  tweenGameItems: any; // 当前绑定缓动动画的配置
+  particleGameItem: any; // 当前绑定粒子动画的对象
   editGameItem: any; // 编辑游戏对象信息
   dragTarget: any; // 拖拽对象
   operationType: string; // 操作类型
@@ -41,6 +45,8 @@ const initialState: SceneState = {
   game: null,
   gameItem: null,
   tweenGameItems: null,
+  defaultTween: null,
+  particleGameItem: null,
   editGameItem: {},
   dragTarget: null,
   operationType: "pick",
@@ -119,10 +125,24 @@ const _setResumeActionStack = (state: SceneState, action) => {
   };
 };
 
+const _setDefaultTween = (state: SceneState, action) => {
+  return {
+    ...state,
+    defaultTween: action.payload
+  };
+};
+
 const _setTweenGameItem = (state: SceneState, action) => {
   return {
     ...state,
     tweenGameItems: action.payload
+  };
+};
+
+const _setParticleGameItem = (state: SceneState, action) => {
+  return {
+    ...state,
+    particleGameItem: action.payload
   };
 };
 
@@ -137,7 +157,9 @@ SceneMap[SET_DRAG_TARGET] = _setDragTarget;
 SceneMap[SET_OPERATION_TYPE] = _setOperationType;
 SceneMap[SET_CANCEL_ACTION_STACK] = _setCancelActionStack;
 SceneMap[SET_RESUME_ACTION_STACK] = _setResumeActionStack;
+SceneMap[SET_DEFAULT_TWEEN] = _setDefaultTween;
 SceneMap[SET_TWEEN_GAME_ITEM] = _setTweenGameItem;
+SceneMap[SET_PARTICLE_GAME_ITEM] = _setParticleGameItem;
 
 const sceneReducer = (state = initialState, action) => {
   if (SceneMap[action.type]) {

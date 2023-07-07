@@ -2,156 +2,122 @@
  * @Author: kunnisser
  * @Date: 2023-06-30 16:44:49
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-06 16:40:06
+ * @LastEditTime: 2023-07-07 17:33:03
  * @FilePath: /kunigame/editor/page/outline/inspector_config/tween/index.tsx
  * @Description: ---- 缓动配置 ----
  */
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import DatGui from "react-dat-gui";
 import { DatProperties } from "../config";
 import { DatTweenPropertyConfig, DatScaleTweenPropertyConfig } from "./config";
-import { debounce } from "ts@/kuni/lib/utils/common";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
-import Game from "ts@/kuni/lib/core";
 import * as _ from "lodash";
-import { Divider } from "antd";
+import { setTweenGameItem } from "editor@/common/gameStore/scene/action";
 
-let originTarget: any = null;
+// let originTarget: any = null;
 const TweenDatGui = () => {
-  const ref = useRef({
-    tween: null,
-    defaultTween: null,
-    scaleTween: null
-  } as any);
-  const [tweenItem, setTweenItem] = useState({
-    x: 0,
-    y: 0,
-    alpha: 1,
-    angle: 0,
-    loop: false,
-    repeat: 0,
-    delay: 0,
-    duration: 1,
-    yoyo: false,
-    ease: "linear",
-    inout: "easeNone",
-    progress: 0
-  });
+  const dispatch = useDispatch();
 
-  const [scaleTweenItem, setScaleTweenItem] = useState({
-    scale: { x: 1, y: 1 },
-    scaleloop: false,
-    repeat: 0,
-    delay: 0,
-    duration: 1,
-    yoyo: false,
-    ease: "linear",
-    inout: "easeNone",
-    progress: 0
-  });
-  const game: Game = useSelector(
-    (store: CombineReducer) => store.sceneReducer.game
+  // const [scaleTweenItem, setScaleTweenItem] = useState({
+  //   scale: { x: 1, y: 1 },
+  //   scaleloop: false,
+  //   repeat: 0,
+  //   delay: 0,
+  //   duration: 1,
+  //   yoyo: false,
+  //   ease: "linear",
+  //   inout: "easeNone",
+  //   progress: 0
+  // });
+  const defaultTween = useSelector(
+    (store: CombineReducer) => store.sceneReducer.defaultTween
   );
-  const targets = useSelector(
+  const vars = useSelector(
     (store: CombineReducer) => store.sceneReducer.tweenGameItems
   );
 
-  useEffect(() => {
-    ref.current.tween = game.add.tween();
-  }, []);
+  // useEffect(() => {
+  //   console.log("tween's obj changed");
+  //   if (targets) {
+  //     console.log(ref.current.defaultTween);
+  //     [originTarget] = _.cloneDeep(targets);
+  //   }
+  // }, [targets]);
 
-  useEffect(() => {
-    console.log("tween's obj changed");
-    if (targets) {
-      [originTarget] = _.cloneDeep(targets);
-    }
-  }, [targets]);
+  const handleUpdate = (tweenVars: any) => {
+    console.log(vars);
+    // const tween = ref.current.tween;
+    // ref.current.defaultTween && ref.current.defaultTween.pause().kill();
 
-  const handleUpdate = (tweenInfo: any) => {
-    const tween = ref.current.tween;
-    ref.current.defaultTween && ref.current.defaultTween.pause().kill();
+    // debounce.handler(() => {}, 500);
 
-    debounce.handler(() => {
-      const {
-        duration,
-        x,
-        y,
-        loop,
-        yoyo,
-        alpha,
-        repeat,
-        angle,
-        ease,
-        inout,
-        delay
-      } = tweenInfo;
+    // // 初始对象属性
+    // const originVars = {
+    //   x: originTarget.x,
+    //   y: originTarget.y,
+    //   alpha: originTarget.alpha,
+    //   angle: originTarget.angle
+    // };
 
-      // 初始对象属性
-      const originVars = {
-        x: originTarget.x,
-        y: originTarget.y,
-        alpha: originTarget.alpha,
-        angle: originTarget.angle
-      };
-
-      ref.current.defaultTween = tween.instance.to(targets, duration, {
-        startAt: originVars,
-        x: "+=" + x,
-        y: "+=" + y,
-        angle: "+=" + angle,
-        alpha: alpha || originTarget.alpha,
-        paused: true,
-        delay,
-        yoyo,
-        repeat,
-        ease: tween[ease][inout],
-        onComplete: () => {
-          loop &&
-            ref.current.defaultTween &&
-            ref.current.defaultTween.seek(0).restart(true);
-        }
-      });
-    }, 500);
-    ref.current.defaultTween &&
-      ref.current.defaultTween.progress(tweenInfo.progress);
-    setTweenItem(tweenInfo);
+    //   ref.current.defaultTween = tween.instance.to(targets, duration, {
+    //     startAt: originVars,
+    //     x: "+=" + x,
+    //     y: "+=" + y,
+    //     angle: "+=" + angle,
+    //     alpha: alpha || originTarget.alpha,
+    //     paused: true,
+    //     delay,
+    //     yoyo,
+    //     repeat,
+    //     ease: tween[ease][inout],
+    //     onComplete: () => {
+    //       loop &&
+    //         ref.current.defaultTween &&
+    //         ref.current.defaultTween.seek(0).restart(true);
+    //     }
+    //   });
+    // ref.current.defaultTween &&
+    //   ref.current.defaultTween.progress(tweenInfo.progress);
+    console.log(tweenVars);
+    dispatch(setTweenGameItem(tweenVars));
+    // setTweenItem(tweenInfo);
   };
 
-  const handleScaleUpdate = (tweenInfo: any) => {
-    const tween = ref.current.tween;
-    ref.current.scaleTween && ref.current.scaleTween.pause().kill();
+  // const handleScaleUpdate = (tweenInfo: any) => {
+  //   const tween = ref.current.tween;
+  //   ref.current.scaleTween && ref.current.scaleTween.pause().kill();
 
-    debounce.handler(() => {
-      const { duration, scale, scaleloop, yoyo, repeat, ease, inout, delay } =
-        tweenInfo;
+  //   debounce.handler(() => {
+  //     const { duration, scale, scaleloop, yoyo, repeat, ease, inout, delay } =
+  //       tweenInfo;
 
-      // 初始对象缩放
-      const originScaleVars = {
-        x: originTarget.scale.x,
-        y: originTarget.scale.y
-      };
+  //     // 初始对象缩放
+  //     const originScaleVars = {
+  //       x: originTarget.scale.x,
+  //       y: originTarget.scale.y
+  //     };
 
-      ref.current.scaleTween = tween.instance.to(targets[0].scale, duration, {
-        startAt: originScaleVars,
-        x: originScaleVars.x * scale.x,
-        y: originScaleVars.y * scale.y,
-        paused: true,
-        delay,
-        yoyo,
-        repeat,
-        ease: tween[ease][inout],
-        onComplete: () => {
-          scaleloop &&
-            ref.current.scaleTween &&
-            ref.current.scaleTween.seek(0).restart(true);
-        }
-      });
-    }, 500);
-    ref.current.scaleTween &&
-      ref.current.scaleTween.progress(tweenInfo.progress);
-    setScaleTweenItem(tweenInfo);
-  };
+  //     ref.current.scaleTween = tween.instance.to(targets[0].scale, duration, {
+  //       startAt: originScaleVars,
+  //       x: originScaleVars.x * scale.x,
+  //       y: originScaleVars.y * scale.y,
+  //       paused: true,
+  //       delay,
+  //       yoyo,
+  //       repeat,
+  //       ease: tween[ease][inout],
+  //       onComplete: () => {
+  //         scaleloop &&
+  //           ref.current.scaleTween &&
+  //           ref.current.scaleTween.seek(0).restart(true);
+  //       }
+  //     });
+  //   }, 500);
+  //   ref.current.scaleTween &&
+  //     ref.current.scaleTween.progress(tweenInfo.progress);
+  //   setScaleTweenItem(tweenInfo);
+  // };
 
   const generateConfigCard = (configs: any, key: string) => {
     const itemConfigs: Array<DatProperties> = configs;
@@ -182,15 +148,20 @@ const TweenDatGui = () => {
       }
     });
   };
-  return (
-    <>
-      <DatGui data={tweenItem} onUpdate={handleUpdate}>
-        {generateConfigCard(DatTweenPropertyConfig(ref), "default-tween")}
+  return vars ? (
+    <div>
+      <DatGui data={vars} onUpdate={handleUpdate}>
+        {generateConfigCard(
+          DatTweenPropertyConfig(defaultTween),
+          "default-tween"
+        )}
       </DatGui>
-      <DatGui data={scaleTweenItem} onUpdate={handleScaleUpdate}>
+      {/* <DatGui data={scaleTweenItem} onUpdate={handleScaleUpdate}>
         {generateConfigCard(DatScaleTweenPropertyConfig(ref), "scale-tween")}
-      </DatGui>
-    </>
+      </DatGui> */}
+    </div>
+  ) : (
+    <>先选择缓动对象</>
   );
 };
 

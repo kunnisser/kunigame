@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-30 16:45:01
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-06 15:54:59
+ * @LastEditTime: 2023-07-07 17:24:18
  * @FilePath: /kunigame/editor/page/outline/inspector_config/tween/config.ts
  * @Description: ---- tween 配置信息 ----
  */
@@ -14,7 +14,7 @@ import {
   DatButton
 } from "react-dat-gui";
 import { DatProperties } from "../config";
-export const DatTweenPropertyConfig = (ref): Array<DatProperties> => [
+export const DatTweenPropertyConfig = (tween): Array<DatProperties> => [
   {
     label: "缓动动画",
     component: DatFolder,
@@ -113,22 +113,21 @@ export const DatTweenPropertyConfig = (ref): Array<DatProperties> => [
             label: "播放",
             component: DatButton,
             onClick: () => {
-              ref.current.defaultTween &&
-                ref.current.defaultTween.restart(true);
+              tween && tween.restart(true);
             }
           },
           {
             label: "反向播放",
             component: DatButton,
             onClick: () => {
-              ref.current.defaultTween && ref.current.defaultTween.reverse(0);
+              tween && tween.reverse(0);
             }
           },
           {
             label: "重置",
             component: DatButton,
             onClick: () => {
-              ref.current.defaultTween && ref.current.defaultTween.pause(0);
+              tween && tween.pause(0);
             }
           }
         ]

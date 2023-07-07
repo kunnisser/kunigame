@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-04 17:29:20
+ * @LastEditTime: 2023-07-07 13:51:57
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -39,6 +39,7 @@ import { EditGameName } from "editor@/page/workbench/canvas";
 import { isObjectEmpty } from "editor@/tool";
 import AlignHeader from "./header/align";
 import TweenEditor from "./workbench/tween";
+import ParticleEditor from "./workbench/particle";
 
 export const WrapContext = createContext({});
 
@@ -57,7 +58,8 @@ const WireBoard = (props) => {
 
   const inspectorMap = {
     "scene": "场景元素",
-    "tween": "缓动动画"
+    "tween": "缓动动画",
+    "particle": "粒子特效"
   };
 
   const CommonWidget = {
@@ -100,6 +102,12 @@ const WireBoard = (props) => {
       key: "tween",
       name: sceneId + "Tween",
       childComponent: <TweenEditor type={editorType} />,
+      icon: <RocketOutlined />
+    },
+    {
+      key: "particle",
+      name: sceneId + "Particle",
+      childComponent: <ParticleEditor type={editorType} />,
       icon: <RocketOutlined />
     }
   ];
