@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-06-30 16:44:49
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-07 17:33:03
- * @FilePath: /kunigame/editor/page/outline/inspector_config/tween/index.tsx
+ * @LastEditTime: 2023-07-08 01:17:23
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\tween\index.tsx
  * @Description: ---- 缓动配置 ----
  */
 import React from "react";
@@ -46,7 +46,6 @@ const TweenDatGui = () => {
   // }, [targets]);
 
   const handleUpdate = (tweenVars: any) => {
-    console.log(vars);
     // const tween = ref.current.tween;
     // ref.current.defaultTween && ref.current.defaultTween.pause().kill();
 
@@ -79,7 +78,6 @@ const TweenDatGui = () => {
     //   });
     // ref.current.defaultTween &&
     //   ref.current.defaultTween.progress(tweenInfo.progress);
-    console.log(tweenVars);
     dispatch(setTweenGameItem(tweenVars));
     // setTweenItem(tweenInfo);
   };

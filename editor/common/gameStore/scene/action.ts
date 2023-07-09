@@ -2,13 +2,13 @@
  * @Author: kunnisser
  * @Date: 2021-02-19 17:29:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-07 17:32:20
- * @FilePath: /kunigame/editor/common/gameStore/scene/action.ts
+ * @LastEditTime: 2023-07-08 00:37:59
+ * @FilePath: \kunigame\editor\common\gameStore\scene\action.ts
  * @Description: ---- 场景状态action ----
  */
 
-import Game from "ts@/kuni/lib/core";
-import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
+import Game from 'ts@/kuni/lib/core';
+import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
 
 const GET_SCENE_LIST = Symbol();
 const SET_CURRENT_SCENE = Symbol();
@@ -27,7 +27,7 @@ const SET_PARTICLE_GAME_ITEM = Symbol();
 const getSceneList = (list: Array<KnScene>) => {
   return {
     type: GET_SCENE_LIST,
-    payload: list
+    payload: list,
   };
 };
 
@@ -35,7 +35,7 @@ const getSceneList = (list: Array<KnScene>) => {
 const setCurrentScene = (scene: KnScene | null) => {
   return {
     type: SET_CURRENT_SCENE,
-    payload: scene
+    payload: scene,
   };
 };
 
@@ -43,7 +43,7 @@ const setCurrentScene = (scene: KnScene | null) => {
 const getGame = (game: Game | null) => {
   return {
     type: GET_GAME,
-    payload: game
+    payload: game,
   };
 };
 
@@ -52,7 +52,7 @@ const getGame = (game: Game | null) => {
 const getGameItem = (item: Array<any> | null) => {
   return {
     type: GET_GAME_ITEM,
-    payload: item
+    payload: item,
   };
 };
 
@@ -61,7 +61,7 @@ const updateEditGameItem = (gameItem: any) => {
   console.log(gameItem);
   return {
     type: UPDATE_EDIT_GAME_ITEM,
-    payload: gameItem
+    payload: gameItem,
   };
 };
 
@@ -69,7 +69,7 @@ const updateEditGameItem = (gameItem: any) => {
 const clearEditGameItem = () => {
   return {
     type: CLEAR_EDIT_GAME_ITEM,
-    payload: {}
+    payload: {},
   };
 };
 
@@ -77,7 +77,7 @@ const clearEditGameItem = () => {
 const setCurrentOperationType = (type: string) => {
   return {
     type: SET_OPERATION_TYPE,
-    payload: type
+    payload: type,
   };
 };
 
@@ -85,7 +85,7 @@ const setCurrentOperationType = (type: string) => {
 const setDragTarget = (target: any) => {
   return {
     type: SET_DRAG_TARGET,
-    payload: target
+    payload: target,
   };
 };
 
@@ -93,23 +93,22 @@ const setDragTarget = (target: any) => {
 const setCancelActionStack = (stack) => {
   return {
     type: SET_CANCEL_ACTION_STACK,
-    payload: stack
+    payload: stack,
   };
 };
 
 const setResumeActionStack = (stack) => {
   return {
     type: SET_RESUME_ACTION_STACK,
-    payload: stack
+    payload: stack,
   };
 };
 
 // 设置tween配置
 const setTweenGameItem = (targets) => {
-  console.log(targets);
   return {
     type: SET_TWEEN_GAME_ITEM,
-    payload: targets
+    payload: targets,
   };
 };
 
@@ -117,7 +116,7 @@ const setTweenGameItem = (targets) => {
 const setDefaultTween = (tween) => {
   return {
     type: SET_DEFAULT_TWEEN,
-    payload: tween
+    payload: tween,
   };
 };
 
@@ -125,7 +124,7 @@ const setDefaultTween = (tween) => {
 const setParticleGameItem = (target) => {
   return {
     type: SET_PARTICLE_GAME_ITEM,
-    payload: target
+    payload: target,
   };
 };
 
@@ -155,5 +154,5 @@ export {
   setParticleGameItem,
   SET_PARTICLE_GAME_ITEM,
   SET_DEFAULT_TWEEN,
-  setDefaultTween
+  setDefaultTween,
 };

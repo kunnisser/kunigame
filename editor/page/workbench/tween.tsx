@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-07 17:16:25
- * @FilePath: /kunigame/editor/page/workbench/tween.tsx
+ * @LastEditTime: 2023-07-10 00:09:30
+ * @FilePath: \kunigame\editor\page\workbench\tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
 import { CombineReducer } from "editor@/common/store";
@@ -17,13 +17,14 @@ import {
 } from "editor@/common/gameStore/scene/action";
 import { debounce } from "ts@/kuni/lib/utils/common";
 let previewGame: any = null;
-let tweenCotainer: any = null;
+let tweenContainer: any = null;
 let tweenItem: any = null;
 const TweenEditor = (props: any) => {
   const ref = useRef({
     tween: null,
     defaultTween: null,
-    scaleTween: null
+    scaleTween: null,
+    progress: 0
   } as any);
   const dispatch = useDispatch();
   const currentScene = useSelector(
@@ -72,20 +73,19 @@ const TweenEditor = (props: any) => {
         editorHeight: game.config.editorHeight
       });
       previewTweenDom.appendChild(previewGame.app.view);
-      tweenCotainer = previewGame.add.group("tweenGroup", previewGame.world);
-      tweenCotainer.position.set(previewGame.editX, previewGame.editY);
+      tweenContainer = previewGame.add.group("tweenGroup", previewGame.world);
+      tweenContainer.position.set(previewGame.editX, previewGame.editY);
       ref.current.tween = previewGame.add.tween();
-      // 初始渲染设置默认值
-      dispatch(setTweenGameItem(defaultTweenVars));
     } else {
       previewGame.stage.removeChildren();
     }
   }, []);
 
-  const generateTween = (targets) => {
+  const generateTween = (target) => {
     const tween = ref.current.tween;
+    tween.instance.killAll();
+    const [originItem] = currentGameItem;
     ref.current.defaultTween && ref.current.defaultTween.pause().kill();
-    const [originTarget] = _.cloneDeep(targets);
     const {
       duration,
       x,
@@ -97,24 +97,22 @@ const TweenEditor = (props: any) => {
       angle,
       ease,
       inout,
-      delay
+      delay,
     } = vars || defaultTweenVars;
-    console.log(vars);
-    console.log(tween, ease);
-    console.log(tween[ease]);
+
     // 初始对象属性
     const originVars = {
-      x: originTarget.x,
-      y: originTarget.y,
-      alpha: originTarget.alpha,
-      angle: originTarget.angle
+      x: originItem.x,
+      y: originItem.y,
+      alpha: originItem.alpha,
+      angle: originItem.angle
     };
-    ref.current.defaultTween = tween.instance.to(targets, duration, {
+    ref.current.defaultTween = tween.instance.to(target, duration, {
       startAt: originVars,
       x: "+=" + x,
       y: "+=" + y,
       angle: "+=" + angle,
-      alpha: alpha || originTarget.alpha,
+      alpha: alpha || originItem.alpha,
       paused: true,
       delay,
       yoyo,
@@ -126,27 +124,43 @@ const TweenEditor = (props: any) => {
           ref.current.defaultTween.seek(0).restart(true);
       }
     });
-    dispatch(setDefaultTween(ref.current.defaultTween));
+
   };
 
   useEffect(() => {
-    debounce.handler(() => {
-      console.log(vars);
-      generateTween([tweenItem]);
-    }, 500);
+    if (!tweenItem) {
+      return;
+    }
+    generateTween(tweenItem);
+    console.log(ref.current.defaultTween);
+    if (ref.current.progress === vars.progress) {
+      ref.current.defaultTween &&
+        ref.current.defaultTween.progress(0).pause();
+
+      console.log('update');
+      dispatch(setDefaultTween(ref.current.defaultTween));
+    } else {
+      ref.current.defaultTween &&
+        ref.current.defaultTween.progress(vars.progress).pause();
+    }
+
+
   }, [vars]);
 
   useEffect(() => {
-    if (currentScene && tweenCotainer) {
+    if (currentScene && tweenContainer) {
       if (currentGameItem) {
         const [cloneGameItem]: any = _.cloneDeep(currentGameItem);
         cloneGameItem.interactive = false;
-        tweenCotainer.removeChildren();
-        tweenCotainer.addChild(cloneGameItem);
+        tweenContainer.removeChildren();
+        tweenContainer.addChild(cloneGameItem);
         tweenItem = cloneGameItem;
-        generateTween([cloneGameItem]);
+        cloneGameItem && generateTween(cloneGameItem);
+
+        // 初始渲染设置默认值
+        dispatch(setTweenGameItem(defaultTweenVars));
       } else {
-        tweenCotainer.removeChildren();
+        tweenContainer.removeChildren();
       }
     }
   }, [currentScene, currentGameItem, type]);
