@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-10 00:09:30
- * @FilePath: \kunigame\editor\page\workbench\tween.tsx
+ * @LastEditTime: 2023-07-10 14:26:39
+ * @FilePath: /kunigame/editor/page/workbench/tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
 import { CombineReducer } from "editor@/common/store";
@@ -83,9 +83,7 @@ const TweenEditor = (props: any) => {
 
   const generateTween = (target) => {
     const tween = ref.current.tween;
-    tween.instance.killAll();
     const [originItem] = currentGameItem;
-    ref.current.defaultTween && ref.current.defaultTween.pause().kill();
     const {
       duration,
       x,
@@ -97,7 +95,8 @@ const TweenEditor = (props: any) => {
       angle,
       ease,
       inout,
-      delay,
+      progress,
+      delay
     } = vars || defaultTweenVars;
 
     // 初始对象属性
@@ -107,6 +106,10 @@ const TweenEditor = (props: any) => {
       alpha: originItem.alpha,
       angle: originItem.angle
     };
+
+    ref.current.defaultTween &&
+      (ref.current.defaultTween.pause(0).kill(),
+      (ref.current.defaultTween = null));
     ref.current.defaultTween = tween.instance.to(target, duration, {
       startAt: originVars,
       x: "+=" + x,
@@ -124,27 +127,17 @@ const TweenEditor = (props: any) => {
           ref.current.defaultTween.seek(0).restart(true);
       }
     });
-
+    ref.current.defaultTween &&
+      ref.current.defaultTween.progress(progress).pause();
   };
 
   useEffect(() => {
     if (!tweenItem) {
       return;
     }
+
     generateTween(tweenItem);
-    console.log(ref.current.defaultTween);
-    if (ref.current.progress === vars.progress) {
-      ref.current.defaultTween &&
-        ref.current.defaultTween.progress(0).pause();
-
-      console.log('update');
-      dispatch(setDefaultTween(ref.current.defaultTween));
-    } else {
-      ref.current.defaultTween &&
-        ref.current.defaultTween.progress(vars.progress).pause();
-    }
-
-
+    dispatch(setDefaultTween(ref.current.defaultTween));
   }, [vars]);
 
   useEffect(() => {
