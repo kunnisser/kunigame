@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-19 17:29:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-08 00:37:59
+ * @LastEditTime: 2023-07-10 23:18:26
  * @FilePath: \kunigame\editor\common\gameStore\scene\action.ts
  * @Description: ---- 场景状态action ----
  */
@@ -21,7 +21,9 @@ const SET_OPERATION_TYPE = Symbol();
 const SET_CANCEL_ACTION_STACK = Symbol();
 const SET_RESUME_ACTION_STACK = Symbol();
 const SET_DEFAULT_TWEEN = Symbol();
-const SET_TWEEN_GAME_ITEM = Symbol();
+const SET_SCALE_TWEEN = Symbol();
+const SET_TWEEN_VARS = Symbol();
+const SET_SCALE_TWEEN_VARS = Symbol();
 const SET_PARTICLE_GAME_ITEM = Symbol();
 // 储存场景列表
 const getSceneList = (list: Array<KnScene>) => {
@@ -105,9 +107,17 @@ const setResumeActionStack = (stack) => {
 };
 
 // 设置tween配置
-const setTweenGameItem = (targets) => {
+const setTweenVars = (targets) => {
   return {
-    type: SET_TWEEN_GAME_ITEM,
+    type: SET_TWEEN_VARS,
+    payload: targets,
+  };
+};
+
+// 设置tweenScale配置
+const setScaleTweenVars = (targets) => {
+  return {
+    type: SET_SCALE_TWEEN_VARS,
     payload: targets,
   };
 };
@@ -116,6 +126,14 @@ const setTweenGameItem = (targets) => {
 const setDefaultTween = (tween) => {
   return {
     type: SET_DEFAULT_TWEEN,
+    payload: tween,
+  };
+};
+
+// 设置scaleTween实例
+const setScaleTween = (tween) => {
+  return {
+    type: SET_SCALE_TWEEN,
     payload: tween,
   };
 };
@@ -149,10 +167,14 @@ export {
   setResumeActionStack,
   SET_CANCEL_ACTION_STACK,
   SET_RESUME_ACTION_STACK,
-  setTweenGameItem,
-  SET_TWEEN_GAME_ITEM,
+  setTweenVars,
+  SET_TWEEN_VARS,
+  setScaleTweenVars,
+  SET_SCALE_TWEEN_VARS,
   setParticleGameItem,
   SET_PARTICLE_GAME_ITEM,
-  SET_DEFAULT_TWEEN,
   setDefaultTween,
+  SET_DEFAULT_TWEEN,
+  setScaleTween,
+  SET_SCALE_TWEEN,
 };
