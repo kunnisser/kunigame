@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-06-30 16:44:49
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-10 23:51:23
- * @FilePath: \kunigame\editor\page\outline\inspector_config\tween\index.tsx
+ * @LastEditTime: 2023-07-11 13:05:48
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/tween/index.tsx
  * @Description: ---- 缓动配置 ----
  */
 import React from "react";
@@ -13,7 +13,11 @@ import { DatTweenPropertyConfig, DatScaleTweenPropertyConfig } from "./config";
 import { useDispatch, useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import * as _ from "lodash";
-import { setScaleTweenVars, setTweenVars } from "editor@/common/gameStore/scene/action";
+import {
+  setScaleTweenVars,
+  setTweenVars
+} from "editor@/common/gameStore/scene/action";
+import { Button } from "antd";
 
 const TweenDatGui = () => {
   const dispatch = useDispatch();
@@ -38,7 +42,7 @@ const TweenDatGui = () => {
 
   const handleScaleUpdate = (scaleTweenVars) => {
     dispatch(setScaleTweenVars(scaleTweenVars));
-  }
+  };
 
   const generateConfigCard = (configs: any, key: string) => {
     const itemConfigs: Array<DatProperties> = configs;
@@ -71,6 +75,15 @@ const TweenDatGui = () => {
   };
   return vars ? (
     <div>
+      <Button
+        type="primary"
+        onClick={() => {
+          defaultTween && defaultTween.seek(0).restart(true);
+          scaleTween && scaleTween.seek(0).restart(true);
+        }}
+      >
+        总体预览
+      </Button>
       <DatGui data={vars} onUpdate={handleUpdate}>
         {generateConfigCard(
           DatTweenPropertyConfig(defaultTween),
@@ -78,7 +91,10 @@ const TweenDatGui = () => {
         )}
       </DatGui>
       <DatGui data={scaleVars} onUpdate={handleScaleUpdate}>
-        {generateConfigCard(DatScaleTweenPropertyConfig(scaleTween), "scale-tween")}
+        {generateConfigCard(
+          DatScaleTweenPropertyConfig(scaleTween),
+          "scale-tween"
+        )}
       </DatGui>
     </div>
   ) : (

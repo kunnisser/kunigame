@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-07 13:51:57
+ * @LastEditTime: 2023-07-11 16:14:32
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -26,7 +26,8 @@ import {
   SettingOutlined,
   BulbOutlined,
   DesktopOutlined,
-  RocketOutlined
+  RocketOutlined,
+  UngroupOutlined
 } from "@ant-design/icons";
 import "editor@/assets/index.styl";
 import {
@@ -108,7 +109,7 @@ const WireBoard = (props) => {
       key: "particle",
       name: sceneId + "Particle",
       childComponent: <ParticleEditor type={editorType} />,
-      icon: <RocketOutlined />
+      icon: <UngroupOutlined />
     }
   ];
 

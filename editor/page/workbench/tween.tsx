@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-10 23:53:08
- * @FilePath: \kunigame\editor\page\workbench\tween.tsx
+ * @LastEditTime: 2023-07-11 15:17:18
+ * @FilePath: /kunigame/editor/page/workbench/tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
 import { CombineReducer } from "editor@/common/store";
@@ -96,7 +96,7 @@ const TweenEditor = (props: any) => {
     }
   }, []);
 
-  const generateTween = (target) => {
+  const generateTween = (target: any) => {
     const tween = ref.current.tween;
     const [originItem] = currentGameItem;
     const {
@@ -124,7 +124,7 @@ const TweenEditor = (props: any) => {
 
     ref.current.defaultTween &&
       (ref.current.defaultTween.pause(0).kill(),
-        (ref.current.defaultTween = null));
+      (ref.current.defaultTween = null));
     ref.current.defaultTween = tween.instance.to(target, duration, {
       startAt: originVars,
       x: "+=" + x,
@@ -144,6 +144,7 @@ const TweenEditor = (props: any) => {
     });
     ref.current.defaultTween &&
       ref.current.defaultTween.progress(progress).pause();
+    dispatch(setDefaultTween(ref.current.defaultTween));
   };
 
   const generateScaleTween = (target) => {
@@ -168,8 +169,7 @@ const TweenEditor = (props: any) => {
     };
 
     ref.current.scaleTween &&
-      (ref.current.scaleTween.pause(0).kill(),
-        (ref.current.scaleTween = null));
+      (ref.current.scaleTween.pause(0).kill(), (ref.current.scaleTween = null));
     ref.current.scaleTween = tween.instance.to(target.scale, duration, {
       startAt: originScaleVars,
       x: originScaleVars.x * scale.x,
@@ -185,18 +185,15 @@ const TweenEditor = (props: any) => {
           ref.current.scaleTween.seek(0).restart(true);
       }
     });
-    ref.current.scaleTween &&
-      ref.current.scaleTween.progress(progress).pause();
+    ref.current.scaleTween && ref.current.scaleTween.progress(progress).pause();
+    dispatch(setScaleTween(ref.current.scaleTween));
   };
-
 
   useEffect(() => {
     if (!tweenItem) {
       return;
     }
-
     generateTween(tweenItem);
-    dispatch(setDefaultTween(ref.current.defaultTween));
   }, [tweenVars]);
 
   useEffect(() => {
@@ -204,7 +201,6 @@ const TweenEditor = (props: any) => {
       return;
     }
     generateScaleTween(tweenItem);
-    dispatch(setScaleTween(ref.current.scaleTween));
   }, [scaleTweenVars]);
 
   useEffect(() => {
@@ -215,11 +211,14 @@ const TweenEditor = (props: any) => {
         tweenContainer.removeChildren();
         tweenContainer.addChild(cloneGameItem);
         tweenItem = cloneGameItem;
-        cloneGameItem && generateTween(cloneGameItem);
+
+        // 根据克隆的当前对象构建缓动缩放动画
+        cloneGameItem &&
+          (generateTween(cloneGameItem), generateScaleTween(cloneGameItem));
 
         // 初始渲染设置默认值
-        dispatch(setTweenVars(defaultTweenVars));
-        dispatch(setScaleTweenVars(defaultScaleTweenVars));
+        dispatch(setTweenVars(tweenVars || defaultTweenVars));
+        dispatch(setScaleTweenVars(scaleTweenVars || defaultScaleTweenVars));
       } else {
         tweenContainer.removeChildren();
       }
