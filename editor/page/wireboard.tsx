@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-11 16:14:32
+ * @LastEditTime: 2023-07-12 16:38:25
  * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
@@ -60,7 +60,8 @@ const WireBoard = (props) => {
   const inspectorMap = {
     "scene": "场景元素",
     "tween": "缓动动画",
-    "particle": "粒子特效"
+    "particle": "粒子特效",
+    "animation": "帧动画"
   };
 
   const CommonWidget = {
@@ -109,6 +110,12 @@ const WireBoard = (props) => {
       key: "particle",
       name: sceneId + "Particle",
       childComponent: <ParticleEditor type={editorType} />,
+      icon: <UngroupOutlined />
+    },
+    {
+      key: "animation",
+      name: sceneId + "Animation",
+      childComponent: <>123</>,
       icon: <UngroupOutlined />
     }
   ];

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-07 16:01:28
+ * @LastEditTime: 2023-07-12 16:39:50
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -197,7 +197,8 @@ const Inspector = (props: any) => {
         <>空</>
       ),
       "tween": <TweenDatGui></TweenDatGui>,
-      "particle": <ParticleDatGui></ParticleDatGui>
+      "particle": <ParticleDatGui></ParticleDatGui>,
+      "animation": <>123123</>
     };
   };
 

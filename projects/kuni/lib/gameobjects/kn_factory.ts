@@ -21,7 +21,7 @@ import KnTiling from "../gameui/kn_tiling";
 import Game from "../core";
 import { TransformImage } from "../utils/common";
 import { knTweenLine, KnTween } from "../gameobjects/kn_tween";
-import { AnimatedSprite, utils } from "pixi.js";
+import { AnimatedSprite, Ticker, utils } from "pixi.js";
 import KnScene from "./kn_scene";
 import KnSprite from "./kn_sprite";
 import KnBitMapText from "./kn_bitmap_text";
@@ -161,7 +161,7 @@ class KnFactory {
   }
 
   ticker = () => {
-    const ticker = PIXI.Ticker.shared;
+    const ticker = new Ticker();
     ticker.autoStart = false;
     ticker.stop();
     return ticker;
