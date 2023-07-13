@@ -25,7 +25,7 @@ class KnEmitter extends ParticleContainer {
   static throtting = 4; // 频率常量
   public shooting = !1; // 默认粒子发射状态关闭
   public constructor(game: Game, quality: number, key: string) {
-    super(quality, ParticleConfig);
+    super(quality, ParticleConfig, void 0, true);
     this.game = game;
     this.key = key;
     this.alpha = 1;

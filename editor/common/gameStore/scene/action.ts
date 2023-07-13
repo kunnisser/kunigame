@@ -2,13 +2,13 @@
  * @Author: kunnisser
  * @Date: 2021-02-19 17:29:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-10 23:18:26
- * @FilePath: \kunigame\editor\common\gameStore\scene\action.ts
+ * @LastEditTime: 2023-07-13 16:33:27
+ * @FilePath: /kunigame/editor/common/gameStore/scene/action.ts
  * @Description: ---- 场景状态action ----
  */
 
-import Game from 'ts@/kuni/lib/core';
-import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
+import Game from "ts@/kuni/lib/core";
+import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 
 const GET_SCENE_LIST = Symbol();
 const SET_CURRENT_SCENE = Symbol();
@@ -24,12 +24,12 @@ const SET_DEFAULT_TWEEN = Symbol();
 const SET_SCALE_TWEEN = Symbol();
 const SET_TWEEN_VARS = Symbol();
 const SET_SCALE_TWEEN_VARS = Symbol();
-const SET_PARTICLE_GAME_ITEM = Symbol();
+const SET_PARTICLE_VARS = Symbol();
 // 储存场景列表
 const getSceneList = (list: Array<KnScene>) => {
   return {
     type: GET_SCENE_LIST,
-    payload: list,
+    payload: list
   };
 };
 
@@ -37,7 +37,7 @@ const getSceneList = (list: Array<KnScene>) => {
 const setCurrentScene = (scene: KnScene | null) => {
   return {
     type: SET_CURRENT_SCENE,
-    payload: scene,
+    payload: scene
   };
 };
 
@@ -45,7 +45,7 @@ const setCurrentScene = (scene: KnScene | null) => {
 const getGame = (game: Game | null) => {
   return {
     type: GET_GAME,
-    payload: game,
+    payload: game
   };
 };
 
@@ -54,7 +54,7 @@ const getGame = (game: Game | null) => {
 const getGameItem = (item: Array<any> | null) => {
   return {
     type: GET_GAME_ITEM,
-    payload: item,
+    payload: item
   };
 };
 
@@ -63,7 +63,7 @@ const updateEditGameItem = (gameItem: any) => {
   console.log(gameItem);
   return {
     type: UPDATE_EDIT_GAME_ITEM,
-    payload: gameItem,
+    payload: gameItem
   };
 };
 
@@ -71,7 +71,7 @@ const updateEditGameItem = (gameItem: any) => {
 const clearEditGameItem = () => {
   return {
     type: CLEAR_EDIT_GAME_ITEM,
-    payload: {},
+    payload: {}
   };
 };
 
@@ -79,7 +79,7 @@ const clearEditGameItem = () => {
 const setCurrentOperationType = (type: string) => {
   return {
     type: SET_OPERATION_TYPE,
-    payload: type,
+    payload: type
   };
 };
 
@@ -87,7 +87,7 @@ const setCurrentOperationType = (type: string) => {
 const setDragTarget = (target: any) => {
   return {
     type: SET_DRAG_TARGET,
-    payload: target,
+    payload: target
   };
 };
 
@@ -95,14 +95,14 @@ const setDragTarget = (target: any) => {
 const setCancelActionStack = (stack) => {
   return {
     type: SET_CANCEL_ACTION_STACK,
-    payload: stack,
+    payload: stack
   };
 };
 
 const setResumeActionStack = (stack) => {
   return {
     type: SET_RESUME_ACTION_STACK,
-    payload: stack,
+    payload: stack
   };
 };
 
@@ -110,7 +110,7 @@ const setResumeActionStack = (stack) => {
 const setTweenVars = (targets) => {
   return {
     type: SET_TWEEN_VARS,
-    payload: targets,
+    payload: targets
   };
 };
 
@@ -118,7 +118,7 @@ const setTweenVars = (targets) => {
 const setScaleTweenVars = (targets) => {
   return {
     type: SET_SCALE_TWEEN_VARS,
-    payload: targets,
+    payload: targets
   };
 };
 
@@ -126,7 +126,7 @@ const setScaleTweenVars = (targets) => {
 const setDefaultTween = (tween) => {
   return {
     type: SET_DEFAULT_TWEEN,
-    payload: tween,
+    payload: tween
   };
 };
 
@@ -134,15 +134,15 @@ const setDefaultTween = (tween) => {
 const setScaleTween = (tween) => {
   return {
     type: SET_SCALE_TWEEN,
-    payload: tween,
+    payload: tween
   };
 };
 
 // 设置粒子对象
-const setParticleGameItem = (target) => {
+const setParticleVars = (vars) => {
   return {
-    type: SET_PARTICLE_GAME_ITEM,
-    payload: target,
+    type: SET_PARTICLE_VARS,
+    payload: vars
   };
 };
 
@@ -171,10 +171,10 @@ export {
   SET_TWEEN_VARS,
   setScaleTweenVars,
   SET_SCALE_TWEEN_VARS,
-  setParticleGameItem,
-  SET_PARTICLE_GAME_ITEM,
+  setParticleVars,
+  SET_PARTICLE_VARS,
   setDefaultTween,
   SET_DEFAULT_TWEEN,
   setScaleTween,
-  SET_SCALE_TWEEN,
+  SET_SCALE_TWEEN
 };

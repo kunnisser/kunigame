@@ -2,39 +2,51 @@
  * @Author: kunnisser
  * @Date: 2023-07-07 13:49:58
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-13 14:57:58
+ * @LastEditTime: 2023-07-13 17:36:29
  * @FilePath: /kunigame/editor/page/workbench/particle.tsx
  * @Description: ---- 粒子特效 ----
  */
 
-import { setParticleGameItem } from "editor@/common/gameStore/scene/action";
+import { setParticleVars } from "editor@/common/gameStore/scene/action";
 import { CombineReducer } from "editor@/common/store";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as _ from "lodash";
 import Game from "ts@/kuni/lib/core";
 import Stats from "stats-js";
 import { createFrom } from "ts@/kuni/lib/utils/common";
+import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
 
 let previewGame: any = null;
 let particleContainer: any = null;
 let stats: any = null;
 let prevTicker: any = null;
-let emitter: any = null;
+let emitter: KnEmitter;
 let tween: any = null;
 const ParticleEditor = (props: any) => {
   const dispatch = useDispatch();
+  const ref: any = useRef({
+    duration: 1
+  });
+
   const currentScene = useSelector(
     (store: CombineReducer) => store.sceneReducer.currentScene
   );
   const currentGameItems = useSelector(
     (store: CombineReducer) => store.sceneReducer.gameItem
   );
-
-  const { type } = props;
   const game: Game = useSelector(
     (store: CombineReducer) => store.sceneReducer.game
   );
+  const particleVars = useSelector(
+    (store: CombineReducer) => store.sceneReducer.particleVars
+  );
+  const { type } = props;
+
+  const defaultParticleVars = {
+    throtting: 10,
+    duration: ref.current.duration
+  };
 
   useEffect(() => {
     const previewParticleDom: any = document.getElementById("previewParticle");
@@ -61,7 +73,7 @@ const ParticleEditor = (props: any) => {
         previewGame.world
       );
       tween = previewGame.add.tween();
-      emitter = previewGame.add.emitter(previewGame, 10, "attack");
+      emitter = previewGame.add.emitter(previewGame, 1, "logo");
       particleContainer.position.set(previewGame.editX, previewGame.editY);
       particleContainer.addChild(emitter);
     } else {
@@ -75,9 +87,9 @@ const ParticleEditor = (props: any) => {
     for (let particle of particles) {
       particle.x = pointX;
       particle.y = pointY;
-      tween.instance.to(particle, 0.5, {
-        x: particle.x + game.math.redirect() * Math.random() * 100,
-        y: particle.y - Math.random() * 200 - 10,
+      tween.instance.to(particle, ref.current.duration, {
+        x: particle.x + game.math.redirect() * Math.random() * 1000,
+        y: particle.y - Math.random() * 2000 - 10,
         angle: 100 + game.math.redirect() * Math.random() * 300,
         alpha: 0,
         ease: tween.linear.easeNone
@@ -93,7 +105,7 @@ const ParticleEditor = (props: any) => {
       emitter.throtting -= 1;
       if (emitter.throtting < 0) {
         multeShootOnce(target.x, target.y);
-        emitter.throtting = 40;
+        emitter.throtting = KnEmitter.throtting;
       }
       stats.end();
       // if (emitter.throtting < 0) {
@@ -111,12 +123,16 @@ const ParticleEditor = (props: any) => {
       // }
     });
     prevTicker.start();
-
-    dispatch(setParticleGameItem(target));
   };
 
   useEffect(() => {
-    if (type === "particle" && currentScene) {
+    const { throtting, duration } = particleVars || defaultParticleVars;
+    KnEmitter.throtting = throtting;
+    ref.current.duration = duration;
+  }, [particleVars]);
+
+  useEffect(() => {
+    if (type === "particle" && currentScene && currentGameItems) {
       const [currentGameItem] = currentGameItems;
       const cloneGameItem: any = createFrom(currentGameItem, previewGame);
       cloneGameItem.parent = null;
@@ -124,6 +140,7 @@ const ParticleEditor = (props: any) => {
         particleContainer.removeChildAt(1);
       particleContainer.addChild(cloneGameItem);
       generateParticle(currentGameItem);
+      dispatch(setParticleVars(particleVars || defaultParticleVars));
     } else {
       prevTicker && prevTicker.stop() && prevTicker.destroy();
     }
