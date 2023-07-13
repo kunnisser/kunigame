@@ -58,6 +58,22 @@ class KnFactory {
     return parent.addChild(sprite), sprite;
   };
 
+  sprite = (name: string, key: any, anchor?: Array<number>) => {
+    let texture: any = null,
+      imageKey: any = null;
+    if (Object.prototype.toString.call(key) === "[object String]") {
+      texture = PIXI.utils.TextureCache[key];
+      imageKey = key;
+    } else {
+      texture = key;
+      imageKey = key.textureCacheIds ? key.textureCacheIds[0] : key;
+    }
+    const sprite = new KnSprite(name, key, texture);
+    anchor && sprite.anchor.set(...anchor);
+
+    return sprite;
+  };
+
   button = (
     key: any,
     switchKey: any,

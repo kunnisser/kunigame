@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-11 15:17:18
+ * @LastEditTime: 2023-07-13 14:52:35
  * @FilePath: /kunigame/editor/page/workbench/tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
@@ -17,6 +17,7 @@ import {
   setScaleTweenVars,
   setTweenVars
 } from "editor@/common/gameStore/scene/action";
+import { createFrom } from "ts@/kuni/lib/utils/common";
 let previewGame: any = null;
 let tweenContainer: any = null;
 let tweenItem: any = null;
@@ -31,7 +32,7 @@ const TweenEditor = (props: any) => {
   const currentScene = useSelector(
     (store: CombineReducer) => store.sceneReducer.currentScene
   );
-  const currentGameItem = useSelector(
+  const currentGameItems = useSelector(
     (store: CombineReducer) => store.sceneReducer.gameItem
   );
   const game = useSelector((store: CombineReducer) => store.sceneReducer.game);
@@ -98,7 +99,7 @@ const TweenEditor = (props: any) => {
 
   const generateTween = (target: any) => {
     const tween = ref.current.tween;
-    const [originItem] = currentGameItem;
+    const [originItem] = currentGameItems;
     const {
       duration,
       x,
@@ -140,6 +141,7 @@ const TweenEditor = (props: any) => {
         loop &&
           ref.current.defaultTween &&
           ref.current.defaultTween.seek(0).restart(true);
+        console.log(currentGameItems);
       }
     });
     ref.current.defaultTween &&
@@ -149,7 +151,7 @@ const TweenEditor = (props: any) => {
 
   const generateScaleTween = (target) => {
     const tween = ref.current.tween;
-    const [originItem] = currentGameItem;
+    const [originItem] = currentGameItems;
     const {
       duration,
       scale,
@@ -205,25 +207,27 @@ const TweenEditor = (props: any) => {
 
   useEffect(() => {
     if (currentScene && tweenContainer) {
-      if (currentGameItem) {
-        const [cloneGameItem]: any = _.cloneDeep(currentGameItem);
+      if (currentGameItems && type === "tween") {
+        const [currentGameItem] = currentGameItems;
+        const cloneGameItem: any = createFrom(currentGameItem, previewGame);
+        cloneGameItem.parent = null;
         cloneGameItem.interactive = false;
         tweenContainer.removeChildren();
         tweenContainer.addChild(cloneGameItem);
         tweenItem = cloneGameItem;
-
         // 根据克隆的当前对象构建缓动缩放动画
         cloneGameItem &&
           (generateTween(cloneGameItem), generateScaleTween(cloneGameItem));
-
         // 初始渲染设置默认值
         dispatch(setTweenVars(tweenVars || defaultTweenVars));
         dispatch(setScaleTweenVars(scaleTweenVars || defaultScaleTweenVars));
       } else {
+        ref.current.defaultTween && ref.current.defaultTween.pause(0);
+        ref.current.scaleTween && ref.current.scaleTween.pause(0);
         tweenContainer.removeChildren();
       }
     }
-  }, [currentScene, currentGameItem, type]);
+  }, [currentScene, currentGameItems, type]);
 
   return (
     <>

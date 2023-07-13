@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-13 16:52:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-12 16:39:50
+ * @LastEditTime: 2023-07-13 14:56:42
  * @FilePath: /kunigame/editor/page/outline/inspector_config/index.tsx
  * @Description: ---- 目标元素内容配置层 ----
  */
@@ -15,7 +15,7 @@ import { DatProperties, InspectorConfig } from "./config";
 import { updateEditGameItem } from "editor@/common/gameStore/scene/action";
 import { CombineReducer } from "editor@/common/store";
 import Admixture from "./dat/admixture";
-import { debounce } from "ts@/kuni/lib/utils/common";
+import { createFrom, debounce } from "ts@/kuni/lib/utils/common";
 import * as _ from "lodash";
 import TweenDatGui from "./tween";
 import ParticleDatGui from "./particle";
@@ -93,7 +93,8 @@ const Inspector = (props: any) => {
 
   // 将带-字符串的属性名解构成嵌套对象
   const disAssembleGameItem = (path, gameItem) => {
-    const factorValue: any = _.cloneDeep(gameItem);
+    const game: Game = store.getState().sceneReducer.game;
+    const factorValue: any = createFrom(gameItem, game);
     const ret = _.get(factorValue, path);
     return {
       [path]: ret

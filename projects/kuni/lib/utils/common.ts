@@ -169,6 +169,25 @@ const TransformAncientDate = {
   }
 };
 
+const createFrom = (target, game: Game, parent?: any) => {
+  const type = target.constructor.name;
+  const typeMap = {
+    "KnText": () =>
+      game.add.text(target.id, target.text, target.style, [
+        target.anchor.x,
+        target.anchor.y
+      ]),
+    "KnSprite": () => {
+      game.add.sprite(target.name, target.key, [
+        target.anchor.x,
+        target.anchor.y
+      ]);
+    }
+  };
+  const cloneEntity = typeMap[type]();
+  return Object.assign(cloneEntity, target);
+};
+
 export {
   debounce,
   math,
@@ -177,5 +196,6 @@ export {
   Throtte,
   TransformAncientDate,
   distance,
-  rotatePointers
+  rotatePointers,
+  createFrom
 };
