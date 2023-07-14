@@ -2,12 +2,15 @@
  * @Author: kunnisser
  * @Date: 2023-07-07 13:49:58
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-13 17:36:29
+ * @LastEditTime: 2023-07-14 17:22:05
  * @FilePath: /kunigame/editor/page/workbench/particle.tsx
  * @Description: ---- 粒子特效 ----
  */
 
-import { setParticleVars } from "editor@/common/gameStore/scene/action";
+import {
+  setEmitter,
+  setParticleVars
+} from "editor@/common/gameStore/scene/action";
 import { CombineReducer } from "editor@/common/store";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +19,7 @@ import Game from "ts@/kuni/lib/core";
 import Stats from "stats-js";
 import { createFrom } from "ts@/kuni/lib/utils/common";
 import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
+import { utils } from "pixi.js";
 
 let previewGame: any = null;
 let particleContainer: any = null;
@@ -26,7 +30,23 @@ let tween: any = null;
 const ParticleEditor = (props: any) => {
   const dispatch = useDispatch();
   const ref: any = useRef({
-    duration: 1
+    throtting: 10,
+    duration: 1,
+    count: 1,
+    offsetX: 100,
+    offsetY: 100,
+    xRandom: true,
+    yRandom: true,
+    xDirect: true,
+    yDirect: true,
+    ease: "linear",
+    inout: "easeNone",
+    angle: 360,
+    angleRandom: true,
+    angleDirect: true,
+    width: 0,
+    height: 0,
+    texture: null
   });
 
   const currentScene = useSelector(
@@ -43,10 +63,7 @@ const ParticleEditor = (props: any) => {
   );
   const { type } = props;
 
-  const defaultParticleVars = {
-    throtting: 10,
-    duration: ref.current.duration
-  };
+  const defaultParticleVars = ref.current;
 
   useEffect(() => {
     const previewParticleDom: any = document.getElementById("previewParticle");
@@ -73,26 +90,60 @@ const ParticleEditor = (props: any) => {
         previewGame.world
       );
       tween = previewGame.add.tween();
-      emitter = previewGame.add.emitter(previewGame, 1, "logo");
+      emitter = previewGame.add.emitter(previewGame, 10, "attack");
       particleContainer.position.set(previewGame.editX, previewGame.editY);
       particleContainer.addChild(emitter);
+      dispatch(setEmitter(emitter));
     } else {
       previewGame.world.removeChildren();
     }
   }, []);
 
-  // 多个粒子单次发射
+  const particleBooleanDispose = (bool, ret: any) => {
+    return bool ? ret : 1;
+  };
+
+  // 粒子发射
   const multeShootOnce = (pointX: number, pointY: number) => {
-    const particles: Array<any> = emitter.shootMulite(4);
+    const {
+      xDirect,
+      xRandom,
+      yDirect,
+      yRandom,
+      offsetX,
+      offsetY,
+      count,
+      duration,
+      ease,
+      inout,
+      angle,
+      angleRandom,
+      angleDirect,
+      width,
+      height
+    } = ref.current;
+    const particles: Array<any> = emitter.shootMulite(count);
     for (let particle of particles) {
-      particle.x = pointX;
-      particle.y = pointY;
-      tween.instance.to(particle, ref.current.duration, {
-        x: particle.x + game.math.redirect() * Math.random() * 1000,
-        y: particle.y - Math.random() * 2000 - 10,
-        angle: 100 + game.math.redirect() * Math.random() * 300,
+      particle.x = pointX + game.math.redirect() * Math.random() * width;
+      particle.y = pointY + game.math.redirect() * Math.random() * height;
+      tween.instance.to(particle, duration, {
+        x:
+          particle.x +
+          particleBooleanDispose(xDirect, game.math.redirect()) *
+            particleBooleanDispose(xRandom, Math.random()) *
+            offsetX,
+        y:
+          particle.y +
+          particleBooleanDispose(yDirect, game.math.redirect()) *
+            particleBooleanDispose(yRandom, Math.random()) *
+            offsetY,
+        angle:
+          particle.angle +
+          particleBooleanDispose(angleDirect, game.math.redirect()) *
+            particleBooleanDispose(angleRandom, Math.random()) *
+            angle,
         alpha: 0,
-        ease: tween.linear.easeNone
+        ease: tween[ease][inout]
       });
     }
   };
@@ -105,57 +156,30 @@ const ParticleEditor = (props: any) => {
       emitter.throtting -= 1;
       if (emitter.throtting < 0) {
         multeShootOnce(target.x, target.y);
-        emitter.throtting = KnEmitter.throtting;
+        emitter.throtting = ref.current.throtting;
       }
       stats.end();
-      // if (emitter.throtting < 0) {
-      //   const particle = emitter.shoot();
-      //   particle.x = target.x;
-      //   particle.y = target.y;
-      //   tween.instance.to(particle, 1.6, {
-      //     x: 0 + game.math.redirect() * Math.random() * 200,
-      //     y: 0 - Math.random() * 200,
-      //     angle: 100 + game.math.redirect() * Math.random() * 300,
-      //     alpha: 0,
-      //     ease: tween.linear.easeNone
-      //   });
-      //   emitter.throtting = KnEmitter.throtting;
-      // }
     });
     prevTicker.start();
   };
 
   useEffect(() => {
-    const { throtting, duration } = particleVars || defaultParticleVars;
-    KnEmitter.throtting = throtting;
-    ref.current.duration = duration;
+    const editVars = particleVars || defaultParticleVars;
+    ref.current = editVars;
   }, [particleVars]);
 
   useEffect(() => {
+    particleContainer.children.length > 1 && particleContainer.removeChildAt(1);
     if (type === "particle" && currentScene && currentGameItems) {
       const [currentGameItem] = currentGameItems;
       const cloneGameItem: any = createFrom(currentGameItem, previewGame);
       cloneGameItem.parent = null;
-      particleContainer.children.length > 1 &&
-        particleContainer.removeChildAt(1);
       particleContainer.addChild(cloneGameItem);
       generateParticle(currentGameItem);
       dispatch(setParticleVars(particleVars || defaultParticleVars));
     } else {
       prevTicker && prevTicker.stop() && prevTicker.destroy();
     }
-    // const previewParticleDom: any = document.getElementById("previewParticle");
-    // if (type !== "particle") {
-    //   previewParticleDom.firstChild &&
-    //     previewParticleDom.removeChild(previewParticleDom.firstChild);
-    //   prevTicker && prevTicker.stop() && prevTicker.destroy();
-    // } else if (currentScene && currentGameItem) {
-
-    //   console.log(previewGame);
-    //   console.log(emitter.children.length);
-    //   previewParticleDom.appendChild(previewGame.app.view);
-    //   // generateParticle(cloneGameItem);
-    // }
   }, [currentScene, currentGameItems, type]);
 
   return (

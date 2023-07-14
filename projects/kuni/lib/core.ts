@@ -210,7 +210,9 @@ export default class Game {
   }
 
   refresh() {
-    // 创建刷新器
-    this.ticker = this.add.ticker();
+    // 创建全局刷新器
+    this.ticker = PIXI.Ticker.shared;
+    this.ticker.autoStart = false;
+    this.ticker.stop();
   }
 }

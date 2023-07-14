@@ -2,12 +2,13 @@
  * @Author: kunnisser
  * @Date: 2021-02-19 17:29:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-13 16:33:27
+ * @LastEditTime: 2023-07-14 16:10:43
  * @FilePath: /kunigame/editor/common/gameStore/scene/action.ts
  * @Description: ---- 场景状态action ----
  */
 
 import Game from "ts@/kuni/lib/core";
+import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 
 const GET_SCENE_LIST = Symbol();
@@ -25,6 +26,8 @@ const SET_SCALE_TWEEN = Symbol();
 const SET_TWEEN_VARS = Symbol();
 const SET_SCALE_TWEEN_VARS = Symbol();
 const SET_PARTICLE_VARS = Symbol();
+const SET_EMITTER = Symbol();
+
 // 储存场景列表
 const getSceneList = (list: Array<KnScene>) => {
   return {
@@ -138,11 +141,19 @@ const setScaleTween = (tween) => {
   };
 };
 
-// 设置粒子对象
+// 设置粒子对象配置
 const setParticleVars = (vars) => {
   return {
     type: SET_PARTICLE_VARS,
     payload: vars
+  };
+};
+
+// 设置粒子发射器实例
+const setEmitter = (emitter: KnEmitter) => {
+  return {
+    type: SET_EMITTER,
+    payload: emitter
   };
 };
 
@@ -176,5 +187,7 @@ export {
   setDefaultTween,
   SET_DEFAULT_TWEEN,
   setScaleTween,
-  SET_SCALE_TWEEN
+  SET_SCALE_TWEEN,
+  setEmitter,
+  SET_EMITTER
 };

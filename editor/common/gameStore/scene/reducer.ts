@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-22 09:21:27
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-13 16:47:37
+ * @LastEditTime: 2023-07-14 16:12:01
  * @FilePath: /kunigame/editor/common/gameStore/scene/reducer.ts
  * @Description: ---- 操作scene状态 ----
  */
@@ -22,9 +22,11 @@ import {
   SET_DEFAULT_TWEEN,
   SET_SCALE_TWEEN,
   SET_TWEEN_VARS,
-  SET_SCALE_TWEEN_VARS
+  SET_SCALE_TWEEN_VARS,
+  SET_EMITTER
 } from "./action";
 import Game from "ts@/kuni/lib/core";
+import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
 
 export interface SceneState {
   scene: Array<KnScene>;
@@ -36,6 +38,7 @@ export interface SceneState {
   tweenVars: any; // 当前绑定缓动动画的配置
   scaleTweenVars: any; // 当前绑定缩放动画的配置
   particleVars: any; // 当前绑定粒子动画的配置
+  emitter: KnEmitter | null; // 粒子发射器实例
   editGameItem: any; // 编辑游戏对象信息
   dragTarget: any; // 拖拽对象
   operationType: string; // 操作类型
@@ -53,6 +56,7 @@ const initialState: SceneState = {
   defaultTween: null,
   scaleTween: null,
   particleVars: null,
+  emitter: null,
   editGameItem: {},
   dragTarget: null,
   operationType: "pick",
@@ -166,6 +170,13 @@ const _setParticleVars = (state: SceneState, action) => {
   };
 };
 
+const _setEmitter = (state: SceneState, action) => {
+  return {
+    ...state,
+    emitter: action.payload
+  };
+};
+
 const SceneMap = {};
 SceneMap[GET_SCENE_LIST] = _getSceneList;
 SceneMap[SET_CURRENT_SCENE] = _setCurrentScene;
@@ -184,6 +195,7 @@ SceneMap[SET_TWEEN_VARS] = _setTweenVars;
 SceneMap[SET_SCALE_TWEEN_VARS] = _setScaleTweenVars;
 // particle
 SceneMap[SET_PARTICLE_VARS] = _setParticleVars;
+SceneMap[SET_EMITTER] = _setEmitter;
 
 const sceneReducer = (state = initialState, action) => {
   if (SceneMap[action.type]) {

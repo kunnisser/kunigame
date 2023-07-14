@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-27 16:55:00
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-03-13 16:24:56
+ * @LastEditTime: 2023-07-14 16:06:54
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/interface/index.ts
  * @Description: ----dat-gui 类型定义 ----
  */
@@ -19,6 +19,7 @@ export interface DefaultProps {
   optionLabels?: Array<any>;
   onUpdate?: Function;
   _onUpdateValue?: Function;
+  onChange?: any;
 }
 
 export interface FolderProps {

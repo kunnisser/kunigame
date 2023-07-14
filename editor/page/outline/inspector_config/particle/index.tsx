@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-07-07 13:56:56
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-13 16:49:16
+ * @LastEditTime: 2023-07-14 16:14:17
  * @FilePath: /kunigame/editor/page/outline/inspector_config/particle/index.tsx
  * @Description: ---- 粒子编辑组建 ----
  */
@@ -16,8 +16,14 @@ import { CombineReducer } from "editor@/common/store";
 import { setParticleVars } from "editor@/common/gameStore/scene/action";
 const ParticleDatGui = () => {
   const dispatch = useDispatch();
+  const currentGameItems = useSelector(
+    (store: CombineReducer) => store.sceneReducer.gameItem
+  );
   const particleVars = useSelector(
     (store: CombineReducer) => store.sceneReducer.particleVars
+  );
+  const emitter = useSelector(
+    (store: CombineReducer) => store.sceneReducer.emitter
   );
   const handleUpdate = (vars) => {
     dispatch(setParticleVars(vars));
@@ -52,9 +58,9 @@ const ParticleDatGui = () => {
       }
     });
   };
-  return particleVars ? (
+  return particleVars && currentGameItems ? (
     <DatGui data={particleVars} onUpdate={handleUpdate}>
-      {generateConfigCard(DatParticlePropertyConfig(), "particle")}
+      {generateConfigCard(DatParticlePropertyConfig(emitter), "particle")}
     </DatGui>
   ) : (
     <>粒子特效</>

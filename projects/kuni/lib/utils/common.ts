@@ -169,22 +169,33 @@ const TransformAncientDate = {
   }
 };
 
-const createFrom = (target, game: Game, parent?: any) => {
+const createFrom = (target, game: Game) => {
   const type = target.constructor.name;
+  console.log(type, target);
   const typeMap = {
     "KnText": () =>
       game.add.text(target.id, target.text, target.style, [
         target.anchor.x,
         target.anchor.y
       ]),
-    "KnSprite": () => {
-      game.add.sprite(target.name, target.key, [
+    "KnSprite": () =>
+      game.add.sprite(target.name, target.id, [
         target.anchor.x,
         target.anchor.y
-      ]);
-    }
+      ]),
+    "KnBitMapText": () =>
+      game.add.bitmapText(
+        target.id,
+        target.text,
+        {
+          fontSize: target.fontSize,
+          fontName: target.fontName
+        },
+        [target.anchor.x, target.anchor.y]
+      )
   };
   const cloneEntity = typeMap[type]();
+  console.log(cloneEntity);
   return Object.assign(cloneEntity, target);
 };
 

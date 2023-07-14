@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-15 09:58:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-23 17:20:17
+ * @LastEditTime: 2023-07-14 17:30:13
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/texture.tsx
  * @Description: ---- 纹理选择 ----
  */
@@ -17,13 +17,18 @@ import { CombineReducer } from "editor@/common/store";
 import { ModalOptions } from "editor@/feedback/modalcore";
 import { WrapContext } from "editor@/page/wireboard";
 import ModalPickerWrapper from "./modal/pickerWrapper";
+import { utils } from "pixi.js";
 import Game from "ts@/kuni/lib/core";
 
 let previewGame: any = null;
 const DatTexture = (props: DefaultProps) => {
   const { path, label, className } = props;
   const [previewSprite, setPreviewSprite] = useState(null as any);
-  const defaultVal = props.data ? props.data[path] : "";
+  console.log(props.data);
+  const defaultVal =
+    props.data && props.data[path]
+      ? props.data[path]
+      : utils.TextureCache["attack"];
   const { openModal }: any = useContext(WrapContext);
   const currentScene = useSelector(
     (store: CombineReducer) => store.sceneReducer.currentScene
@@ -35,9 +40,14 @@ const DatTexture = (props: DefaultProps) => {
 
   const changeTexture = (texture) => {
     const { liveUpdate, _onUpdateValue, onUpdate, path } = props;
-    _onUpdateValue && _onUpdateValue(path, texture);
-    if (liveUpdate) {
-      onUpdate && onUpdate(texture);
+    if (props.onChange) {
+      props.onChange(texture);
+      updateSprite(texture);
+    } else {
+      _onUpdateValue && _onUpdateValue(path, texture);
+      if (liveUpdate) {
+        onUpdate && onUpdate(texture);
+      }
     }
   };
 
@@ -81,7 +91,7 @@ const DatTexture = (props: DefaultProps) => {
           currentScene={currentScene}
           imageList={imageList}
           atlasList={atlasList}
-          defaultVal={defaultVal}
+          defaultVal={previewSprite.texture}
           changeTexture={changeTexture}
         ></ModalPickerWrapper>
       ),
@@ -105,7 +115,6 @@ const DatTexture = (props: DefaultProps) => {
       textureDom.appendChild(previewGame.app.view);
       previewGame.stage.removeChildren();
     }
-
     const ratio = defaultVal.width / defaultVal.height;
     const sprite = previewGame.add.image(
       "",
@@ -118,18 +127,22 @@ const DatTexture = (props: DefaultProps) => {
     sprite.width = ratio > 1 ? previewWidth : previewHeight * ratio;
     sprite.height = ratio > 1 ? previewWidth / ratio : previewHeight;
     sprite.tint = 0xffffff;
-    console.log(sprite);
     setPreviewSprite(sprite);
   }, []);
 
-  useEffect(() => {
+  const updateSprite = (texture) => {
     if (previewSprite) {
       const ratio = defaultVal.width / defaultVal.height;
       previewSprite.width = ratio > 1 ? previewWidth : previewHeight * ratio;
       previewSprite.height = ratio > 1 ? previewWidth / ratio : previewHeight;
-      previewSprite.texture = defaultVal;
+      previewSprite.texture = texture;
       setPreviewSprite(previewSprite);
     }
+  };
+
+  useEffect(() => {
+    console.log(defaultVal);
+    updateSprite(defaultVal);
   }, [defaultVal]);
 
   return (
@@ -142,12 +155,10 @@ const DatTexture = (props: DefaultProps) => {
       <div style={{ paddingTop: "10px" }}>
         <label>{labelText}</label>
       </div>
-      <div className="kn-texture">
-        <div id="texturePreview"></div>
-      </div>
+      <div className="kn-texture">{<div id="texturePreview"></div>}</div>
       <div className="kn-texture-bar">
         <Button type="primary" block onClick={pickTexture}>
-          {defaultVal.textureCacheIds[0]}
+          {previewSprite && previewSprite.texture.textureCacheIds[0]}
         </Button>
       </div>
     </li>

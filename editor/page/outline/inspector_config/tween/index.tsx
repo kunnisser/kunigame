@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-30 16:44:49
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-11 13:05:48
+ * @LastEditTime: 2023-07-14 09:54:50
  * @FilePath: /kunigame/editor/page/outline/inspector_config/tween/index.tsx
  * @Description: ---- 缓动配置 ----
  */
@@ -21,7 +21,9 @@ import { Button } from "antd";
 
 const TweenDatGui = () => {
   const dispatch = useDispatch();
-
+  const currentGameItems = useSelector(
+    (store: CombineReducer) => store.sceneReducer.gameItem
+  );
   const defaultTween = useSelector(
     (store: CombineReducer) => store.sceneReducer.defaultTween
   );
@@ -73,7 +75,8 @@ const TweenDatGui = () => {
       }
     });
   };
-  return vars ? (
+
+  return vars && currentGameItems ? (
     <div>
       <Button
         type="primary"
