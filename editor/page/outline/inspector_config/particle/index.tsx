@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-07-07 13:56:56
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-14 16:14:17
- * @FilePath: /kunigame/editor/page/outline/inspector_config/particle/index.tsx
+ * @LastEditTime: 2023-07-15 16:39:35
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\particle\index.tsx
  * @Description: ---- 粒子编辑组建 ----
  */
 

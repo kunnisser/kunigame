@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-15 09:58:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-14 17:30:13
- * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/texture.tsx
+ * @LastEditTime: 2023-07-16 18:49:22
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\texture.tsx
  * @Description: ---- 纹理选择 ----
  */
 
@@ -21,10 +21,11 @@ import { utils } from "pixi.js";
 import Game from "ts@/kuni/lib/core";
 
 let previewGame: any = null;
+
 const DatTexture = (props: DefaultProps) => {
+  DatTexture['staticProps'] = props;
   const { path, label, className } = props;
   const [previewSprite, setPreviewSprite] = useState(null as any);
-  console.log(props.data);
   const defaultVal =
     props.data && props.data[path]
       ? props.data[path]
@@ -39,9 +40,11 @@ const DatTexture = (props: DefaultProps) => {
   const previewHeight = 270;
 
   const changeTexture = (texture) => {
-    const { liveUpdate, _onUpdateValue, onUpdate, path } = props;
-    if (props.onChange) {
-      props.onChange(texture);
+    const { liveUpdate, _onUpdateValue, onUpdate, onChange } = DatTexture['staticProps']
+    if (onChange) {
+      const newPath = DatTexture['staticProps'].path;
+      DatTexture['staticProps'].data[newPath] = texture;
+      onChange(texture);
       updateSprite(texture);
     } else {
       _onUpdateValue && _onUpdateValue(path, texture);
@@ -136,12 +139,12 @@ const DatTexture = (props: DefaultProps) => {
       previewSprite.width = ratio > 1 ? previewWidth : previewHeight * ratio;
       previewSprite.height = ratio > 1 ? previewWidth / ratio : previewHeight;
       previewSprite.texture = texture;
+      console.log('preivew', previewSprite);
       setPreviewSprite(previewSprite);
     }
   };
 
   useEffect(() => {
-    console.log(defaultVal);
     updateSprite(defaultVal);
   }, [defaultVal]);
 
@@ -158,7 +161,7 @@ const DatTexture = (props: DefaultProps) => {
       <div className="kn-texture">{<div id="texturePreview"></div>}</div>
       <div className="kn-texture-bar">
         <Button type="primary" block onClick={pickTexture}>
-          {previewSprite && previewSprite.texture.textureCacheIds[0]}
+          {defaultVal && defaultVal.textureCacheIds[0]}
         </Button>
       </div>
     </li>

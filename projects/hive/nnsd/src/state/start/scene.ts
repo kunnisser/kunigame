@@ -60,7 +60,8 @@ class Start extends KnScene {
     testGroup.addChild(demo1Text);
     testGroup.addChild(demo2Text);
     this.game.add.group("groupChild", group2);
-    const logo2 = this.game.add.image("logo2", "Item_Cloud0000", group2);
+    const logo2 = this.game.add.image("logo2", "logo", group2);
+    logo2.scale.y = 1;
     logo2.scale.set(1.0300000000000002, 1.2524539231364777);
     logo2.angle = 0;
     logo2.alpha = 1;

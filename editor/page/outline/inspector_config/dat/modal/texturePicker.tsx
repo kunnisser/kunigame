@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-16 16:55:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-05 23:55:19
+ * @LastEditTime: 2023-07-16 18:42:04
  * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\texturePicker.tsx
  * @Description: ---- 弹窗内容 - 纹理选择 ----
  */
@@ -12,10 +12,9 @@ import React, { useContext, useEffect, useRef } from "react";
 import Game from "ts@/kuni/lib/core";
 import { WrapContext } from "editor@/page/wireboard";
 import { setTimeout } from "timers";
-import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 
 const ModalTexturePicker = (props: any) => {
-  const { atlasList, changeTexture, pickValue, currentScene } = props;
+  const { atlasList, changeTexture, pickValue, currentScene, game } = props;
   const { closeModal }: any = useContext(WrapContext);
   const dpr = 2;
   const ref: any = useRef({
@@ -33,10 +32,11 @@ const ModalTexturePicker = (props: any) => {
   }
 
   function onPointerDown(this: any) {
-    const icon: KnSprite = this;
-    const texture = icon.texture;
-    changeTexture(texture);
+    const iconKey: string = this.texture.textureCacheIds[0];
+    console.log(iconKey);
+    const texture = game.add.texture(iconKey);
     closeModal();
+    changeTexture(texture);
   }
 
   useEffect(() => {

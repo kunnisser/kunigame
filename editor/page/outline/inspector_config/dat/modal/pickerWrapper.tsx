@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-19 17:33:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-03 10:34:02
- * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/pickerWrapper.tsx
+ * @LastEditTime: 2023-07-16 17:04:44
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\pickerWrapper.tsx
  * @Description: ---- 选择内容外层 ----
  */
 import React from "react";
@@ -35,6 +35,7 @@ const ModalPickerWrapper = (props: any) => {
         changeTexture={changeTexture}
         atlasList={atlasList}
         currentScene={currentScene}
+        game={currentScene.game}
       ></ModalTexturePicker>
     </>
   );

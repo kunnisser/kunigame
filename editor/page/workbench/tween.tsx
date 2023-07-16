@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-13 14:52:35
- * @FilePath: /kunigame/editor/page/workbench/tween.tsx
+ * @LastEditTime: 2023-07-16 01:14:00
+ * @FilePath: \kunigame\editor\page\workbench\tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
 import { CombineReducer } from "editor@/common/store";
@@ -73,29 +73,34 @@ const TweenEditor = (props: any) => {
   };
 
   useEffect(() => {
-    const previewTweenDom: any = document.getElementById("previewTween");
     if (!previewGame) {
-      const dpr = window.devicePixelRatio;
-
-      previewGame = new Game({
-        width: previewTweenDom.clientWidth * dpr * 2,
-        ratio: previewTweenDom.clientWidth / previewTweenDom.clientHeight,
-        dpr,
-        antialias: true,
-        transparent: true,
-        view: previewTweenDom,
-        isPureCanvas: true,
-        editorWidth: game.config.editorWidth,
-        editorHeight: game.config.editorHeight
-      });
-      previewTweenDom.appendChild(previewGame.app.view);
-      tweenContainer = previewGame.add.group("tweenGroup", previewGame.world);
-      tweenContainer.position.set(previewGame.editX, previewGame.editY);
-      ref.current.tween = previewGame.add.tween();
+      const dom: any = createGame();
+      dom.appendChild(previewGame.app.view);
     } else {
       previewGame.stage.removeChildren();
     }
+
   }, []);
+
+  const createGame = () => {
+    const previewTweenDom: any = document.getElementById("previewTween");
+    const dpr = window.devicePixelRatio;
+    previewGame = new Game({
+      width: previewTweenDom.clientWidth * dpr * 2,
+      ratio: previewTweenDom.clientWidth / previewTweenDom.clientHeight,
+      dpr,
+      antialias: true,
+      transparent: true,
+      view: previewTweenDom,
+      isPureCanvas: true,
+      editorWidth: game.config.editorWidth,
+      editorHeight: game.config.editorHeight
+    });
+    tweenContainer = previewGame.add.group("tweenGroup", previewGame.world);
+    tweenContainer.position.set(previewGame.editX, previewGame.editY);
+    ref.current.tween = previewGame.add.tween();
+    return previewTweenDom;
+  }
 
   const generateTween = (target: any) => {
     const tween = ref.current.tween;
@@ -125,7 +130,7 @@ const TweenEditor = (props: any) => {
 
     ref.current.defaultTween &&
       (ref.current.defaultTween.pause(0).kill(),
-      (ref.current.defaultTween = null));
+        (ref.current.defaultTween = null));
     ref.current.defaultTween = tween.instance.to(target, duration, {
       startAt: originVars,
       x: "+=" + x,
@@ -206,7 +211,8 @@ const TweenEditor = (props: any) => {
   }, [scaleTweenVars]);
 
   useEffect(() => {
-    if (currentScene && tweenContainer) {
+    previewGame.app.stage || createGame();
+    if (currentScene) {
       if (currentGameItems && type === "tween") {
         const [currentGameItem] = currentGameItems;
         const cloneGameItem: any = createFrom(currentGameItem, previewGame);
@@ -224,9 +230,12 @@ const TweenEditor = (props: any) => {
       } else {
         ref.current.defaultTween && ref.current.defaultTween.pause(0);
         ref.current.scaleTween && ref.current.scaleTween.pause(0);
-        tweenContainer.removeChildren();
       }
     }
+
+    return () => {
+      previewGame.app.stage && previewGame.app.destroy(true);
+    };
   }, [currentScene, currentGameItems, type]);
 
   return (

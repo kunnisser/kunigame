@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-07-07 13:49:58
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-14 17:22:05
- * @FilePath: /kunigame/editor/page/workbench/particle.tsx
+ * @LastEditTime: 2023-07-16 01:26:06
+ * @FilePath: \kunigame\editor\page\workbench\particle.tsx
  * @Description: ---- 粒子特效 ----
  */
 
@@ -19,7 +19,6 @@ import Game from "ts@/kuni/lib/core";
 import Stats from "stats-js";
 import { createFrom } from "ts@/kuni/lib/utils/common";
 import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
-import { utils } from "pixi.js";
 
 let previewGame: any = null;
 let particleContainer: any = null;
@@ -46,7 +45,7 @@ const ParticleEditor = (props: any) => {
     angleDirect: true,
     width: 0,
     height: 0,
-    texture: null
+    particleTexture: null
   });
 
   const currentScene = useSelector(
@@ -66,38 +65,36 @@ const ParticleEditor = (props: any) => {
   const defaultParticleVars = ref.current;
 
   useEffect(() => {
-    const previewParticleDom: any = document.getElementById("previewParticle");
-    if (!previewGame) {
-      const dpr = window.devicePixelRatio;
-      stats = Stats();
-      previewParticleDom.style.position = "relative";
-      stats.dom.style.position = "absolute";
-      previewGame = new Game({
-        width: previewParticleDom.clientWidth * dpr * 2,
-        ratio: previewParticleDom.clientWidth / previewParticleDom.clientHeight,
-        dpr,
-        antialias: true,
-        transparent: true,
-        view: previewParticleDom,
-        isPureCanvas: true,
-        editorWidth: game.config.editorWidth,
-        editorHeight: game.config.editorHeight
-      });
-      previewParticleDom.appendChild(previewGame.app.view);
-      previewParticleDom.appendChild(stats.dom);
-      particleContainer = previewGame.add.group(
-        "particleEditorGroup",
-        previewGame.world
-      );
-      tween = previewGame.add.tween();
-      emitter = previewGame.add.emitter(previewGame, 10, "attack");
-      particleContainer.position.set(previewGame.editX, previewGame.editY);
-      particleContainer.addChild(emitter);
-      dispatch(setEmitter(emitter));
-    } else {
-      previewGame.world.removeChildren();
-    }
+    stats = Stats();
+    stats.dom.style.position = "absolute";
+    const dom = createGame();
+    dom.style.position = "relative";
   }, []);
+
+  const createGame = () => {
+    const previewParticleDom: any = document.getElementById("previewParticle");
+    const dpr = window.devicePixelRatio;
+    previewGame = new Game({
+      width: previewParticleDom.clientWidth * dpr * 2,
+      ratio: previewParticleDom.clientWidth / previewParticleDom.clientHeight,
+      dpr,
+      antialias: true,
+      transparent: true,
+      view: previewParticleDom,
+      isPureCanvas: true,
+      editorWidth: game.config.editorWidth,
+      editorHeight: game.config.editorHeight
+    });
+    previewParticleDom.appendChild(previewGame.app.view);
+    previewParticleDom.appendChild(stats.dom);
+    particleContainer = previewGame.add.group(
+      "particleEditorGroup",
+      previewGame.world
+    );
+    tween = previewGame.add.tween();
+    particleContainer.position.set(previewGame.editX, previewGame.editY);
+    return previewParticleDom;
+  }
 
   const particleBooleanDispose = (bool, ret: any) => {
     return bool ? ret : 1;
@@ -130,18 +127,18 @@ const ParticleEditor = (props: any) => {
         x:
           particle.x +
           particleBooleanDispose(xDirect, game.math.redirect()) *
-            particleBooleanDispose(xRandom, Math.random()) *
-            offsetX,
+          particleBooleanDispose(xRandom, Math.random()) *
+          offsetX,
         y:
           particle.y +
           particleBooleanDispose(yDirect, game.math.redirect()) *
-            particleBooleanDispose(yRandom, Math.random()) *
-            offsetY,
+          particleBooleanDispose(yRandom, Math.random()) *
+          offsetY,
         angle:
           particle.angle +
           particleBooleanDispose(angleDirect, game.math.redirect()) *
-            particleBooleanDispose(angleRandom, Math.random()) *
-            angle,
+          particleBooleanDispose(angleRandom, Math.random()) *
+          angle,
         alpha: 0,
         ease: tween[ease][inout]
       });
@@ -169,16 +166,24 @@ const ParticleEditor = (props: any) => {
   }, [particleVars]);
 
   useEffect(() => {
+    previewGame.app.stage || createGame();
     particleContainer.children.length > 1 && particleContainer.removeChildAt(1);
     if (type === "particle" && currentScene && currentGameItems) {
       const [currentGameItem] = currentGameItems;
       const cloneGameItem: any = createFrom(currentGameItem, previewGame);
       cloneGameItem.parent = null;
+      emitter = previewGame.add.emitter(previewGame, 10, "attack");
+      particleContainer.addChild(emitter);
       particleContainer.addChild(cloneGameItem);
       generateParticle(currentGameItem);
+      dispatch(setEmitter(emitter));
       dispatch(setParticleVars(particleVars || defaultParticleVars));
     } else {
       prevTicker && prevTicker.stop() && prevTicker.destroy();
+    }
+
+    return () => {
+      previewGame.app.stage && previewGame.app.destroy(true);
     }
   }, [currentScene, currentGameItems, type]);
 

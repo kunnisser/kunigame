@@ -7,15 +7,15 @@
 
 /* 粒子发射器类 */
 
-import { ParticleContainer, utils, Sprite } from "pixi.js";
-import Game from "../core";
+import { ParticleContainer, utils, Sprite } from 'pixi.js';
+import Game from '../core';
 const ParticleConfig: any = {
   scale: true,
   position: true,
   visible: true,
   rotation: true,
   uvs: true,
-  alpha: true
+  alpha: true,
 };
 class KnEmitter extends ParticleContainer {
   public key: string;
@@ -30,7 +30,7 @@ class KnEmitter extends ParticleContainer {
     this.key = key;
     this.alpha = 1;
     this.throtting = KnEmitter.throtting;
-    this.create(quality, key);
+    quality && this.create(quality, key);
   }
 
   public create(quality: number = 10, key: string) {
