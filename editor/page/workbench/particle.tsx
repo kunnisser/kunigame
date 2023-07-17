@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-07-07 13:49:58
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-16 01:26:06
- * @FilePath: \kunigame\editor\page\workbench\particle.tsx
+ * @LastEditTime: 2023-07-17 17:39:22
+ * @FilePath: /kunigame/editor/page/workbench/particle.tsx
  * @Description: ---- 粒子特效 ----
  */
 
@@ -45,7 +45,7 @@ const ParticleEditor = (props: any) => {
     angleDirect: true,
     width: 0,
     height: 0,
-    particleTexture: null
+    particleTexture: "attack"
   });
 
   const currentScene = useSelector(
@@ -94,7 +94,7 @@ const ParticleEditor = (props: any) => {
     tween = previewGame.add.tween();
     particleContainer.position.set(previewGame.editX, previewGame.editY);
     return previewParticleDom;
-  }
+  };
 
   const particleBooleanDispose = (bool, ret: any) => {
     return bool ? ret : 1;
@@ -127,18 +127,18 @@ const ParticleEditor = (props: any) => {
         x:
           particle.x +
           particleBooleanDispose(xDirect, game.math.redirect()) *
-          particleBooleanDispose(xRandom, Math.random()) *
-          offsetX,
+            particleBooleanDispose(xRandom, Math.random()) *
+            offsetX,
         y:
           particle.y +
           particleBooleanDispose(yDirect, game.math.redirect()) *
-          particleBooleanDispose(yRandom, Math.random()) *
-          offsetY,
+            particleBooleanDispose(yRandom, Math.random()) *
+            offsetY,
         angle:
           particle.angle +
           particleBooleanDispose(angleDirect, game.math.redirect()) *
-          particleBooleanDispose(angleRandom, Math.random()) *
-          angle,
+            particleBooleanDispose(angleRandom, Math.random()) *
+            angle,
         alpha: 0,
         ease: tween[ease][inout]
       });
@@ -166,13 +166,18 @@ const ParticleEditor = (props: any) => {
   }, [particleVars]);
 
   useEffect(() => {
-    previewGame.app.stage || createGame();
-    particleContainer.children.length > 1 && particleContainer.removeChildAt(1);
     if (type === "particle" && currentScene && currentGameItems) {
+      previewGame.app.stage || createGame();
+      particleContainer.children.length > 1 &&
+        particleContainer.removeChildAt(1);
       const [currentGameItem] = currentGameItems;
       const cloneGameItem: any = createFrom(currentGameItem, previewGame);
       cloneGameItem.parent = null;
-      emitter = previewGame.add.emitter(previewGame, 10, "attack");
+      emitter = previewGame.add.emitter(
+        previewGame,
+        10,
+        ref.current.particleTexture
+      );
       particleContainer.addChild(emitter);
       particleContainer.addChild(cloneGameItem);
       generateParticle(currentGameItem);
@@ -183,8 +188,14 @@ const ParticleEditor = (props: any) => {
     }
 
     return () => {
-      previewGame.app.stage && previewGame.app.destroy(true);
-    }
+      previewGame && previewGame.stage.removeChildren();
+      previewGame.app.renderer &&
+        previewGame.app.renderer.context.gl
+          .getExtension("WEBGL_lose_context")
+          .loseContext();
+      previewGame.app.stage &&
+        previewGame.app.destroy(true, { children: true });
+    };
   }, [currentScene, currentGameItems, type]);
 
   return (

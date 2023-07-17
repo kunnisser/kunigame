@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-17 14:08:31
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-03 10:35:25
+ * @LastEditTime: 2023-07-17 09:29:59
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/imagePicker.tsx
  * @Description: ---- 图片选择 ----
  */
@@ -10,7 +10,7 @@ import { Space } from "antd";
 import React, { useContext } from "react";
 import { WrapContext } from "editor@/page/wireboard";
 const ModalImagePicker = (props: any) => {
-  const { images, game, changeTexture, pickValue } = props;
+  const { images, changeTextureKey, pickValue } = props;
   const { closeModal }: any = useContext(WrapContext);
 
   return (
@@ -19,15 +19,12 @@ const ModalImagePicker = (props: any) => {
         return (
           <div
             className={
-              image.key === pickValue.textureCacheIds[0]
-                ? "texture-active"
-                : "texture-unactive"
+              image.key === pickValue ? "texture-active" : "texture-unactive"
             }
             key={image.key}
             onClick={() => {
-              const texture = game.add.texture(image.key);
               closeModal();
-              changeTexture(texture);
+              changeTextureKey(image.key);
             }}
           >
             <div className="kn-image-thumb">

@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-16 16:55:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-16 18:42:04
- * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\texturePicker.tsx
+ * @LastEditTime: 2023-07-17 09:31:29
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/texturePicker.tsx
  * @Description: ---- 弹窗内容 - 纹理选择 ----
  */
 
@@ -14,7 +14,7 @@ import { WrapContext } from "editor@/page/wireboard";
 import { setTimeout } from "timers";
 
 const ModalTexturePicker = (props: any) => {
-  const { atlasList, changeTexture, pickValue, currentScene, game } = props;
+  const { atlasList, changeTextureKey, pickValue, currentScene, game } = props;
   const { closeModal }: any = useContext(WrapContext);
   const dpr = 2;
   const ref: any = useRef({
@@ -33,10 +33,8 @@ const ModalTexturePicker = (props: any) => {
 
   function onPointerDown(this: any) {
     const iconKey: string = this.texture.textureCacheIds[0];
-    console.log(iconKey);
-    const texture = game.add.texture(iconKey);
     closeModal();
-    changeTexture(texture);
+    changeTextureKey(iconKey);
   }
 
   useEffect(() => {
@@ -116,9 +114,7 @@ const ModalTexturePicker = (props: any) => {
             0.5 * frameHeight +
             j * (frameHeight + frameMarginBottom);
           icon.tint =
-            pickValue.textureCacheIds[0] === icon.texture.textureCacheIds[0]
-              ? 0x32bf4c
-              : 0xffffff;
+            pickValue === icon.texture.textureCacheIds[0] ? 0x32bf4c : 0xffffff;
           if (isNewCreatedTexture) {
             icon.interactive = true;
             icon.on("pointerover", onPointerOver, icon);

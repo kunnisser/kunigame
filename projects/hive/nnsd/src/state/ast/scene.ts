@@ -20,21 +20,16 @@ class AST extends KnScene {
       bg002: '/projects/hive/nnsd/assets/images/bg002.jpg',
       attack: '/projects/hive/nnsd/assets/images/attack.png',
       desyrel: '/projects/hive/nnsd/assets/fonts/desyrel.xml',
-      avator_01: '/projects/hive/nnsd/assets/images/avator_01.png',
+      avator_01: '/projects/hive/nnsd/assets/images/avator_01.png'
     };
   }
 
   boot() {}
 
   create() {
-    const demoText: KnText = this.game.add.text(
-      'demoText',
-      'WELCOME',
-      {
-        fontSize: 100,
-      },
-      [0.5, 0.5]
-    );
+    const demoText: KnText = this.game.add.text('demoText', 'WELCOME', {
+      fontSize: 100
+    }, [0.5, 0.5]);
     demoText.name = 'demoText1';
     demoText.style.fontSize = 166;
     demoText.style.fill = '#c08484';
@@ -74,6 +69,7 @@ class AST extends KnScene {
       this.removeChildren(1, this.children.length);
     }
   }
+
 }
 
 export default AST;

@@ -2,12 +2,12 @@
  * @Author: kunnisser
  * @Date: 2023-07-15 16:29:40
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-15 17:39:39
- * @FilePath: \kunigame\editor\page\outline\inspector_config\scene\index.tsx
+ * @LastEditTime: 2023-07-17 10:28:42
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/scene/index.tsx
  * @Description: ---- 场景对象配置面板 ----
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import Game from "ts@/kuni/lib/core";
 import DatGui from "react-dat-gui";
@@ -17,6 +17,7 @@ import { CombineReducer } from "editor@/common/store";
 import Admixture from "../dat/admixture";
 import { createFrom, debounce } from "ts@/kuni/lib/utils/common";
 import * as _ from "lodash";
+import { utils } from "pixi.js";
 
 const SceneDatGui = () => {
   const [gameItem, setGameItem] = useState(null as any);
@@ -35,8 +36,7 @@ const SceneDatGui = () => {
     return store.sceneReducer.editGameItem;
   });
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   useEffect(() => {
     const item = store.getState().sceneReducer.gameItem;
@@ -59,7 +59,7 @@ const SceneDatGui = () => {
         const prop = keys.reduce((total, key) => {
           return total[key];
         }, item[0]);
-        configItems[keysCombine] = prop;
+        configItems[keysCombine] = setAdvancedVariables(prop);
       });
 
       setGameItem(configItems);
@@ -85,10 +85,7 @@ const SceneDatGui = () => {
   // 处理特殊提交对象
   const setAdvancedVariables = (val: any) => {
     if (val.textureCacheIds) {
-      return {
-        type: "texture",
-        value: val.textureCacheIds
-      };
+      return val.textureCacheIds[0];
     }
     return val;
   };
@@ -104,7 +101,7 @@ const SceneDatGui = () => {
   };
 
   const handleUpdate = (newData: any, path: string) => {
-    console.time('scene');
+    console.time("scene");
     const game: Game = store.getState().sceneReducer.game;
     const [gameItem] = store.getState().sceneReducer.gameItem;
     const gameItemName = gameItem.name;
@@ -124,7 +121,11 @@ const SceneDatGui = () => {
       // 链式调用赋值
       keys.reduce((total, key, index) => {
         if (index === keys.length - 1) {
-          total[key] = newData[keysCombine];
+          if (key === "texture") {
+            total[key] = utils.TextureCache[newData[keysCombine]];
+          } else {
+            total[key] = newData[keysCombine];
+          }
         }
         return total[key];
       }, gameItem);
@@ -140,7 +141,7 @@ const SceneDatGui = () => {
     debounce.handler(() => {
       ref.current.update = true;
       const recordNext = { [path]: newData[path] };
-      editGameItem[gameItemName][path] = setAdvancedVariables(newData[path]);
+      editGameItem[gameItemName][path] = newData[path];
 
       console.log("old", ref.current.recordPrev);
       console.log("new", recordNext);
@@ -155,7 +156,7 @@ const SceneDatGui = () => {
       dispatch(updateEditGameItem(editGameItem));
     });
     setGameItem({ ...newData });
-    console.timeEnd('scene');
+    console.timeEnd("scene");
   };
 
   /**
@@ -197,7 +198,7 @@ const SceneDatGui = () => {
     )
   ) : (
     <>空</>
-  )
-}
+  );
+};
 
 export default SceneDatGui;

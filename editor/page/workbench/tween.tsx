@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-16 01:14:00
- * @FilePath: \kunigame\editor\page\workbench\tween.tsx
+ * @LastEditTime: 2023-07-17 17:51:00
+ * @FilePath: /kunigame/editor/page/workbench/tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
 import { CombineReducer } from "editor@/common/store";
@@ -79,7 +79,6 @@ const TweenEditor = (props: any) => {
     } else {
       previewGame.stage.removeChildren();
     }
-
   }, []);
 
   const createGame = () => {
@@ -96,11 +95,12 @@ const TweenEditor = (props: any) => {
       editorWidth: game.config.editorWidth,
       editorHeight: game.config.editorHeight
     });
+    console.log(previewGame);
     tweenContainer = previewGame.add.group("tweenGroup", previewGame.world);
     tweenContainer.position.set(previewGame.editX, previewGame.editY);
     ref.current.tween = previewGame.add.tween();
     return previewTweenDom;
-  }
+  };
 
   const generateTween = (target: any) => {
     const tween = ref.current.tween;
@@ -127,10 +127,11 @@ const TweenEditor = (props: any) => {
       alpha: originItem.alpha,
       angle: originItem.angle
     };
+    console.log(originItem);
 
     ref.current.defaultTween &&
       (ref.current.defaultTween.pause(0).kill(),
-        (ref.current.defaultTween = null));
+      (ref.current.defaultTween = null));
     ref.current.defaultTween = tween.instance.to(target, duration, {
       startAt: originVars,
       x: "+=" + x,
@@ -146,11 +147,11 @@ const TweenEditor = (props: any) => {
         loop &&
           ref.current.defaultTween &&
           ref.current.defaultTween.seek(0).restart(true);
-        console.log(currentGameItems);
       }
     });
     ref.current.defaultTween &&
-      ref.current.defaultTween.progress(progress).pause();
+      ref.current.defaultTween.pause().progress(progress);
+    console.log(target.x);
     dispatch(setDefaultTween(ref.current.defaultTween));
   };
 
@@ -211,19 +212,21 @@ const TweenEditor = (props: any) => {
   }, [scaleTweenVars]);
 
   useEffect(() => {
-    previewGame.app.stage || createGame();
     if (currentScene) {
       if (currentGameItems && type === "tween") {
         const [currentGameItem] = currentGameItems;
-        const cloneGameItem: any = createFrom(currentGameItem, previewGame);
-        cloneGameItem.parent = null;
-        cloneGameItem.interactive = false;
+        // const cloneGameItem: any = _.cloneDeep(currentGameItem);
+
+        tweenItem = createFrom(currentGameItem, previewGame);
+        tweenItem.parent = null;
+        tweenItem.game = previewGame;
+        tweenItem.canvas = previewGame.app.view;
+        tweenItem.context = previewGame.app.renderer.context;
+        tweenItem.interactive = false;
+        console.log(tweenItem);
         tweenContainer.removeChildren();
-        tweenContainer.addChild(cloneGameItem);
-        tweenItem = cloneGameItem;
-        // 根据克隆的当前对象构建缓动缩放动画
-        cloneGameItem &&
-          (generateTween(cloneGameItem), generateScaleTween(cloneGameItem));
+        tweenContainer.addChild(tweenItem);
+
         // 初始渲染设置默认值
         dispatch(setTweenVars(tweenVars || defaultTweenVars));
         dispatch(setScaleTweenVars(scaleTweenVars || defaultScaleTweenVars));
@@ -232,10 +235,6 @@ const TweenEditor = (props: any) => {
         ref.current.scaleTween && ref.current.scaleTween.pause(0);
       }
     }
-
-    return () => {
-      previewGame.app.stage && previewGame.app.destroy(true);
-    };
   }, [currentScene, currentGameItems, type]);
 
   return (

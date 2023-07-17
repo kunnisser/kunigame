@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-03-19 17:33:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-16 17:04:44
- * @FilePath: \kunigame\editor\page\outline\inspector_config\dat\modal\pickerWrapper.tsx
+ * @LastEditTime: 2023-07-17 09:17:56
+ * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/pickerWrapper.tsx
  * @Description: ---- 选择内容外层 ----
  */
 import React from "react";
@@ -12,7 +12,7 @@ import ModalImagePicker from "./imagePicker";
 import { Badge, Divider } from "antd";
 
 const ModalPickerWrapper = (props: any) => {
-  const { defaultVal, imageList, currentScene, atlasList, changeTexture } =
+  const { defaultVal, imageList, currentScene, atlasList, changeTextureKey } =
     props;
 
   return (
@@ -22,7 +22,7 @@ const ModalPickerWrapper = (props: any) => {
       </Badge.Ribbon>
       <ModalImagePicker
         pickValue={defaultVal}
-        changeTexture={changeTexture}
+        changeTextureKey={changeTextureKey}
         images={imageList}
         game={currentScene.game}
       ></ModalImagePicker>
@@ -32,7 +32,7 @@ const ModalPickerWrapper = (props: any) => {
       </Badge.Ribbon>
       <ModalTexturePicker
         pickValue={defaultVal}
-        changeTexture={changeTexture}
+        changeTextureKey={changeTextureKey}
         atlasList={atlasList}
         currentScene={currentScene}
         game={currentScene.game}

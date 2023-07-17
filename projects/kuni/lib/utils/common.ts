@@ -1,6 +1,6 @@
 import Game from "../core";
 import { Graphics, Container } from "pixi.js";
-
+import * as _ from "lodash";
 // 防抖函数
 const debounce: any = {
   tick: null,
@@ -169,9 +169,9 @@ const TransformAncientDate = {
   }
 };
 
+// 自定义game对象拷贝
 const createFrom = (target, game: Game) => {
   const type = target.constructor.name;
-  console.log(type, target);
   const typeMap = {
     "KnText": () =>
       game.add.text(target.id, target.text, target.style, [
@@ -195,8 +195,7 @@ const createFrom = (target, game: Game) => {
       )
   };
   const cloneEntity = typeMap[type]();
-  console.log(cloneEntity);
-  return Object.assign(cloneEntity, target);
+  return Object.assign(cloneEntity, Object.assign({}, target));
 };
 
 export {
