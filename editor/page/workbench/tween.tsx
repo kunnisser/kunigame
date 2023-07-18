@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-17 17:51:00
+ * @LastEditTime: 2023-07-18 10:37:46
  * @FilePath: /kunigame/editor/page/workbench/tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
@@ -26,7 +26,8 @@ const TweenEditor = (props: any) => {
     tween: null,
     defaultTween: null,
     scaleTween: null,
-    progress: 0
+    progress: 0,
+    boot: false
   } as any);
   const dispatch = useDispatch();
   const currentScene = useSelector(
@@ -95,7 +96,6 @@ const TweenEditor = (props: any) => {
       editorWidth: game.config.editorWidth,
       editorHeight: game.config.editorHeight
     });
-    console.log(previewGame);
     tweenContainer = previewGame.add.group("tweenGroup", previewGame.world);
     tweenContainer.position.set(previewGame.editX, previewGame.editY);
     ref.current.tween = previewGame.add.tween();
@@ -127,7 +127,6 @@ const TweenEditor = (props: any) => {
       alpha: originItem.alpha,
       angle: originItem.angle
     };
-    console.log(originItem);
 
     ref.current.defaultTween &&
       (ref.current.defaultTween.pause(0).kill(),
@@ -151,7 +150,6 @@ const TweenEditor = (props: any) => {
     });
     ref.current.defaultTween &&
       ref.current.defaultTween.pause().progress(progress);
-    console.log(target.x);
     dispatch(setDefaultTween(ref.current.defaultTween));
   };
 
@@ -215,18 +213,12 @@ const TweenEditor = (props: any) => {
     if (currentScene) {
       if (currentGameItems && type === "tween") {
         const [currentGameItem] = currentGameItems;
-        // const cloneGameItem: any = _.cloneDeep(currentGameItem);
-
         tweenItem = createFrom(currentGameItem, previewGame);
-        tweenItem.parent = null;
-        tweenItem.game = previewGame;
-        tweenItem.canvas = previewGame.app.view;
-        tweenItem.context = previewGame.app.renderer.context;
         tweenItem.interactive = false;
-        console.log(tweenItem);
         tweenContainer.removeChildren();
         tweenContainer.addChild(tweenItem);
-
+        ref.current.boot && generateTween(tweenItem);
+        ref.current.boot = true;
         // 初始渲染设置默认值
         dispatch(setTweenVars(tweenVars || defaultTweenVars));
         dispatch(setScaleTweenVars(scaleTweenVars || defaultScaleTweenVars));

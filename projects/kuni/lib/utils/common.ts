@@ -170,7 +170,7 @@ const TransformAncientDate = {
 };
 
 // 自定义game对象拷贝
-const createFrom = (target, game: Game) => {
+const createFrom = (target: any, game: Game) => {
   const type = target.constructor.name;
   const typeMap = {
     "KnText": () =>
@@ -195,7 +195,25 @@ const createFrom = (target, game: Game) => {
       )
   };
   const cloneEntity = typeMap[type]();
-  return Object.assign(cloneEntity, Object.assign({}, target));
+  const keys = Object.keys(target);
+  keys.forEach((key) => {
+    if (key !== "transform") {
+      cloneEntity[key] = target[key];
+    }
+  });
+  const { x, y, scale, rotation, skew, pivot } = target;
+  cloneEntity.setTransform(
+    x,
+    y,
+    scale.x,
+    scale.y,
+    rotation,
+    skew.x,
+    skew.y,
+    pivot.x,
+    pivot.y
+  );
+  return cloneEntity;
 };
 
 export {
