@@ -20,7 +20,8 @@ class AST extends KnScene {
       bg002: '/projects/hive/nnsd/assets/images/bg002.jpg',
       attack: '/projects/hive/nnsd/assets/images/attack.png',
       desyrel: '/projects/hive/nnsd/assets/fonts/desyrel.xml',
-      avator_01: '/projects/hive/nnsd/assets/images/avator_01.png'
+      avator_01: '/projects/hive/nnsd/assets/images/avator_01.png',
+      boy: "/projects/hive/nnsd/assets/atlas/boy.json"
     };
   }
 

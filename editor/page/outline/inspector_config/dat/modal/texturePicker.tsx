@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-16 16:55:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-17 09:31:29
+ * @LastEditTime: 2023-07-18 14:08:17
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/modal/texturePicker.tsx
  * @Description: ---- 弹窗内容 - 纹理选择 ----
  */
@@ -14,7 +14,7 @@ import { WrapContext } from "editor@/page/wireboard";
 import { setTimeout } from "timers";
 
 const ModalTexturePicker = (props: any) => {
-  const { atlasList, changeTextureKey, pickValue, currentScene, game } = props;
+  const { atlasList, changeTextureKey, pickValue, currentScene } = props;
   const { closeModal }: any = useContext(WrapContext);
   const dpr = 2;
   const ref: any = useRef({

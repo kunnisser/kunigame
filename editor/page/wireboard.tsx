@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-01-21 17:21:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-15 17:11:08
- * @FilePath: \kunigame\editor\page\wireboard.tsx
+ * @LastEditTime: 2023-07-18 16:31:28
+ * @FilePath: /kunigame/editor/page/wireboard.tsx
  * @Description: ---- 酷尼游戏控制台 ----
  */
 
@@ -27,7 +27,8 @@ import {
   BulbOutlined,
   DesktopOutlined,
   RocketOutlined,
-  UngroupOutlined
+  UngroupOutlined,
+  FireOutlined
 } from "@ant-design/icons";
 import "editor@/assets/index.styl";
 import {
@@ -41,6 +42,7 @@ import { isObjectEmpty } from "editor@/tool";
 import AlignHeader from "./header/align";
 import TweenEditor from "./workbench/tween";
 import ParticleEditor from "./workbench/particle";
+import AnimationEditor from "./workbench/animation";
 
 export const WrapContext = createContext({});
 
@@ -115,8 +117,8 @@ const WireBoard = (props) => {
     {
       key: "animation",
       name: sceneId + "Animation",
-      childComponent: <>123</>,
-      icon: <UngroupOutlined />
+      childComponent: <AnimationEditor type={editorType} />,
+      icon: <FireOutlined />
     }
   ];
 
