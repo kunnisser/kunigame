@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-19 17:29:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-14 16:10:43
+ * @LastEditTime: 2023-07-19 16:04:18
  * @FilePath: /kunigame/editor/common/gameStore/scene/action.ts
  * @Description: ---- 场景状态action ----
  */
@@ -26,6 +26,7 @@ const SET_SCALE_TWEEN = Symbol();
 const SET_TWEEN_VARS = Symbol();
 const SET_SCALE_TWEEN_VARS = Symbol();
 const SET_PARTICLE_VARS = Symbol();
+const SET_ANIMATION_VARS = Symbol();
 const SET_EMITTER = Symbol();
 
 // 储存场景列表
@@ -149,6 +150,14 @@ const setParticleVars = (vars) => {
   };
 };
 
+// 设置动画对象配置
+const setAnimationVars = (vars) => {
+  return {
+    type: SET_ANIMATION_VARS,
+    payload: vars
+  };
+};
+
 // 设置粒子发射器实例
 const setEmitter = (emitter: KnEmitter) => {
   return {
@@ -188,6 +197,8 @@ export {
   SET_DEFAULT_TWEEN,
   setScaleTween,
   SET_SCALE_TWEEN,
+  setAnimationVars,
+  SET_ANIMATION_VARS,
   setEmitter,
   SET_EMITTER
 };
