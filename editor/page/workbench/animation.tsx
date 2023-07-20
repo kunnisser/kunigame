@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-07-18 10:56:05
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-19 17:47:51
+ * @LastEditTime: 2023-07-20 15:58:50
  * @FilePath: /kunigame/editor/page/workbench/animation.tsx
  * @Description: ---- 帧动画 ----
  */
@@ -23,7 +23,7 @@ const AnimationEditor = (props: any) => {
     frameSprites: null,
     index: 0,
     borderSize: 0,
-    atlas: null
+    animationName: ""
   } as any);
   const dispatch = useDispatch();
   const currentScene = useSelector(
@@ -34,7 +34,9 @@ const AnimationEditor = (props: any) => {
   );
   const defaultAnimationVars = {
     speed: 1,
-    name: null
+    name: "",
+    loop: true,
+    range: null
   };
   const createGame = () => {
     const animationDom: any = document.getElementById("previewAnimation");
@@ -95,49 +97,23 @@ const AnimationEditor = (props: any) => {
     };
   };
 
-  const generateAnimationPanel = (frame) => {
-    console.log("animat");
-    const previewGroup = animationGame.add.group(
-      "animationPreview",
-      animationGame.world
-    );
-    animationGame.ticker.add(() => {
-      previewGroup.update();
-    });
-    previewGroup.position.set(
-      animationGame.config.half_w,
-      animationGame.config.height * 0.4
-    );
-
-    const vars = animationVars || defaultAnimationVars;
-    const anim: AnimatedSprite = animationGame.add.animation(frame, vars.speed);
-    const size = anim.width > anim.height ? anim.width : anim.height;
-    anim.scale.set((ref.current.borderSize / size) * 1.25);
-    previewGroup.addChild(anim);
-    anim.anchor.set(0.5);
-
-    anim.interactive = true;
-    anim.on("pointerdown", () => {
-      if (anim.playing) {
-        animationGame.ticker.stop();
-        anim.stop();
-      } else {
-        animationGame.ticker.start();
-        anim.play();
-      }
-    });
-
-    ref.current.animation = anim;
+  // 切换帧动画素材，变更界面显示
+  const gererateAnimationShow = (name?: string) => {
+    animationGame.world.removeChildren();
+    const frame = setAnimationThumb(name);
+    generateAnimationPanel(frame);
+    bindAnimationOperation();
   };
 
-  const setAnimationThumb = () => {
+  // 设置动画帧列表
+  const setAnimationThumb = (name?: string) => {
     const frameGroup = animationGame.add.group(
       "animationFrameGroup",
       animationGame.world
     );
+    ref.current.index = 0;
     const borderSize = animationGame.config.height * 0.2;
     frameGroup.position.set(0, animationGame.config.height - borderSize - 100);
-
     const gameResources = currentScene.game.loader.preloader.resources;
     const resourceKeys = Object.keys(currentScene.resources);
     const atlas: any = {};
@@ -148,7 +124,8 @@ const AnimationEditor = (props: any) => {
       .map((resourceKey) => {
         return (atlas[resourceKey] = gameResources[resourceKey].data.frames);
       });
-    const keys = Object.keys(atlas.icon);
+    const defaultName: string = Object.keys(atlas)[0];
+    const keys = Object.keys(atlas[name || defaultName]);
     const frameSprites: Array<KnSprite> = [];
     const borderGraphics: KnGraphics = animationGame.add.graphics(
       "animationThumbBorder"
@@ -186,10 +163,52 @@ const AnimationEditor = (props: any) => {
     ref.current.borderGraphics = borderGraphics;
     ref.current.frameSprites = frameSprites;
     ref.current.borderSize = borderSize;
-    ref.current.atlas = atlas;
     return keys.map((key: string) => utils.TextureCache[key]);
   };
 
+  // 设置动画播放预览
+  const generateAnimationPanel = (frame) => {
+    console.log("animat");
+    const previewGroup = animationGame.add.group(
+      "animationPreview",
+      animationGame.world
+    );
+    animationGame.ticker.add(() => {
+      previewGroup.update();
+    });
+    previewGroup.position.set(
+      animationGame.config.half_w,
+      animationGame.config.height * 0.4
+    );
+
+    const vars = animationVars || defaultAnimationVars;
+    const anim: AnimatedSprite = animationGame.add.animation(frame, vars.speed);
+    const size = anim.width > anim.height ? anim.width : anim.height;
+    anim.scale.set((ref.current.borderSize / size) * 1.25);
+    anim.anchor.set(0.5);
+    previewGroup.addChild(anim);
+    updateAnimation(anim, vars);
+
+    anim.interactive = true;
+    anim.on("pointerdown", () => {
+      if (anim.playing) {
+        animationGame.ticker.stop();
+        anim.stop();
+      } else {
+        animationGame.ticker.start();
+        anim.play();
+      }
+    });
+
+    ref.current.animation = anim;
+  };
+
+  // 更新动画属性
+  const updateAnimation = (animation: AnimatedSprite, vars: any) => {
+    animation.animationSpeed = vars.speed;
+    animation.loop = vars.loop;
+  };
+  // 切换动画帧
   const changeFrame = (index, borderGraphics, frameSprites, borderSize) => {
     borderGraphics.clear();
     ref.current.animation.gotoAndStop(index);
@@ -208,26 +227,19 @@ const AnimationEditor = (props: any) => {
 
   useEffect(() => {
     if (animationVars && ref.current.animation) {
-      const { animation, atlas } = ref.current;
-      animation.animationSpeed = animationVars.speed;
-      console.log(animationVars.name, ref.current.atlas);
-      const keys = Object.keys(atlas);
-      const currentAtlasKey = animationVars.name
-        ? atlas[animationVars.name]
-        : atlas[keys[0]];
-      console.log(currentAtlasKey);
-      ref.current.animation.textures = Object.keys(currentAtlasKey).map(
-        (key: string) => utils.TextureCache[key]
-      );
+      const { animation, animationName } = ref.current;
+      console.log(animationVars);
+      updateAnimation(animation, animationVars);
+      if (animationName !== animationVars.name) {
+        gererateAnimationShow(animationVars.name);
+        ref.current.animationName = animationVars.name;
+      }
     }
   }, [animationVars]);
 
   useEffect(() => {
     if (type === "animation" && currentScene) {
-      animationGame.world.removeChildren();
-      const frame = setAnimationThumb();
-      generateAnimationPanel(frame);
-      bindAnimationOperation();
+      gererateAnimationShow();
       animationGame.ticker.start();
     } else {
       animationGame.ticker.stop();

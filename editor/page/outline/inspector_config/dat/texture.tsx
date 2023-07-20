@@ -2,12 +2,12 @@
  * @Author: kunnisser
  * @Date: 2023-03-15 09:58:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-17 14:00:13
+ * @LastEditTime: 2023-07-20 15:26:06
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/texture.tsx
  * @Description: ---- 纹理选择 ----
  */
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { DefaultProps } from "./interface";
 import isString from "lodash.isstring";
 import cx from "classnames";

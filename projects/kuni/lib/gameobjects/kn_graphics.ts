@@ -270,6 +270,14 @@ class KnGraphics extends Graphics {
     this.endFill();
     return this;
   }
+
+  generateStar(x, y, points, radius, [color, borderColor], border, rotate) {
+    this.lineStyle(border, borderColor);
+    this.beginFill(color, 1);
+    this.drawStar(x, y, points, radius, void 0, rotate);
+    this.endFill();
+    return this;
+  }
 }
 
 export default KnGraphics;
