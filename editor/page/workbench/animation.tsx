@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-07-18 10:56:05
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-20 15:58:50
+ * @LastEditTime: 2023-07-21 17:15:20
  * @FilePath: /kunigame/editor/page/workbench/animation.tsx
  * @Description: ---- 帧动画 ----
  */
@@ -100,9 +100,7 @@ const AnimationEditor = (props: any) => {
   // 切换帧动画素材，变更界面显示
   const gererateAnimationShow = (name?: string) => {
     animationGame.world.removeChildren();
-    const frame = setAnimationThumb(name);
-    generateAnimationPanel(frame);
-    bindAnimationOperation();
+    setAnimationThumb(name);
   };
 
   // 设置动画帧列表
@@ -114,16 +112,32 @@ const AnimationEditor = (props: any) => {
     ref.current.index = 0;
     const borderSize = animationGame.config.height * 0.2;
     frameGroup.position.set(0, animationGame.config.height - borderSize - 100);
-    const gameResources = currentScene.game.loader.preloader.resources;
+    const loader = currentScene.game.loader.preloader;
+    const gameResources = loader.resources;
     const resourceKeys = Object.keys(currentScene.resources);
-    const atlas: any = {};
-    resourceKeys
-      .filter((key: string) => {
-        return ["json"].indexOf(gameResources[key].extension) > -1;
-      })
-      .map((resourceKey) => {
-        return (atlas[resourceKey] = gameResources[resourceKey].data.frames);
+    const atlasKeys = resourceKeys.filter((key: string) => {
+      return ["json"].indexOf(gameResources[key].extension) > -1;
+    });
+    if (loader.loading) {
+      loader.load(() => {
+        setAtlasOptions(frameGroup, borderSize, atlasKeys, loader, name);
       });
+    } else {
+      setAtlasOptions(frameGroup, borderSize, atlasKeys, loader, name);
+    }
+  };
+
+  const setAtlasOptions = (
+    frameGroup,
+    borderSize,
+    atlasKeys,
+    loader,
+    name?: string
+  ) => {
+    const atlas: any = {};
+    atlasKeys.map((resourceKey) => {
+      return (atlas[resourceKey] = loader.resources[resourceKey].data.frames);
+    });
     const defaultName: string = Object.keys(atlas)[0];
     const keys = Object.keys(atlas[name || defaultName]);
     const frameSprites: Array<KnSprite> = [];
@@ -163,11 +177,14 @@ const AnimationEditor = (props: any) => {
     ref.current.borderGraphics = borderGraphics;
     ref.current.frameSprites = frameSprites;
     ref.current.borderSize = borderSize;
-    return keys.map((key: string) => utils.TextureCache[key]);
+    const frame = keys.map((key: string) => utils.TextureCache[key]);
+    generateAnimationPanel(frame);
+    bindAnimationOperation();
   };
 
   // 设置动画播放预览
   const generateAnimationPanel = (frame) => {
+    console.log(frame);
     console.log("animat");
     const previewGroup = animationGame.add.group(
       "animationPreview",
@@ -228,7 +245,6 @@ const AnimationEditor = (props: any) => {
   useEffect(() => {
     if (animationVars && ref.current.animation) {
       const { animation, animationName } = ref.current;
-      console.log(animationVars);
       updateAnimation(animation, animationVars);
       if (animationName !== animationVars.name) {
         gererateAnimationShow(animationVars.name);
@@ -239,12 +255,13 @@ const AnimationEditor = (props: any) => {
 
   useEffect(() => {
     if (type === "animation" && currentScene) {
+      console.log("show");
       gererateAnimationShow();
       animationGame.ticker.start();
     } else {
       animationGame.ticker.stop();
     }
-  }, [type]);
+  }, [type, currentScene]);
   return <div id="previewAnimation"></div>;
 };
 

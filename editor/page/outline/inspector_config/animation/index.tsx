@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-07-19 15:59:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-20 17:26:32
+ * @LastEditTime: 2023-07-21 17:13:35
  * @FilePath: /kunigame/editor/page/outline/inspector_config/animation/index.tsx
  * @Description: ---- 动画配置面板 ----
  */
@@ -14,7 +14,8 @@ import DatGui from "react-dat-gui";
 import { useDispatch, useSelector } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import { setAnimationVars } from "editor@/common/gameStore/scene/action";
-const AnimationDatGui = () => {
+const AnimationDatGui = (props) => {
+  const { type } = props;
   const dispatch = useDispatch();
   const [max, setMax] = useState(0);
   const [defaultVal, setDefaultVal] = useState([0, 0]) as any;
@@ -27,51 +28,56 @@ const AnimationDatGui = () => {
   );
   const handleUpdate = (vars) => {
     if (animationVars.name !== vars.name) {
-      const loader = currentScene.game.loader.preloader;
-      const gameResources = loader.resources;
-      const resourceKeys = Object.keys(currentScene.resources);
-      const atlasKeys: Array<string> = resourceKeys.filter((key: string) => {
-        return ["json"].indexOf(gameResources[key].extension) > -1;
-      });
-      const currentAtlas: any = {};
-      atlasKeys.map((resourceKey) => {
-        return (currentAtlas[resourceKey] =
-          gameResources[resourceKey].data.frames);
-      });
-      const frameLength: number = Object.keys(currentAtlas[vars.name]).length;
-      setMax(frameLength - 1);
-      console.log(frameLength - 1);
-      vars.range = [0, frameLength - 1];
-      setDefaultVal([0, frameLength - 1]);
-      setOptions(atlasKeys);
+      const [atlasKeys, loader] = getAtlasKeys();
+      setAtlasOptions(atlasKeys, loader, vars.name);
     }
-
     dispatch(setAnimationVars(vars));
   };
 
   useEffect(() => {
     if (currentScene) {
-      const loader = currentScene.game.loader.preloader;
-      const gameResources = loader.resources;
-      const resourceKeys = Object.keys(currentScene.resources);
-      const atlasKeys: Array<string> = resourceKeys.filter((key: string) => {
-        return ["json"].indexOf(gameResources[key].extension) > -1;
-      });
-      setOptions(atlasKeys);
-      loader.onComplete.add(() => {
-        const currentAtlas: any = {};
-        atlasKeys.map((resourceKey) => {
-          return (currentAtlas[resourceKey] =
-            gameResources[resourceKey].data.frames);
-        });
-        const frameLength: number = Object.keys(
-          currentAtlas[atlasKeys[0]]
-        ).length;
-        setMax(frameLength - 1);
-        setDefaultVal([0, frameLength - 1]);
-      });
+      console.log("change", currentScene);
+      const [atlasKeys, loader] = getAtlasKeys();
+      loadingAtlasOptions(atlasKeys, loader);
     }
-  }, [currentScene]);
+  }, [currentScene, type]);
+
+  // 获取场景帧的多个名称
+  const getAtlasKeys = () => {
+    const loader = currentScene.game.loader.preloader;
+    const resourceKeys = Object.keys(currentScene.resources);
+    const atlasKeys: Array<string> = resourceKeys.filter((key: string) => {
+      return ["json"].indexOf(loader.resources[key].extension) > -1;
+    });
+    return [atlasKeys, loader];
+  };
+
+  const loadingAtlasOptions = (atlasKeys, loader) => {
+    if (loader.loading) {
+      loader.load(() => {
+        setAtlasOptions(atlasKeys, loader);
+      });
+    } else {
+      setAtlasOptions(atlasKeys, loader);
+    }
+  };
+
+  // 设置帧选项，帧长度（min， max），默认帧选择范围（range）
+  const setAtlasOptions = (atlasKeys, loader, name?: string) => {
+    const currentAtlas: any = {};
+    atlasKeys.map((resourceKey) => {
+      return (currentAtlas[resourceKey] =
+        loader.resources[resourceKey].data.frames);
+    });
+    const frameLength: number = Object.keys(
+      currentAtlas[name || atlasKeys[0]]
+    ).length;
+
+    console.log(atlasKeys, name || atlasKeys[0]);
+    setOptions(atlasKeys);
+    setMax(frameLength - 1);
+    setDefaultVal([0, frameLength - 1]);
+  };
 
   const generateConfigCard = (configs: any, key: string) => {
     const itemConfigs: Array<DatProperties> = configs;
@@ -128,12 +134,12 @@ const AnimationDatGui = () => {
       }
     });
   };
-  return animationVars ? (
+  return animationVars && currentScene ? (
     <DatGui data={animationVars} onUpdate={handleUpdate}>
       {generateConfigCard(DatAnimationPropertyConfig(), "animation")}
     </DatGui>
   ) : (
-    <>粒子特效</>
+    <>请选择资源场景</>
   );
 };
 

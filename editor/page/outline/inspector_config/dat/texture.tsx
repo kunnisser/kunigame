@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-15 09:58:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-20 15:26:06
+ * @LastEditTime: 2023-07-21 17:19:54
  * @FilePath: /kunigame/editor/page/outline/inspector_config/dat/texture.tsx
  * @Description: ---- 纹理选择 ----
  */
@@ -19,7 +19,6 @@ import { WrapContext } from "editor@/page/wireboard";
 import ModalPickerWrapper from "./modal/pickerWrapper";
 import { utils } from "pixi.js";
 import Game from "ts@/kuni/lib/core";
-import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 
 let previewGame: any = null;
 
@@ -139,8 +138,8 @@ const DatTexture = (props: DefaultProps) => {
 
   useEffect(() => {
     if (ref.current.sprite) {
+      const sprite: any = ref.current.sprite;
       const texture = utils.TextureCache[defaultVal];
-      const sprite: KnSprite = ref.current.sprite;
       const ratio = texture.width / texture.height;
       sprite.texture = texture;
       sprite.width = ratio > 1 ? previewWidth : previewHeight * ratio;
