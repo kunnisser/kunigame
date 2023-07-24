@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-07-18 10:56:05
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-21 17:15:20
+ * @LastEditTime: 2023-07-24 14:37:07
  * @FilePath: /kunigame/editor/page/workbench/animation.tsx
  * @Description: ---- 帧动画 ----
  */
@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Game from "ts@/kuni/lib/core";
 import KnGraphics from "ts@/kuni/lib/gameobjects/kn_graphics";
 import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
+import { debounce } from "ts@/kuni/lib/utils/common";
 let animationGame: Game;
 const AnimationEditor = (props: any) => {
   const { type } = props;
@@ -23,7 +24,9 @@ const AnimationEditor = (props: any) => {
     frameSprites: null,
     index: 0,
     borderSize: 0,
-    animationName: ""
+    animationName: "",
+    animationTextures: null,
+    range: null
   } as any);
   const dispatch = useDispatch();
   const currentScene = useSelector(
@@ -98,13 +101,13 @@ const AnimationEditor = (props: any) => {
   };
 
   // 切换帧动画素材，变更界面显示
-  const gererateAnimationShow = (name?: string) => {
+  const gererateAnimationShow = (name?: string, range?: Array<number>) => {
     animationGame.world.removeChildren();
-    setAnimationThumb(name);
+    setAnimationThumb(name, range);
   };
 
   // 设置动画帧列表
-  const setAnimationThumb = (name?: string) => {
+  const setAnimationThumb = (name?: string, range?: Array<number>) => {
     const frameGroup = animationGame.add.group(
       "animationFrameGroup",
       animationGame.world
@@ -120,32 +123,37 @@ const AnimationEditor = (props: any) => {
     });
     if (loader.loading) {
       loader.load(() => {
-        setAtlasOptions(frameGroup, borderSize, atlasKeys, loader, name);
+        setAtlasOptions(frameGroup, borderSize, atlasKeys, loader, name, range);
       });
     } else {
-      setAtlasOptions(frameGroup, borderSize, atlasKeys, loader, name);
+      setAtlasOptions(frameGroup, borderSize, atlasKeys, loader, name, range);
     }
   };
 
+  // 根据对应名称的atlas来构建frameGroup和预览
   const setAtlasOptions = (
     frameGroup,
     borderSize,
     atlasKeys,
     loader,
-    name?: string
+    name?: string,
+    range?: Array<number>
   ) => {
     const atlas: any = {};
     atlasKeys.map((resourceKey) => {
       return (atlas[resourceKey] = loader.resources[resourceKey].data.frames);
     });
     const defaultName: string = Object.keys(atlas)[0];
-    const keys = Object.keys(atlas[name || defaultName]);
+    let keys = Object.keys(atlas[name || defaultName]);
     const frameSprites: Array<KnSprite> = [];
     const borderGraphics: KnGraphics = animationGame.add.graphics(
       "animationThumbBorder"
     );
     frameGroup.addChild(borderGraphics);
     borderGraphics.clear();
+
+    //  筛选帧
+    range && (keys = keys.slice(range[0], range[1] + 1));
     keys.forEach((key, index) => {
       const borderColor = index === ref.current.index ? 0x11b234 : 0xffffff;
       const spriteThumb = animationGame.add.sprite(key, key, [0.5, 0.5]);
@@ -244,11 +252,18 @@ const AnimationEditor = (props: any) => {
 
   useEffect(() => {
     if (animationVars && ref.current.animation) {
-      const { animation, animationName } = ref.current;
+      const { animation, animationName, range } = ref.current;
       updateAnimation(animation, animationVars);
       if (animationName !== animationVars.name) {
         gererateAnimationShow(animationVars.name);
         ref.current.animationName = animationVars.name;
+        ref.current.animationTextures = animation.textures;
+      }
+      if (animationVars.range && range + "" !== animationVars.range + "") {
+        ref.current.range = animationVars.range;
+        debounce.handler(() => {
+          gererateAnimationShow(animationVars.name, animationVars.range);
+        }, 500);
       }
     }
   }, [animationVars]);
