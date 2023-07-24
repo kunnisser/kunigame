@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-25 17:30:35
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-27 14:59:42
+ * @LastEditTime: 2023-06-29 14:35:31
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/common/rotate/index.ts
  * @Description: ---- 旋转模块 ----
  */
@@ -60,51 +60,37 @@ class RotateTool {
       [currentGameItem.x, currentGameItem.y, radius * 0.5 + 18.5],
       3
     );
-    this.drawOriginArrow(currentGameItem, radius);
-    this.drawArrow(currentGameItem, radius);
+    this.drawOriginArrow(currentGameItem);
+    this.drawArrow(currentGameItem);
     this.rotateOriginPointer.generateCircle(0x000000, [
       currentGameItem.x,
       currentGameItem.y,
-      radius * 0.03 * 1.5
+      16
     ]);
     this.rotateOriginPointer.generateCircle(0x806787, [
       currentGameItem.x,
       currentGameItem.y,
-      radius * 0.03
+      12
     ]);
   }
 
-  drawOriginArrow(item, borderSize) {
-    let { x, y, width, height }: any = item;
-    const radius = width > height ? width : height;
-    const border = borderSize * 0.01;
+  drawOriginArrow(item) {
+    let { x, y }: any = item;
     this.originArrow.clear();
-    this.originArrow.generateStrokeLine(border, 0x806787, 0x000000, [
-      x,
-      y,
-      radius * 0.5 + 16,
-      border * 2
-    ]);
+    this.originArrow.generateStrokeLine(1, 0x806787, 0x000000, [x, y, 180, 4]);
   }
 
-  drawArrow(item, borderSize) {
-    let { x, y, width, height }: any = item;
-    const radius = width > height ? width : height;
-    const border = borderSize * 0.01;
+  drawArrow(item) {
+    let { x, y }: any = item;
     this.anchorArrow.clear();
     this.anchorArrow.position.set(x, y);
-    this.anchorArrow.generateStrokeLine(border, 0xd10311, 0x000000, [
-      0,
-      0,
-      radius * 0.5 + 16,
-      border * 2
-    ]);
+    this.anchorArrow.generateStrokeLine(1, 0xd10311, 0x000000, [0, 0, 180, 4]);
     this.anchorArrow.generateTriangle(
       0xd10311,
       0x000000,
-      border,
+      4,
       { x: 0, y: 0 },
-      borderSize * 0.04
+      16
     );
     this.anchorArrow.angle = item.angle;
   }
