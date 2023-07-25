@@ -53,14 +53,13 @@ const updateScene = (requestParams) => {
             // 从sprite对象构建表达式中进行调整修改
             if (recordKey === "texture") {
               isNewExpression = false;
-              declaration.init.arguments[1] = T.stringLiteral(
-                recordValue.value[0]
-              );
+              declaration.init.arguments[1] = T.stringLiteral(recordValue);
             }
             Utils.findAstNode(ast, {
               // 过滤已有的等号表达式
               ExpressionStatement: (path) => {
                 const left = path.node.expression.left;
+                console.log(left);
                 if (
                   left &&
                   left.object &&
@@ -71,6 +70,7 @@ const updateScene = (requestParams) => {
                   const flatKeys = transformToArray(left, len)
                     .flat(Infinity)
                     .join("-");
+                  console.log(flatKeys, key + "-" + recordKey);
                   if (flatKeys === key + "-" + recordKey) {
                     isNewExpression = false;
                     path.node.expression.right =
@@ -93,7 +93,6 @@ const updateScene = (requestParams) => {
                     memberObject.object.name === key &&
                     memberObject.property.name === recordKey
                   ) {
-                    console.log(key, recordKey);
                     isNewExpression = false;
                     path.node.arguments = [
                       convertGamePropertyToExpression(recordValue.x),

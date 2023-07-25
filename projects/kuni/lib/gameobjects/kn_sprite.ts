@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-14 16:15:56
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-03 14:26:28
+ * @LastEditTime: 2023-07-25 10:28:07
  * @FilePath: /kunigame/projects/kuni/lib/gameobjects/kn_sprite.ts
  * @Description: ---- sprite类 ----
  */
@@ -17,7 +17,6 @@ class KnSprite extends Sprite {
     super(texture);
     this.id = id;
     this.name = key || id;
-    this.tintColor = "#fff";
     this.boot = true;
   }
 

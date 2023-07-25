@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-15 16:05:23
+ * @LastEditTime: 2023-07-25 10:25:02
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -35,15 +35,10 @@ class Welcome extends KnScene {
   boot() {}
 
   create() {
-    const bg: KnSprite = this.game.add.image("bg", "bg", this);
-    bg.tintColor = "#ffffff";
-    bg.y = 0;
-    bg.x = 0;
-    bg.width = 1920;
-    bg.height = 960;
+    const bg: KnSprite = this.game.add.background("bg", "BG_10000");
+    this.addChild(bg);
     const logo: KnSprite = this.game.add.image("logo", "Item_Cow0000", this);
     logo.visible = true;
-    logo.tintColor = "#ffffff";
     logo.blendMode = 0;
     logo.angle = 0;
     logo.skew.y = 0;

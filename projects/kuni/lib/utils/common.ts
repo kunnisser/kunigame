@@ -183,6 +183,7 @@ const createFrom = (target: any, game: Game) => {
         target.anchor.x,
         target.anchor.y
       ]),
+    "KnBackGround": () => game.add.background(target.name, target.id),
     "KnBitMapText": () =>
       game.add.bitmapText(
         target.id,
