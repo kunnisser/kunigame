@@ -173,6 +173,7 @@ const TransformAncientDate = {
 const createFrom = (target: any, game: Game) => {
   const type = target.constructor.name;
   const typeMap = {
+    "KnGroup": () => game.add.group(target.key),
     "KnText": () =>
       game.add.text(target.id, target.text, target.style, [
         target.anchor.x,

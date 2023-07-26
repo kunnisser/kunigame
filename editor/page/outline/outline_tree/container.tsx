@@ -2,13 +2,13 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-25 10:31:34
+ * @LastEditTime: 2023-07-26 17:49:28
  * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
  * @Description: ---- 场景元素列表 ----
  */
 import React, { useState, useEffect } from "react";
 import { message, Tree } from "antd";
-import { useSelector, useStore } from "react-redux";
+import { useDispatch, useSelector, useStore } from "react-redux";
 import { CombineReducer } from "editor@/common/store";
 import Icon from "@ant-design/icons";
 import { ReactComponent as TextIcon } from "editor@/assets/icon/text.svg";
@@ -16,15 +16,20 @@ import { ReactComponent as SpriteIcon } from "editor@/assets/icon/sprite.svg";
 import { ReactComponent as GroupIcon } from "editor@/assets/icon/group.svg";
 import { ReactComponent as GraphicsIcon } from "editor@/assets/icon/graphics.svg";
 import { DataNode } from "antd/lib/tree";
+import { updateEditGameItem } from "editor@/common/gameStore/scene/action";
+import EditorTools from "ts@/template/src/tools";
 
 const ContainerTree = () => {
   const [displayList, setDisplayList] = useState([] as any);
   const [expandedKeys, setExpandedKeys] = useState([]);
   const store = useStore();
+  const dispatch = useDispatch();
   const onExpand = (expandedKeys) => {
     setExpandedKeys(expandedKeys);
   };
-
+  const listenEditGameItem = useSelector((store: CombineReducer) => {
+    return store.sceneReducer.editGameItem;
+  });
   const getParentKey = (key, tree) => {
     let parentKey;
     for (let i = 0; i < tree.length; i++) {
@@ -39,15 +44,6 @@ const ContainerTree = () => {
     }
     return parentKey;
   };
-
-  // 查找场景
-  // const onChange = (e) => {
-  //   const { value } = e.target;
-  //   const expandedKeys: any = currentScene.id;
-  //   setExpandedKeys(expandedKeys);
-  //   setAutoExpandParent(true);
-  //   setSearchValue(value);
-  // };
 
   // 当前游戏场景
   const currentScene = useSelector(
@@ -178,8 +174,6 @@ const ContainerTree = () => {
         }
       };
       const data = [...displayList];
-
-      // Find dragObject
       let dragObj: any;
       dropLoop(data, dragKey, (item: any, index, arr) => {
         arr.splice(index, 1);
@@ -193,13 +187,33 @@ const ContainerTree = () => {
           item.children = item.children || [];
           // where to insert 示例添加到头部，可以是随意位置
           item.children.unshift(dragObj);
-          item.item.addChildAt(dragObj.item, 0);
+          const tool: EditorTools =
+            store.getState().sceneReducer.game.editorTools;
+          tool.recordOperationStep([dragObj.item], (record, target?: any) => {
+            record.prev = {
+              parent: target.parent.name,
+              index: target.parent.getChildIndex(target)
+            };
+            item.item.addChildAt(target, 0);
+            // alignCallback(item, game);
+            record.next = {
+              parent: target.parent.name,
+              index: target.parent.getChildIndex(target)
+            };
+            listenEditGameItem[item.item.name] = Object.assign(
+              listenEditGameItem[item.item.name] || {},
+              record.next
+            );
+            return record;
+          });
+          dispatch(updateEditGameItem(listenEditGameItem));
         });
       } else if (
         ((dropTargetNode as any).props.children || []).length > 0 && // Has children
         (dropTargetNode as any).props.expanded && // Is expanded
         dropPosition === 1 // On the bottom gap
       ) {
+        console.log(listenEditGameItem);
         dropLoop(data, dropKey, (item: any) => {
           item.children = item.children || [];
           // where to insert 示例添加到头部，可以是随意位置
@@ -207,6 +221,7 @@ const ContainerTree = () => {
           item.item.addChildAt(dragObj.item, 0);
         });
       } else {
+        console.log(listenEditGameItem);
         let ar: DataNode[] = [];
         let i: number;
         let node: any = null;
@@ -226,6 +241,7 @@ const ContainerTree = () => {
             node.item.parent.addChildAt(dragObj!.item, i!);
           }
         } else {
+          console.log(listenEditGameItem);
           ar.splice(i! + 1, 0, dragObj!);
           if (isCommonGroup) {
             node.item.parent.setChildIndex(dragObj!.item, i! + 1);

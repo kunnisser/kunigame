@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-27 16:57:28
+ * @LastEditTime: 2023-07-26 17:45:57
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -198,9 +198,9 @@ class EditorTools {
       target: offsetGameItems,
       type: this.game.editorTools.type
     });
-
     //更新辅助工具线框
-    this.drawOperationComponent(offsetGameItems);
+    const gameItem = this.game.redux.store.getState().sceneReducer.gameItem;
+    gameItem && this.drawOperationComponent(offsetGameItems);
     return offsetGameItems;
   }
 
@@ -209,7 +209,6 @@ class EditorTools {
     let newEditGameItem: any =
       this.game.redux.store.getState().sceneReducer.editGameItem;
     targets.map((target, index) => {
-      console.log("editors", editors);
       newEditGameItem[target.name] = Object.assign(
         newEditGameItem[target.name] || {},
         editors[index]
@@ -267,6 +266,9 @@ class EditorTools {
   };
 
   onClickHandler = (items: Array<any>, type?: string) => {
+    if (!items) {
+      return;
+    }
     // inspector注入目标
     // 设置选中的元素
     this.game.redux.dispatch({

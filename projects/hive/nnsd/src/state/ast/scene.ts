@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-07 10:12:37
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-25 17:13:20
+ * @LastEditTime: 2023-07-26 11:26:28
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/ast/scene.ts
  * @Description: ----  ----
  */
@@ -34,23 +34,18 @@ class AST extends KnScene {
   boot() {}
 
   create() {
-    const gameBg = this.game.add.background("gameBg", "BG_30000");
+    const gameBg = this.game.add.background("gameBg", "BG_50000");
     this.addChild(gameBg);
     const demoText: KnText = this.game.add.text("demoText", "WELCOME", {
       fontSize: 100
     }, [0.5, 0.5]);
-    demoText.name = "demoText1";
-    demoText.style.fontSize = 166;
-    demoText.style.fill = "#c08484";
-    demoText.style.fill = "#ce9797";
-    demoText.style.fontSize = 215;
-    demoText.style.fontSize = 105;
+    demoText.scale.x = 1;
+    demoText.style.fontSize = 75;
     demoText.style.fill = "#ff6161";
     demoText.angle = 0;
-    demoText.scale.y = 0.3;
-    demoText.scale.set(0.6137024262748128, 0.6830838195772531);
+    demoText.scale.y = 1;
     demoText.alpha = 1;
-    demoText.text = "CAMSCHARING123";
+    demoText.text = "CAMSCHARING";
     demoText.anchor.set(0.5, 0.5);
     demoText.visible = true;
     demoText.style.dropShadowDistance = 16;
@@ -60,14 +55,20 @@ class AST extends KnScene {
     demoText.style.dropShadowColor = "#57d8d8";
     demoText.style.strokeThickness = 20;
     demoText.style.stroke = "#2a5860";
-    demoText.x = 728;
-    demoText.y = 480;
+    demoText.x = 585;
+    demoText.y = 433;
     const testGroup = this.game.add.group("group1", this);
     testGroup.addChild(demoText);
     const group2 = this.game.add.group("group2", this);
-    group2.y = 274;
-    group2.x = 486;
+    group2.y = 0;
+    group2.x = 0;
     this.game.add.group("groupChild", group2);
+    const cloud = this.game.add.image("cloud", "titleBg", group2);
+    cloud.scale.y = 1.2;
+    cloud.scale.x = 1.2;
+    cloud.anchor.set(0.5, 0.5);
+    cloud.y = 424;
+    cloud.x = 590;
   }
 
   update() {}

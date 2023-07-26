@@ -35,7 +35,6 @@ const updateScene = (requestParams) => {
   );
   const actionKeys = Object.keys(editRecords);
   const ast = Utils.fileToAst(targetPath);
-
   actionKeys.map((key) => {
     Utils.findAstNode(ast, {
       VariableDeclaration: (path) => {
@@ -47,7 +46,7 @@ const updateScene = (requestParams) => {
           const recordKeys = Object.keys(record);
           for (let recordKey of recordKeys) {
             let isNewExpression = true;
-            const recordKeyArr = recordKey.split("-");
+            const recordKeyArr = recordKey.split(".");
             const recordValue = record[recordKey];
             const len = recordKeyArr.length;
             // 从sprite对象构建表达式中进行调整修改
@@ -59,7 +58,6 @@ const updateScene = (requestParams) => {
               // 过滤已有的等号表达式
               ExpressionStatement: (path) => {
                 const left = path.node.expression.left;
-                console.log(left);
                 if (
                   left &&
                   left.object &&
@@ -69,9 +67,8 @@ const updateScene = (requestParams) => {
                   // 先把MemberExpression转多维数组，然后扁平化进行比对
                   const flatKeys = transformToArray(left, len)
                     .flat(Infinity)
-                    .join("-");
-                  console.log(flatKeys, key + "-" + recordKey);
-                  if (flatKeys === key + "-" + recordKey) {
+                    .join(".");
+                  if (flatKeys === key + "." + recordKey) {
                     isNewExpression = false;
                     path.node.expression.right =
                       convertGamePropertyToExpression(recordValue);
