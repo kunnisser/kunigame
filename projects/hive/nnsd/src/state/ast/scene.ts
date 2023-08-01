@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-07 10:12:37
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-26 11:26:28
+ * @LastEditTime: 2023-08-01 17:22:29
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/ast/scene.ts
  * @Description: ----  ----
  */
@@ -27,7 +27,8 @@ class AST extends KnScene {
       bg: "/projects/hive/nnsd/assets/images/bg.png",
       background: "/projects/hive/nnsd/assets/atlas/background.json",
       titleBg: "/projects/hive/nnsd/assets/images/titleBg.png",
-      startBtn: "/projects/hive/nnsd/assets/images/startBtn.png"
+      startBtn: "/projects/hive/nnsd/assets/images/startBtn.png",
+      g6: "/projects/hive/nnsd/assets/images/g6.png"
     };
   }
 
@@ -69,6 +70,12 @@ class AST extends KnScene {
     cloud.anchor.set(0.5, 0.5);
     cloud.y = 424;
     cloud.x = 590;
+    const boy = this.game.add.image("boy", "g6", group2);
+    boy.anchor.set(0.5, 0.5);
+    boy.scale.y = 1.5;
+    boy.scale.x = 1.5;
+    boy.y = 906;
+    boy.x = 551;
   }
 
   update() {}
