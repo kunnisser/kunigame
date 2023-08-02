@@ -109,7 +109,13 @@ class UIDemo extends KnScene {
   }
 
   addRankBtn() {
-    const btn = this.game.add.button("rankBtn", null, this, [0.5, 0.5]);
+    const btn = this.game.add.button(
+      "rankBtn",
+      "rankBtn",
+      null,
+      this,
+      [0.5, 0.5]
+    );
     btn.scale.set(0.2);
     btn.position.set(
       this.game.config.half_w - btn.width,
@@ -231,7 +237,13 @@ class UIDemo extends KnScene {
   }
 
   addCardBtn() {
-    const btn = this.game.add.button("cardBtn", null, this, [0.5, 0.5]);
+    const btn = this.game.add.button(
+      "cardBtn",
+      "cardBtn",
+      null,
+      this,
+      [0.5, 0.5]
+    );
     btn.scale.set(0.2);
     btn.position.set(
       this.game.config.half_w + btn.width,

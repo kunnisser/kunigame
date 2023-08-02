@@ -10,7 +10,8 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
   entry: {
-    index: ["./editor/index.tsx"]
+    index: ["./editor/index.tsx"],
+    demo: ["./projects/hive/nnsd/preview.ts"]
   },
   output: {
     path: __dirname + "/output/editor",
@@ -123,7 +124,14 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./editor/index.html"
+      template: "./editor/index.html",
+      filename: "index.html",
+      chunks: ["index"]
+    }),
+    new HtmlWebpackPlugin({
+      template: "./projects/hive/nnsd/index.html",
+      filename: "demo.html",
+      chunks: ["demo"]
     }),
     new ForkTsCheckerWebpackPlguin({
       async: false,

@@ -118,6 +118,7 @@ class KnModal extends KnGroup {
 
     // 定义关闭按钮
     const close = this.game.add.button(
+      "close",
       this.options.close,
       null,
       panelModal,
@@ -180,6 +181,7 @@ class KnModal extends KnGroup {
       navtab["currentIndex"] = 0;
       this.options.panels.forEach((panel, index: number) => {
         const btnRect = this.game.add.button(
+          "navtab" + index,
           0xd10311,
           null,
           navtab,

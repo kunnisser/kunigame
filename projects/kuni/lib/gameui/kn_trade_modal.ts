@@ -101,6 +101,7 @@ class KnTradeModal extends KnGroup {
 
     // 定义关闭按钮
     const close = this.game.add.button(
+      "closeBtn",
       this.options.close,
       null,
       panelModal,

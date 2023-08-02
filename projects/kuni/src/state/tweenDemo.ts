@@ -110,7 +110,13 @@ class TweenDemo extends KnScene {
 
   // 增加开始按钮
   addStart() {
-    const start = this.game.add.button("start", "cannikin", this, [0.5, 0.5]);
+    const start = this.game.add.button(
+      "startCannikin",
+      "start",
+      "cannikin",
+      this,
+      [0.5, 0.5]
+    );
     start.position.set(this.game.config.half_w, this.game.config.half_h);
     start.scale.set(0.36);
     this.angleTween(start);

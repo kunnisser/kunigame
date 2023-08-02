@@ -82,6 +82,7 @@ class KnFactory {
   };
 
   button = (
+    name: string,
     key: any,
     switchKey: any,
     parent: PIXI.Container,
@@ -99,7 +100,7 @@ class KnFactory {
       key = btnTexture;
     }
 
-    btn = this.image("", key, parent, align);
+    btn = this.image(name || "", key, parent, align);
 
     btn.interactive = !0;
 
@@ -147,7 +148,7 @@ class KnFactory {
     });
 
     if (tipkey) {
-      btn["tip"] = this.image("", tipkey, parent, [0.5, 0.5]);
+      btn["tip"] = this.image(tipkey + "_tip", tipkey, parent, [0.5, 0.5]);
     }
     return btn;
   };
