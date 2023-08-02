@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 16:00:13
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-03 00:13:32
+ * @LastEditTime: 2023-08-02 23:28:54
  * @FilePath: \kunigame\editor\page\header\index.tsx
  * @Description: ---- KN编辑器菜单 ----
  */
@@ -226,6 +226,11 @@ const KnHeader = () => {
       }
     });
   };
+
+  // 预览项目
+  const showPreviewGame = () => {
+    window.open('./demo.html', '_blank');
+  }
   return (
     <React.Fragment>
       <Space>
@@ -247,6 +252,7 @@ const KnHeader = () => {
         <Tooltip placement="bottom" title="预览游戏">
           <Button
             icon={<PlayCircleOutlined />}
+            onClick={showPreviewGame}
             key="play"
           />
         </Tooltip>
