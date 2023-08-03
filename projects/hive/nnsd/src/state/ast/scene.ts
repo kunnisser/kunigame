@@ -86,13 +86,13 @@ class AST extends KnScene {
     platform.y = 1530;
     platform.x = 688;
     const start = this.game.add.button("start", "startBtn", "startBtn", this);
-    start.anchor.set(0.5, 0.5)
+    start.anchor.set(0.5, 0.5);
     start.y = 1170;
     start.x = 585;
     const boy = this.game.add.image("boy", "role", this);
     boy.anchor.set(0.5, 0.5);
-    boy.scale.y = 0.5;
-    boy.scale.x = 0.5;
+    boy.scale.y = 2;
+    boy.scale.x = 2;
     boy.y = 1334;
     boy.x = 988;
   }

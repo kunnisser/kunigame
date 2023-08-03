@@ -46,13 +46,13 @@ class KnScene extends Container {
       this.game.overlay = null;
     }
     if (!this.isBoot) {
-      this.boot(nextTarget);
       this.signBooting();
       this.create();
       // ticker只能在首次加载注册，否则会注册多个事件
       this.game.ticker.add((delta) => {
         this.update(delta);
       });
+      this.boot(nextTarget);
     }
     this.game.ticker.start();
     return this;

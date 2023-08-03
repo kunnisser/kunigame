@@ -44,14 +44,15 @@ class Preloader extends KnScene {
 
   loading(target: KnScene, isFirstLoad?: Boolean) {
     if (target && target.resources) {
-      this.loadScene(target.resources)
-        .on("progress", this.loadingHandler)
-        .load((loader) => {
-          // 资源加载完成，进入目标场景
-          target.isCached = true;
-          target.loader = loader;
-          this.game.sceneManager.changeScene(this, target);
-        });
+      const sceneLoader = this.loadScene(target.resources);
+      // console.log(this.loadScene(target.resources));
+      sceneLoader.onProgress.add(this.loadingHandler);
+      sceneLoader.load((loader) => {
+        // 资源加载完成，进入目标场景
+        target.isCached = true;
+        target.loader = loader;
+        this.game.sceneManager.changeScene(this, target);
+      });
     } else {
       this.game.sceneManager.changeScene(this, target);
     }

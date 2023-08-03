@@ -28,14 +28,15 @@ class Welcome extends KnScene {
       font_a: "/projects/hive/nnsd/assets/fonts/font_a.fnt",
       avator: "/projects/hive/nnsd/assets/images/avator.jpg",
       icon: "/projects/hive/nnsd/assets/atlas/icon.json",
-      background: "/projects/hive/nnsd/assets/atlas/background.json"
+      background: "/projects/hive/nnsd/assets/atlas/background.json",
+      gameBg: "/projects/hive/nnsd/assets/images/gameBg.png"
     };
   }
 
   boot() {}
 
   create() {
-    const bg: KnSprite = this.game.add.background("bg", "BG_10000");
+    const bg: KnSprite = this.game.add.background("bg", "gameBg");
     this.addChild(bg);
     const logo: KnSprite = this.game.add.image("logo", "Item_Cow0000", this);
     logo.visible = true;
@@ -45,15 +46,15 @@ class Welcome extends KnScene {
     logo.skew.x = 0;
     logo.scale.x = 1;
     logo.scale.y = 1;
-    logo.y = 366;
-    logo.x = 489;
+    logo.y = 92;
+    logo.x = 48;
     logo.anchor.set(0, 0);
     const demoText: KnText = this.game.add.text("demoText", "WELCOME", {
       fontSize: 300
     }, [0.5, 0.5]);
-    demoText.angle = 55.036902453963506;
-    demoText.style.fontSize = 96;
-    demoText.text = "WELCOME123";
+    demoText.angle = 0;
+    demoText.style.fontSize = 101;
+    demoText.text = "得分";
     demoText.style.fontSize = 211;
     demoText.anchor.set(0.5, 0.5);
     demoText.scale.y = 0.5;
@@ -67,16 +68,16 @@ class Welcome extends KnScene {
     demoText.style.fill = "#ffffff";
     demoText.style.strokeThickness = 20;
     demoText.style.stroke = "#2a5860";
-    demoText.x = 1055;
-    demoText.y = 327;
+    demoText.x = 575;
+    demoText.y = 210;
     const demo1Text: KnText = this.game.add.text("demo1Text", "测试", {
       fontSize: "24",
       fill: 0xffffff
     }, [0.5, 0.5]);
     demo1Text.anchor.set(0.5, 0.5);
     demo1Text.text = "by.kunnisser";
-    demo1Text.x = 900;
-    demo1Text.y = 819.5714282989502;
+    demo1Text.x = 619;
+    demo1Text.y = 874;
     demo1Text.scale.y = 1;
     demo1Text.scale.x = 1;
     const bmText = this.game.add.bitmapText("bmText", "153112312312313123\n23012313212313\n1", {
@@ -85,8 +86,8 @@ class Welcome extends KnScene {
     });
     bmText.align = "center";
     bmText.anchor.set(0.5, 0);
-    bmText.y = 547;
-    bmText.x = 900;
+    bmText.y = 540;
+    bmText.x = 612;
     bmText.letterSpacing = 11;
     bmText.fontSize = 100;
     bmText.fontName = "desyrel";

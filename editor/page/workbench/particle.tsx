@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-07-07 13:49:58
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-17 17:39:22
+ * @LastEditTime: 2023-08-03 16:50:08
  * @FilePath: /kunigame/editor/page/workbench/particle.tsx
  * @Description: ---- 粒子特效 ----
  */
@@ -81,7 +81,6 @@ const ParticleEditor = (props: any) => {
       antialias: true,
       transparent: true,
       view: previewParticleDom,
-      isPureCanvas: true,
       editorWidth: game.config.editorWidth,
       editorHeight: game.config.editorHeight
     });
