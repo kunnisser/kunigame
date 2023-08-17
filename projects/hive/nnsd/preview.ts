@@ -2,17 +2,17 @@
  * @Author: kunnisser
  * @Date: 2023-08-02 17:24:15
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-08-05 01:22:07
- * @FilePath: \kunigame\projects\hive\nnsd\preview.ts
+ * @LastEditTime: 2023-08-17 16:34:59
+ * @FilePath: /kunigame/projects/hive/nnsd/preview.ts
  * @Description: ----  ----
  */
 
-import Game from 'ts@/kuni/lib/core';
-import StateHive from './src/state/hive';
-import Config from './schema/game.json';
-import Preloader from 'ts@/kuni/lib/loader/kn_preloader';
+import Game from "ts@/kuni/lib/core";
+import StateHive from "./src/state/hive";
+import Config from "./schema/game.json";
+import Preloader from "ts@/kuni/lib/loader/kn_preloader";
 
-const view: any = document.getElementById('stage'); // 初始化游戏场景列表
+const view: any = document.getElementById("stage"); // 初始化游戏场景列表
 const dpr = window.devicePixelRatio;
 console.log(view.clientWidth, dpr);
 const game = new Game({
@@ -21,10 +21,10 @@ const game = new Game({
   antialias: Config.antialias,
   transparent: Config.transparent,
   view,
-  isPureCanvas: true,
+  isPureCanvas: true
 });
 const GameHive = StateHive(game);
-game.editHive = GameHive;
-game.entryHive = GameHive['Welcome'];
-const previewLoader = game.sceneManager.addScene('global_preloader', Preloader);
+game.hive = GameHive;
+game.entryHive = GameHive["Welcome"];
+const previewLoader = game.sceneManager.addScene("global_preloader", Preloader);
 game.sceneManager.changeScene(null, previewLoader);

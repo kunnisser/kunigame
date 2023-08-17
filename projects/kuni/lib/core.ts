@@ -1,16 +1,16 @@
-import KnFactory from '../lib/gameobjects/kn_factory';
-import KnLoader from '../lib/loader/kn_loader';
-import KnSceneManager from '../lib/gameobjects/kn_scene_manager';
-import { Application, settings, SCALE_MODES } from 'pixi.js';
-import { debounce, math } from '../lib/utils/common';
-import KnScene from './gameobjects/kn_scene';
-import KnTranstion from '../lib/gameui/kn_transtion';
-import KnCursor from './gameui/kn_cursor';
-import CoverMask from './dev/editor_mask/cover';
-import * as PIXI from 'pixi.js';
-import EditorTools from 'ts@/hive/nnsd/src/tools';
-import KnGroup from './gameobjects/kn_group';
-import KnGraphics from './gameobjects/kn_graphics';
+import KnFactory from "../lib/gameobjects/kn_factory";
+import KnLoader from "../lib/loader/kn_loader";
+import KnSceneManager from "../lib/gameobjects/kn_scene_manager";
+import { Application, settings, SCALE_MODES } from "pixi.js";
+import { debounce, math } from "../lib/utils/common";
+import KnScene from "./gameobjects/kn_scene";
+import KnTranstion from "../lib/gameui/kn_transtion";
+import KnCursor from "./gameui/kn_cursor";
+import CoverMask from "./dev/editor_mask/cover";
+import * as PIXI from "pixi.js";
+import EditorTools from "ts@/hive/nnsd/src/tools";
+import KnGroup from "./gameobjects/kn_group";
+import KnGraphics from "./gameobjects/kn_graphics";
 
 interface EnterProps {
   width: number;
@@ -70,10 +70,10 @@ export default class Game {
     height: number;
   }; // 游戏尺寸
   entryHive: any;
-  editHive: any;
+  hive: any;
   ratio: number;
   constructor(config: EnterProps) {
-    window['PIXI'] = PIXI;
+    window["PIXI"] = PIXI;
     this.view = config.view;
     this.dpr = config.dpr || window.devicePixelRatio;
     this.camera = {};
@@ -95,8 +95,7 @@ export default class Game {
       editorWidth: config.editorWidth || config.width,
       editorHeight: config.editorHeight || config.width / this.ratio,
       halfEditorWidth: (config.editorWidth || config.width) * 0.5,
-      halfEditorHeight:
-        (config.editorHeight || config.width / this.ratio) * 0.5,
+      halfEditorHeight: (config.editorHeight || config.width / this.ratio) * 0.5
     };
 
     this.app = new Application({
@@ -104,7 +103,7 @@ export default class Game {
       height: this.config.height,
       antialias: config.antialias || false,
       transparent: config.transparent || !1,
-      resolution: this.dpr,
+      resolution: this.dpr
     });
 
     globalThis.__PIXI_APP__ = this.app;
@@ -119,16 +118,16 @@ export default class Game {
 
     // 初始化画布
     this.stage = this.app.stage;
-    this.editBounds = new KnGraphics(this, 'edit_bounds');
+    this.editBounds = new KnGraphics(this, "edit_bounds");
 
     // 定义游戏容器
-    this.world = new KnGroup(this, 'world', this.stage);
+    this.world = new KnGroup(this, "world", this.stage);
     this.world.addChild(this.editBounds);
     config.editorWidth &&
       config.editorHeight &&
       this.editBounds.generateRectLineStyle(
         [6, 2],
-        0xffffff,
+        0x41e40f,
         0x000000,
         [this.editX, this.editY, config.editorWidth, config.editorHeight],
         { x: 0, y: 0 }
@@ -179,20 +178,20 @@ export default class Game {
     if (Cur_Ratio > RATIO) {
       size = {
         width: SCREEN_HEIGHT * RATIO,
-        height: +SCREEN_HEIGHT,
+        height: +SCREEN_HEIGHT
       };
     } else {
       size = {
         width: +SCREEN_WIDTH,
-        height: SCREEN_WIDTH / RATIO,
+        height: SCREEN_WIDTH / RATIO
       };
     }
 
-    this.app.view.style.width = size.width + 'px';
-    this.app.view.style.height = size.height + 'px';
+    this.app.view.style.width = size.width + "px";
+    this.app.view.style.height = size.height + "px";
 
     // 屏幕适配
-    this.app.renderer['autoResize'] = true;
+    this.app.renderer["autoResize"] = true;
     this.app.renderer.resize(size.width, size.height);
     settings.SCALE_MODE = SCALE_MODES.NEAREST;
     settings.FILTER_RESOLUTION = window.devicePixelRatio;

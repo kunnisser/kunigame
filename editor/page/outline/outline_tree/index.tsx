@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-01-24 21:50:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-14 16:46:27
+ * @LastEditTime: 2023-08-17 16:35:23
  * @FilePath: /kunigame/editor/page/outline/outline_tree/index.tsx
  * @Description: ---- 大纲树状结构 ----
  */
@@ -136,12 +136,10 @@ const OutlineTree = () => {
   // 监听游戏初始化完成
   useEffect(() => {
     if (game) {
-      const sceneListTree = Object.values(game.editHive).map(
-        (scene: KnScene) => ({
-          title: scene.id,
-          key: scene.id
-        })
-      );
+      const sceneListTree = Object.values(game.hive).map((scene: KnScene) => ({
+        title: scene.id,
+        key: scene.id
+      }));
       const curDisplayList: any = [
         {
           title: "显示列表",
@@ -198,7 +196,7 @@ const OutlineTree = () => {
           treeData={loop(displayList)}
           onSelect={(selected: Array<string>) => {
             const key: string = selected[0];
-            const pickedScene: KnScene | null = game.editHive[key];
+            const pickedScene: KnScene | null = game.hive[key];
 
             if (pickedScene) {
               // 设置当前编辑游戏场景

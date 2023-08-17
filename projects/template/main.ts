@@ -16,7 +16,7 @@ const GameInitial = (view) => {
   });
   // 定义全局Mask
   const GameHive = StateHive(game);
-  game.editHive = GameHive;
+  game.hive = GameHive;
 
   // game.entryHive = GameHive["Welcome"];
   // game.sceneManager.dispatchEditScene(GameHive["Welcome"]);

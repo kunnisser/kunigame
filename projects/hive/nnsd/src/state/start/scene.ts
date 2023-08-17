@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-18 16:03:17
+ * @LastEditTime: 2023-08-17 17:49:42
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -31,42 +31,27 @@ class Start extends KnScene {
   create() {
     const testGroup = this.game.add.group("group1");
     const group2 = this.game.add.group("group2", this);
-    const demoText: KnText = this.game.add.text(
-      "demoText",
-      "test1",
-      {
-        fontSize: "24",
-        fill: 0xffffff
-      },
-      [0.5, 0.5]
-    );
+    const demoText: KnText = this.game.add.text("demoText", "test1", {
+      fontSize: "24",
+      fill: 0xffffff
+    }, [0.5, 0.5]);
+    demoText.scale.x = 4.1;
     demoText.angle = 46.739919993534755;
-    demoText.scale.set(0.5256201742799509, 0.6073624667437026);
     demoText.text = "充电桩";
     demoText.anchor.set(0.5, 0.5);
     demoText.y = 239;
-    demoText.x = 1006.6893050963129;
-    const demo1Text: KnText = this.game.add.text(
-      "demo1Text",
-      "test2",
-      {
-        fontSize: "24",
-        fill: 0xffffff
-      },
-      [0.5, 0.5]
-    );
+    demoText.x = 452;
+    const demo1Text: KnText = this.game.add.text("demo1Text", "test2", {
+      fontSize: "24",
+      fill: 0xffffff
+    }, [0.5, 0.5]);
     demo1Text.text = "配发";
     demo1Text.y = 239;
     demo1Text.x = 1406.3786101926257;
-    const demo2Text: KnText = this.game.add.text(
-      "demo2Text",
-      "test3",
-      {
-        fontSize: "24",
-        fill: 0xffffff
-      },
-      [0.5, 0.5]
-    );
+    const demo2Text: KnText = this.game.add.text("demo2Text", "test3", {
+      fontSize: "24",
+      fill: 0xffffff
+    }, [0.5, 0.5]);
     demo2Text.text = "特斯拉";
     demo2Text.visible = true;
     demo2Text.y = 239;
@@ -83,7 +68,7 @@ class Start extends KnScene {
     logo2.visible = true;
     logo2.anchor.set(0.5, 0.5);
     logo2.y = 239;
-    logo2.x = 279;
+    logo2.x = 348;
     logo2.scale.x = 1;
     logo2.tintColor = "#ffffff";
     this.addChild(testGroup);
@@ -97,6 +82,7 @@ class Start extends KnScene {
       this.removeChildren(1, this.children.length);
     }
   }
+
 }
 
 export default Start;

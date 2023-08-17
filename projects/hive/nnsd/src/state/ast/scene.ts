@@ -2,100 +2,101 @@
  * @Author: kunnisser
  * @Date: 2023-03-07 10:12:37
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-08-04 22:30:58
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\ast\scene.ts
+ * @LastEditTime: 2023-08-17 18:18:08
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/ast/scene.ts
  * @Description: ----  ----
  */
-import Game from 'ts@/kuni/lib/core';
-import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
-import KnText from 'ts@/kuni/lib/gameobjects/kn_text';
+import Game from "ts@/kuni/lib/core";
+import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
+import KnText from "ts@/kuni/lib/gameobjects/kn_text";
+
 class AST extends KnScene {
-  public game: Game;
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
     this.resources = {
-      titleBg: '/projects/hive/nnsd/assets/images/titleBg.png',
-      startBtn: '/projects/hive/nnsd/assets/images/startBtn.png',
-      role: '/projects/hive/nnsd/assets/images/role.png',
-      gameBg: '/projects/hive/nnsd/assets/images/gameBg.png',
-      mainPeak: '/projects/hive/nnsd/assets/images/mainPeak.png',
-      mountain: '/projects/hive/nnsd/assets/images/mountain.png',
-      platform: '/projects/hive/nnsd/assets/images/platform.png',
+      titleBg: "/projects/hive/nnsd/assets/images/titleBg.png",
+      startBtn: "/projects/hive/nnsd/assets/images/startBtn.png",
+      role: "/projects/hive/nnsd/assets/images/role.png",
+      gameBg: "/projects/hive/nnsd/assets/images/gameBg.png",
+      mainPeak: "/projects/hive/nnsd/assets/images/mainPeak.png",
+      mountain: "/projects/hive/nnsd/assets/images/mountain.png",
+      platform: "/projects/hive/nnsd/assets/images/platform.png"
     };
   }
 
   boot() {}
 
   create() {
-    const gameBg = this.game.add.background('gameBg', 'gameBg');
+    const gameBg = this.game.add.background("gameBg", "gameBg");
     this.addChild(gameBg);
     const demoText: KnText = this.game.add.text(
-      'demoText',
-      'WELCOME',
+      "demoText",
+      "WELCOME",
       {
-        fontSize: 100,
+        fontSize: 100
       },
       [0.5, 0.5]
     );
     demoText.scale.x = 1;
-    demoText.style.fontSize = 75;
-    demoText.style.fill = '#ff6161';
+    demoText.style.fontSize = 68;
+    demoText.style.fill = "#ff6161";
     demoText.angle = 0;
     demoText.scale.y = 1;
     demoText.alpha = 1;
-    demoText.text = '多多词汇峰';
+    demoText.text = "多多词汇峰";
     demoText.anchor.set(0.5, 0.5);
     demoText.visible = true;
     demoText.style.dropShadowDistance = 16;
     demoText.style.dropShadowBlur = 10;
     demoText.style.dropShadowAngle = 0.6;
     demoText.style.dropShadow = true;
-    demoText.style.dropShadowColor = '#57d8d8';
+    demoText.style.dropShadowColor = "#57d8d8";
     demoText.style.strokeThickness = 20;
-    demoText.style.stroke = '#2a5860';
-    demoText.x = 597;
-    demoText.y = 445;
-    const cloud = this.game.add.image('cloud', 'titleBg', this);
-    cloud.scale.y = 1.2;
-    cloud.scale.x = 1.2;
+    demoText.style.stroke = "#2a5860";
+    demoText.x = 379;
+    demoText.y = 303;
+    const cloud = this.game.add.image("cloud", "titleBg", this);
+    cloud.y = 301;
+    cloud.x = 375;
+    cloud.scale.y = 0.7;
+    cloud.scale.x = 0.7;
     cloud.anchor.set(0.5, 0.5);
-    cloud.y = 450;
-    cloud.x = 609;
     this.addChild(demoText);
-    const mainPeak = this.game.add.image('mainPeak', 'mainPeak', this);
-    mainPeak.scale.y = 1.5;
-    mainPeak.scale.x = 1.5;
-    mainPeak.y = 1255;
-    mainPeak.x = -6;
-    const mountain = this.game.add.image('mountain', 'mountain', this);
-    mountain.scale.set(1.28, 1.26);
-    mountain.scale.x = 1.2;
-    mountain.y = 1918;
-    mountain.x = 1;
-    const platform = this.game.add.image('platform', 'platform', this);
-    platform.scale.y = 1.4;
-    platform.scale.x = 1.4;
-    platform.scale.set(1.3900000000000001, 1.6800000000000002);
-    platform.y = 1530;
-    platform.x = 688;
-    const start = this.game.add.button('start', 'startBtn', 'startBtn', this);
+    const mainPeak = this.game.add.image("mainPeak", "mainPeak", this);
+    mainPeak.scale.y = 1;
+    mainPeak.scale.x = 1;
+    mainPeak.y = 613;
+    mainPeak.x = -3;
+    const mountain = this.game.add.image("mountain", "mountain", this);
+    mountain.scale.y = 0.9;
+    mountain.scale.x = 0.9;
+    mountain.y = 1049;
+    mountain.x = -7;
+    const platform = this.game.add.image("platform", "platform", this);
+    platform.anchor.set(1, 1);
+    platform.scale.y = 1;
+    platform.scale.x = 1;
+    platform.y = 1334;
+    platform.x = 750;
+    const start = this.game.add.button("start", "startBtn", "startBtn", this);
     start.anchor.set(0.5, 0.5);
-    start.y = 1170;
-    start.x = 585;
+    start.y = 667.0224119530416;
+    start.x = 375;
+
     start.next = () => {
-      console.log(this.game.editHive);
       this.game.sceneManager.changeScene(
         this.game.currentScene,
-        this.game.editHive['Welcome']
+        this.game.hive["Welcome"]
       );
     };
-    const boy = this.game.add.image('boy', 'role', this);
+
+    const boy = this.game.add.image("boy", "role", this);
     boy.anchor.set(0.5, 0.5);
-    boy.scale.y = 2;
-    boy.scale.x = 2;
-    boy.y = 1334;
-    boy.x = 988;
+    boy.scale.y = 1;
+    boy.scale.x = 1;
+    boy.y = 744;
+    boy.x = 612;
   }
 
   update() {}
