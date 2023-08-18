@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-07 16:50:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-26 17:45:57
+ * @LastEditTime: 2023-08-18 17:49:10
  * @FilePath: /kunigame/projects/hive/nnsd/src/tools/index.ts
  * @Description: ---- 工具集 ----
  */
@@ -136,7 +136,19 @@ class EditorTools {
             const { prev } = prevAction?.stack[index];
             const keys = Object.keys(prev);
             keys.map((key) => {
-              return _.set(target, key, prev[key]);
+              // 判断一层 x,y 为半尺寸和全尺寸
+              if (key === "x" || key === "y") {
+                const sizeMap = {
+                  "xhalf": this.game.config.halfEditorWidth,
+                  "yhalf": this.game.config.halfEditorHeight,
+                  "xwhole": this.game.config.editorWidth,
+                  "ywhole": this.game.config.editorHeight
+                };
+                const ret = sizeMap[`${key}${prev[key]}`] || prev[key];
+                return _.set(target, key, ret);
+              } else {
+                return _.set(target, key, prev[key]);
+              }
             });
             editors.push(prev);
             return target;

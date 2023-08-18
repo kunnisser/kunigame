@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-07 10:12:37
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-08-17 18:18:08
+ * @LastEditTime: 2023-08-18 17:52:08
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/ast/scene.ts
  * @Description: ----  ----
  */
@@ -58,26 +58,28 @@ class AST extends KnScene {
     demoText.y = 303;
     const cloud = this.game.add.image("cloud", "titleBg", this);
     cloud.y = 301;
-    cloud.x = 375;
+    cloud.x = 0;
     cloud.scale.y = 0.7;
     cloud.scale.x = 0.7;
     cloud.anchor.set(0.5, 0.5);
     this.addChild(demoText);
     const mainPeak = this.game.add.image("mainPeak", "mainPeak", this);
+    mainPeak.anchor.set(0, 1);
     mainPeak.scale.y = 1;
     mainPeak.scale.x = 1;
-    mainPeak.y = 613;
-    mainPeak.x = -3;
+    mainPeak.y = 1334.0448239060831;
+    mainPeak.x = 0;
     const mountain = this.game.add.image("mountain", "mountain", this);
+    mountain.anchor.set(0, 1);
     mountain.scale.y = 0.9;
     mountain.scale.x = 0.9;
-    mountain.y = 1049;
-    mountain.x = -7;
+    mountain.y = 1334.0448239060831;
+    mountain.x = 0;
     const platform = this.game.add.image("platform", "platform", this);
     platform.anchor.set(1, 1);
     platform.scale.y = 1;
     platform.scale.x = 1;
-    platform.y = 1334;
+    platform.y = 1334.0448239060831;
     platform.x = 750;
     const start = this.game.add.button("start", "startBtn", "startBtn", this);
     start.anchor.set(0.5, 0.5);

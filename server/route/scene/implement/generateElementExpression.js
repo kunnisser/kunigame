@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-07 14:14:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-05-11 16:38:43
+ * @LastEditTime: 2023-08-18 16:29:01
  * @FilePath: /kunigame/server/route/scene/implement/generateElementExpression.js
  * @Description: ---- 游戏属性的ast表达式实现 ----
  */
@@ -80,7 +80,8 @@ const generateExpressionStatement = (editRecords, key, recordKey) => {
           T.identifier(recordKeyArr[1])
         )
       : T.memberExpression(T.identifier(key), T.identifier(recordKey));
-  if (typeof targetRecordValue === "object" && targetRecordValue.x) {
+  // 二级目标为对象，且包含x,y属性名
+  if (typeof targetRecordValue === "object" && targetRecordValue.x !== void 0) {
     // set赋值
     return T.callExpression(
       T.memberExpression(

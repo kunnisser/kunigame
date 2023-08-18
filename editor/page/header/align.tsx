@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-04-03 00:09:09
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-28 15:52:33
+ * @LastEditTime: 2023-08-18 17:41:12
  * @FilePath: /kunigame/editor/page/header/align.tsx
  * @Description: ---- 布局对齐按钮组 ----
  */
@@ -98,6 +98,18 @@ const AlignHeader = () => {
     tool.switchOperationType.bind(tool)(key);
   };
 
+  // 判断是居中，靠右转换
+  const transformPositionByName = (game: Game, item, name) => {
+    const sizeMap = {
+      x: game.config.editorWidth,
+      y: game.config.editorHeight
+    };
+    const positionRatio = (item[name] / sizeMap[name]) * 2;
+    return Number.isInteger(positionRatio)
+      ? [0, "half", "whole"][positionRatio]
+      : item[name];
+  };
+
   const commonAlignHandler = (alignCallback) => {
     const tool: EditorTools = store.getState().sceneReducer.game.editorTools;
     const game: Game = store.getState().sceneReducer.game;
@@ -107,9 +119,15 @@ const AlignHeader = () => {
     const editGameItem = store.getState().sceneReducer.editGameItem;
 
     tool.recordOperationStep(gameItems || [], (record, item?: any) => {
-      record.prev = { x: item.x, y: item.y };
+      record.prev = {
+        x: transformPositionByName(game, item, "x"),
+        y: transformPositionByName(game, item, "y")
+      };
       alignCallback(item, game);
-      record.next = { x: item.x, y: item.y };
+      record.next = {
+        x: transformPositionByName(game, item, "x"),
+        y: transformPositionByName(game, item, "y")
+      };
       editGameItem[item.name] = Object.assign(
         editGameItem[item.name] || {},
         record.next
