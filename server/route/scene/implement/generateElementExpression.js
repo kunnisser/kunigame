@@ -2,18 +2,18 @@
  * @Author: kunnisser
  * @Date: 2023-03-07 14:14:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-08-18 16:29:01
- * @FilePath: /kunigame/server/route/scene/implement/generateElementExpression.js
+ * @LastEditTime: 2023-08-19 19:23:53
+ * @FilePath: \kunigame\server\route\scene\implement\generateElementExpression.js
  * @Description: ---- 游戏属性的ast表达式实现 ----
  */
-const T = require("@babel/types");
+const T = require('@babel/types');
 
 const generateTextureAst = (obj) => {
   return T.callExpression(
     T.memberExpression(
       T.memberExpression(
-        T.memberExpression(T.thisExpression(), T.identifier("game")),
-        T.identifier("add")
+        T.memberExpression(T.thisExpression(), T.identifier('game')),
+        T.identifier('add')
       ),
       T.identifier(obj.type)
     ),
@@ -23,7 +23,7 @@ const generateTextureAst = (obj) => {
 
 const generateAdvanceObject = (obj) => {
   const advanceMap = {
-    "texture": generateTextureAst
+    texture: generateTextureAst,
   };
   return advanceMap[obj.type](obj);
 };
@@ -34,12 +34,12 @@ const generateAdvanceObject = (obj) => {
  * @return {*}
  */
 const convertGamePropertyToExpression = (val) => {
-  console.log(val);
   const type = typeof val;
+  console.log(type, val);
   const convertMaps = {
     number: T.numericLiteral,
     string: T.stringLiteral,
-    boolean: T.booleanLiteral
+    boolean: T.booleanLiteral,
   };
   return convertMaps[type]
     ? convertMaps[type](val)
@@ -53,7 +53,7 @@ const convertGamePropertyToExpression = (val) => {
  * @return {*}
  */
 const transformToArray = (target, len) => {
-  if (len > 0 && target.object.type === "MemberExpression") {
+  if (len > 0 && target.object.type === 'MemberExpression') {
     const newTarget = target.object;
     len -= 1;
     return [transformToArray(newTarget, len), target.property.name];
@@ -72,7 +72,7 @@ const transformToArray = (target, len) => {
 const generateExpressionStatement = (editRecords, key, recordKey) => {
   const targetRecord = editRecords[key];
   const targetRecordValue = targetRecord[recordKey];
-  const recordKeyArr = recordKey.split("-");
+  const recordKeyArr = recordKey.split('-');
   const memberExpression =
     recordKeyArr.length > 1
       ? T.memberExpression(
@@ -81,32 +81,75 @@ const generateExpressionStatement = (editRecords, key, recordKey) => {
         )
       : T.memberExpression(T.identifier(key), T.identifier(recordKey));
   // 二级目标为对象，且包含x,y属性名
-  if (typeof targetRecordValue === "object" && targetRecordValue.x !== void 0) {
+  if (typeof targetRecordValue === 'object' && targetRecordValue.x !== void 0) {
     // set赋值
     return T.callExpression(
       T.memberExpression(
         T.memberExpression(T.identifier(key), T.identifier(recordKey)),
-        T.identifier("set")
+        T.identifier('set')
       ),
       [
         convertGamePropertyToExpression(targetRecordValue.x),
-        convertGamePropertyToExpression(targetRecordValue.y)
+        convertGamePropertyToExpression(targetRecordValue.y),
       ]
     );
   } else {
     // 等号赋值
-    return T.expressionStatement(
-      T.assignmentExpression(
-        "=",
-        memberExpression,
-        convertGamePropertyToExpression(targetRecordValue)
-      )
-    );
+    if (
+      (recordKey === 'x' || recordKey === 'y') &&
+      ['half', 'whole'].indexOf(targetRecordValue) >= 0
+    ) {
+      return T.expressionStatement(
+        T.assignmentExpression(
+          '=',
+          memberExpression,
+          convertGamePositionPropertiesToExpression(
+            recordKey,
+            targetRecordValue
+          )
+        )
+      );
+    } else {
+      return T.expressionStatement(
+        T.assignmentExpression(
+          '=',
+          memberExpression,
+          convertGamePropertyToExpression(targetRecordValue)
+        )
+      );
+    }
   }
+};
+
+// 坐标尺寸转换 string -> 表达式
+const convertGamePositionPropertiesToExpression = (
+  recordKey,
+  targetRecordValue
+) => {
+  const isSizeExpressionArray = ['half', 'whole'];
+  const sizeExpressionMap = {
+    x: {
+      half: 'half_w',
+      whole: 'width',
+    },
+    y: {
+      half: 'half_h',
+      whole: 'height',
+    },
+  };
+
+  return T.memberExpression(
+    T.memberExpression(
+      T.memberExpression(T.thisExpression(), T.identifier('game')),
+      T.identifier('config')
+    ),
+    T.identifier(sizeExpressionMap[recordKey][targetRecordValue])
+  );
 };
 
 module.exports = {
   convertGamePropertyToExpression,
+  convertGamePositionPropertiesToExpression,
   generateExpressionStatement,
-  transformToArray
+  transformToArray,
 };
