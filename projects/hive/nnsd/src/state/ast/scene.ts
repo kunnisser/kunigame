@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-07 10:12:37
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-08-19 21:58:02
+ * @LastEditTime: 2023-09-01 00:29:29
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\ast\scene.ts
  * @Description: ----  ----
  */
@@ -35,16 +35,12 @@ class AST extends KnScene {
     const demoText: KnText = this.game.add.text(
       'demoText',
       'WELCOME',
-      {
-        fontSize: 100,
-      },
+      {},
       [0.5, 0.5]
     );
-    demoText.scale.x = 1;
-    demoText.style.fontSize = 68;
+    demoText.style.fontSize = 240;
     demoText.style.fill = '#ff6161';
     demoText.angle = 0;
-    demoText.scale.y = 1;
     demoText.alpha = 1;
     demoText.text = '多多词汇峰';
     demoText.anchor.set(0.5, 0.5);
