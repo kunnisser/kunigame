@@ -103,7 +103,7 @@ class KnFactory {
 
     btn = this.image(name || "", key, parent, align);
 
-    btn.interactive = !0;
+    btn.interactive = true;
 
     btn["next"] = null;
 
@@ -117,6 +117,9 @@ class KnFactory {
     ];
 
     btn.on("pointerdown", (e) => {
+      if (this.game.coverMask) {
+        return;
+      }
       btn.blendMode = PIXI.BLEND_MODES.ADD_NPM;
       btn.start && btn.start(e);
     });
@@ -131,6 +134,9 @@ class KnFactory {
     });
 
     btn.on("pointerup", (e: Event) => {
+      if (this.game.coverMask) {
+        return;
+      }
       if (btn.blendMode === PIXI.BLEND_MODES.ADD_NPM) {
         btn.blendMode = PIXI.BLEND_MODES.NORMAL;
         if (switchKey) {

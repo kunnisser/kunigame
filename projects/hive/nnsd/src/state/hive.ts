@@ -10,7 +10,6 @@ const StateHiveKey = {
 };
 
 const StateHive = (game) => {
-  // game.sceneManager.addScene("global_preloader", Preloader);
   const hive = {};
   for (let key in StateHiveKey) {
     hive[key] = game.sceneManager.addScene(key, StateHiveKey[key]);
