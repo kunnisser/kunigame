@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-03-07 10:12:37
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-01 00:29:29
+ * @LastEditTime: 2023-09-04 19:59:25
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\ast\scene.ts
  * @Description: ----  ----
  */
@@ -17,13 +17,13 @@ class AST extends KnScene {
     super(game, key);
     this.game = game;
     this.resources = {
-      titleBg: '/projects/hive/nnsd/assets/images/titleBg.png',
-      startBtn: '/projects/hive/nnsd/assets/images/startBtn.png',
-      role: '/projects/hive/nnsd/assets/images/role.png',
-      gameBg: '/projects/hive/nnsd/assets/images/gameBg.png',
-      mainPeak: '/projects/hive/nnsd/assets/images/mainPeak.png',
-      mountain: '/projects/hive/nnsd/assets/images/mountain.png',
-      platform: '/projects/hive/nnsd/assets/images/platform.png',
+      titleBg: 'assets/images/titleBg.png',
+      startBtn: 'assets/images/startBtn.png',
+      role: 'assets/images/role.png',
+      gameBg: 'assets/images/gameBg.png',
+      mainPeak: 'assets/images/mainPeak.png',
+      mountain: 'assets/images/mountain.png',
+      platform: 'assets/images/platform.png',
     };
   }
 

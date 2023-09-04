@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-02-02 16:46:30
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-26 17:49:28
- * @FilePath: /kunigame/editor/page/outline/outline_tree/container.tsx
+ * @LastEditTime: 2023-09-04 19:45:47
+ * @FilePath: \kunigame\editor\page\outline\outline_tree\container.tsx
  * @Description: ---- 场景元素列表 ----
  */
 import React, { useState, useEffect } from "react";
@@ -72,6 +72,10 @@ const ContainerTree = () => {
         icon: SpriteIcon
       },
       "KnSprite": {
+        key: "name",
+        icon: SpriteIcon
+      },
+      "AnimatedSprite": {
         key: "name",
         icon: SpriteIcon
       },

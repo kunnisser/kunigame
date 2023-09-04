@@ -1,6 +1,6 @@
-import Game from "ts@/kuni/lib/core";
-import StateHive from "./src/state/hive";
-import Config from "./schema/game.json";
+import Game from 'ts@/kuni/lib/core';
+import StateHive from './src/state/hive';
+import Config from './schema/game.json';
 const GameInitial = (view) => {
   const dpr = window.devicePixelRatio;
   console.log(view.clientWidth * dpr * 2);
@@ -12,13 +12,13 @@ const GameInitial = (view) => {
     transparent: Config.transparent,
     view,
     editorWidth: Config.width,
-    editorHeight: Config.width / Config.ratio
+    editorHeight: Config.width / Config.ratio,
   });
   // 定义全局Mask
   const GameHive = StateHive(game);
   game.hive = GameHive;
   game.assetsPath = Config.assetsPath;
-  game.entryHive = GameHive["Welcome"];
+  game.entryHive = GameHive['Welcome'];
   return game;
 };
 
