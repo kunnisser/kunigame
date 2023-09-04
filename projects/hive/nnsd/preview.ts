@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-08-02 17:24:15
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-08-17 16:34:59
+ * @LastEditTime: 2023-09-04 13:50:06
  * @FilePath: /kunigame/projects/hive/nnsd/preview.ts
  * @Description: ----  ----
  */
@@ -17,6 +17,7 @@ const dpr = window.devicePixelRatio;
 console.log(view.clientWidth, dpr);
 const game = new Game({
   width: view.clientWidth * dpr, // Config.width,
+  height: view.clientHeight * dpr,
   ratio: view.clientWidth / view.clientHeight, // Config.ratio,
   antialias: Config.antialias,
   transparent: Config.transparent,

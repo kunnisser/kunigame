@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2021-01-25 16:00:13
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-08-02 23:28:54
- * @FilePath: \kunigame\editor\page\header\index.tsx
+ * @LastEditTime: 2023-09-04 10:19:30
+ * @FilePath: /kunigame/editor/page/header/index.tsx
  * @Description: ---- KN编辑器菜单 ----
  */
 
@@ -229,8 +229,8 @@ const KnHeader = () => {
 
   // 预览项目
   const showPreviewGame = () => {
-    window.open('./demo.html', '_blank');
-  }
+    window.open("./editor/demo.html", "_blank");
+  };
   return (
     <React.Fragment>
       <Space>

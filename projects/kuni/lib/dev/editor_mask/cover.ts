@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-06-29 13:51:52
+ * @LastEditTime: 2023-09-04 13:43:46
  * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
@@ -57,8 +57,9 @@ class CoverMask extends KnGroup {
    * @return {void}
    */
   generateGrid(): KnGraphics {
-    const width: number = this.game.config.width ?? 0;
-    const height: number = this.game.config.height ?? 0;
+    console.log("gridWidth", this.game.app.view.width);
+    const width: number = this.game.app.view.width * this.game.dpr ?? 0;
+    const height: number = this.game.app.view.height * this.game.dpr ?? 0;
     const size: number = 100;
     const border: IBorder = {
       width: 1,
