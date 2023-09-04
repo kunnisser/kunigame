@@ -15,7 +15,7 @@ class KnLoader extends Loader {
   filling(resources: any) {
     for (let key of Object.keys(resources)) {
       if (!this.preloader.resources[key]) {
-        this.preloader.add(key, resources[key]);
+        this.preloader.add(key, this.game.assetsPath + resources[key]);
       }
     }
   }

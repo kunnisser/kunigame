@@ -26,6 +26,7 @@ interface EnterProps {
 }
 
 export default class Game {
+  public assetsPath?: string; // 资源路径prefix
   public edit: symbol; // 编辑模式
   public redux: any; // 外部redux对象
   public entryStateKey: string;

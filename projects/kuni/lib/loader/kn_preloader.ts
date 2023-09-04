@@ -9,10 +9,10 @@
  * 场景切换资源加载
  */
 
-import KnScene from '../gameobjects/kn_scene';
-import KnGraphics from '../gameobjects/kn_graphics';
-import Game from '../core';
-import { AnimatedSprite } from 'pixi.js';
+import KnScene from "../gameobjects/kn_scene";
+import KnGraphics from "../gameobjects/kn_graphics";
+import Game from "../core";
+import { AnimatedSprite } from "pixi.js";
 
 class Preloader extends KnScene {
   public loadingTypes: Map<string, Function>;
@@ -30,16 +30,15 @@ class Preloader extends KnScene {
     super(game, key);
     this.game = game;
     this.resources = {
-      bg001: '/projects/kuni/assets/images/bg001.jpg',
-      run: '/projects/kuni/assets/data/loadingrun.json',
-      vertex: '/projects/kuni/assets/shader/vertex/default.vert',
+      bg001: "assets/images/bg001.jpg",
+      run: "assets/data/loadingrun.json"
     };
   }
 
   boot(target: KnScene, isFirstLoad?: Boolean) {
     this.loading(target, isFirstLoad);
     this.anmi.x = this.startX;
-    this.loadingText.text = '0 %';
+    this.loadingText.text = "0 %";
   }
 
   loading(target: KnScene, isFirstLoad?: Boolean) {
@@ -60,15 +59,15 @@ class Preloader extends KnScene {
 
   create() {
     const tmpText = this.game.add.text(
-      '',
-      'loading...',
-      { fontFamily: 'GrilledCheeseBTNToasted', fontSize: 12 },
+      "",
+      "loading...",
+      { fontFamily: "GrilledCheeseBTNToasted", fontSize: 12 },
       [0.5, 0.5]
     );
     this.addChild(tmpText);
     this.removeChild(tmpText);
     this.position.set(this.game.config.half_w, this.game.config.half_h);
-    this.bg = this.game.add.image('', 'bg001', this);
+    this.bg = this.game.add.image("", "bg001", this);
     this.bg.width = this.game.config.width;
     this.bg.height = this.game.config.height;
     this.bg.anchor.set(0.5);
@@ -109,7 +108,7 @@ class Preloader extends KnScene {
     this.addChild(this.anmi);
 
     // 绘制加载条
-    this.loadingGp = this.game.add.group('sprite_loading', this);
+    this.loadingGp = this.game.add.group("sprite_loading", this);
     this.loadingbar = this.drawStage.generateRect(
       0xd10311,
       [0, 0, this.game.config.half_w + this.anmi.width, 8, 4],
@@ -124,12 +123,12 @@ class Preloader extends KnScene {
 
     // 绘制加载文字
     this.loadingText = this.game.add.text(
-      '',
-      '0 %',
+      "",
+      "0 %",
       {
-        fontFamily: 'GrilledCheeseBTNToasted',
+        fontFamily: "GrilledCheeseBTNToasted",
         fontSize: 12,
-        fill: 0xffffff,
+        fill: 0xffffff
       },
       [0.5, 0.5]
     );
