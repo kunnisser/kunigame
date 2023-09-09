@@ -130,7 +130,7 @@ const TweenEditor = (props: any) => {
 
     ref.current.defaultTween &&
       (ref.current.defaultTween.pause(0).kill(),
-      (ref.current.defaultTween = null));
+        (ref.current.defaultTween = null));
     ref.current.defaultTween = tween.instance.to(target, duration, {
       startAt: originVars,
       x: "+=" + x,

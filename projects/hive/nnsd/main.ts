@@ -3,7 +3,6 @@ import StateHive from './src/state/hive';
 import Config from './schema/game.json';
 const GameInitial = (view) => {
   const dpr = window.devicePixelRatio;
-  console.log(view.clientWidth * dpr * 2);
   const game = new Game({
     width: view.clientWidth * dpr * 2, // Config.width,
     ratio: view.clientWidth / view.clientHeight, // Config.ratio,

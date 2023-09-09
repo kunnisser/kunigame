@@ -2,15 +2,15 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-04 13:43:46
- * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
+ * @LastEditTime: 2023-09-10 00:25:46
+ * @FilePath: \kunigame\projects\kuni\lib\dev\editor_mask\cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
 
-import { Container, Text } from "pixi.js";
-import Game from "../../core";
-import KnGraphics from "../../gameobjects/kn_graphics";
-import KnGroup from "../../gameobjects/kn_group";
+import { Container, Text } from 'pixi.js';
+import Game from '../../core';
+import KnGraphics from '../../gameobjects/kn_graphics';
+import KnGroup from '../../gameobjects/kn_group';
 
 class CoverMask extends KnGroup {
   public game: Game;
@@ -29,7 +29,7 @@ class CoverMask extends KnGroup {
   public lines: KnGraphics;
   static scaleRatio: number;
   constructor(game: Game, parent: PIXI.Container) {
-    super(game, "coverMask", parent);
+    super(game, 'coverMask', parent);
     this.game = game;
     this.start_X = 0;
     this.start_Y = 0;
@@ -57,14 +57,13 @@ class CoverMask extends KnGroup {
    * @return {void}
    */
   generateGrid(): KnGraphics {
-    console.log("gridWidth", this.game.app.view.width);
-    const width: number = this.game.app.view.width * this.game.dpr ?? 0;
-    const height: number = this.game.app.view.height * this.game.dpr ?? 0;
+    const width: number = this.game.app.view.width * this.game.dpr * 2 ?? 0;
+    const height: number = this.game.app.view.height * this.game.dpr * 2 ?? 0;
     const size: number = 100;
     const border: IBorder = {
       width: 1,
       color: 0xffffff,
-      alpha: 0.15
+      alpha: 0.15,
     };
     const lines: KnGraphics = this.game.add.graphics().generateLine(border);
     lines.interactive = true;
@@ -79,12 +78,12 @@ class CoverMask extends KnGroup {
       lines.moveTo(0, y);
       lines.lineTo(width, y);
       const scaleText = this.game.add.text(
-        "",
+        '',
         `${y - editY}`,
         {
           fontSize: 14,
-          fontWeight: "bold",
-          fill: 0x8ac007
+          fontWeight: 'bold',
+          fill: 0x8ac007,
         },
         [0, 0.5]
       );
@@ -98,12 +97,12 @@ class CoverMask extends KnGroup {
       lines.lineTo(x, height);
       this.addChild(lines);
       const scaleText = this.game.add.text(
-        "",
+        '',
         `${x - editX}`,
         {
           fontSize: 14,
-          fontWeight: "bold",
-          fill: 0x8ac007
+          fontWeight: 'bold',
+          fill: 0x8ac007,
         },
         [0.5, 0]
       );
@@ -193,7 +192,7 @@ class CoverMask extends KnGroup {
     //   posTextTip.visible = mouseIn;
     // });
 
-    mask.on("mousemove", (e) => {
+    mask.on('mousemove', (e) => {
       // if (!mouseIn) {
       //   return;
       // }
@@ -205,7 +204,7 @@ class CoverMask extends KnGroup {
     });
 
     // 绑定缩放事件
-    canvas.addEventListener("wheel", (e: WheelEvent) => {
+    canvas.addEventListener('wheel', (e: WheelEvent) => {
       // posTextTip.visible = false;
       scaleVal -= e.deltaY;
       if (scaleVal < SCALE_VALUE - 250) {

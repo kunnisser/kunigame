@@ -9,6 +9,7 @@
 
 import { ParticleContainer, utils, Sprite } from 'pixi.js';
 import Game from '../core';
+import KnSprite from './kn_sprite';
 const ParticleConfig: any = {
   scale: true,
   position: true,
@@ -34,47 +35,48 @@ class KnEmitter extends ParticleContainer {
   }
 
   public create(quality: number = 10, key: string) {
-    const texture = utils.TextureCache[key];
+    const createdSprite: Array<KnSprite> = [];
     for (let i = 0; i < quality; i++) {
-      let sprite: Sprite = new Sprite(texture);
+      let sprite: KnSprite = this.game.add.image('', key, this);
       sprite.alpha = 0;
       sprite.anchor.set(0.5);
-      sprite.scale.set(0.5);
 
-      // 添加到组中
-      this.addChild(sprite);
-      if (quality === 1) {
-        return sprite;
-      }
+      // 一次新增的多个对象
+      createdSprite.push(sprite);
     }
-    return null;
+    return createdSprite;
   }
 
-  public getParticle() {
-    let bootParticle: any = null;
-    bootParticle = this.children.find((particle) => {
+  public getParticle(count?: number) {
+    const freeParticles: Array<any> = this.children.filter((particle: any) => {
       return particle.alpha === 0;
     });
-    return bootParticle || this.create(1, this.key);
+    const bootCount: number = count || 1;
+    if (freeParticles.length >= bootCount) {
+      return freeParticles.slice(0, bootCount);
+    } else {
+      return this.create(bootCount, this.key);
+    }
   }
 
   // 单粒子发射 (发射器移动)
   public shoot() {
-    let shootParticle: Sprite = this.getParticle();
+    let shootParticle: Sprite = this.getParticle(1)[0];
     shootParticle.alpha = 1;
     shootParticle.angle = 0;
     return shootParticle;
   }
 
   // 多粒子发射 (发射器静止)
-  public shootMulite(num: number = 1) {
-    let bootParticles: Array<any> = [];
-    for (let i = 0; i < num; i++) {
-      const shootParticle = this.getParticle();
-      shootParticle.alpha = 1;
-      shootParticle.angle = 0;
-      bootParticles.push(shootParticle);
-    }
+  public shootMulite(num: number = 1): Array<KnSprite> {
+    const shootParticles = this.getParticle(num);
+    const bootParticles: Array<KnSprite> = shootParticles.map(
+      (shootParticle) => {
+        shootParticle.alpha = 1;
+        shootParticle.angle = 0;
+        return shootParticle;
+      }
+    );
     return bootParticles;
   }
 }

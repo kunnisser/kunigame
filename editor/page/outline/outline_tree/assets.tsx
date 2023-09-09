@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-06 17:05:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-04-02 00:52:59
+ * @LastEditTime: 2023-09-09 23:38:02
  * @FilePath: \kunigame\editor\page\outline\outline_tree\assets.tsx
  * @Description: ---- 素材列表 ----
  */
@@ -20,10 +20,10 @@ const AssetsList = () => {
   const dispatch = useDispatch();
   const store = useStore();
   const [assetsPath, imageDir, atlasDir, fontDir] = [
-    "/projects/hive",
-    "/assets/images/",
-    "/assets/atlas/",
-    "/assets/fonts/"
+    "/projects/hive/",
+    "assets/images/",
+    "assets/atlas/",
+    "assets/fonts/"
   ];
   const [imageList, setImageList] = useState([] as any);
   const [atlasList, setAtlasList] = useState([] as any);
@@ -140,14 +140,14 @@ const AssetsList = () => {
                   onDragStart={() =>
                     dragHandle({
                       key: imageName,
-                      url: `${assetsPath}/${EditGameName}${imageDir}${image}`
+                      url: `${imageDir}${image}`
                     })
                   }
                 >
                   <div className="kn-image-thumb">
                     <img
                       draggable={false}
-                      src={`${assetsPath}/${EditGameName}${imageDir}${image}`}
+                      src={`${assetsPath}${EditGameName}/${imageDir}${image}`}
                     ></img>
                   </div>
                   <p style={{ textAlign: "center" }}>{image}</p>
@@ -173,14 +173,14 @@ const AssetsList = () => {
                     onDragStart={() =>
                       dragHandle({
                         key: atlasName,
-                        url: `${assetsPath}/${EditGameName}${atlasDir}${atlas}`
+                        url: `${atlasDir}${atlas}`
                       })
                     }
                   >
                     <div className="kn-image-thumb">
                       <img
                         draggable={false}
-                        src={`${assetsPath}/${EditGameName}${atlasDir}${atlasName}.png`}
+                        src={`${atlasDir}${atlasName}.png`}
                       ></img>
                     </div>
                     <p style={{ textAlign: "center" }}>{atlas}</p>
@@ -207,14 +207,14 @@ const AssetsList = () => {
                     onDragStart={() =>
                       dragHandle({
                         key: fontName,
-                        url: `${assetsPath}/${EditGameName}${fontDir}${font}`
+                        url: `${fontDir}${font}`
                       })
                     }
                   >
                     <div className="kn-image-thumb">
                       <img
                         draggable={false}
-                        src={`${assetsPath}/${EditGameName}${fontDir}${fontName}.png`}
+                        src={`${assetsPath}${EditGameName}/${fontDir}${fontName}.png`}
                       ></img>
                     </div>
                     <p style={{ textAlign: "center" }}>{font}</p>

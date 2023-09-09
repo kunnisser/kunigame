@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-07-07 13:49:58
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-08-03 16:50:08
- * @FilePath: /kunigame/editor/page/workbench/particle.tsx
+ * @LastEditTime: 2023-09-10 01:59:50
+ * @FilePath: \kunigame\editor\page\workbench\particle.tsx
  * @Description: ---- 粒子特效 ----
  */
 
@@ -19,6 +19,7 @@ import Game from "ts@/kuni/lib/core";
 import Stats from "stats-js";
 import { createFrom } from "ts@/kuni/lib/utils/common";
 import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
+import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 
 let previewGame: any = null;
 let particleContainer: any = null;
@@ -118,7 +119,8 @@ const ParticleEditor = (props: any) => {
       width,
       height
     } = ref.current;
-    const particles: Array<any> = emitter.shootMulite(count);
+    const particles: Array<KnSprite> = emitter.shootMulite(count);
+    console.log('发射', particles.map((p) => p.width));
     for (let particle of particles) {
       particle.x = pointX + game.math.redirect() * Math.random() * width;
       particle.y = pointY + game.math.redirect() * Math.random() * height;
@@ -126,18 +128,18 @@ const ParticleEditor = (props: any) => {
         x:
           particle.x +
           particleBooleanDispose(xDirect, game.math.redirect()) *
-            particleBooleanDispose(xRandom, Math.random()) *
-            offsetX,
+          particleBooleanDispose(xRandom, Math.random()) *
+          offsetX,
         y:
           particle.y +
           particleBooleanDispose(yDirect, game.math.redirect()) *
-            particleBooleanDispose(yRandom, Math.random()) *
-            offsetY,
+          particleBooleanDispose(yRandom, Math.random()) *
+          offsetY,
         angle:
           particle.angle +
           particleBooleanDispose(angleDirect, game.math.redirect()) *
-            particleBooleanDispose(angleRandom, Math.random()) *
-            angle,
+          particleBooleanDispose(angleRandom, Math.random()) *
+          angle,
         alpha: 0,
         ease: tween[ease][inout]
       });
@@ -145,7 +147,6 @@ const ParticleEditor = (props: any) => {
   };
 
   const generateParticle = (target) => {
-    console.log("generateParticle");
     prevTicker = previewGame.add.ticker();
     prevTicker.add((delta) => {
       stats.begin();
@@ -162,6 +163,7 @@ const ParticleEditor = (props: any) => {
   useEffect(() => {
     const editVars = particleVars || defaultParticleVars;
     ref.current = editVars;
+    console.log("particleVars", editVars);
   }, [particleVars]);
 
   useEffect(() => {

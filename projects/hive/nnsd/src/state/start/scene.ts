@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-04 19:59:31
+ * @LastEditTime: 2023-09-10 01:07:43
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\start\scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -23,6 +23,8 @@ class Start extends KnScene {
       avator_01: 'assets/images/avator_01.png',
       loadingrun: 'assets/atlas/loadingrun.json',
       icon: 'assets/atlas/icon.json',
+      rocket: 'assets/images/rocket.png',
+      gas: "assets/images/gas.png"
     };
   }
 
@@ -31,42 +33,27 @@ class Start extends KnScene {
   create() {
     const testGroup = this.game.add.group('group1');
     const group2 = this.game.add.group('group2', this);
-    const demoText: KnText = this.game.add.text(
-      'demoText',
-      'test1',
-      {
-        fontSize: '24',
-        fill: 0xffffff,
-      },
-      [0.5, 0.5]
-    );
+    const demoText: KnText = this.game.add.text('demoText', 'test1', {
+      fontSize: '24',
+      fill: 0xffffff
+    }, [0.5, 0.5]);
     demoText.scale.x = 4.1;
     demoText.angle = 46.739919993534755;
     demoText.text = '充电桩';
     demoText.anchor.set(0.5, 0.5);
     demoText.y = 239;
     demoText.x = 452;
-    const demo1Text: KnText = this.game.add.text(
-      'demo1Text',
-      'test2',
-      {
-        fontSize: '24',
-        fill: 0xffffff,
-      },
-      [0.5, 0.5]
-    );
+    const demo1Text: KnText = this.game.add.text('demo1Text', 'test2', {
+      fontSize: '24',
+      fill: 0xffffff
+    }, [0.5, 0.5]);
     demo1Text.text = '配发';
     demo1Text.y = 239;
     demo1Text.x = 1406.3786101926257;
-    const demo2Text: KnText = this.game.add.text(
-      'demo2Text',
-      'test3',
-      {
-        fontSize: '24',
-        fill: 0xffffff,
-      },
-      [0.5, 0.5]
-    );
+    const demo2Text: KnText = this.game.add.text('demo2Text', 'test3', {
+      fontSize: '24',
+      fill: 0xffffff
+    }, [0.5, 0.5]);
     demo2Text.text = '特斯拉';
     demo2Text.visible = true;
     demo2Text.y = 239;
@@ -87,6 +74,9 @@ class Start extends KnScene {
     logo2.scale.x = 1;
     logo2.tintColor = '#ffffff';
     this.addChild(testGroup);
+    const rocket = this.game.add.image('rocketTemp', 'rocket', this);
+    rocket.position.set(this.game.config.half_w, this.game.config.half_h);
+    rocket.anchor.set(0.5);
   }
 
   update() {}
@@ -97,6 +87,7 @@ class Start extends KnScene {
       this.removeChildren(1, this.children.length);
     }
   }
+
 }
 
 export default Start;
