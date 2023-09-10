@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-07-07 13:49:58
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-10 01:59:50
+ * @LastEditTime: 2023-09-10 20:07:49
  * @FilePath: \kunigame\editor\page\workbench\particle.tsx
  * @Description: ---- 粒子特效 ----
  */
@@ -96,63 +96,13 @@ const ParticleEditor = (props: any) => {
     return previewParticleDom;
   };
 
-  const particleBooleanDispose = (bool, ret: any) => {
-    return bool ? ret : 1;
-  };
-
-  // 粒子发射
-  const multeShootOnce = (pointX: number, pointY: number) => {
-    const {
-      xDirect,
-      xRandom,
-      yDirect,
-      yRandom,
-      offsetX,
-      offsetY,
-      count,
-      duration,
-      ease,
-      inout,
-      angle,
-      angleRandom,
-      angleDirect,
-      width,
-      height
-    } = ref.current;
-    const particles: Array<KnSprite> = emitter.shootMulite(count);
-    console.log('发射', particles.map((p) => p.width));
-    for (let particle of particles) {
-      particle.x = pointX + game.math.redirect() * Math.random() * width;
-      particle.y = pointY + game.math.redirect() * Math.random() * height;
-      tween.instance.to(particle, duration, {
-        x:
-          particle.x +
-          particleBooleanDispose(xDirect, game.math.redirect()) *
-          particleBooleanDispose(xRandom, Math.random()) *
-          offsetX,
-        y:
-          particle.y +
-          particleBooleanDispose(yDirect, game.math.redirect()) *
-          particleBooleanDispose(yRandom, Math.random()) *
-          offsetY,
-        angle:
-          particle.angle +
-          particleBooleanDispose(angleDirect, game.math.redirect()) *
-          particleBooleanDispose(angleRandom, Math.random()) *
-          angle,
-        alpha: 0,
-        ease: tween[ease][inout]
-      });
-    }
-  };
-
   const generateParticle = (target) => {
     prevTicker = previewGame.add.ticker();
     prevTicker.add((delta) => {
       stats.begin();
       emitter.throtting -= 1;
       if (emitter.throtting < 0) {
-        multeShootOnce(target.x, target.y);
+        emitter.multeShootOnce(previewGame, tween, target.x, target.y, ref.current);
         emitter.throtting = ref.current.throtting;
       }
       stats.end();
@@ -179,6 +129,7 @@ const ParticleEditor = (props: any) => {
         10,
         ref.current.particleTexture
       );
+      console.log(ref.current.particleTexture);
       particleContainer.addChild(emitter);
       particleContainer.addChild(cloneGameItem);
       generateParticle(currentGameItem);

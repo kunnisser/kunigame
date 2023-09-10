@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-02-06 17:05:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-09 23:38:02
+ * @LastEditTime: 2023-09-10 15:22:20
  * @FilePath: \kunigame\editor\page\outline\outline_tree\assets.tsx
  * @Description: ---- 素材列表 ----
  */
@@ -114,7 +114,7 @@ const AssetsList = () => {
               return (
                 <div key={prefab.key} draggable={false}>
                   <div className="kn-image-thumb">
-                    <img draggable={false} src={`${prefab.value}`}></img>
+                    <img draggable={false} src={`${assetsPath}${EditGameName}/${prefab.value}`}></img>
                   </div>
                   <p style={{ textAlign: "center", padding: "4px" }}>
                     <Tag color={tagType.color}>{tagType.name}</Tag>
@@ -180,7 +180,7 @@ const AssetsList = () => {
                     <div className="kn-image-thumb">
                       <img
                         draggable={false}
-                        src={`${atlasDir}${atlasName}.png`}
+                        src={`${assetsPath}${EditGameName}/${atlasDir}${atlasName}.png`}
                       ></img>
                     </div>
                     <p style={{ textAlign: "center" }}>{atlas}</p>
