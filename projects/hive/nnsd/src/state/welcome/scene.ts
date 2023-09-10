@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-10 20:26:25
+ * @LastEditTime: 2023-09-10 23:14:00
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -59,11 +59,13 @@ class Welcome extends KnScene {
     this.interactive = true;
     this.on('pointerdown', () => {
       this.bootRocket = true;
+      this.rocketEmitter.visible = true;
     });
     this.on('pointerup', () => {
       this.bootRocket = false;
       console.log(this.power);
       this.power = 0;
+      this.rocketEmitter.visible = false;
     });
     this.waterPlanet = this.game.add.image('waterPlanet', 'waterPlanet', this);
     this.waterPlanet.anchor.set(0.5);
@@ -108,24 +110,23 @@ class Welcome extends KnScene {
         0,
         -this.moon.height * 0.5,
         {
-          throtting: 3,
-          duration: 1,
-          count: 4,
-          offsetX: 100,
-          offsetY: 158,
+          duration: 0.5,
+          count: 2,
+          offsetX: this.moon.width * 0.5,
+          offsetY: this.moon.height * 0.85,
           xRandom: true,
           yRandom: false,
           xDirect: true,
           yDirect: false,
           ease: 'cubic',
-          inout: 'easeOut',
+          inout: 'easInOut',
           angle: 360,
           angleRandom: true,
           angleDirect: true,
           width: 0,
           height: 0,
-          particleTexture: 'gas',
-        }
+        },
+        'from'
       );
     }
   }

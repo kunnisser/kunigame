@@ -86,7 +86,8 @@ class KnEmitter extends ParticleContainer {
     tween,
     pointX: number,
     pointY: number,
-    options
+    options,
+    method?: string
   ) => {
     const {
       xDirect,
@@ -109,7 +110,7 @@ class KnEmitter extends ParticleContainer {
     for (let particle of particles) {
       particle.x = pointX + game.math.redirect() * Math.random() * width;
       particle.y = pointY + game.math.redirect() * Math.random() * height;
-      tween.instance.to(particle, duration, {
+      tween.instance[method || 'to'](particle, duration, {
         x:
           particle.x +
           this.particleBooleanDispose(xDirect, game.math.redirect()) *
