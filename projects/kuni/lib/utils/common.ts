@@ -197,24 +197,24 @@ const createFrom = (target: any, game: Game) => {
       )
   };
   const cloneEntity = typeMap[type]();
-  const keys = Object.keys(target);
-  keys.forEach((key) => {
-    if (key !== "transform") {
-      cloneEntity[key] = target[key];
-    }
-  });
-  const { x, y, scale, rotation, skew, pivot } = target;
-  cloneEntity.setTransform(
-    x,
-    y,
-    scale.x,
-    scale.y,
-    rotation,
-    skew.x,
-    skew.y,
-    pivot.x,
-    pivot.y
-  );
+  // const keys = Object.keys(target);
+  // keys.forEach((key) => {
+  //   if (key !== "transform") {
+  //     cloneEntity[key] = target[key];
+  //   }
+  // });
+  // const { x, y, scale, rotation, skew, pivot } = target;
+  // cloneEntity.setTransform(
+  //   x,
+  //   y,
+  //   scale.x,
+  //   scale.y,
+  //   rotation,
+  //   skew.x,
+  //   skew.y,
+  //   pivot.x,
+  //   pivot.y
+  // );
   return cloneEntity;
 };
 

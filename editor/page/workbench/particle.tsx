@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-07-07 13:49:58
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-10 20:07:49
- * @FilePath: \kunigame\editor\page\workbench\particle.tsx
+ * @LastEditTime: 2023-09-11 17:46:57
+ * @FilePath: /kunigame/editor/page/workbench/particle.tsx
  * @Description: ---- 粒子特效 ----
  */
 
@@ -19,7 +19,6 @@ import Game from "ts@/kuni/lib/core";
 import Stats from "stats-js";
 import { createFrom } from "ts@/kuni/lib/utils/common";
 import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
-import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 
 let previewGame: any = null;
 let particleContainer: any = null;
@@ -85,7 +84,6 @@ const ParticleEditor = (props: any) => {
       editorWidth: game.config.editorWidth,
       editorHeight: game.config.editorHeight
     });
-    previewParticleDom.appendChild(previewGame.app.view);
     previewParticleDom.appendChild(stats.dom);
     particleContainer = previewGame.add.group(
       "particleEditorGroup",
@@ -102,7 +100,13 @@ const ParticleEditor = (props: any) => {
       stats.begin();
       emitter.throtting -= 1;
       if (emitter.throtting < 0) {
-        emitter.multeShootOnce(previewGame, tween, target.x, target.y, ref.current);
+        emitter.multeShootOnce(
+          previewGame,
+          tween,
+          target.x,
+          target.y,
+          ref.current
+        );
         emitter.throtting = ref.current.throtting;
       }
       stats.end();
@@ -124,15 +128,18 @@ const ParticleEditor = (props: any) => {
       const [currentGameItem] = currentGameItems;
       const cloneGameItem: any = createFrom(currentGameItem, previewGame);
       cloneGameItem.parent = null;
+      cloneGameItem.position.set(
+        game.config.editorWidth * 0.5,
+        game.config.editorHeight * 0.5
+      );
       emitter = previewGame.add.emitter(
         previewGame,
         10,
         ref.current.particleTexture
       );
-      console.log(ref.current.particleTexture);
       particleContainer.addChild(emitter);
       particleContainer.addChild(cloneGameItem);
-      generateParticle(currentGameItem);
+      generateParticle(cloneGameItem);
       dispatch(setEmitter(emitter));
       dispatch(setParticleVars(particleVars || defaultParticleVars));
     } else {

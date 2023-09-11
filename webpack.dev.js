@@ -28,7 +28,7 @@ module.exports = merge(common, {
   devServer: {
     inline: false,
     port: 8888,
-    host: "localhost"
+    host: "0.0.0.0"
   },
   plugins: [
     new webpack.DefinePlugin({
