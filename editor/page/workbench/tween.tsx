@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-11 11:11:14
+ * @LastEditTime: 2023-09-12 10:50:23
  * @FilePath: /kunigame/editor/page/workbench/tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
@@ -92,7 +92,6 @@ const TweenEditor = (props: any) => {
       antialias: true,
       transparent: true,
       view: previewTweenDom,
-      isPureCanvas: true,
       editorWidth: game.config.editorWidth,
       editorHeight: game.config.editorHeight
     });
