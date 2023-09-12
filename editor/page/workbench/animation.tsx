@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-07-18 10:56:05
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-11 11:11:01
- * @FilePath: /kunigame/editor/page/workbench/animation.tsx
+ * @LastEditTime: 2023-09-12 23:24:39
+ * @FilePath: \kunigame\editor\page\workbench\animation.tsx
  * @Description: ---- 帧动画 ----
  */
 import { setAnimationVars } from "editor@/common/gameStore/scene/action";
@@ -47,12 +47,13 @@ const AnimationEditor = (props: any) => {
     animationGame = new Game({
       width: animationDom.clientWidth * dpr * 2,
       ratio: animationDom.clientWidth / animationDom.clientHeight,
-      dpr,
+      height: animationDom.clientHeight * dpr * 2,
       antialias: true,
       transparent: true,
       view: animationDom,
       isPureCanvas: true
     });
+    console.log(animationGame.app.view.width);
     return animationDom;
   };
 
@@ -205,6 +206,8 @@ const AnimationEditor = (props: any) => {
       animationGame.config.half_w,
       animationGame.config.height * 0.4
     );
+    console.log(animationGame);
+    console.log(previewGroup);
 
     const vars = animationVars || defaultAnimationVars;
     const anim: AnimatedSprite = animationGame.add.animation(frame, vars.speed);
