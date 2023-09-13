@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-07-18 10:56:05
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-12 23:24:39
- * @FilePath: \kunigame\editor\page\workbench\animation.tsx
+ * @LastEditTime: 2023-09-13 13:33:49
+ * @FilePath: /kunigame/editor/page/workbench/animation.tsx
  * @Description: ---- 帧动画 ----
  */
 import { setAnimationVars } from "editor@/common/gameStore/scene/action";
@@ -39,6 +39,7 @@ const AnimationEditor = (props: any) => {
     speed: 1,
     name: "",
     loop: true,
+    scale: 1,
     range: null
   };
   const createGame = () => {
@@ -193,8 +194,6 @@ const AnimationEditor = (props: any) => {
 
   // 设置动画播放预览
   const generateAnimationPanel = (frame) => {
-    console.log(frame);
-    console.log("animat");
     const previewGroup = animationGame.add.group(
       "animationPreview",
       animationGame.world
@@ -206,13 +205,8 @@ const AnimationEditor = (props: any) => {
       animationGame.config.half_w,
       animationGame.config.height * 0.4
     );
-    console.log(animationGame);
-    console.log(previewGroup);
-
     const vars = animationVars || defaultAnimationVars;
     const anim: AnimatedSprite = animationGame.add.animation(frame, vars.speed);
-    const size = anim.width > anim.height ? anim.width : anim.height;
-    anim.scale.set((ref.current.borderSize / size) * 1.25);
     anim.anchor.set(0.5);
     previewGroup.addChild(anim);
     updateAnimation(anim, vars);
@@ -235,7 +229,9 @@ const AnimationEditor = (props: any) => {
   const updateAnimation = (animation: AnimatedSprite, vars: any) => {
     animation.animationSpeed = vars.speed;
     animation.loop = vars.loop;
+    animation.scale.set(vars.scale);
   };
+
   // 切换动画帧
   const changeFrame = (index, borderGraphics, frameSprites, borderSize) => {
     borderGraphics.clear();

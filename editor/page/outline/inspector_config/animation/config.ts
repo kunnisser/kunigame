@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-07-19 16:00:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-20 15:37:11
+ * @LastEditTime: 2023-09-13 13:32:25
  * @FilePath: /kunigame/editor/page/outline/inspector_config/animation/config.ts
  * @Description: ---- 动画配置信息 ----
  */
@@ -28,6 +28,14 @@ export const DatAnimationPropertyConfig = (): Array<DatProperties> => [
         component: DatNumber,
         min: 0.01,
         max: 2,
+        step: 0.01
+      },
+      {
+        path: ["scale"],
+        label: "缩放",
+        component: DatNumber,
+        min: 0.1,
+        max: 10,
         step: 0.01
       },
       {

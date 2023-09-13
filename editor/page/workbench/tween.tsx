@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-12 10:50:23
+ * @LastEditTime: 2023-09-13 15:47:32
  * @FilePath: /kunigame/editor/page/workbench/tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
@@ -27,7 +27,8 @@ const TweenEditor = (props: any) => {
     defaultTween: null,
     scaleTween: null,
     progress: 0,
-    boot: false
+    boot: false,
+    globalCoord: [0, 0]
   } as any);
   const dispatch = useDispatch();
   const currentScene = useSelector(
@@ -121,8 +122,8 @@ const TweenEditor = (props: any) => {
 
     // 初始对象属性
     const originVars = {
-      x: originItem.x,
-      y: originItem.y,
+      x: ref.current.globalCoord[0],
+      y: ref.current.globalCoord[1],
       alpha: originItem.alpha,
       angle: originItem.angle
     };
@@ -213,6 +214,13 @@ const TweenEditor = (props: any) => {
       if (currentGameItems && type === "tween") {
         const [currentGameItem] = currentGameItems;
         tweenItem = createFrom(currentGameItem, previewGame);
+        ref.current.globalCoord = game.editorTools.loopGlobalCoord(
+          currentGameItem,
+          currentGameItem.x,
+          currentGameItem.y
+        );
+        const [x, y] = ref.current.globalCoord;
+        tweenItem.position.set(x, y);
         tweenItem.interactive = false;
         tweenContainer.removeChildren();
         tweenContainer.addChild(tweenItem);

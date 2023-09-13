@@ -2,17 +2,17 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-10 23:14:00
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\scene.ts
+ * @LastEditTime: 2023-09-13 14:42:34
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
-import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
-import Game from 'ts@/kuni/lib/core';
-import KnSprite from 'ts@/kuni/lib/gameobjects/kn_sprite';
-import { utils } from 'pixi.js';
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
-import { KnTween } from 'ts@/kuni/lib/gameobjects/kn_tween';
-import KnEmitter from 'ts@/kuni/lib/gameobjects/kn_emitter';
+import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
+import Game from "ts@/kuni/lib/core";
+import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
+import { utils } from "pixi.js";
+import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
+import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
 class Welcome extends KnScene {
   game: Game;
   key: String;
@@ -30,26 +30,26 @@ class Welcome extends KnScene {
     this.key = key;
     this.bootRocket = false;
     this.resources = {
-      gameBg: 'assets/images/gameBg.png',
-      rocket: 'assets/images/rocket.png',
-      fire: 'assets/atlas/fire.json',
-      moon: 'assets/images/moon.png',
-      waterPlanet: 'assets/images/waterPlanet.png',
-      gas: 'assets/images/gas.png',
+      gameBg: "assets/images/gameBg.png",
+      rocket: "assets/images/rocket.png",
+      fire: "assets/atlas/fire.json",
+      moon: "assets/images/moon.png",
+      waterPlanet: "assets/images/waterPlanet.png",
+      gas: "assets/images/gas.png"
     };
   }
 
   boot() {}
 
   create() {
-    const bg: KnSprite = this.game.add.background('bg', 'gameBg');
+    const bg: KnSprite = this.game.add.background("bg", "gameBg");
     bg.visible = true;
     this.tween = this.game.add.tween();
     this.addChild(bg);
-    this.moonGroup = this.game.add.group('planet', this);
+    this.moonGroup = this.game.add.group("planet", this);
     this.moonGroup.x = this.game.config.half_w;
     this.moonGroup.y = this.game.config.height * 0.85;
-    const moon = this.game.add.image('moon', 'moon', this.moonGroup);
+    const moon = this.game.add.image("moon", "moon", this.moonGroup);
     moon.anchor.set(0.5, 0.5);
     moon.x = 0;
     moon.y = 0;
@@ -57,32 +57,32 @@ class Welcome extends KnScene {
     this.moonGroup.y -= this.moon.height * 0.5;
     this.power = 0;
     this.interactive = true;
-    this.on('pointerdown', () => {
+    this.on("pointerdown", () => {
       this.bootRocket = true;
       this.rocketEmitter.visible = true;
     });
-    this.on('pointerup', () => {
+    this.on("pointerup", () => {
       this.bootRocket = false;
       console.log(this.power);
       this.power = 0;
       this.rocketEmitter.visible = false;
     });
-    this.waterPlanet = this.game.add.image('waterPlanet', 'waterPlanet', this);
+    this.waterPlanet = this.game.add.image("waterPlanet", "waterPlanet", this);
     this.waterPlanet.anchor.set(0.5);
     this.waterPlanet.position.set(
       this.game.config.half_w,
       this.game.config.half_h * 0.15 + this.waterPlanet.width * 0.5
     );
     const rocket: KnSprite = this.game.add.image(
-      'rocket',
-      'rocket',
+      "rocket",
+      "rocket",
       this.moonGroup
     );
     rocket.anchor.set(0.5, 1);
     rocket.x = moon.x;
     rocket.y = moon.y - moon.height * 0.5;
     const fire = this.game.add.animation(
-      ['fire1.png', 'fire2.png', 'fire3.png'].map(
+      ["fire1.png", "fire2.png", "fire3.png"].map(
         (key) => utils.TextureCache[key]
       ),
       0.4
@@ -94,7 +94,7 @@ class Welcome extends KnScene {
     this.addChild(fire);
     fire.visible = false; // fire.play();
 
-    this.rocketEmitter = this.game.add.emitter(this.game, 1, 'gas');
+    this.rocketEmitter = this.game.add.emitter(this.game, 1, "gas");
     this.moonGroup.addChild(this.rocketEmitter);
   }
 
@@ -118,15 +118,15 @@ class Welcome extends KnScene {
           yRandom: false,
           xDirect: true,
           yDirect: false,
-          ease: 'cubic',
-          inout: 'easInOut',
+          ease: "cubic",
+          inout: "easInOut",
           angle: 360,
           angleRandom: true,
           angleDirect: true,
           width: 0,
-          height: 0,
+          height: 0
         },
-        'from'
+        "from"
       );
     }
   }

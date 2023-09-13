@@ -153,6 +153,7 @@ export default class Game {
 
     // 定义和添加游戏编辑层
     if (!config.isPureCanvas) {
+      console.log(this);
       this.coverMask = new CoverMask(this, this.stage);
       this.coverMask.scale.set(this.size.width / config.width);
     }
@@ -161,7 +162,8 @@ export default class Game {
     window.onresize = () => {
       // 防抖函数
       debounce.handler(() => {
-        this.resizeStage(this.view, config);
+        console.log(this);
+        this.resizeStage(this.app.view, config);
       });
     };
 
