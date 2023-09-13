@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-07-19 15:59:33
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-21 17:13:35
- * @FilePath: /kunigame/editor/page/outline/inspector_config/animation/index.tsx
+ * @LastEditTime: 2023-09-13 23:43:00
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\animation\index.tsx
  * @Description: ---- 动画配置面板 ----
  */
 
@@ -69,11 +69,12 @@ const AnimationDatGui = (props) => {
       return (currentAtlas[resourceKey] =
         loader.resources[resourceKey].data.frames);
     });
+    if (!currentAtlas[name || atlasKeys[0]]) {
+      return;
+    }
     const frameLength: number = Object.keys(
       currentAtlas[name || atlasKeys[0]]
     ).length;
-
-    console.log(atlasKeys, name || atlasKeys[0]);
     setOptions(atlasKeys);
     setMax(frameLength - 1);
     setDefaultVal([0, frameLength - 1]);

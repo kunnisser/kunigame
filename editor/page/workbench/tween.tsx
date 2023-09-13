@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-13 15:47:32
- * @FilePath: /kunigame/editor/page/workbench/tween.tsx
+ * @LastEditTime: 2023-09-13 23:35:19
+ * @FilePath: \kunigame\editor\page\workbench\tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
 import { CombineReducer } from "editor@/common/store";
@@ -130,7 +130,7 @@ const TweenEditor = (props: any) => {
 
     ref.current.defaultTween &&
       (ref.current.defaultTween.pause(0).kill(),
-      (ref.current.defaultTween = null));
+        (ref.current.defaultTween = null));
     ref.current.defaultTween = tween.instance.to(target, duration, {
       startAt: originVars,
       x: "+=" + x,
@@ -232,6 +232,7 @@ const TweenEditor = (props: any) => {
       } else {
         ref.current.defaultTween && ref.current.defaultTween.pause(0);
         ref.current.scaleTween && ref.current.scaleTween.pause(0);
+        tweenContainer.removeChildren();
       }
     }
   }, [currentScene, currentGameItems, type]);

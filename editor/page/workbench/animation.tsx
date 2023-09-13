@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-07-18 10:56:05
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-13 13:33:49
- * @FilePath: /kunigame/editor/page/workbench/animation.tsx
+ * @LastEditTime: 2023-09-13 23:41:11
+ * @FilePath: \kunigame\editor\page\workbench\animation.tsx
  * @Description: ---- 帧动画 ----
  */
 import { setAnimationVars } from "editor@/common/gameStore/scene/action";
@@ -146,6 +146,10 @@ const AnimationEditor = (props: any) => {
       return (atlas[resourceKey] = loader.resources[resourceKey].data.frames);
     });
     const defaultName: string = Object.keys(atlas)[0];
+    // 无对应atlas资源
+    if (!atlas[name || defaultName]) {
+      return;
+    }
     let keys = Object.keys(atlas[name || defaultName]);
     const frameSprites: Array<KnSprite> = [];
     const borderGraphics: KnGraphics = animationGame.add.graphics(
@@ -269,7 +273,6 @@ const AnimationEditor = (props: any) => {
 
   useEffect(() => {
     if (type === "animation" && currentScene) {
-      console.log("show");
       gererateAnimationShow();
       animationGame.ticker.start();
     } else {
