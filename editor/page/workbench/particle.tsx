@@ -2,23 +2,23 @@
  * @Author: kunnisser
  * @Date: 2023-07-07 13:49:58
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-13 17:39:29
- * @FilePath: /kunigame/editor/page/workbench/particle.tsx
+ * @LastEditTime: 2023-09-13 23:26:44
+ * @FilePath: \kunigame\editor\page\workbench\particle.tsx
  * @Description: ---- 粒子特效 ----
  */
 
 import {
   setEmitter,
-  setParticleVars
-} from "editor@/common/gameStore/scene/action";
-import { CombineReducer } from "editor@/common/store";
-import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import * as _ from "lodash";
-import Game from "ts@/kuni/lib/core";
-import Stats from "stats-js";
-import { createFrom } from "ts@/kuni/lib/utils/common";
-import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
+  setParticleVars,
+} from 'editor@/common/gameStore/scene/action';
+import { CombineReducer } from 'editor@/common/store';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import * as _ from 'lodash';
+import Game from 'ts@/kuni/lib/core';
+import Stats from 'stats-js';
+import { createFrom } from 'ts@/kuni/lib/utils/common';
+import KnEmitter from 'ts@/kuni/lib/gameobjects/kn_emitter';
 
 let previewGame: any = null;
 let particleContainer: any = null;
@@ -38,14 +38,14 @@ const ParticleEditor = (props: any) => {
     yRandom: true,
     xDirect: true,
     yDirect: true,
-    ease: "linear",
-    inout: "easeNone",
+    ease: 'linear',
+    inout: 'easeNone',
     angle: 360,
     angleRandom: true,
     angleDirect: true,
     width: 0,
     height: 0,
-    particleTexture: "particle"
+    particleTexture: 'particle',
   });
 
   const currentScene = useSelector(
@@ -66,13 +66,13 @@ const ParticleEditor = (props: any) => {
 
   useEffect(() => {
     stats = Stats();
-    stats.dom.style.position = "absolute";
+    stats.dom.style.position = 'absolute';
     const dom = createGame();
-    dom.style.position = "relative";
+    dom.style.position = 'relative';
   }, []);
 
   const createGame = () => {
-    const previewParticleDom: any = document.getElementById("previewParticle");
+    const previewParticleDom: any = document.getElementById('previewParticle');
     const dpr = window.devicePixelRatio;
     previewGame = new Game({
       width: previewParticleDom.clientWidth * dpr * 2,
@@ -83,11 +83,11 @@ const ParticleEditor = (props: any) => {
       transparent: true,
       view: previewParticleDom,
       editorWidth: game.config.editorWidth,
-      editorHeight: game.config.editorHeight
+      editorHeight: game.config.editorHeight,
     });
     previewParticleDom.appendChild(stats.dom);
     particleContainer = previewGame.add.group(
-      "particleEditorGroup",
+      'particleEditorGroup',
       previewGame.world
     );
     tween = previewGame.add.tween();
@@ -96,8 +96,8 @@ const ParticleEditor = (props: any) => {
   };
 
   const generateParticle = (target) => {
-    console.log(target, target.x);
-    previewGame.ticker.add((delta) => {
+    prevTicker = previewGame.add.ticker();
+    prevTicker.add((delta) => {
       stats.begin();
       emitter.throtting -= 1;
       if (emitter.throtting < 0) {
@@ -112,23 +112,18 @@ const ParticleEditor = (props: any) => {
       }
       stats.end();
     });
-    console.log(previewGame.ticker);
-    previewGame.ticker.start();
+    prevTicker.start();
   };
 
   useEffect(() => {
     const editVars = particleVars || defaultParticleVars;
     ref.current = editVars;
-    console.log("particleVars", editVars);
   }, [particleVars]);
 
   useEffect(() => {
-    console.log(type, currentScene);
-    console.log(previewGame);
-    if (type === "particle") {
+    if (type === 'particle') {
       previewGame.app.stage || createGame();
       if (currentScene && currentGameItems) {
-        console.log(previewGame.app.stage);
         particleContainer.children.length > 1 &&
           particleContainer.removeChildAt(1);
         const [currentGameItem] = currentGameItems;
@@ -148,27 +143,16 @@ const ParticleEditor = (props: any) => {
         generateParticle(cloneGameItem);
         dispatch(setEmitter(emitter));
         dispatch(setParticleVars(particleVars || defaultParticleVars));
-        setTimeout(() => {
-          previewGame.ticker.stop();
-          setTimeout(() => {
-            previewGame.ticker.start();
-          }, 5000);
-        }, 500);
-      } else {
-        previewGame.ticker.stop();
       }
     } else {
-      console.log("关闭");
-      previewGame.ticker.stop();
+      prevTicker && prevTicker.stop() && prevTicker.destroy();
     }
 
     return () => {
-      console.log("关闭1");
-      previewGame.ticker.stop();
-      console.log(prevTicker);
+      previewGame && previewGame.stage.removeChildren();
       previewGame.app.renderer &&
         previewGame.app.renderer.context.gl
-          .getExtension("WEBGL_lose_context")
+          .getExtension('WEBGL_lose_context')
           .loseContext();
       previewGame.app.stage &&
         previewGame.app.destroy(true, { children: true });
