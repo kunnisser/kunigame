@@ -24,7 +24,7 @@ class Start extends KnScene {
       loadingrun: 'assets/atlas/loadingrun.json',
       icon: 'assets/atlas/icon.json',
       rocket: 'assets/images/rocket.png',
-      gas: 'assets/images/gas.png',
+      gas: 'assets/images/gas.png'
     };
   }
 
@@ -33,16 +33,11 @@ class Start extends KnScene {
   create() {
     const testGroup = this.game.add.group('group1');
     const group2 = this.game.add.group('group2', this);
-
-    const demo1Text: KnText = this.game.add.text(
-      'demo1Text',
-      'test2',
-      {
-        fontSize: '24',
-        fill: 0xffffff,
-      },
-      [0.5, 0.5]
-    );
+    const demo1Text: KnText = this.game.add.text('demo1Text', 'test2', {
+      fontSize: '24',
+      fill: 0xffffff
+    }, [0.5, 0.5]);
+    demo1Text.style.fill = "#3572f0";
     demo1Text.text = '配发';
     demo1Text.y = 239;
     demo1Text.x = 1406.3786101926257;
@@ -73,6 +68,7 @@ class Start extends KnScene {
       this.removeChildren(1, this.children.length);
     }
   }
+
 }
 
 export default Start;

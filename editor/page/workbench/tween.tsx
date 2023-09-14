@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-06-29 14:57:08
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-13 23:35:19
+ * @LastEditTime: 2023-09-14 23:40:52
  * @FilePath: \kunigame\editor\page\workbench\tween.tsx
  * @Description: ---- tween动画工作台 ----
  */
@@ -200,6 +200,7 @@ const TweenEditor = (props: any) => {
       return;
     }
     generateTween(tweenItem);
+    console.log('tweenConfig', tweenVars);
   }, [tweenVars]);
 
   useEffect(() => {
@@ -207,6 +208,7 @@ const TweenEditor = (props: any) => {
       return;
     }
     generateScaleTween(tweenItem);
+    console.log('tweenScaleConfig', scaleTweenVars);
   }, [scaleTweenVars]);
 
   useEffect(() => {
