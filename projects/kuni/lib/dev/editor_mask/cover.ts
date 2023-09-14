@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-04 16:00:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-13 16:54:39
+ * @LastEditTime: 2023-09-14 09:33:17
  * @FilePath: /kunigame/projects/kuni/lib/dev/editor_mask/cover.ts
  * @Description: ---- 编辑蒙层 ----
  */
@@ -210,8 +210,6 @@ class CoverMask extends KnGroup {
         scaleVal = SCALE_VALUE - 250;
       }
       this.scaleRatio = scaleVal / SCALE_VALUE;
-
-      console.log(this.scaleRatio);
 
       // 对外提供scaleRatio
       CoverMask.scaleRatio = this.scaleRatio;
