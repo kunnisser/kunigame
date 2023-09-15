@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-14 16:46:47
+ * @LastEditTime: 2023-09-15 13:58:51
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -50,6 +50,7 @@ class Welcome extends KnScene {
     this.on("pointerdown", () => {
       this.bootRocket = true;
       this.rocket.emitter.visible = true;
+      this.rocket.shake.seek(0).restart(true);
     });
     this.on("pointerup", () => {
       this.bootRocket = false;
