@@ -2,22 +2,22 @@
  * @Author: kunnisser
  * @Date: 2023-09-16 16:15:28
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-16 16:37:21
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\planet\index.ts
+ * @LastEditTime: 2023-09-18 14:46:57
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/planet/index.ts
  * @Description: ---- 定义默认的星球 ----
  */
 
-import Game from 'ts@/kuni/lib/core';
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
-import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
-import KnSprite from 'ts@/kuni/lib/gameobjects/kn_sprite';
+import Game from "ts@/kuni/lib/core";
+import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
+import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 
 class Planet extends KnGroup {
   body: KnSprite;
   gravityField: any;
   gravity: number;
   constructor(game: Game, parent: KnScene, key: string) {
-    super(game, 'default_planet', parent);
+    super(game, "default_planet", parent);
     this.gravity = 1;
     this.initial(game, key);
   }
@@ -28,10 +28,10 @@ class Planet extends KnGroup {
   }
 
   generateGravityField(game) {
-    this.gravityField = game.add.graphics('gravityField');
+    this.gravityField = game.add.graphics("gravityField");
     this.gravityField.generateCircle(
       0xc3d9f1,
-      [0, 0, this.body.width * 1],
+      [0, 0, this.body.width * 1.5],
       0.4
     );
   }
