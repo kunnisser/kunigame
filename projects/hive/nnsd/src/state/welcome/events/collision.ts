@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-16 16:54:31
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-18 16:10:16
+ * @LastEditTime: 2023-09-19 15:47:35
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/events/collision.ts
  * @Description: ---- 碰撞距离检测 ----
  */
@@ -18,7 +18,7 @@ export const isImpact = (scene: Welcome) => {
     distance(hitPoint, scene.planetSystem.position) -
     scene.planetSystem.body.width * 0.5;
   if (rocketDistance <= 0) {
-    scene.rocket.gameOver(hitPoint);
+    scene.rocket.crashed(hitPoint);
     console.log("hit");
   }
 };
