@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-14 15:13:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-19 17:36:39
+ * @LastEditTime: 2023-09-20 17:51:13
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/rocket/rocket.ts
  * @Description: ---- 创建🚀的基本型 ----
  */
@@ -14,6 +14,7 @@ import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
 import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
 import Welcome from "../scene";
+import PlanetSystem from "../planet";
 import { math } from "ts@/kuni/lib/utils/common";
 class Rocket extends KnGroup {
   power: number;
@@ -26,28 +27,33 @@ class Rocket extends KnGroup {
   plume: PIXI.AnimatedSprite;
   tween: KnTween;
   shake: TweenMax;
-  parent: Welcome;
+  parent: PlanetSystem;
   isInOrbit: boolean;
   scene: Welcome;
+  isLanded: boolean;
+  isFlying: boolean;
   constructor(game: Game, parent: Welcome) {
-    super(game, "default_rocket_group", parent.universe);
+    super(game, "default_rocket_group", parent.planetSystem);
     this.game = game;
     this.scene = parent;
     this.tween = game.add.tween();
     this.power = 0;
-    this.isInOrbit = false;
+    this.isInOrbit = false; // 是否进入轨道
     this.incX = 0;
     this.incY = 0;
+    this.isLanded = true; // 是否着陆
+    this.isFlying = false; // 是否飞行中
     this.initial();
   }
 
   initial() {
-    this.x = this.scene.moon.x;
-    this.y = this.scene.moon.y;
+    this.x = this.scene.planetSystem.startingPlanet.x;
+    this.y = this.scene.planetSystem.startingPlanet.y;
     this.emitter = this.game.add.emitter(this.game, 1, "gas");
     this.sprite = this.game.add.sprite("rocket", "rocket");
     this.sprite.anchor.set(0.5, 1);
-    this.sprite.pivot.y = this.scene.moon.height * 0.5;
+    this.sprite.pivot.y =
+      this.scene.planetSystem.startingPlanet.body.height * 0.5;
     this.shake = this.generateTween();
     const plume = this.game.add.animation(
       ["fire1.png", "fire2.png", "fire3.png"].map(
@@ -72,7 +78,11 @@ class Rocket extends KnGroup {
       ].map((key) => utils.TextureCache[key]),
       0.2
     );
-    boom.position.set(0, -this.scene.moon.height * 0.5 - this.sprite.height);
+    boom.position.set(
+      0,
+      -this.scene.planetSystem.startingPlanet.body.height * 0.5 -
+        this.sprite.height
+    );
     boom.anchor.set(0.5, 1);
     boom.loop = false;
     this.addChild(this.emitter, plume, boom, this.sprite);
@@ -118,6 +128,7 @@ class Rocket extends KnGroup {
   // 激活吸取能量
   booting(target) {
     if (this.emitter.visible) {
+      console.log(target);
       this.power += 0.05;
       this.emitter.multeShootOnce(
         this.game,
@@ -144,21 +155,24 @@ class Rocket extends KnGroup {
         "from"
       );
     } else {
-      if (this.isInOrbit) {
+      if (this.isInOrbit && !this.isFlying) {
         this.orbiting();
       } else {
-        this.x += this.incX;
-        this.y += this.incY;
         this.checkMoving();
       }
+      this.x += this.incX;
+      this.y += this.incY;
     }
   }
 
   // 起飞时刻计算角度，关闭粒子发射，打开尾焰动画
   takeoff(debug?: number) {
     if (this.power > 0) {
-      this.computedDirectSpeed(debug || this.angle);
-      this.power = 0;
+      this.isLanded = false;
+      this.isFlying = true;
+      this.computedDirectSpeed(
+        debug || (this.isInOrbit ? this.angle + 90 : this.angle)
+      );
       this.emitter.visible = false;
       this.plume.visible = true;
       this.plume.play();
@@ -177,6 +191,8 @@ class Rocket extends KnGroup {
   }
 
   landed() {
+    this.power = 0;
+    this.isFlying = false;
     this.plume.visible = false;
     this.plume.stop();
   }
@@ -184,14 +200,15 @@ class Rocket extends KnGroup {
   // 坠毁
   crashed(point: any) {
     this.scene.gameOver = true;
-    this.landed();
     this.sprite.visible = false;
+    this.landed();
     const hitAngle = math.angleBetweenPoints(
-      this.scene.planetSystem.position,
+      this.scene.planetSystem.targetPlanet.position,
       point
     );
     this.boom.visible = true;
     this.boom.rotation = hitAngle + Math.PI / 2;
+    this.scene.gameOverGui.open();
     this.boom.gotoAndPlay(0);
     this.boom.onComplete = () => {
       this.boom.visible = false;
@@ -201,13 +218,16 @@ class Rocket extends KnGroup {
 
   // 入轨环绕
   orbiting() {
-    this.position.set(this.scene.planetSystem.x, this.scene.planetSystem.y);
+    this.position.set(
+      this.scene.planetSystem.startingPlanet.x,
+      this.scene.planetSystem.startingPlanet.y
+    );
     this.angle += 1.5;
   }
 
   // 驻扎在星球转动
   landing(target) {
-    if (!this.plume.visible) {
+    if (this.isLanded) {
       this.angle = target.angle;
     }
   }
@@ -227,11 +247,20 @@ class Rocket extends KnGroup {
     this.visible = true;
     this.sprite.visible = true;
     this.landed();
+    this.isLanded = true;
     this.angle = 0;
     this.incX = 0;
     this.incY = 0;
     this.emitter.visible = false;
-    this.position.set(this.scene.moon.x, this.scene.moon.y);
+    this.position.set(
+      this.scene.planetSystem.startingPlanet.x,
+      this.scene.planetSystem.startingPlanet.y
+    );
+  }
+
+  update() {
+    this.landing(this.parent.startingPlanet);
+    this.booting(this.parent.startingPlanet);
   }
 
   gameOver() {
