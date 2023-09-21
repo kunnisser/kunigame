@@ -2,21 +2,21 @@
  * @Author: kunnisser
  * @Date: 2023-09-20 14:02:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-21 14:41:08
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/planet/celestialBody/gravityBody.ts
+ * @LastEditTime: 2023-09-21 23:21:27
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\planet\celestialBody\gravityBody.ts
  * @Description: ---- 引力星体 ----
  */
-import Game from "ts@/kuni/lib/core";
-import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
-import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
-import PlanetSystem from "..";
+import Game from 'ts@/kuni/lib/core';
+import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
+import KnSprite from 'ts@/kuni/lib/gameobjects/kn_sprite';
+import PlanetSystem from '..';
 
 class GravityPlanet extends KnGroup {
   body: KnSprite;
   gravityField: any;
   gravity: number;
   constructor(game: Game, parent: PlanetSystem, key: string) {
-    super(game, "gravity_planet", parent);
+    super(game, 'gravity_planet', parent);
     this.gravity = 1;
     this.initGenerator(game, key);
   }
@@ -27,10 +27,10 @@ class GravityPlanet extends KnGroup {
   }
 
   generateGravityField(game) {
-    this.gravityField = game.add.graphics("gravityField");
+    this.gravityField = game.add.graphics('gravityField');
     this.gravityField.generateCircle(
       0xc3d9f1,
-      [0, 0, this.body.width * 1.2],
+      [0, 0, this.body.width * (1 + Math.random())],
       0.4
     );
   }

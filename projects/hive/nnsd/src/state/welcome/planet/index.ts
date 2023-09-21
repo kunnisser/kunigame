@@ -2,19 +2,19 @@
  * @Author: kunnisser
  * @Date: 2023-09-16 16:15:28
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-20 17:16:12
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/planet/index.ts
+ * @LastEditTime: 2023-09-21 23:33:56
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\planet\index.ts
  * @Description: ---- 定义默认的星球 ----
  */
 
-import Game from "ts@/kuni/lib/core";
-import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
-import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
-import Welcome from "../scene";
-import Planet from "./celestialBody/defaultBody";
-import GravityPlanet from "./celestialBody/gravityBody";
-import { isImpact } from "../events";
-import { isInOrbit } from "../events/collision";
+import Game from 'ts@/kuni/lib/core';
+import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
+import KnSprite from 'ts@/kuni/lib/gameobjects/kn_sprite';
+import Welcome from '../scene';
+import Planet from './celestialBody/defaultBody';
+import GravityPlanet from './celestialBody/gravityBody';
+import { isImpact } from '../events';
+import { isInOrbit } from '../events/collision';
 
 class PlanetSystem extends KnGroup {
   body: KnSprite;
@@ -24,20 +24,23 @@ class PlanetSystem extends KnGroup {
   targetPlanet: GravityPlanet;
   parent: Welcome;
   nextPlanet: GravityPlanet;
+  game: Game;
   constructor(game: Game, parent: Welcome) {
-    super(game, "plantSystem", parent);
+    super(game, 'plantSystem', parent);
+    this.game = game;
     this.initGenerator(game);
   }
 
   initGenerator(game) {
-    this.startingPlanet = new Planet(game, this, "moon");
-    this.targetPlanet = new GravityPlanet(game, this, "waterPlanet");
-    this.nextPlanet = new GravityPlanet(game, this, "waterPlanet");
-    this.nextPlanet.body.tint = 0xd10311;
-    this.nextPlanet.position.set(game.config.half_w, -game.config.half_h * 0.5);
+    this.startingPlanet = new Planet(game, this, 'moon');
+    this.targetPlanet = new GravityPlanet(game, this, 'waterPlanet');
   }
 
   next() {
+    this.nextPlanet = new GravityPlanet(this.game, this, 'waterPlanet');
+    this.nextPlanet.body.tint = ~~(16777215 * Math.random());
+    this.nextPlanet.position.y = this.targetPlanet.y - this.game.config.half_h;
+    this.setChildIndex(this.nextPlanet, 0);
     this.startingPlanet = this.targetPlanet;
     this.targetPlanet = this.nextPlanet;
   }
