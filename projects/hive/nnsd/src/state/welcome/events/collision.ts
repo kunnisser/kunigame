@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-16 16:54:31
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-21 23:09:22
+ * @LastEditTime: 2023-09-24 19:02:17
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\events\collision.ts
  * @Description: ---- 碰撞距离检测 ----
  */
@@ -11,20 +11,13 @@ import Welcome from '../scene';
 import { distance } from 'ts@/kuni/lib/utils/common';
 export const isImpact = (scene: Welcome) => {
   const hitPoint = {
-    x: scene.rocket.x,
-    y:
-      scene.rocket.y -
-      scene.planetSystem.startingPlanet.body.height * 0.5 -
-      scene.rocket.sprite.height,
+    x: scene.rocket.x + scene.rocket.hitPoint.x,
+    y: scene.rocket.y + scene.rocket.hitPoint.y,
   };
   const rocketDistance =
     distance(hitPoint, scene.planetSystem.targetPlanet.position) -
     scene.planetSystem.targetPlanet.body.width * 0.5;
-  if (rocketDistance <= 0) {
-    console.log(
-      scene.rocket.position,
-      scene.planetSystem.targetPlanet.position
-    );
+  if (rocketDistance < 0) {
     scene.rocket.crashed(hitPoint);
     console.log('hit');
   }

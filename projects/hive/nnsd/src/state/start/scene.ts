@@ -37,7 +37,11 @@ class Start extends KnScene {
       fontSize: '24',
       fill: 0xffffff
     }, [0.5, 0.5]);
-    demo1Text.style.fill = "#3572f0";
+    demo1Text.style.fontWeight = "bold";
+    demo1Text.style.stroke = "#000000";
+    demo1Text.style.fontSize = 110;
+    demo1Text.style.strokeThickness = 10;
+    demo1Text.style.fill = "#ffffff";
     demo1Text.text = '配发';
     demo1Text.y = 239;
     demo1Text.x = 1406.3786101926257;

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-16 16:15:28
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-21 23:33:56
+ * @LastEditTime: 2023-09-25 00:44:37
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\planet\index.ts
  * @Description: ---- 定义默认的星球 ----
  */
@@ -32,17 +32,20 @@ class PlanetSystem extends KnGroup {
   }
 
   initGenerator(game) {
+    this.pivot.set(this.game.config.half_w, this.game.config.half_h);
+    this.position.set(this.game.config.half_w, this.game.config.half_h);
     this.startingPlanet = new Planet(game, this, 'moon');
     this.targetPlanet = new GravityPlanet(game, this, 'waterPlanet');
   }
 
   next() {
-    this.nextPlanet = new GravityPlanet(this.game, this, 'waterPlanet');
-    this.nextPlanet.body.tint = ~~(16777215 * Math.random());
-    this.nextPlanet.position.y = this.targetPlanet.y - this.game.config.half_h;
-    this.setChildIndex(this.nextPlanet, 0);
+    // this.nextPlanet = new GravityPlanet(this.game, this, 'waterPlanet');
+    // this.nextPlanet.body.tint = ~~(16777215 * Math.random());
+    // this.nextPlanet.position.y = this.targetPlanet.y - this.game.config.half_h;
+    // this.setChildIndex(this.nextPlanet, 0);
+    // this.removeChild(this.startingPlanet);
     this.startingPlanet = this.targetPlanet;
-    this.targetPlanet = this.nextPlanet;
+    // this.targetPlanet = this.nextPlanet;
   }
 
   update() {

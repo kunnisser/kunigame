@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-20 14:02:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-21 23:21:27
+ * @LastEditTime: 2023-09-24 18:59:12
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\planet\celestialBody\gravityBody.ts
  * @Description: ---- 引力星体 ----
  */
@@ -30,7 +30,7 @@ class GravityPlanet extends KnGroup {
     this.gravityField = game.add.graphics('gravityField');
     this.gravityField.generateCircle(
       0xc3d9f1,
-      [0, 0, this.body.width * (1 + Math.random())],
+      [0, 0, this.body.width * (1 + 0.5 * Math.random())],
       0.4
     );
   }

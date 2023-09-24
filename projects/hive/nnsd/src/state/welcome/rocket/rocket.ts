@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-14 15:13:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-21 23:22:28
+ * @LastEditTime: 2023-09-24 19:10:19
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\rocket\rocket.ts
  * @Description: ---- 创建🚀的基本型 ----
  */
@@ -32,6 +32,7 @@ class Rocket extends KnGroup {
   scene: Welcome;
   isLanded: boolean;
   isFlying: boolean;
+  hitPoint: { x: number; y: number };
   constructor(game: Game, parent: Welcome) {
     super(game, 'default_rocket_group', parent.planetSystem);
     this.game = game;
@@ -74,13 +75,11 @@ class Rocket extends KnGroup {
         'boom4.png',
         'boom5.png',
         'boom6.png',
-        'boom7.png',
       ].map((key) => utils.TextureCache[key]),
       0.2
     );
     boom.position.set(0, -this.sprite.height);
-    boom.anchor.set(0.5, 1);
-    boom.angle = 180;
+    boom.anchor.set(0.5, 0);
     boom.loop = false;
     this.addChild(this.emitter, plume, boom, this.sprite);
     this.boom = boom;
@@ -125,7 +124,7 @@ class Rocket extends KnGroup {
   // 激活吸取能量
   booting(target) {
     if (this.emitter.visible) {
-      this.power += 0.1;
+      this.power > 4 || (this.power += 0.1);
       this.emitter.multeShootOnce(
         this.game,
         this.tween,
@@ -161,23 +160,18 @@ class Rocket extends KnGroup {
     }
   }
 
-  // 还原inOrbit的原坐标
-  resetRocketPosition() {
-    const rotate: number = (Math.PI / 180) * this.angle;
-    const distance = this.pivot.y;
-    const [disX, disY] = [
-      distance * Math.sin(rotate),
-      distance * Math.cos(rotate),
-    ];
-    this.pivot.y = 0;
-    const resetPosition = [this.x + disX, this.y + disY];
-    this.position.set(...resetPosition);
+  // 还原火箭碰撞点的相对坐标
+  resetRocketHitPosition() {
+    const rocketFromPlanet: number =
+      this.parent.startingPlanet.body.height * 0.5 + this.sprite.height;
+    const offset = this.computeAngleOffset(this.angle, rocketFromPlanet);
+    this.hitPoint = { x: offset.x, y: -offset.y };
   }
 
   // 起飞时刻计算角度，关闭粒子发射，打开尾焰动画
   takeoff(debug?: number) {
     if (this.power > 0) {
-      // this.resetRocketPosition();
+      this.resetRocketHitPosition();
       this.isLanded = false;
       this.isInOrbit = false;
       this.isFlying = true;
@@ -191,12 +185,16 @@ class Rocket extends KnGroup {
 
   computedDirectSpeed(angle: number) {
     const rotate: number = (Math.PI / 180) * angle;
-    const [x, y] = [
-      Math.sin(rotate) * this.power,
-      -Math.cos(rotate) * this.power,
-    ];
+    const power = 5 + this.power;
+    const [x, y] = [Math.sin(rotate) * power, -Math.cos(rotate) * power];
     this.incX = +x.toFixed(2);
     this.incY = +y.toFixed(2);
+  }
+
+  computeAngleOffset(angle: number, distance: number) {
+    const rotate: number = (Math.PI / 180) * angle;
+    const [x, y] = [Math.sin(rotate) * distance, Math.cos(rotate) * distance];
+    return { x, y };
   }
 
   landed() {
@@ -217,7 +215,8 @@ class Rocket extends KnGroup {
       point
     );
     this.boom.visible = true;
-    this.boom.rotation = hitAngle + Math.PI / 2;
+    console.log(hitAngle);
+    this.boom.rotation = -hitAngle;
     this.boom.gotoAndPlay(0);
     this.boom.onComplete = () => {
       this.boom.visible = false;
@@ -232,8 +231,8 @@ class Rocket extends KnGroup {
       this.scene.planetSystem.startingPlanet.y
     );
     this.pivot.y = this.scene.planetSystem.startingPlanet.body.height * 0.5;
-    this.boom.angle = 180;
     this.isLanded = true;
+    this.boom.angle = 0;
     this.landed();
   }
 
@@ -264,6 +263,7 @@ class Rocket extends KnGroup {
     this.angle = 0;
     this.incX = 0;
     this.incY = 0;
+    this.boom.angle = 0;
     this.emitter.visible = false;
     this.position.set(
       this.scene.planetSystem.startingPlanet.x,
