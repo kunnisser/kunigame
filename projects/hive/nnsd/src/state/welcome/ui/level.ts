@@ -2,15 +2,16 @@
  * @Author: kunnisser
  * @Date: 2023-09-24 21:44:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-24 22:39:35
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\ui\level.ts
+ * @LastEditTime: 2023-09-25 09:42:38
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/ui/level.ts
  * @Description: ---- 等级条 ----
  */
 
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
-import Welcome from '../scene';
-import Game from 'ts@/kuni/lib/core';
-import KnSprite from 'ts@/kuni/lib/gameobjects/kn_sprite';
+import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import Welcome from "../scene";
+import Game from "ts@/kuni/lib/core";
+import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
+import KnText from "ts@/kuni/lib/gameobjects/kn_text";
 
 class LevelBar extends KnGroup {
   game: Game;
@@ -18,30 +19,30 @@ class LevelBar extends KnGroup {
   innerBar: KnSprite;
   maskBar: KnSprite;
   level: number;
-  levelInfo: import('e:/code/kunigame/projects/kuni/lib/gameobjects/kn_text').default;
+  levelInfo: KnText;
   constructor(game: Game, parent: Welcome) {
-    super(game, 'levelBar', parent);
+    super(game, "levelBar", parent);
     this.generator();
     this.game = game;
   }
 
   generator() {
     this.outBar = this.game.add.image(
-      'outBar',
-      'levelOutbar',
+      "outBar",
+      "levelOutbar",
       this,
       [0.5, 0.5]
     );
     this.innerBar = this.game.add.image(
-      'innerBar',
-      'levelInnerbar',
+      "innerBar",
+      "levelInnerbar",
       this,
       [0, 0.5]
     );
     this.innerBar.x -= this.innerBar.width * 0.5;
     this.maskBar = this.game.add.image(
-      'maskBar',
-      'levelMaskBar',
+      "maskBar",
+      "levelMaskBar",
       this,
       [0, 0.5]
     );
@@ -50,14 +51,14 @@ class LevelBar extends KnGroup {
     this.innerBar.mask = this.maskBar;
     this.level = 1;
     this.levelInfo = this.game.add.text(
-      'levelInfo',
-      'Lv.' + this.level,
+      "levelInfo",
+      "Lv." + this.level,
       {
         fontSize: 40,
-        fontWeight: 'bold',
-        fill: '#ffffff',
-        stroke: '#000000',
-        strokeThickness: 20,
+        fontWeight: "bold",
+        fill: "#ffffff",
+        stroke: "#000000",
+        strokeThickness: 20
       },
       [0.5, 0.5]
     );
