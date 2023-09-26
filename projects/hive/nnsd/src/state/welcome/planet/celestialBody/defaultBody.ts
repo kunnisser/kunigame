@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-20 14:01:26
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-25 17:19:09
+ * @LastEditTime: 2023-09-26 14:34:47
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/planet/celestialBody/defaultBody.ts
  * @Description: ---- 普通星体 ----
  */
@@ -15,6 +15,7 @@ import PlanetSystem from "..";
 class Planet extends KnGroup {
   game: Game;
   body: KnSprite;
+  satellites: any;
   constructor(game: Game, parent: PlanetSystem, key: string) {
     super(game, "launchPlanet", parent);
     this.game = game;

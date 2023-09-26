@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-25 15:43:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-25 17:34:54
+ * @LastEditTime: 2023-09-26 15:22:33
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/planet/satellite/index.ts
  * @Description: ----  ----
  */
@@ -29,7 +29,7 @@ class SatelliteGroup extends KnGroup {
       const sateBody = this.game.add.group("sateBody", this);
       this.game.add.image("", "satellite", sateBody, [0.5, 0.5]);
       sateBody.pivot.y = this.planet.body.width * 0.5 + 50 + (index % 2) * 100;
-      sateBody.angle += index * 40;
+      sateBody.angle += index * 90;
       const text = this.game.add.text(
         "",
         val + "",
@@ -44,7 +44,7 @@ class SatelliteGroup extends KnGroup {
     this.addChild(...satellites);
   }
   update() {
-    this.angle -= 1;
+    this.angle -= 0.2;
   }
 }
 

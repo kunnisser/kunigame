@@ -2,23 +2,33 @@
  * @Author: kunnisser
  * @Date: 2023-09-16 16:48:57
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-19 17:38:17
+ * @LastEditTime: 2023-09-26 14:15:56
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/events/input.ts
  * @Description: ---- 输入相关事件 ----
  */
 
 import Welcome from "../scene";
 
+let side: number = 1;
 export const mainTouchEvent = (scene: Welcome) => {
   scene.on("pointerdown", () => {
-    if (!scene.gameOver) {
+    if (!scene.gameOver && !scene.rocket.isInOrbit) {
       scene.bootRocket = true;
       scene.rocket.emitter.visible = true;
       scene.rocket.shake.seek(0).restart(true);
     }
   });
   scene.on("pointerup", () => {
-    scene.bootRocket = false;
-    scene.rocket.takeoff();
+    if (scene.rocket.isInOrbit) {
+      console.log("tap");
+      side *= -1;
+      scene.tween.instance.to(scene.rocket.pivot, 0.1, {
+        y: scene.planetSystem.startingPlanet.body.width * 0.5 + 100 + 50 * side,
+        ease: scene.tween["back"]["easeOut"]
+      });
+    } else {
+      scene.bootRocket = false;
+      scene.rocket.takeoff();
+    }
   });
 };

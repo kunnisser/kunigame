@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-14 15:13:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-25 17:23:09
+ * @LastEditTime: 2023-09-26 15:20:15
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/rocket/rocket.ts
  * @Description: ---- 创建🚀的基本型 ----
  */
@@ -228,21 +228,23 @@ class Rocket extends KnGroup {
 
   // 入轨环绕
   orbiting() {
-    this.position.set(
-      this.scene.planetSystem.startingPlanet.x,
-      this.scene.planetSystem.startingPlanet.y
-    );
-    this.pivot.y =
-      this.scene.planetSystem.startingPlanet.body.width * 0.5 + 150;
-    this.isLanded = true;
-    this.power = 0;
-    this.isFlying = false;
+    const satellites = this.scene.planetSystem.startingPlanet.satellites;
+    if (!satellites) {
+      return;
+    }
+    // const satellite = satellites.children[0];
+    // console.log("a:", this.angle % 360);
+    // console.log("b:", (360 - satellites.angle) % 360);
+    console.log(satellites.angle);
+    if ((this.angle % 360) - (Math.abs(360 - satellites.angle) % 360) < 5) {
+      // console.log(this.angle % 360);
+    }
   }
 
   // 驻扎在星球转动
   landing(target) {
     if (this.isLanded) {
-      this.angle = target.body.angle;
+      this.angle += this.isInOrbit ? 0.5 : 1.5;
     }
   }
 

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-16 16:54:31
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-25 11:11:34
+ * @LastEditTime: 2023-09-26 11:12:26
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/events/collision.ts
  * @Description: ---- 碰撞距离检测 ----
  */
@@ -31,6 +31,10 @@ export const isInOrbit = (scene: Welcome) => {
     rocketDistance <= 0 &&
     scene.rocket.y <= scene.planetSystem.targetPlanet.y
   ) {
+    scene.rocket.position.set(
+      scene.planetSystem.targetPlanet.x,
+      scene.planetSystem.targetPlanet.y
+    );
     scene.rocket.isInOrbit = true;
     scene.rocket.isFlying = false;
     scene.rocket.self.angle = 90;
@@ -38,6 +42,9 @@ export const isInOrbit = (scene: Welcome) => {
     scene.rocket.incX = 0;
     scene.rocket.incY = 0;
     scene.rocket.plume.y = 0;
+    scene.rocket.isLanded = true;
+    scene.rocket.pivot.y =
+      scene.planetSystem.targetPlanet.body.width * 0.5 + 150;
     scene.next();
   }
 };

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-25 17:21:24
+ * @LastEditTime: 2023-09-26 10:45:48
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -77,16 +77,17 @@ class Welcome extends KnScene {
       y: "+=" + this.game.config.height * 0.25,
       ease: this.tween["cubic"]["easeInOut"]
     });
+    const scaleRatio = 1.4;
     const cameraScaling = this.tween.instance.to(
       this.planetSystem.targetPlanet.scale,
       0.1,
       {
-        x: 1.2,
-        y: 1.2,
+        x: scaleRatio,
+        y: scaleRatio,
         ease: this.tween["back"]["easeOut"],
         yoyo: true,
         onComplete: () => {
-          this.rocket.scale.set(1.2);
+          this.rocket.scale.set(scaleRatio);
           this.planetSystem.next();
         }
       }
