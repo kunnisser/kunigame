@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-14 15:13:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-28 00:19:25
+ * @LastEditTime: 2023-10-01 00:13:07
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\rocket\rocket.ts
  * @Description: ---- 创建🚀的基本型 ----
  */
@@ -36,6 +36,7 @@ class Rocket extends KnGroup {
   hitPoint: { x: number; y: number };
   self: KnGroup;
   orbitIndex: number;
+  rateFire: number;
   constructor(game: Game, parent: Welcome) {
     super(game, 'default_rocket_group', parent.planetSystem);
     this.game = game;
@@ -48,6 +49,7 @@ class Rocket extends KnGroup {
     this.isLanded = true; // 是否着陆
     this.isFlying = false; // 是否飞行中
     this.orbitIndex = 1; // 在轨道中的序列
+    this.rateFire = 30; // 射速
     this.initial();
   }
 
@@ -242,22 +244,26 @@ class Rocket extends KnGroup {
     // console.log(satellites.angle);
     satellites.children.map((satellite: KnGroup, index: number) => {
       if (
-        Math.abs(
-          (this.angle % 360) - (360 + ((satellites.angle + index * 90) % 360))
-        ) < 30 &&
-        this.orbitIndex === index
+        (this.angle % 360) - (360 + ((satellites.angle + index * 90) % 360)) >
+          -90 &&
+        (this.angle % 360) - (360 + ((satellites.angle + index * 90) % 360)) <
+          -30 &&
+        this.orbitIndex === index % 2
       ) {
         if (!satellite.visible) {
           return;
         }
-        console.log(index);
         const satelliteText: any = satellite.children[1];
         const satellitePower = +satelliteText.text;
         if (satellitePower <= 0) {
           satellite.visible = false;
           // satellites.removeChild(satellite);
         } else {
-          satelliteText.text = satellitePower - 1 + '';
+          this.rateFire -= 1;
+          if (this.rateFire < 0) {
+            satelliteText.text = satellitePower - 1 + '';
+            this.rateFire = 30;
+          }
         }
         // this.scene.gameOver = true;
       }
@@ -268,7 +274,7 @@ class Rocket extends KnGroup {
   // 驻扎在星球转动
   landing(target) {
     if (this.isLanded) {
-      this.angle += this.isInOrbit ? 0.5 : 1.5;
+      this.angle += this.isInOrbit ? 0.1 : 1.5;
     }
   }
 

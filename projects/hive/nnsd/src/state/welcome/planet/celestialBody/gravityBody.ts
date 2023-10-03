@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-20 14:02:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-28 00:05:22
+ * @LastEditTime: 2023-09-30 01:25:03
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\planet\celestialBody\gravityBody.ts
  * @Description: ---- 引力星体 ----
  */
@@ -50,7 +50,7 @@ class GravityPlanet extends KnGroup {
   }
 
   generateSatellite(game: Game) {
-    this.satellites = new SatelliteGroup(game, this, [10, 100]);
+    this.satellites = new SatelliteGroup(game, this, [100, 200]);
     this.addChild(this.satellites);
   }
 
