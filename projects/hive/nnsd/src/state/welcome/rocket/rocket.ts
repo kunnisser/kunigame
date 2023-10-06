@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-14 15:13:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-01 00:13:07
+ * @LastEditTime: 2023-10-06 20:23:52
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\rocket\rocket.ts
  * @Description: ---- 创建🚀的基本型 ----
  */
@@ -242,14 +242,15 @@ class Rocket extends KnGroup {
     // console.log('a:', this.angle % 360);
     // console.log("b:", (360 - satellites.angle) % 360);
     // console.log(satellites.angle);
-    satellites.children.map((satellite: KnGroup, index: number) => {
+    console.log(this.angle % 360);
+    satellites.children.map((satellite: any, index: number) => {
+      const satText: any = satellite.children[2];
       if (
-        (this.angle % 360) - (360 + ((satellites.angle + index * 90) % 360)) >
-          -90 &&
-        (this.angle % 360) - (360 + ((satellites.angle + index * 90) % 360)) <
-          -30 &&
+        satText.text - (this.angle % 360) < 60 &&
+        satText.text - (this.angle % 360) > 0 &&
         this.orbitIndex === index % 2
       ) {
+        satellite.children[0].tint = 0xcccccc;
         if (!satellite.visible) {
           return;
         }
@@ -266,6 +267,8 @@ class Rocket extends KnGroup {
           }
         }
         // this.scene.gameOver = true;
+      } else {
+        satellite.children[0].tint = 0xffffff;
       }
       return null;
     });
@@ -285,7 +288,6 @@ class Rocket extends KnGroup {
       this.y < 0 - this.parent.y ||
       this.y > this.game.config.height - this.parent.y
     ) {
-      console.log(this.x, this.y);
       this.gameOver();
     }
   }

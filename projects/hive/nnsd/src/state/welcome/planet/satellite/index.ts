@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-25 15:43:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-03 13:41:46
+ * @LastEditTime: 2023-10-06 17:21:56
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\planet\satellite\index.ts
  * @Description: ----  ----
  */
@@ -55,9 +55,10 @@ class SatelliteGroup extends KnGroup {
   }
   update() {
     this.children.map((sat: any) => {
-      return (sat.children[2].text = (sat.angle + this.angle).toFixed(2));
+      const angle = (360 + ((sat.angle + this.angle) % 360)) % 360;
+      return (sat.children[2].text = angle.toFixed(2));
     });
-    this.angle -= 0.01;
+    this.angle -= 0.1;
   }
 }
 
