@@ -2,21 +2,23 @@
  * @Author: kunnisser
  * @Date: 2023-09-14 15:13:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-06 20:23:52
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\rocket\rocket.ts
+ * @LastEditTime: 2023-10-07 17:44:24
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/rocket/rocket.ts
  * @Description: ---- 创建🚀的基本型 ----
  */
 
-import { TweenMax } from 'gsap';
-import { utils } from 'pixi.js';
-import Game from 'ts@/kuni/lib/core';
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
-import KnSprite from 'ts@/kuni/lib/gameobjects/kn_sprite';
-import { KnTween } from 'ts@/kuni/lib/gameobjects/kn_tween';
-import Welcome from '../scene';
-import PlanetSystem from '../planet';
-import { math } from 'ts@/kuni/lib/utils/common';
-import SatelliteGroup from '../planet/satellite';
+import { TweenMax } from "gsap";
+import { utils } from "pixi.js";
+import Game from "ts@/kuni/lib/core";
+import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
+import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
+import Welcome from "../scene";
+import PlanetSystem from "../planet";
+import { math } from "ts@/kuni/lib/utils/common";
+import SatelliteGroup from "../planet/satellite";
+import KnText from "ts@/kuni/lib/gameobjects/kn_text";
+import shooter from "./shooter";
 class Rocket extends KnGroup {
   power: number;
   incX: number; // x,y方向的位移增量
@@ -37,8 +39,12 @@ class Rocket extends KnGroup {
   self: KnGroup;
   orbitIndex: number;
   rateFire: number;
+  debugger: KnText;
+  shooter: {
+    originalShooter: (tween: KnTween, rocket: Rocket, target: any) => void;
+  };
   constructor(game: Game, parent: Welcome) {
-    super(game, 'default_rocket_group', parent.planetSystem);
+    super(game, "default_rocket_group", parent.planetSystem);
     this.game = game;
     this.scene = parent;
     this.tween = game.add.tween();
@@ -56,14 +62,14 @@ class Rocket extends KnGroup {
   initial() {
     this.x = this.scene.planetSystem.startingPlanet.x;
     this.y = this.scene.planetSystem.startingPlanet.y;
-    this.emitter = this.game.add.emitter(this.game, 1, 'gas');
-    this.sprite = this.game.add.sprite('rocket', 'rocket');
+    this.emitter = this.game.add.emitter(this.game, 1, "gas");
+    this.sprite = this.game.add.sprite("rocket", "rocket");
     this.sprite.anchor.set(0.5, 1);
     this.pivot.y = this.scene.planetSystem.startingPlanet.body.height * 0.5;
     this.emitter.y = this.scene.planetSystem.startingPlanet.body.height * 0.5;
     this.shake = this.generateTween();
     const plume = this.game.add.animation(
-      ['fire1.png', 'fire2.png', 'fire3.png'].map(
+      ["fire1.png", "fire2.png", "fire3.png"].map(
         (key) => utils.TextureCache[key]
       ),
       0.4
@@ -75,25 +81,36 @@ class Rocket extends KnGroup {
 
     const boom = this.game.add.animation(
       [
-        'boom1.png',
-        'boom2.png',
-        'boom3.png',
-        'boom4.png',
-        'boom5.png',
-        'boom6.png',
+        "boom1.png",
+        "boom2.png",
+        "boom3.png",
+        "boom4.png",
+        "boom5.png",
+        "boom6.png"
       ].map((key) => utils.TextureCache[key]),
       0.2
     );
     boom.position.set(0, -this.sprite.height);
     boom.anchor.set(0.5, 0);
     boom.loop = false;
-    this.self = this.game.add.group('self', this);
+    this.self = this.game.add.group("self", this);
     this.self.addChild(this.emitter, plume, boom, this.sprite);
     this.boom = boom;
     this.plume = plume;
     this.boom.visible = false;
     this.plume.visible = false;
     this.emitter.visible = false;
+    this.debugger = this.game.add.text(
+      "",
+      "0",
+      {
+        fill: 0xffffff,
+        fontSize: 50
+      },
+      [0.5, 0.5]
+    );
+    this.self.addChild(this.debugger);
+    this.shooter = shooter(this.game, this.self);
   }
 
   // 火箭发射缓动
@@ -101,15 +118,15 @@ class Rocket extends KnGroup {
     const { duration, scale, scaleloop, yoyo, repeat, ease, inout, delay } = {
       scale: {
         x: 1.1,
-        y: 0.95,
+        y: 0.95
       },
       scaleloop: true,
       repeat: 5,
       delay: 0,
       duration: 0.1,
       yoyo: true,
-      ease: 'cubic',
-      inout: 'easeOut',
+      ease: "cubic",
+      inout: "easeOut"
     };
 
     const shakeTween = this.tween.instance.to(this.sprite.scale, duration, {
@@ -123,7 +140,7 @@ class Rocket extends KnGroup {
       ease: this.tween[ease][inout],
       onComplete: () => {
         scaleloop && shakeTween && shakeTween.seek(0).restart(true);
-      },
+      }
     });
     return shakeTween;
   }
@@ -146,15 +163,15 @@ class Rocket extends KnGroup {
           yRandom: false,
           xDirect: true,
           yDirect: false,
-          ease: 'cubic',
-          inout: 'easInOut',
+          ease: "cubic",
+          inout: "easInOut",
           angle: 360,
           angleRandom: true,
           angleDirect: true,
           width: 0,
-          height: 0,
+          height: 0
         },
-        'from'
+        "from"
       );
     } else {
       if (this.isInOrbit && !this.isFlying) {
@@ -231,6 +248,11 @@ class Rocket extends KnGroup {
     };
   }
 
+  // 计算飞船与卫星的角度差
+  computeAngle(satText: any) {
+    return (720 + +satText.text - (this.angle % 360)) % 360;
+  }
+
   // 入轨环绕
   orbiting() {
     const satellites: SatelliteGroup =
@@ -242,12 +264,14 @@ class Rocket extends KnGroup {
     // console.log('a:', this.angle % 360);
     // console.log("b:", (360 - satellites.angle) % 360);
     // console.log(satellites.angle);
-    console.log(this.angle % 360);
     satellites.children.map((satellite: any, index: number) => {
       const satText: any = satellite.children[2];
+      if (this.orbitIndex === index % 2) {
+        this.debugger.text = this.computeAngle(satText).toFixed(1);
+      }
       if (
-        satText.text - (this.angle % 360) < 60 &&
-        satText.text - (this.angle % 360) > 0 &&
+        this.computeAngle(satText) < 90 &&
+        this.computeAngle(satText) > 10 &&
         this.orbitIndex === index % 2
       ) {
         satellite.children[0].tint = 0xcccccc;
@@ -262,11 +286,18 @@ class Rocket extends KnGroup {
         } else {
           this.rateFire -= 1;
           if (this.rateFire < 0) {
-            satelliteText.text = satellitePower - 1 + '';
+            satelliteText.text = satellitePower - 1 + "";
             this.rateFire = 30;
+            this.shooter.originalShooter(this.tween, this, satellite);
           }
         }
         // this.scene.gameOver = true;
+      } else if (
+        this.computeAngle(satText) <= 10 &&
+        this.orbitIndex === index % 2
+      ) {
+        console.log("lose");
+        this.gameOver();
       } else {
         satellite.children[0].tint = 0xffffff;
       }

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-16 16:15:28
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-26 14:32:21
+ * @LastEditTime: 2023-10-07 10:54:01
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/planet/index.ts
  * @Description: ---- 定义默认的星球 ----
  */
@@ -51,7 +51,7 @@ class PlanetSystem extends KnGroup {
     this.startingPlanet.update();
     this.targetPlanet.update();
     this.parent.rocket.isFlying && isImpact(this.parent);
-    this.parent.rocket.isFlying && isInOrbit(this.parent);
+    // this.parent.rocket.isFlying && isInOrbit(this.parent);
   }
 
   reset() {

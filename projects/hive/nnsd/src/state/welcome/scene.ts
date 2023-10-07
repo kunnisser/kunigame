@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-26 10:45:48
+ * @LastEditTime: 2023-10-07 10:52:59
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -16,6 +16,7 @@ import KnTiling from "ts@/kuni/lib/gameui/kn_tiling";
 import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
 import GameOverGui from "./ui/end";
 import LevelBar from "./ui/level";
+import { isInOrbit } from "./events/collision";
 
 class Welcome extends KnScene {
   game: Game;
@@ -70,6 +71,7 @@ class Welcome extends KnScene {
     mainTouchEvent(this);
     this.level = new LevelBar(this.game, this);
     this.gameOverGui = new GameOverGui(this.game, this);
+    isInOrbit(this);
   }
 
   next() {
