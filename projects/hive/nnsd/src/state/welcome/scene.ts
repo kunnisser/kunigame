@@ -2,21 +2,21 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-07 10:52:59
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
+ * @LastEditTime: 2023-10-07 23:28:53
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
-import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
-import Game from "ts@/kuni/lib/core";
-import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
-import Rocket from "./rocket/rocket";
-import PlanetSystem from "./planet";
-import { mainTouchEvent } from "./events";
-import KnTiling from "ts@/kuni/lib/gameui/kn_tiling";
-import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
-import GameOverGui from "./ui/end";
-import LevelBar from "./ui/level";
-import { isInOrbit } from "./events/collision";
+import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
+import Game from 'ts@/kuni/lib/core';
+import { KnTween } from 'ts@/kuni/lib/gameobjects/kn_tween';
+import Rocket from './rocket/rocket';
+import PlanetSystem from './planet';
+import { mainTouchEvent } from './events';
+import KnTiling from 'ts@/kuni/lib/gameui/kn_tiling';
+import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
+import GameOverGui from './ui/end';
+import LevelBar from './ui/level';
+import { isInOrbit } from './events/collision';
 
 class Welcome extends KnScene {
   game: Game;
@@ -39,20 +39,21 @@ class Welcome extends KnScene {
     this.bootRocket = false;
     this.tween = this.game.add.tween();
     this.resources = {
-      gameBg: "assets/images/gameBg.png",
-      rocket: "assets/images/rocket.png",
-      fire: "assets/atlas/fire.json",
-      moon: "assets/images/moon.png",
-      waterPlanet: "assets/images/waterPlanet.png",
-      gas: "assets/images/gas.png",
-      satellite: "assets/images/satellite.png",
-      gravityField: "assets/images/gravityField.png",
-      boom: "assets/atlas/boom.json",
-      levelBg1: "assets/images/levelBg1.jpg",
-      restart: "assets/images/restart.png",
-      levelOutbar: "assets/images/levelOutbar.png",
-      levelInnerbar: "assets/images/levelInnerbar.png",
-      levelMaskBar: "assets/images/levelMaskBar.png"
+      gameBg: 'assets/images/gameBg.png',
+      rocket: 'assets/images/rocket.png',
+      fire: 'assets/atlas/fire.json',
+      moon: 'assets/images/moon.png',
+      waterPlanet: 'assets/images/waterPlanet.png',
+      gas: 'assets/images/gas.png',
+      satellite: 'assets/images/satellite.png',
+      gravityField: 'assets/images/gravityField.png',
+      boom: 'assets/atlas/boom.json',
+      logo: 'assets/images/logo.png',
+      levelBg1: 'assets/images/levelBg1.jpg',
+      restart: 'assets/images/restart.png',
+      levelOutbar: 'assets/images/levelOutbar.png',
+      levelInnerbar: 'assets/images/levelInnerbar.png',
+      levelMaskBar: 'assets/images/levelMaskBar.png',
     };
   }
 
@@ -61,7 +62,7 @@ class Welcome extends KnScene {
   create() {
     this.interactive = true;
     this.bg = this.game.add.tiling(
-      "levelBg1",
+      'levelBg1',
       this.game.config.width,
       this.game.config.height,
       this
@@ -76,8 +77,8 @@ class Welcome extends KnScene {
 
   next() {
     const cameraMoving = this.tween.instance.to(this.planetSystem, 0.5, {
-      y: "+=" + this.game.config.height * 0.25,
-      ease: this.tween["cubic"]["easeInOut"]
+      y: '+=' + this.game.config.height * 0.25,
+      ease: this.tween['cubic']['easeInOut'],
     });
     const scaleRatio = 1.4;
     const cameraScaling = this.tween.instance.to(
@@ -86,12 +87,12 @@ class Welcome extends KnScene {
       {
         x: scaleRatio,
         y: scaleRatio,
-        ease: this.tween["back"]["easeOut"],
+        ease: this.tween['back']['easeOut'],
         yoyo: true,
         onComplete: () => {
           this.rocket.scale.set(scaleRatio);
           this.planetSystem.next();
-        }
+        },
       }
     );
 
