@@ -7,15 +7,15 @@
 
 /* 粒子发射器类 */
 
-import { ParticleContainer, Sprite, utils } from 'pixi.js';
-import Game from '../core';
+import { ParticleContainer, Sprite, utils } from "pixi.js";
+import Game from "../core";
 const ParticleConfig: any = {
   scale: true,
   position: true,
   visible: true,
   rotation: true,
   uvs: true,
-  alpha: true,
+  alpha: true
 };
 class KnEmitter extends ParticleContainer {
   public key: string;
@@ -58,15 +58,10 @@ class KnEmitter extends ParticleContainer {
   }
 
   // 单粒子发射 (发射器移动)
-  public shoot(tween, duration, pivot, target, ease, inout, method?: string) {
+  public shoot() {
     let shootParticle: Sprite = this.getParticle(1)[0];
     shootParticle.alpha = 1;
     shootParticle.angle = 0;
-    tween.instance[method || 'to'](shootParticle, duration, {
-      angle: target.angle,
-      alpha: 0,
-      ease: tween[ease][inout],
-    });
     return shootParticle;
   }
 
@@ -109,13 +104,13 @@ class KnEmitter extends ParticleContainer {
       angleRandom,
       angleDirect,
       width,
-      height,
+      height
     } = options;
     const particles: Array<Sprite> = this.shootMulite(count);
     for (let particle of particles) {
       particle.x = pointX + game.math.redirect() * Math.random() * width;
       particle.y = pointY + game.math.redirect() * Math.random() * height;
-      tween.instance[method || 'to'](particle, duration, {
+      tween.instance[method || "to"](particle, duration, {
         x:
           particle.x +
           this.particleBooleanDispose(xDirect, game.math.redirect()) *
@@ -132,7 +127,7 @@ class KnEmitter extends ParticleContainer {
             this.particleBooleanDispose(angleRandom, Math.random()) *
             angle,
         alpha: 0,
-        ease: tween[ease][inout],
+        ease: tween[ease][inout]
       });
     }
   };

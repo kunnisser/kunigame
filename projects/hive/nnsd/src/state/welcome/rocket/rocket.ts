@@ -2,22 +2,22 @@
  * @Author: kunnisser
  * @Date: 2023-09-14 15:13:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-07 23:46:50
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\rocket\rocket.ts
+ * @LastEditTime: 2023-10-08 17:44:13
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/rocket/rocket.ts
  * @Description: ---- 创建🚀的基本型 ----
  */
 
-import { TweenMax } from 'gsap';
-import { utils } from 'pixi.js';
-import Game from 'ts@/kuni/lib/core';
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
-import KnSprite from 'ts@/kuni/lib/gameobjects/kn_sprite';
-import { KnTween } from 'ts@/kuni/lib/gameobjects/kn_tween';
-import Welcome from '../scene';
-import PlanetSystem from '../planet';
-import { math } from 'ts@/kuni/lib/utils/common';
-import SatelliteGroup from '../planet/satellite';
-import KnText from 'ts@/kuni/lib/gameobjects/kn_text';
+import { TweenMax } from "gsap";
+import { utils } from "pixi.js";
+import Game from "ts@/kuni/lib/core";
+import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
+import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
+import Welcome from "../scene";
+import PlanetSystem from "../planet";
+import { math } from "ts@/kuni/lib/utils/common";
+import SatelliteGroup from "../planet/satellite";
+import KnText from "ts@/kuni/lib/gameobjects/kn_text";
 class Rocket extends KnGroup {
   power: number;
   incX: number; // x,y方向的位移增量
@@ -43,7 +43,7 @@ class Rocket extends KnGroup {
     originalShooter: (tween: KnTween, rocket: Rocket, target: any) => void;
   };
   constructor(game: Game, parent: Welcome) {
-    super(game, 'default_rocket_group', parent.planetSystem);
+    super(game, "default_rocket_group", parent.planetSystem);
     this.game = game;
     this.scene = parent;
     this.tween = game.add.tween();
@@ -61,14 +61,14 @@ class Rocket extends KnGroup {
   initial() {
     this.x = this.scene.planetSystem.startingPlanet.x;
     this.y = this.scene.planetSystem.startingPlanet.y;
-    this.emitter = this.game.add.emitter(this.game, 1, 'gas');
-    this.sprite = this.game.add.sprite('rocket', 'rocket');
+    this.emitter = this.game.add.emitter(this.game, 1, "gas");
+    this.sprite = this.game.add.sprite("rocket", "rocket");
     this.sprite.anchor.set(0.5, 1);
     this.pivot.y = this.scene.planetSystem.startingPlanet.body.height * 0.5;
     this.emitter.y = this.scene.planetSystem.startingPlanet.body.height * 0.5;
     this.shake = this.generateTween();
     const plume = this.game.add.animation(
-      ['fire1.png', 'fire2.png', 'fire3.png'].map(
+      ["fire1.png", "fire2.png", "fire3.png"].map(
         (key) => utils.TextureCache[key]
       ),
       0.4
@@ -80,19 +80,19 @@ class Rocket extends KnGroup {
 
     const boom = this.game.add.animation(
       [
-        'boom1.png',
-        'boom2.png',
-        'boom3.png',
-        'boom4.png',
-        'boom5.png',
-        'boom6.png',
+        "boom1.png",
+        "boom2.png",
+        "boom3.png",
+        "boom4.png",
+        "boom5.png",
+        "boom6.png"
       ].map((key) => utils.TextureCache[key]),
       0.2
     );
     boom.position.set(0, -this.sprite.height);
     boom.anchor.set(0.5, 0);
     boom.loop = false;
-    this.self = this.game.add.group('self', this);
+    this.self = this.game.add.group("self", this);
     this.self.addChild(this.emitter, plume, boom, this.sprite);
     this.boom = boom;
     this.plume = plume;
@@ -100,11 +100,11 @@ class Rocket extends KnGroup {
     this.plume.visible = false;
     this.emitter.visible = false;
     this.debugger = this.game.add.text(
-      '',
-      '0',
+      "",
+      "0",
       {
         fill: 0xffffff,
-        fontSize: 50,
+        fontSize: 50
       },
       [0.5, 0.5]
     );
@@ -116,15 +116,15 @@ class Rocket extends KnGroup {
     const { duration, scale, scaleloop, yoyo, repeat, ease, inout, delay } = {
       scale: {
         x: 1.1,
-        y: 0.95,
+        y: 0.95
       },
       scaleloop: true,
       repeat: 5,
       delay: 0,
       duration: 0.1,
       yoyo: true,
-      ease: 'cubic',
-      inout: 'easeOut',
+      ease: "cubic",
+      inout: "easeOut"
     };
 
     const shakeTween = this.tween.instance.to(this.sprite.scale, duration, {
@@ -138,7 +138,7 @@ class Rocket extends KnGroup {
       ease: this.tween[ease][inout],
       onComplete: () => {
         scaleloop && shakeTween && shakeTween.seek(0).restart(true);
-      },
+      }
     });
     return shakeTween;
   }
@@ -161,15 +161,15 @@ class Rocket extends KnGroup {
           yRandom: false,
           xDirect: true,
           yDirect: false,
-          ease: 'cubic',
-          inout: 'easInOut',
+          ease: "cubic",
+          inout: "easInOut",
           angle: 360,
           angleRandom: true,
           angleDirect: true,
           width: 0,
-          height: 0,
+          height: 0
         },
-        'from'
+        "from"
       );
     } else {
       if (this.isInOrbit && !this.isFlying) {
@@ -284,21 +284,27 @@ class Rocket extends KnGroup {
         } else {
           this.rateFire -= 1;
           if (this.rateFire < 0) {
-            satelliteText.text = satellitePower - 1 + '';
+            satelliteText.text = satellitePower - 1 + "";
             this.rateFire = 30;
-            this.scene.planetSystem.shooter.originalShooter(
-              this.tween,
-              this,
-              satellite
+            const shootingBullet = this.scene.planetSystem.shooter.shoot(
+              this.pivot.y + this.width * 0.5
             );
+            shootingBullet.angle = (360 + (this.angle % 360)) % 360;
           }
+          this.scene.planetSystem.shooter.bullets.bulletsPool.filter(
+            (bullet) => {
+              if (bullet.visible) {
+                bullet.angle += 5;
+              }
+            }
+          );
         }
         // this.scene.gameOver = true;
       } else if (
         this.computeAngle(satText) <= 10 &&
         this.orbitIndex === index % 2
       ) {
-        console.log('lose');
+        console.log("lose");
         this.gameOver();
       } else {
         satellite.children[0].tint = 0xffffff;

@@ -2,20 +2,20 @@
  * @Author: kunnisser
  * @Date: 2023-09-16 16:15:28
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-07 23:43:59
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\planet\index.ts
+ * @LastEditTime: 2023-10-08 17:27:00
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/planet/index.ts
  * @Description: ---- 定义默认的星球 ----
  */
 
-import Game from 'ts@/kuni/lib/core';
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
-import KnSprite from 'ts@/kuni/lib/gameobjects/kn_sprite';
-import Welcome from '../scene';
-import Planet from './celestialBody/defaultBody';
-import GravityPlanet from './celestialBody/gravityBody';
-import { isImpact } from '../events';
-import { isInOrbit } from '../events/collision';
-import shooter from '../rocket/shooter';
+import Game from "ts@/kuni/lib/core";
+import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
+import Welcome from "../scene";
+import Planet from "./celestialBody/defaultBody";
+import GravityPlanet from "./celestialBody/gravityBody";
+import { isImpact } from "../events";
+import Shooter from "../shooter/shooter";
+// import { isInOrbit } from '../events/collision';
 
 class PlanetSystem extends KnGroup {
   body: KnSprite;
@@ -26,24 +26,19 @@ class PlanetSystem extends KnGroup {
   parent: Welcome;
   nextPlanet: GravityPlanet;
   game: Game;
-  shooter: {
-    originalShooter: (
-      tween: import('e:/code/kunigame/projects/kuni/lib/gameobjects/kn_tween').KnTween,
-      rocket: import('e:/code/kunigame/projects/hive/nnsd/src/state/welcome/rocket/rocket').default,
-      target: any
-    ) => void;
-  };
+  shooter: Shooter;
   constructor(game: Game, parent: Welcome) {
-    super(game, 'plantSystem', parent);
+    super(game, "plantSystem", parent);
     this.game = game;
     this.initGenerator(game);
   }
 
   initGenerator(game) {
     // this.position.set(this.game.config.half_w, this.game.config.half_h);
-    this.startingPlanet = new Planet(game, this, 'moon');
-    this.targetPlanet = new GravityPlanet(game, this, 'waterPlanet');
-    this.shooter = shooter(this.game, this);
+    this.startingPlanet = new Planet(game, this, "moon");
+    this.targetPlanet = new GravityPlanet(game, this, "waterPlanet");
+    this.shooter = new Shooter(this.game, this);
+    this.shooter.setBullet("attack", 10);
   }
 
   next() {
