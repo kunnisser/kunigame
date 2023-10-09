@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-14 15:13:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-08 17:44:13
+ * @LastEditTime: 2023-10-09 14:07:07
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/rocket/rocket.ts
  * @Description: ---- 创建🚀的基本型 ----
  */
@@ -246,9 +246,9 @@ class Rocket extends KnGroup {
     };
   }
 
-  // 计算飞船与卫星的角度差
-  computeAngle(satText: any) {
-    return (720 + +satText.text - (this.angle % 360)) % 360;
+  // 计算目标与卫星的角度差
+  computeAngle(satText: any, target: any) {
+    return (720 + +satText.text - (target.angle % 360)) % 360;
   }
 
   // 入轨环绕
@@ -265,11 +265,11 @@ class Rocket extends KnGroup {
     satellites.children.map((satellite: any, index: number) => {
       const satText: any = satellite.children[2];
       if (this.orbitIndex === index % 2) {
-        this.debugger.text = this.computeAngle(satText).toFixed(1);
+        this.debugger.text = this.computeAngle(satText, this).toFixed(1);
       }
       if (
-        this.computeAngle(satText) < 90 &&
-        this.computeAngle(satText) > 10 &&
+        this.computeAngle(satText, this) < 90 &&
+        this.computeAngle(satText, this) > 10 &&
         this.orbitIndex === index % 2
       ) {
         satellite.children[0].tint = 0xcccccc;
@@ -285,23 +285,26 @@ class Rocket extends KnGroup {
           this.rateFire -= 1;
           if (this.rateFire < 0) {
             satelliteText.text = satellitePower - 1 + "";
-            this.rateFire = 30;
+            this.rateFire = 10;
             const shootingBullet = this.scene.planetSystem.shooter.shoot(
               this.pivot.y + this.width * 0.5
             );
-            shootingBullet.angle = (360 + (this.angle % 360)) % 360;
+            shootingBullet.angle = this.angle;
           }
           this.scene.planetSystem.shooter.bullets.bulletsPool.filter(
             (bullet) => {
               if (bullet.visible) {
-                bullet.angle += 5;
+                console.log(this.computeAngle(satText, bullet));
+                this.computeAngle(satText, bullet) > 10
+                  ? (bullet.angle += 5)
+                  : (bullet.visible = false);
               }
             }
           );
         }
         // this.scene.gameOver = true;
       } else if (
-        this.computeAngle(satText) <= 10 &&
+        this.computeAngle(satText, this) <= 10 &&
         this.orbitIndex === index % 2
       ) {
         console.log("lose");
@@ -309,6 +312,7 @@ class Rocket extends KnGroup {
       } else {
         satellite.children[0].tint = 0xffffff;
       }
+
       return null;
     });
   }

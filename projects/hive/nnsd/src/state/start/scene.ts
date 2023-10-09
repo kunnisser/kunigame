@@ -2,23 +2,23 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-08 16:04:54
+ * @LastEditTime: 2023-10-09 10:38:18
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import Game from "ts@/kuni/lib/core";
 import KnText from "ts@/kuni/lib/gameobjects/kn_text";
-import KnSprite from "/Users/qiankun/cams/kunigame/projects/kuni/lib/gameobjects/kn_sprite";
 import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
+import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
 
 class Start extends KnScene {
   game: Game;
   demoTest: KnText;
-  rocket: import("/Users/qiankun/cams/kunigame/projects/kuni/lib/gameobjects/kn_sprite").default;
-  emitter: import("/Users/qiankun/cams/kunigame/projects/kuni/lib/gameobjects/kn_emitter").default;
+  rocket: KnSprite;
   delta: number;
-  tween: import("/Users/qiankun/cams/kunigame/projects/kuni/lib/gameobjects/kn_tween").KnTween;
+  tween: KnTween;
   bullets: Array<KnSprite>;
   bulletsContainer: KnGroup;
   fired: boolean;
