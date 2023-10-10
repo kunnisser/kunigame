@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-10-08 16:47:49
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-08 17:45:56
+ * @LastEditTime: 2023-10-10 09:51:06
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/shooter/shooter.ts
  * @Description: ---- 射击系统 ----
  */
@@ -52,6 +52,12 @@ class Shooter extends KnGroup {
 
   recover(bullet: KnSprite) {
     bullet.visible = false;
+  }
+
+  ceasefire() {
+    for (const bullet of this.bullets.bulletsPool) {
+      bullet.visible = false;
+    }
   }
 }
 

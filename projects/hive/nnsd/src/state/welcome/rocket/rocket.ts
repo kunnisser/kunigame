@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-14 15:13:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-09 14:07:07
+ * @LastEditTime: 2023-10-10 09:54:02
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/rocket/rocket.ts
  * @Description: ---- 创建🚀的基本型 ----
  */
@@ -264,6 +264,9 @@ class Rocket extends KnGroup {
     // console.log(satellites.angle);
     satellites.children.map((satellite: any, index: number) => {
       const satText: any = satellite.children[2];
+      if (!satellite.visible) {
+        return;
+      }
       if (this.orbitIndex === index % 2) {
         this.debugger.text = this.computeAngle(satText, this).toFixed(1);
       }
@@ -273,12 +276,10 @@ class Rocket extends KnGroup {
         this.orbitIndex === index % 2
       ) {
         satellite.children[0].tint = 0xcccccc;
-        if (!satellite.visible) {
-          return;
-        }
         const satelliteText: any = satellite.children[1];
         const satellitePower = +satelliteText.text;
         if (satellitePower <= 0) {
+          this.scene.planetSystem.shooter.ceasefire();
           satellite.visible = false;
           // satellites.removeChild(satellite);
         } else {
