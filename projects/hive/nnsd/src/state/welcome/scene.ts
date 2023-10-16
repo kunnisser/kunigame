@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-08 17:39:11
+ * @LastEditTime: 2023-10-16 16:29:29
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -48,7 +48,7 @@ class Welcome extends KnScene {
       satellite: "assets/images/satellite.png",
       gravityField: "assets/images/gravityField.png",
       boom: "assets/atlas/boom.json",
-      attack: "assets/images/attack.png",
+      bullet: "assets/images/bullet.png",
       levelBg1: "assets/images/levelBg1.jpg",
       restart: "assets/images/restart.png",
       levelOutbar: "assets/images/levelOutbar.png",

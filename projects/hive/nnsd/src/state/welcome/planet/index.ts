@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-16 16:15:28
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-08 17:27:00
+ * @LastEditTime: 2023-10-16 16:30:08
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/planet/index.ts
  * @Description: ---- 定义默认的星球 ----
  */
@@ -38,7 +38,7 @@ class PlanetSystem extends KnGroup {
     this.startingPlanet = new Planet(game, this, "moon");
     this.targetPlanet = new GravityPlanet(game, this, "waterPlanet");
     this.shooter = new Shooter(this.game, this);
-    this.shooter.setBullet("attack", 10);
+    this.shooter.setBullet("bullet", 10);
   }
 
   next() {
