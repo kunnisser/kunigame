@@ -2,21 +2,21 @@
  * @Author: kunnisser
  * @Date: 2023-10-08 16:47:49
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-10-10 09:51:06
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/welcome/shooter/shooter.ts
+ * @LastEditTime: 2023-10-23 23:52:39
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\welcome\shooter\shooter.ts
  * @Description: ---- 射击系统 ----
  */
 
-import Game from "ts@/kuni/lib/core";
-import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
-import Bullets from "./bullets";
-import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
+import Game from 'ts@/kuni/lib/core';
+import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
+import Bullets from './bullets';
+import KnSprite from 'ts@/kuni/lib/gameobjects/kn_sprite';
 
 class Shooter extends KnGroup {
   game: Game;
   bullets: Bullets;
   constructor(game: Game, parent) {
-    super(game, "shooter", parent);
+    super(game, 'shooter', parent);
     this.initial(game);
   }
 
@@ -35,11 +35,11 @@ class Shooter extends KnGroup {
     });
     if (bootBullet) {
       bootBullet.visible = true;
-      bootBullet.pivot.y = pivot;
+      bootBullet.pivot.y = pivot + bootBullet.width * 0.5;
       return bootBullet;
     } else {
       const createBullet = this.game.add.image(
-        "",
+        '',
         this.bullets.key,
         this.bullets,
         [0.5, 1]
