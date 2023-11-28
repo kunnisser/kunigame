@@ -2,60 +2,74 @@
  * @Author: kunnisser
  * @Date: 2023-11-27 16:58:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-11-27 17:34:55
+ * @LastEditTime: 2023-11-28 15:37:27
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/enemy/normalMonster/monster.ts
  * @Description: ---- 普通怪物小兵 ----
  */
 
 import Game from "ts@/kuni/lib/core";
+import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import TdEnemy from "..";
 import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
+import KnText from "ts@/kuni/lib/gameobjects/kn_text";
 
-class NormalMonster {
+class NormalMonster extends KnGroup {
   public game: Game;
-  public monsterPool: Array<KnSprite>;
-  public bootMonsterPool: Array<KnSprite>;
-  constructor(game: Game) {
+  // -- 怪物角色元素
+  public sprite: KnSprite; // 纹理精灵
+  public word: KnText; // 中文词名
+  public target: any; // 怪物的目标
+  // -- 数值
+  public speed: number; // 前进速度
+  public health: number; // 血量
+  public attack: number; // 攻击力
+  // -- 状态
+  public moving: boolean; // 是否移动
+  public attacking: boolean; // 是否攻击
+  public injured: boolean; // 是否受伤
+  public killed: boolean; // 是否被干掉
+  constructor(game: Game, parent: TdEnemy) {
+    super(game, "normalMonsterEntity", parent);
     this.game = game;
-    // 怪物池
-    this.monsterPool = [];
-    // 激活的怪物池
-    this.bootMonsterPool = [];
+    this.initialRole();
+    this.initialValues();
+    this.initialStatus();
+    this.parent.addChild(this);
   }
 
-  generator() {
-    const monster = this.game.add.sprite(
-      "monsterlv1",
-      "monsterlv1",
-      [0.5, 0.5]
-    );
-    monster.visible = false;
-    monster.interactive = false;
-    this.monsterPool.push(monster);
-    return monster;
+  // 初始化角色对象元素
+  initialRole() {
+    this.word = this.game.add.text("test", "测试", {}, [0.5, 1]);
+    this.word.style.fontSize = 100;
+    this.word.style.fill = "#ff6161";
+    this.sprite = this.game.add.sprite("monsterlv1", "monsterlv1", [0.5, 0.5]);
+    this.word.y = -this.sprite.height * 0.5;
+    this.target = null;
+    this.addChild(this.word, this.sprite);
   }
 
-  dispatch() {
-    let bootMonster: KnSprite | undefined = this.monsterPool.find(
-      (monster: KnSprite) => {
-        return (monster.visible = false);
-      }
-    );
-    bootMonster = bootMonster || this.generator();
-    bootMonster.visible = true;
-    bootMonster.interactive = true;
-    return bootMonster;
+  // 初始化角色数值
+  initialValues() {
+    this.speed = 1;
+    this.health = 100;
+    this.attack = 10;
   }
 
-  destroy(monster: KnSprite) {
-    monster.visible = false;
-    monster.interactive = false;
+  // 初始化角色状态
+  initialStatus() {
+    this.visible = false;
+    this.moving = false;
+    this.attacking = false;
+    this.injured = false;
+    this.killed = false;
   }
 
-  advancing() {
-    this.bootMonsterPool = this.monsterPool.filter((monster: KnSprite) => {
-      return (monster.visible = true);
-    });
+  // 设置怪物角色目标
+  setAttackTarget(target: any) {
+    this.target = target;
   }
+
+  // 怪物弱点
 }
 
 export default NormalMonster;
