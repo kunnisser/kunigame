@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-11-28 17:41:15
+ * @LastEditTime: 2023-11-29 17:06:42
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -41,7 +41,6 @@ class Start extends KnScene {
     this.firstLevel = 1000;
     this.on("pointerdown", () => {
       console.log("123");
-      this.monsterSystem.dispatch();
     });
 
     this.baseNest = new BaseNest(this.game, this);
@@ -55,8 +54,7 @@ class Start extends KnScene {
     if (this.firstLevel < 0) {
       console.log("stop");
     } else {
-      console.log(this.firstLevel);
-      this.firstLevel % 200 === 0 && this.monsterSystem.dispatch();
+      this.firstLevel % 100 === 0 && this.monsterSystem.dispatch(this.baseNest);
       this.firstLevel -= 1;
     }
   }

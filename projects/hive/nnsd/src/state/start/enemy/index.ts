@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-11-27 16:52:35
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-11-28 15:06:34
+ * @LastEditTime: 2023-11-29 16:39:37
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/enemy/index.ts
  * @Description: ---- 敌对角色的容器 ----
  */
@@ -33,7 +33,7 @@ class TdEnemy extends KnGroup {
     return monster;
   }
 
-  dispatch() {
+  dispatch(target: any) {
     let bootMonster: NormalMonster | undefined = this.monsterPool.find(
       (monster: NormalMonster) => {
         return monster.visible === false;
@@ -42,6 +42,7 @@ class TdEnemy extends KnGroup {
     bootMonster = bootMonster || this.generator();
     bootMonster.visible = true;
     this.appearPosition(bootMonster);
+    bootMonster.setAttackTarget(target);
     this.activeMonsterPool.push(bootMonster);
     return bootMonster;
   }
@@ -57,12 +58,17 @@ class TdEnemy extends KnGroup {
   // 怪物移动及边界回收
   advancing() {
     this.activeMonsterPool.forEach((monster: NormalMonster, index: number) => {
-      if (monster.y > this.game.config.height) {
-        monster.visible = false;
-        this.activeMonsterPool.splice(index, 1);
-      } else {
-        monster.y += monster.speed;
+      if (monster.moving) {
+        monster.isAttachTarget();
+        monster.x += monster.vx;
+        monster.y += monster.vy;
       }
+      // if (monster.y > this.game.config.height) {
+      //   monster.visible = false;
+      //   this.activeMonsterPool.splice(index, 1);
+      // } else {
+      //   monster.y += monster.speed;
+      // }
     });
   }
 }

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-11-27 16:58:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-11-28 15:37:27
+ * @LastEditTime: 2023-11-29 17:05:54
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/enemy/normalMonster/monster.ts
  * @Description: ---- 普通怪物小兵 ----
  */
@@ -20,7 +20,7 @@ class NormalMonster extends KnGroup {
   public word: KnText; // 中文词名
   public target: any; // 怪物的目标
   // -- 数值
-  public speed: number; // 前进速度
+  public step: number; // 初始移动总步数
   public health: number; // 血量
   public attack: number; // 攻击力
   // -- 状态
@@ -28,6 +28,13 @@ class NormalMonster extends KnGroup {
   public attacking: boolean; // 是否攻击
   public injured: boolean; // 是否受伤
   public killed: boolean; // 是否被干掉
+
+  // -- 距离环境
+  public distanceTargetX: number; // 距离目标X距离差
+  public distanceTargetY: number; // 距离目标Y距离差
+  public vx: number; // 计算x每一步的距离(x速率)
+  public vy: number; // 计算y每一步的距离（y速率）
+
   constructor(game: Game, parent: TdEnemy) {
     super(game, "normalMonsterEntity", parent);
     this.game = game;
@@ -43,6 +50,7 @@ class NormalMonster extends KnGroup {
     this.word.style.fontSize = 100;
     this.word.style.fill = "#ff6161";
     this.sprite = this.game.add.sprite("monsterlv1", "monsterlv1", [0.5, 0.5]);
+    this.sprite.scale.set(0.5);
     this.word.y = -this.sprite.height * 0.5;
     this.target = null;
     this.addChild(this.word, this.sprite);
@@ -50,7 +58,7 @@ class NormalMonster extends KnGroup {
 
   // 初始化角色数值
   initialValues() {
-    this.speed = 1;
+    this.step = 200;
     this.health = 100;
     this.attack = 10;
   }
@@ -66,10 +74,29 @@ class NormalMonster extends KnGroup {
 
   // 设置怪物角色目标
   setAttackTarget(target: any) {
+    this.moving = true;
     this.target = target;
+    this.distanceTargetX = target.x - this.x;
+    this.distanceTargetY = target.y - this.y;
+    this.vx = this.distanceTargetX / this.step;
+    this.vy = this.distanceTargetY / this.step;
   }
 
-  // 怪物弱点
+  // 怪物已抵达目标
+  isAttachTarget() {
+    const absDistanceX: number = Math.abs(this.target.x - this.x);
+    const absDistanceY: number = Math.abs(this.target.y - this.y);
+    if (absDistanceX < this.target.width && absDistanceY < this.target.height) {
+      this.moving = false;
+    }
+  }
+
+  // 怪物被摧毁
+  remove() {
+    this.target = null;
+    this.killed = true;
+    this.visible = false;
+  }
 }
 
 export default NormalMonster;
