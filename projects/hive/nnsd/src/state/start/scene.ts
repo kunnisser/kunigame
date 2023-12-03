@@ -2,59 +2,61 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-11-29 17:06:42
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
+ * @LastEditTime: 2023-12-03 22:18:21
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\start\scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
-import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
-import Game from "ts@/kuni/lib/core";
-import TdEnemy from "./enemy";
-import BaseNest from "./baseNest";
+import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
+import Game from 'ts@/kuni/lib/core';
+import TdEnemy from './enemy';
+import Role from './hero/role';
+import Warrior from './hero/character/warrior';
 
 class Start extends KnScene {
   game: Game;
   monsterSystem: TdEnemy;
   firstLevel: number;
-  baseNest: BaseNest;
+  role: Role;
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
     this.resources = {
-      gameBg: "assets/images/gameBg.png",
-      attack: "assets/images/attack.png",
-      logo: "assets/images/logo.png",
-      monsterlv1: "assets/images/monster01.png",
-      rocket: "assets/images/rocket.png",
-      gas: "assets/images/gas.png"
+      gameBg: 'assets/images/tdBg.jpg',
+      attack: 'assets/images/attack.png',
+      logo: 'assets/images/logo.png',
+      monsterlv1: 'assets/images/monster01.png',
+      rocket: 'assets/images/rocket.png',
+      gas: 'assets/images/gas.png',
+      texSke: 'assets/atlas/role_ske.json',
+      texData: 'assets/atlas/role_tex.json',
+      tex: 'assets/atlas/role_tex.png',
     };
   }
 
   boot() {}
 
   create() {
-    const gameBg = this.game.add.background("gameBg", "gameBg");
+    const gameBg = this.game.add.background('gameBg', 'gameBg');
     this.addChild(gameBg);
     this.monsterSystem = new TdEnemy(this.game, this);
     this.monsterSystem.position.set(0, 0);
     this.interactive = true;
 
     this.firstLevel = 1000;
-    this.on("pointerdown", () => {
-      console.log("123");
+    this.on('pointerdown', () => {
+      console.log('123');
     });
 
-    this.baseNest = new BaseNest(this.game, this);
-    this.baseNest.position.set(
-      this.game.config.half_w,
-      this.game.config.height - 200
-    );
+    this.role = new Warrior(this.game, this);
+    this.role.x = this.game.config.half_w;
+    this.role.y = this.game.config.half_h;
   }
 
   freedMonster() {
     if (this.firstLevel < 0) {
-      console.log("stop");
+      console.log('stop');
     } else {
-      this.firstLevel % 100 === 0 && this.monsterSystem.dispatch(this.baseNest);
+      this.firstLevel % 100 === 0 && this.monsterSystem.dispatch(this.role);
       this.firstLevel -= 1;
     }
   }
