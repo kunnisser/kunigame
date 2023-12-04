@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-11-27 16:58:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-11-29 17:05:54
+ * @LastEditTime: 2023-12-04 17:29:53
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/enemy/normalMonster/monster.ts
  * @Description: ---- 普通怪物小兵 ----
  */
@@ -12,7 +12,7 @@ import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
 import TdEnemy from "..";
 import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 import KnText from "ts@/kuni/lib/gameobjects/kn_text";
-
+import { Throtte } from "ts@/kuni/lib/utils/common";
 class NormalMonster extends KnGroup {
   public game: Game;
   // -- 怪物角色元素
@@ -86,9 +86,22 @@ class NormalMonster extends KnGroup {
   isAttachTarget() {
     const absDistanceX: number = Math.abs(this.target.x - this.x);
     const absDistanceY: number = Math.abs(this.target.y - this.y);
-    if (absDistanceX < this.target.width && absDistanceY < this.target.height) {
+    // 抵达目标
+    if (
+      absDistanceX < this.target.width * 0.5 &&
+      absDistanceY < this.target.height * 0.5
+    ) {
+      // 停止移动并进行攻击
       this.moving = false;
+      this.attacking = true;
     }
+  }
+
+  // 怪物攻击事件
+  attackEvent() {
+    Throtte(2, 1, () => {
+      this.target.underAttack(1);
+    });
   }
 
   // 怪物被摧毁
