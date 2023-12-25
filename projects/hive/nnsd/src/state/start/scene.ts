@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2021-02-26 14:50:22
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-12-04 17:33:26
+ * @LastEditTime: 2023-12-25 16:14:55
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/scene.ts
  * @Description: ---- 示例欢迎场景 ----
  */
@@ -40,15 +40,15 @@ class Start extends KnScene {
     // const gameBg = this.game.add.background('gameBg', 'gameBg');
     // this.addChild(gameBg);
 
-    this.role = new Warrior(this.game, this);
-    this.role.x = this.game.config.half_w;
-    this.role.y = this.game.config.half_h;
-
     this.monsterSystem = new TdEnemy(this.game, this);
     this.monsterSystem.position.set(0, 0);
     this.interactive = true;
 
     this.firstLevel = 1000;
+
+    this.role = new Warrior(this.game, this);
+    this.role.x = this.game.config.half_w;
+    this.role.y = this.game.config.half_h;
 
     this.on("pointerdown", () => {
       console.log("123");

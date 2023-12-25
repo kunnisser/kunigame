@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-12-03 22:15:07
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-12-04 17:05:20
+ * @LastEditTime: 2023-12-25 16:25:19
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/start/hero/character/warrior.ts
  * @Description: ---- 初始战士 ----
  */
@@ -25,7 +25,7 @@ class Warrior extends Role {
     this.tween = this.game.add.tween();
     this.body = this.setRole("tex", "role");
     this.body?.scale.set(0.2);
-    this.body.animation.play("attack");
+    this.body.animation.play("idle");
     this.body.animation.timeScale = 2;
   }
 
