@@ -2,11 +2,13 @@
 import Start from "./start/scene";
 import Welcome from "./welcome/scene";
 import Ast from "./ast/scene";
+import Card from "./card/scene";
 
 const StateHiveKey = {
   Welcome: Welcome,
   Start: Start,
-  Ast: Ast
+  Ast: Ast,
+  Card
 };
 
 const StateHive = (game) => {

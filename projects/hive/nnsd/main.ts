@@ -16,7 +16,7 @@ const GameInitial = (view) => {
   const GameHive = StateHive(game);
   game.hive = GameHive;
   game.assetsPath = Config.assetsPath;
-  game.entryHive = GameHive["Ast"];
+  game.entryHive = GameHive["Card"];
   return game;
 };
 
