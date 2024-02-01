@@ -2,25 +2,16 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-01 17:23:25
+ * @LastEditTime: 2024-02-01 17:33:45
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/scene.ts
  * @Description: ---- 卡牌 ----
  */
 
-/*
- * @Author: kunnisser
- * @Date: 2023-03-07 10:12:37
- * @LastEditors: kunnisser
- * @LastEditTime: 2023-11-28 13:30:35
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/ast/scene.ts
- * @Description: ----  ----
- */
 import Game from "ts@/kuni/lib/core";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 
 class Card extends KnScene {
   game: Game;
-
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
