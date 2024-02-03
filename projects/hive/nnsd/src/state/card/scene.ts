@@ -2,14 +2,14 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-02 15:48:27
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/scene.ts
+ * @LastEditTime: 2024-02-03 23:44:44
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\scene.ts
  * @Description: ---- 卡牌 ----
  */
 
-import Game from "ts@/kuni/lib/core";
-import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
-import CheckerLayout from "./checkerboard/checkerLayout";
+import Game from 'ts@/kuni/lib/core';
+import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
+import CheckerLayout from './checkerboard/checkerLayout';
 
 class Card extends KnScene {
   game: Game;
@@ -18,16 +18,17 @@ class Card extends KnScene {
     super(game, key);
     this.game = game;
     this.resources = {
-      bg: "assets/images/bg.png",
-      cardWrap: "assets/images/cardWrap.png",
-      satellite: "assets/images/satellite.png"
+      bg: 'assets/images/bg.png',
+      cardWrap: 'assets/images/cardWrap.png',
+      don: 'assets/images/satellite.png',
+      mobs: 'assets/images/monster0.png',
     };
   }
 
   boot() {}
 
   create() {
-    const gameBg = this.game.add.background("bg", "bg");
+    const gameBg = this.game.add.background('bg', 'bg');
     this.layout = new CheckerLayout(this.game);
     this.addChild(gameBg, this.layout);
   }
