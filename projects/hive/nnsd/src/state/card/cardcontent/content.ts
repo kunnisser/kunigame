@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 16:06:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-03 23:33:58
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\content.ts
+ * @LastEditTime: 2024-02-04 14:06:07
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/content.ts
  * @Description: ---- 卡牌内容 ----
  */
 
@@ -18,7 +18,7 @@ class CardContent extends KnGroup {
   attribute: string; // 卡牌属性
   race: string; // 卡牌种族
   sprite: KnSprite | null;
-  indices: Array<number> | null; // 卡牌系坐标
+  indices: Array<number>; // 卡牌系坐标
   constructor(game: Game, parent: CheckerCardWrap) {
     super(game, 'cardContent', parent);
     this.game = game;
@@ -26,7 +26,7 @@ class CardContent extends KnGroup {
     this.race = '';
     this.attribute = '';
     this.sprite = null;
-    this.indices = null;
+    this.indices = [0, 0];
   }
 
   // 初始化

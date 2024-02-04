@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-03 23:40:24
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerCard.ts
+ * @LastEditTime: 2024-02-04 13:32:03
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/checkerboard/checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
 
@@ -114,6 +114,11 @@ class CheckerCardWrap extends KnGroup {
         moveTarget.x - currentPointer.x > 0,
     };
     return Object.keys(directLogicMap).find((key) => directLogicMap[key]);
+  }
+
+  // 卡牌销毁
+  cardDestroy() {
+    this.visible = false;
   }
 }
 
