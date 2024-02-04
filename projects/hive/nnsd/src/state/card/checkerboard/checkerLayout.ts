@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:48:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-04 14:18:41
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/checkerboard/checkerLayout.ts
+ * @LastEditTime: 2024-02-05 00:20:24
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerLayout.ts
  * @Description: ---- 棋盘排列布局 ----
  */
 
@@ -90,15 +90,22 @@ class CheckerLayout extends KnGroup {
     ) as Array<number>;
 
     // 获取目标卡牌
-    const targetCard: CheckerCardWrap | void = this.visibleCheckerCards.find(
-      (card: CheckerCardWrap) => {
-        return this.compareSameIndices(card.content.indices, targetIndices);
+    const cardIndex: number = this.visibleCheckerCards.findIndex(
+      (listCard: CheckerCardWrap) => {
+        return this.compareSameIndices(listCard.content.indices, targetIndices);
       }
     );
+    const targetCard: CheckerCardWrap | void =
+      this.visibleCheckerCards[cardIndex];
+
     // 根据目标卡牌属性进行下一步操作
     if (targetCard && targetCard.content.attribute !== 'player') {
       card.content.indices = targetIndices;
+
+      console.log(targetIndices);
       console.log(targetCard);
+      this.getFollowPlayerCard(card, direct);
+      card.cardDestroy(cardIndex);
     }
   }
 
@@ -109,6 +116,32 @@ class CheckerLayout extends KnGroup {
   ) => {
     return preIndices[0] === nevIndices[0] && preIndices[1] === nevIndices[1];
   };
+
+  // 获取跟随玩家的卡牌
+  getFollowPlayerCard(card: CheckerCardWrap, direct: string) {
+    const followIndices: Array<number> = card.content.indices?.map(
+      (i: number, index: number) => {
+        // 跟随卡牌的坐标，移动反方向没有卡牌，则向上抓取，上方向没有，则向下抓取
+        this.searchBeyondBoundary(i, index, direct);
+        return 0;
+      }
+    ) as Array<number>;
+  }
+
+  // 查询超出边界情况下的跟随卡牌坐标
+  searchBeyondBoundary(i: number, index: number, direct: string) {
+    // 用可中断的循环
+    const ret = Object.keys(this.moveBehavior).map((key) => {
+      if (key !== direct) {
+        return Math.abs(i + this.moveBehavior[key][index]) > 1
+          ? null
+          : i + this.moveBehavior[key][index];
+      }
+    });
+    console.log(ret);
+
+    return ret;
+  }
 }
 
 export default CheckerLayout;

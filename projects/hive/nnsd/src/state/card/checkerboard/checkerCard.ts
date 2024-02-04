@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-04 13:32:03
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/checkerboard/checkerCard.ts
+ * @LastEditTime: 2024-02-04 23:16:30
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
 
@@ -117,7 +117,7 @@ class CheckerCardWrap extends KnGroup {
   }
 
   // 卡牌销毁
-  cardDestroy() {
+  cardDestroy(cardIndex: number) {
     this.visible = false;
   }
 }
