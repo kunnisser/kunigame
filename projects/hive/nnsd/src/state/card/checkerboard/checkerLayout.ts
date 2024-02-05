@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:48:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-05 00:20:24
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerLayout.ts
+ * @LastEditTime: 2024-02-05 15:25:18
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/checkerboard/checkerLayout.ts
  * @Description: ---- 棋盘排列布局 ----
  */
 
@@ -11,8 +11,10 @@ import Game from 'ts@/kuni/lib/core';
 import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
 import CheckerCardWrap from './checkerCard';
 import { math } from 'ts@/kuni/lib/utils/common';
+import { KnTween } from 'ts@/kuni/lib/gameobjects/kn_tween';
 class CheckerLayout extends KnGroup {
   game: Game;
+  tween: KnTween;
   // 九宫格坐标系
   poolIndices: Array<Array<number>>;
   // 棋盘上的卡牌
@@ -22,11 +24,14 @@ class CheckerLayout extends KnGroup {
   latticeHeight: number;
   // 移动的坐标变更
   moveBehavior: {};
+  // 反方向映射定义
+  reverseBehavior: {};
   // 临时定义为玩家初始的坐标位置
   originIndices: Array<number>;
   constructor(game: Game) {
     super(game, 'checkerLayout');
     this.game = game;
+    this.tween = this.game.add.tween();
     this.poolIndices = [
       [-1, -1],
       [0, -1],
@@ -46,6 +51,12 @@ class CheckerLayout extends KnGroup {
       right: [1, 0],
       up: [0, -1],
       down: [0, 1],
+    };
+    this.reverseBehavior = {
+      left: 'right',
+      right: 'left',
+      up: 'down',
+      down: 'up',
     };
     this.initial();
   }
@@ -90,22 +101,13 @@ class CheckerLayout extends KnGroup {
     ) as Array<number>;
 
     // 获取目标卡牌
-    const cardIndex: number = this.visibleCheckerCards.findIndex(
-      (listCard: CheckerCardWrap) => {
-        return this.compareSameIndices(listCard.content.indices, targetIndices);
-      }
-    );
-    const targetCard: CheckerCardWrap | void =
-      this.visibleCheckerCards[cardIndex];
-
+    const [, targetCard] = this.getCardByIndices(targetIndices);
+    console.log('target', targetIndices);
     // 根据目标卡牌属性进行下一步操作
     if (targetCard && targetCard.content.attribute !== 'player') {
-      card.content.indices = targetIndices;
-
-      console.log(targetIndices);
-      console.log(targetCard);
-      this.getFollowPlayerCard(card, direct);
-      card.cardDestroy(cardIndex);
+      const followIndices = this.getFollowPlayerCard(card, direct);
+      const [, followCard] = this.getCardByIndices(followIndices);
+      card.cardMoveLogic(targetCard, followCard);
     }
   }
 
@@ -117,30 +119,67 @@ class CheckerLayout extends KnGroup {
     return preIndices[0] === nevIndices[0] && preIndices[1] === nevIndices[1];
   };
 
-  // 获取跟随玩家的卡牌
+  // 获取跟随玩家的卡牌坐标
   getFollowPlayerCard(card: CheckerCardWrap, direct: string) {
-    const followIndices: Array<number> = card.content.indices?.map(
-      (i: number, index: number) => {
-        // 跟随卡牌的坐标，移动反方向没有卡牌，则向上抓取，上方向没有，则向下抓取
-        this.searchBeyondBoundary(i, index, direct);
-        return 0;
+    // 跟随卡牌的坐标，移动反方向没有卡牌，则向上抓取，上方向没有，则向下抓取
+    const followIndices = this.searchBeyondBoundary(
+      card.content.indices,
+      direct
+    );
+    return followIndices;
+  }
+
+  // 根据卡牌坐标查询卡牌池中的卡牌
+  getCardByIndices(indices: Array<number>): [number, CheckerCardWrap] {
+    const index = this.visibleCheckerCards.findIndex(
+      (listCard: CheckerCardWrap) => {
+        return this.compareSameIndices(listCard.content.indices, indices);
       }
-    ) as Array<number>;
+    );
+    return [index, this.visibleCheckerCards[index]];
   }
 
   // 查询超出边界情况下的跟随卡牌坐标
-  searchBeyondBoundary(i: number, index: number, direct: string) {
-    // 用可中断的循环
-    const ret = Object.keys(this.moveBehavior).map((key) => {
-      if (key !== direct) {
-        return Math.abs(i + this.moveBehavior[key][index]) > 1
-          ? null
-          : i + this.moveBehavior[key][index];
+  searchBeyondBoundary(indices, direct: string) {
+    const reverseKey: string = this.reverseBehavior[direct];
+    // 先从反方向获取卡牌坐标
+    let followIndices: Array<number> = [0, 0];
+    const movedIndices = this.changePositionIndices(
+      indices,
+      this.moveBehavior[reverseKey]
+    );
+    if (movedIndices) {
+      console.log(reverseKey, movedIndices);
+      followIndices = movedIndices;
+    } else {
+      // 反方向超出范围，则从上下方向获取
+      for (const key of Object.keys(this.moveBehavior)) {
+        if (key !== direct && key !== reverseKey) {
+          const searchMovedIndices = this.changePositionIndices(
+            indices,
+            this.moveBehavior[key]
+          );
+          if (searchMovedIndices) {
+            followIndices = searchMovedIndices;
+            break;
+          }
+        }
       }
-    });
-    console.log(ret);
+    }
+    return followIndices;
+  }
 
-    return ret;
+  // 变更坐标计算
+  changePositionIndices(
+    originIndices: Array<number>,
+    moveIndices: Array<number>
+  ) {
+    const movedIndices = originIndices.map(
+      (i, index: number) => i + moveIndices[index]
+    );
+    return Math.abs(movedIndices[0]) < 2 && Math.abs(movedIndices[1]) < 2
+      ? movedIndices
+      : false;
   }
 }
 

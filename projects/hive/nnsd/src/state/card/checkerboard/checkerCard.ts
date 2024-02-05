@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-04 23:16:30
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerCard.ts
+ * @LastEditTime: 2024-02-05 17:35:22
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/checkerboard/checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
 
@@ -15,6 +15,7 @@ import CardContent from '../cardcontent/content';
 import { CardContentMap } from '../cardcontent/combine';
 import Don from '../cardcontent/role/player';
 import { InteractionEvent, Point } from 'pixi.js';
+import { destroyCardTween, generateCardTween, moveCardTween } from '../tween';
 
 class CheckerCardWrap extends KnGroup {
   game: Game;
@@ -116,9 +117,45 @@ class CheckerCardWrap extends KnGroup {
     return Object.keys(directLogicMap).find((key) => directLogicMap[key]);
   }
 
-  // 卡牌销毁
-  cardDestroy(cardIndex: number) {
-    this.visible = false;
+  // 卡牌互动逻辑
+  cardMoveLogic(targetCard: CheckerCardWrap, followCard: CheckerCardWrap) {
+    const currentIndices = [...this.content.indices];
+    const targetIndices = [...targetCard.content.indices];
+    const followIndices = [...followCard.content.indices];
+
+    // 更新卡牌的坐标信息
+    this.content.indices = targetIndices;
+    followCard.content.indices = currentIndices;
+    targetCard.content.indices = followIndices;
+
+    /* 执行卡牌动画 */
+    // 目标卡牌
+    destroyCardTween(this.parent.tween, targetCard);
+    // 玩家卡牌
+    moveCardTween(this.parent.tween, this, {
+      x:
+        targetIndices[0] * (this.parent.latticeWidth + 2) +
+        this.game.config.half_w,
+      y: targetIndices[1] * this.parent.latticeHeight + this.game.config.half_h,
+    });
+    // 跟随卡牌
+    moveCardTween(this.parent.tween, followCard, {
+      x:
+        currentIndices[0] * (this.parent.latticeWidth + 2) +
+        this.game.config.half_w,
+      y:
+        currentIndices[1] * this.parent.latticeHeight + this.game.config.half_h,
+    });
+
+    // 消灭卡牌重置
+    targetCard.position.set(
+      followIndices[0] * (this.parent.latticeWidth + 2) +
+        this.game.config.half_w,
+      followIndices[1] * this.parent.latticeHeight + this.game.config.half_h
+    );
+    targetCard.visible = true;
+    generateCardTween(this.parent.tween, targetCard);
+    console.log(this.parent.visibleCheckerCards);
   }
 }
 

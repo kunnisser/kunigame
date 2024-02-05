@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-05 00:23:16
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\scene.ts
+ * @LastEditTime: 2024-02-05 15:25:28
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/scene.ts
  * @Description: ---- 卡牌 ----
  */
 
