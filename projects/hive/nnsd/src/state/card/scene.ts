@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-05 15:25:28
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/scene.ts
+ * @LastEditTime: 2024-02-05 22:50:56
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\scene.ts
  * @Description: ---- 卡牌 ----
  */
 
@@ -21,7 +21,13 @@ class Card extends KnScene {
       bg: 'assets/images/bg.png',
       cardWrap: 'assets/images/cardWrap.png',
       don: 'assets/images/satellite.png',
-      mobs: 'assets/images/monster0.png',
+      // mobs: 'assets/images/monster0.png',
+      texSke: 'assets/atlas/role_ske.json',
+      texData: 'assets/atlas/role_tex.json',
+      tex: 'assets/atlas/role_tex.png',
+      skullBoneSke: 'assets/atlas/skull_ske.json',
+      skullBoneData: 'assets/atlas/skull_tex.json',
+      skullBone: 'assets/atlas/skull_tex.png',
     };
   }
 

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-03 23:02:43
+ * @LastEditTime: 2024-02-05 23:01:13
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\role\player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -11,7 +11,6 @@ import Game from 'ts@/kuni/lib/core';
 import KnSprite from 'ts@/kuni/lib/gameobjects/kn_sprite';
 import CardContent from '../content';
 import { Point } from 'pixi.js';
-
 class Don extends CardContent {
   game: Game;
   sprite: KnSprite;
@@ -27,9 +26,11 @@ class Don extends CardContent {
   }
 
   initial() {
-    this.sprite = this.game.add.sprite('don', 'don', [0.5, 0.5]);
-    this.sprite.scale.set(0.5);
-    this.addChild(this.sprite);
+    // const role = this.setRole('tex', 'role');
+    // role.scale.set(0.25);
+    // role.y += role.getBounds().height * 0.25;
+    // role.animation.play('idle');
+    // role.animation.timeScale = 2;
     this.currentGlobal = new Point(0, 0);
   }
 

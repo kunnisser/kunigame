@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-03 00:30:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-03 21:34:10
+ * @LastEditTime: 2024-02-05 22:59:39
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\mobs\index.ts
  * @Description: ---- 小怪 ----
  */
@@ -27,6 +27,11 @@ class Mobs extends CardContent {
     this.sprite = this.game.add.sprite('mobs', 'mobs', [0.5, 0.5]);
     this.sprite.scale.set(0.5);
     this.addChild(this.sprite);
+    // const role = this.setRole('skullBone', 'skull');
+    // role.scale.set(0.5);
+    // role.y += role.getBounds().height * 0.25;
+    // role.animation.play('stay');
+    // role.animation.timeScale = 1;
   }
 
   onClick(): void {
