@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 16:06:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-05 22:35:48
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\content.ts
+ * @LastEditTime: 2024-02-06 17:28:55
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/content.ts
  * @Description: ---- 卡牌内容 ----
  */
 
@@ -20,6 +20,7 @@ class CardContent extends KnGroup {
   race: string; // 卡牌种族
   sprite: KnSprite | null;
   indices: Array<number>; // 卡牌系坐标
+  hp: number; // 卡牌血量
   constructor(game: Game, parent: CheckerCardWrap) {
     super(game, 'cardContent', parent);
     this.game = game;
@@ -49,6 +50,11 @@ class CardContent extends KnGroup {
     const sprite: any = factory.buildArmatureDisplay(bonesName);
     this.addChild(sprite);
     return sprite;
+  }
+
+  // 设置卡牌血量
+  setHealth(hp: number) {
+    this.hp = hp;
   }
 }
 
