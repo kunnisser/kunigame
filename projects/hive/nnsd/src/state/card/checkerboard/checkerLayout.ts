@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:48:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-05 15:25:18
+ * @LastEditTime: 2024-02-12 01:25:51
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/checkerboard/checkerLayout.ts
  * @Description: ---- 棋盘排列布局 ----
  */
@@ -19,9 +19,8 @@ class CheckerLayout extends KnGroup {
   poolIndices: Array<Array<number>>;
   // 棋盘上的卡牌
   visibleCheckerCards: Array<CheckerCardWrap>;
-  // 棋盘格子尺寸
-  latticeWidth: number;
-  latticeHeight: number;
+  // 棋盘上的卡牌间距
+  cardSpace: number;
   // 移动的坐标变更
   moveBehavior: {};
   // 反方向映射定义
@@ -43,8 +42,7 @@ class CheckerLayout extends KnGroup {
       [0, 1],
       [1, 1],
     ];
-    this.latticeWidth = 150;
-    this.latticeHeight = 200;
+    this.cardSpace = 16;
     this.originIndices = [0, 0];
     this.moveBehavior = {
       left: [-1, 0],
@@ -76,8 +74,8 @@ class CheckerLayout extends KnGroup {
         this.setOriginType(indices)
       );
       card.position.set(
-        indices[0] * (this.latticeWidth + 2) + this.game.config.half_w,
-        indices[1] * this.latticeHeight + this.game.config.half_h
+        indices[0] * (card.width + this.cardSpace) + this.game.config.half_w,
+        indices[1] * (card.height + this.cardSpace) + this.game.config.half_h
       );
       card.content.indices = indices;
       this.visibleCheckerCards.push(card);
@@ -103,6 +101,7 @@ class CheckerLayout extends KnGroup {
     // 获取目标卡牌
     const [, targetCard] = this.getCardByIndices(targetIndices);
     console.log('target', targetIndices);
+
     // 根据目标卡牌属性进行下一步操作
     if (targetCard && targetCard.content.attribute !== 'player') {
       const followIndices = this.getFollowPlayerCard(card, direct);

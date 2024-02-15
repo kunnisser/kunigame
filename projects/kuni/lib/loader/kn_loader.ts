@@ -1,5 +1,5 @@
-import { Loader } from "pixi.js";
-import Game from "../core";
+import { Loader } from 'pixi.js';
+import Game from '../core';
 
 class KnLoader extends Loader {
   public game: Game;
@@ -9,8 +9,8 @@ class KnLoader extends Loader {
     super();
     this.game = game;
     this.preloader = Loader.shared;
-    this.preloader.resources["particle"] ||
-      this.preloader.add("particle", "/projects/kuni/lib/loader/particle.png");
+    this.preloader.resources['particle'] ||
+      this.preloader.add('particle', '/projects/kuni/lib/loader/particle.png');
   }
 
   // 队列载入

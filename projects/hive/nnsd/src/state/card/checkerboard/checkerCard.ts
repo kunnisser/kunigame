@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-05 22:23:35
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerCard.ts
+ * @LastEditTime: 2024-02-15 17:41:49
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/checkerboard/checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
 
@@ -20,31 +20,29 @@ import { generateCardTween, moveCardTween } from '../tween';
 class CheckerCardWrap extends KnGroup {
   game: Game;
   wrap: KnSprite;
+  container: KnGroup;
   parent: CheckerLayout;
   content: CardContent;
-  type: string | void; // 卡片类型
   constructor(game: Game, parent: CheckerLayout, type?: string) {
     super(game, 'cardWrap', parent);
     this.parent = parent;
     this.game = game;
-    this.type = type;
     this.initialWrap();
-    this.setContent();
+    this.setContent(type);
     this.interaction();
   }
 
   initialWrap() {
     this.wrap = this.game.add.image('cardWrap', 'cardWrap', this, [0.5, 0.5]);
-
-    // 根据layout的尺寸来设置卡牌外壳的宽高尺寸(4 = 卡牌间隙)
-    this.wrap.width = this.parent.latticeWidth - 4;
-    this.wrap.height = this.parent.latticeHeight - 4;
+    this.container = this.game.add.group('cardContainer', this);
   }
 
   // 根据卡片类型 设置卡片内容元素
-  setContent() {
-    if (this.type) {
-      this.content = new CardContentMap[this.type](this.game, this);
+  setContent(type?: string, indices?: Array<number>) {
+    if (type) {
+      this.container.removeChildren();
+      this.content = new CardContentMap[type](this.game, this.container, this);
+      indices && (this.content.indices = indices);
     }
   }
 
@@ -69,12 +67,14 @@ class CheckerCardWrap extends KnGroup {
         });
         playerCardWrap.once('pointerupoutside', (upEvent: InteractionEvent) => {
           playerCardWrap.off('pointerup');
-          const direct: string | void = this.computedPlayerDirection(
+          const direct: string | undefined = this.computedPlayerDirection(
             content.currentGlobal,
             upEvent.data.global
           );
           // 执行移动
           direct && this.parent.updateCheckerBoard(this, direct);
+          // 暂时为执行攻击动画
+          content.onMove(direct);
         });
       }
 
@@ -119,6 +119,15 @@ class CheckerCardWrap extends KnGroup {
 
   // 卡牌互动逻辑
   cardMoveLogic(targetCard: CheckerCardWrap, followCard: CheckerCardWrap) {
+    // 主卡牌击败目标卡牌逻辑
+    this.content.defeat(targetCard);
+
+    const player = this.content as Don;
+    player.checkPlayerHealth();
+    if (!player.isAlive) {
+      console.log('game over');
+      return;
+    }
     const currentIndices = [...this.content.indices];
     const targetIndices = [...targetCard.content.indices];
     const followIndices = [...followCard.content.indices];
@@ -132,24 +141,32 @@ class CheckerCardWrap extends KnGroup {
     // 处理目标卡牌
     targetCard.scale.set(0);
     targetCard.visible = false;
+
     // 移动玩家卡牌
     moveCardTween(
       this.parent.tween,
       this,
       {
         x:
-          targetIndices[0] * (this.parent.latticeWidth + 2) +
+          targetIndices[0] * (this.wrap.width + this.parent.cardSpace) +
           this.game.config.half_w,
         y:
-          targetIndices[1] * this.parent.latticeHeight +
+          targetIndices[1] * (this.wrap.height + this.parent.cardSpace) +
           this.game.config.half_h,
       },
       () => {
         // 被处理的卡牌重置
         targetCard.position.set(
-          followIndices[0] * (this.parent.latticeWidth + 2) +
+          followIndices[0] * (this.wrap.width + this.parent.cardSpace) +
             this.game.config.half_w,
-          followIndices[1] * this.parent.latticeHeight + this.game.config.half_h
+          followIndices[1] * (this.wrap.height + this.parent.cardSpace) +
+            this.game.config.half_h
+        );
+        const arr = ['fruit', 'mobs', 'mobs', 'mobs', 'mobs', 'mobs'];
+
+        targetCard.setContent(
+          arr[(Math.random() * arr.length) | 0],
+          followIndices
         );
         targetCard.visible = true;
         generateCardTween(this.parent.tween, targetCard);
@@ -159,10 +176,11 @@ class CheckerCardWrap extends KnGroup {
     // 跟随卡牌移动
     moveCardTween(this.parent.tween, followCard, {
       x:
-        currentIndices[0] * (this.parent.latticeWidth + 2) +
+        currentIndices[0] * (this.wrap.width + this.parent.cardSpace) +
         this.game.config.half_w,
       y:
-        currentIndices[1] * this.parent.latticeHeight + this.game.config.half_h,
+        currentIndices[1] * (this.wrap.height + this.parent.cardSpace) +
+        this.game.config.half_h,
     });
 
     console.log(this.parent.visibleCheckerCards);

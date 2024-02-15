@@ -2,32 +2,36 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-05 22:50:56
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\scene.ts
+ * @LastEditTime: 2024-02-14 21:22:17
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/scene.ts
  * @Description: ---- 卡牌 ----
  */
 
 import Game from 'ts@/kuni/lib/core';
 import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
 import CheckerLayout from './checkerboard/checkerLayout';
+import ScoreBar from './gui/score';
 
 class Card extends KnScene {
   game: Game;
   layout: CheckerLayout;
+  scoreBar: ScoreBar;
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
     this.resources = {
       bg: 'assets/images/bg.png',
-      cardWrap: 'assets/images/cardWrap.png',
-      don: 'assets/images/satellite.png',
-      // mobs: 'assets/images/monster0.png',
+      cardWrap: 'assets/images/cardBg.png',
+      health: 'assets/images/health.png',
+      orange: 'assets/images/orange.png',
       texSke: 'assets/atlas/role_ske.json',
       texData: 'assets/atlas/role_tex.json',
       tex: 'assets/atlas/role_tex.png',
       skullBoneSke: 'assets/atlas/skull_ske.json',
       skullBoneData: 'assets/atlas/skull_tex.json',
       skullBone: 'assets/atlas/skull_tex.png',
+      font_a: 'assets/fonts/font_a.fnt',
+      font_b: 'assets/fonts/font_b.fnt',
     };
   }
 
@@ -36,7 +40,8 @@ class Card extends KnScene {
   create() {
     const gameBg = this.game.add.background('bg', 'bg');
     this.layout = new CheckerLayout(this.game);
-    this.addChild(gameBg, this.layout);
+    this.scoreBar = new ScoreBar(this.game, this);
+    this.addChild(gameBg, this.layout, this.scoreBar);
   }
 
   update() {}
