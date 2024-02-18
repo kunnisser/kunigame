@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 16:06:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-15 12:11:53
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/content.ts
+ * @LastEditTime: 2024-02-17 23:14:06
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\content.ts
  * @Description: ---- 卡牌内容 ----
  */
 
@@ -20,27 +20,31 @@ class CardContent extends KnGroup {
   parent: CheckerCardWrap;
   attribute: string; // 卡牌属性
   race: string; // 卡牌种族
-  sprite: KnSprite | null;
+  sprite: KnSprite;
   indices: Array<number>; // 卡牌系坐标
   hp: KnBitMapText; // 卡牌血量文字
   hpValue: number; // 卡牌血量数值
   attack: KnBitMapText; // 卡牌攻击力文字
   attackValue: number; // 卡牌攻击力数值
   hpWrap: KnSprite; // 卡牌生命值图标
-
+  emitContainer: KnGroup; // 卡牌的粒子容器，储存粒子发射器
   constructor(game: Game, parent: KnGroup, card: CheckerCardWrap) {
     super(game, 'cardContent', parent);
     this.game = game;
     this.parent = card;
     this.race = '';
     this.attribute = '';
-    this.sprite = null;
+    this.sprite = game.add.sprite('default_content', 'content_empty');
     this.indices = [0, 0];
   }
 
   // 初始化
   initial() {}
 
+  // 初始化粒子容器
+  initialParticle() {
+    this.emitContainer = this.game.add.group('particleEmitter', this);
+  }
   // 卡牌点击事件
   onClick() {}
 
@@ -100,10 +104,16 @@ class CardContent extends KnGroup {
   }
 
   // 击败其他卡牌的逻辑
-  defeat(target: CheckerCardWrap) {}
+  defeat(target: CheckerCardWrap, direct: string) {}
 
   // 卡牌触发事件
   event(target: CardContent, scene: Card) {}
+
+  // 设置粒子发射器
+  setParticleEmitter(emitter) {
+    this.emitContainer.removeChildren();
+    this.emitContainer.addChild(emitter);
+  }
 }
 
 export default CardContent;

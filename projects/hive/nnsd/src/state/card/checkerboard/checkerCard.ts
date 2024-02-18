@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-15 17:41:49
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/checkerboard/checkerCard.ts
+ * @LastEditTime: 2024-02-18 22:53:02
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
 
@@ -73,8 +73,6 @@ class CheckerCardWrap extends KnGroup {
           );
           // 执行移动
           direct && this.parent.updateCheckerBoard(this, direct);
-          // 暂时为执行攻击动画
-          content.onMove(direct);
         });
       }
 
@@ -118,9 +116,13 @@ class CheckerCardWrap extends KnGroup {
   }
 
   // 卡牌互动逻辑
-  cardMoveLogic(targetCard: CheckerCardWrap, followCard: CheckerCardWrap) {
+  cardMoveLogic(
+    targetCard: CheckerCardWrap,
+    followCard: CheckerCardWrap,
+    direct: string
+  ) {
     // 主卡牌击败目标卡牌逻辑
-    this.content.defeat(targetCard);
+    this.content.defeat(targetCard, direct);
 
     const player = this.content as Don;
     player.checkPlayerHealth();
@@ -162,7 +164,7 @@ class CheckerCardWrap extends KnGroup {
           followIndices[1] * (this.wrap.height + this.parent.cardSpace) +
             this.game.config.half_h
         );
-        const arr = ['fruit', 'mobs', 'mobs', 'mobs', 'mobs', 'mobs'];
+        const arr = ['druid', 'fruit', 'fruit', 'fruit', 'mobs', 'mobs'];
 
         targetCard.setContent(
           arr[(Math.random() * arr.length) | 0],

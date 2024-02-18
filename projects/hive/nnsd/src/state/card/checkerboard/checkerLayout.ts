@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:48:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-12 01:25:51
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/checkerboard/checkerLayout.ts
+ * @LastEditTime: 2024-02-17 21:07:44
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerLayout.ts
  * @Description: ---- 棋盘排列布局 ----
  */
 
@@ -27,6 +27,7 @@ class CheckerLayout extends KnGroup {
   reverseBehavior: {};
   // 临时定义为玩家初始的坐标位置
   originIndices: Array<number>;
+
   constructor(game: Game) {
     super(game, 'checkerLayout');
     this.game = game;
@@ -106,7 +107,7 @@ class CheckerLayout extends KnGroup {
     if (targetCard && targetCard.content.attribute !== 'player') {
       const followIndices = this.getFollowPlayerCard(card, direct);
       const [, followCard] = this.getCardByIndices(followIndices);
-      card.cardMoveLogic(targetCard, followCard);
+      card.cardMoveLogic(targetCard, followCard, direct);
     }
   }
 
