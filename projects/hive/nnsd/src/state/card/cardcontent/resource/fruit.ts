@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-14 21:23:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-17 17:44:10
+ * @LastEditTime: 2024-02-21 22:15:47
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\resource\fruit.ts
  * @Description: ---- 资源 - 水果 ----
  */
@@ -68,8 +68,8 @@ class Fruit extends CardContent {
       'pureText',
       this.pureVal + '',
       {
-        fontName: 'font_a',
-        fontSize: 50,
+        fontName: 'cureFont',
+        fontSize: 40,
       },
       [0.5, 0.5]
     );

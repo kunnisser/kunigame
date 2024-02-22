@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-17 23:11:18
+ * @LastEditTime: 2024-02-19 21:50:29
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\scene.ts
  * @Description: ---- 卡牌 ----
  */
@@ -36,6 +36,7 @@ class Card extends KnScene {
       druidBone: 'assets/atlas/deluyi_tex.png',
       font_a: 'assets/fonts/font_a.fnt',
       font_b: 'assets/fonts/font_b.fnt',
+      cureFont: 'assets/fonts/cureFont.fnt',
       treat: 'assets/images/treat.png',
       skills: 'assets/atlas/skills.json',
     };
@@ -47,6 +48,7 @@ class Card extends KnScene {
     const gameBg = this.game.add.background('bg', 'bg');
     this.layout = new CheckerLayout(this.game);
     this.scoreBar = new ScoreBar(this.game, this);
+    console.log(this.game.loader.resources);
     this.addChild(gameBg, this.layout, this.scoreBar);
   }
 
