@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-17 22:59:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-18 22:53:40
+ * @LastEditTime: 2024-02-25 23:06:15
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\mobs\druid.ts
  * @Description: ---- 德鲁伊 ----
  */
@@ -47,6 +47,7 @@ class Druid extends CardContent {
     target.hpValue -= this.attackValue;
     target.hp.text = target.hpValue + '';
     scene.scoreBar.score += 1;
+    scene.level.increaseExp(100);
   }
 }
 

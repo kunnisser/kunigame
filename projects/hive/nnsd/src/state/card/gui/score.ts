@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-14 13:58:23
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-14 17:35:51
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/gui/score.ts
+ * @LastEditTime: 2024-02-25 23:05:55
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\gui\score.ts
  * @Description: ---- 计分栏 ----
  */
 
@@ -39,6 +39,7 @@ class ScoreBar extends KnGroup {
     );
     this.addChild(this.scoreText);
     this.position.set(this.game.config.half_w, 100);
+    this.visible = false;
   }
 
   updateScore(score: number) {

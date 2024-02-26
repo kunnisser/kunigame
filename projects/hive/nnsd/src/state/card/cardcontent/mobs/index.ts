@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-03 00:30:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-18 22:47:52
+ * @LastEditTime: 2024-02-25 22:57:40
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\mobs\index.ts
  * @Description: ---- 小怪 ----
  */
@@ -43,8 +43,7 @@ class Mobs extends CardContent {
     target.hpValue -= this.attackValue;
     target.hp.text = target.hpValue + '';
     scene.scoreBar.score += 1;
-    // this.sprite.animation.timeScale = 3;
-    // this.sprite.animation.play('attack').playTimes = 1;
+    scene.level.increaseExp(50);
   }
 }
 

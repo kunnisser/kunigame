@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-18 22:53:02
+ * @LastEditTime: 2024-02-25 22:35:30
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
@@ -16,6 +16,7 @@ import { CardContentMap } from '../cardcontent/combine';
 import Don from '../cardcontent/role/player';
 import { InteractionEvent, Point } from 'pixi.js';
 import { generateCardTween, moveCardTween } from '../tween';
+import Card from '../scene';
 
 class CheckerCardWrap extends KnGroup {
   game: Game;
@@ -128,6 +129,8 @@ class CheckerCardWrap extends KnGroup {
     player.checkPlayerHealth();
     if (!player.isAlive) {
       console.log('game over');
+      const scene = this.game.currentScene as Card;
+      scene.gameOverGui.open();
       return;
     }
     const currentIndices = [...this.content.indices];
@@ -164,10 +167,9 @@ class CheckerCardWrap extends KnGroup {
           followIndices[1] * (this.wrap.height + this.parent.cardSpace) +
             this.game.config.half_h
         );
-        const arr = ['druid', 'fruit', 'fruit', 'fruit', 'mobs', 'mobs'];
 
         targetCard.setContent(
-          arr[(Math.random() * arr.length) | 0],
+          this.parent.weightRandomGenerator.random(),
           followIndices
         );
         targetCard.visible = true;

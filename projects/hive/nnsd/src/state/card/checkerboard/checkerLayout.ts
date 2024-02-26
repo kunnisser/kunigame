@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:48:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-17 21:07:44
+ * @LastEditTime: 2024-02-25 22:33:57
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerLayout.ts
  * @Description: ---- 棋盘排列布局 ----
  */
@@ -12,6 +12,7 @@ import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
 import CheckerCardWrap from './checkerCard';
 import { math } from 'ts@/kuni/lib/utils/common';
 import { KnTween } from 'ts@/kuni/lib/gameobjects/kn_tween';
+import WeightedRandomGenerator from '../cardcontent/combine';
 class CheckerLayout extends KnGroup {
   game: Game;
   tween: KnTween;
@@ -27,6 +28,8 @@ class CheckerLayout extends KnGroup {
   reverseBehavior: {};
   // 临时定义为玩家初始的坐标位置
   originIndices: Array<number>;
+  // 加权随机生成器
+  weightRandomGenerator: WeightedRandomGenerator;
 
   constructor(game: Game) {
     super(game, 'checkerLayout');
@@ -61,6 +64,7 @@ class CheckerLayout extends KnGroup {
   }
 
   initial() {
+    this.weightRandomGenerator = new WeightedRandomGenerator();
     this.visibleCheckerCards = [];
     this.initialCardPlace();
   }
@@ -87,7 +91,7 @@ class CheckerLayout extends KnGroup {
   setOriginType(indices) {
     return this.compareSameIndices(indices, this.originIndices)
       ? 'don'
-      : 'mobs';
+      : this.weightRandomGenerator.random();
   }
 
   // 根据传入的卡牌和方向，更新构建棋牌布局

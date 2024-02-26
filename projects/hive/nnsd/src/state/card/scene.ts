@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-19 21:50:29
+ * @LastEditTime: 2024-02-25 23:06:18
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\scene.ts
  * @Description: ---- 卡牌 ----
  */
@@ -11,11 +11,15 @@ import Game from 'ts@/kuni/lib/core';
 import KnScene from 'ts@/kuni/lib/gameobjects/kn_scene';
 import CheckerLayout from './checkerboard/checkerLayout';
 import ScoreBar from './gui/score';
+import LevelBar from './gui/level';
+import GameOverGui from './gui/end';
 
 class Card extends KnScene {
   game: Game;
   layout: CheckerLayout;
   scoreBar: ScoreBar;
+  level: LevelBar;
+  gameOverGui: GameOverGui;
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
@@ -39,6 +43,10 @@ class Card extends KnScene {
       cureFont: 'assets/fonts/cureFont.fnt',
       treat: 'assets/images/treat.png',
       skills: 'assets/atlas/skills.json',
+      levelOutbar: "assets/images/levelOutbar.png",
+      levelInnerbar: "assets/images/levelInnerbar.png",
+      levelMaskBar: "assets/images/levelMaskBar.png",
+      restart: "assets/images/restart.png"
     };
   }
 
@@ -48,8 +56,9 @@ class Card extends KnScene {
     const gameBg = this.game.add.background('bg', 'bg');
     this.layout = new CheckerLayout(this.game);
     this.scoreBar = new ScoreBar(this.game, this);
-    console.log(this.game.loader.resources);
     this.addChild(gameBg, this.layout, this.scoreBar);
+    this.level = new LevelBar(this.game, this);
+    this.gameOverGui = new GameOverGui(this.game, this);
   }
 
   update() {}
