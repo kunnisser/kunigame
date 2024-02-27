@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-24 21:44:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-25 22:20:55
+ * @LastEditTime: 2024-02-27 23:09:16
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\gui\level.ts
  * @Description: ---- 等级条 ----
  */
@@ -35,22 +35,23 @@ class LevelBar extends KnGroup {
       "outBar",
       "levelOutbar",
       this,
-      [0.5, 0.5]
+      [0, 0.5]
     );
+    this.outBar.x = -this.outBar.width * 0.5;
     this.innerBar = this.game.add.image(
       "innerBar",
       "levelInnerbar",
       this,
       [0, 0.5]
     );
-    this.innerBar.x -= this.innerBar.width * 0.5;
+    this.innerBar.x = -this.innerBar.width * 0.5;
     this.maskBar = this.game.add.image(
       "maskBar",
       "levelMaskBar",
       this,
-      [0, 0.5]
+      [0.5, 0.5]
     );
-    this.maskBar.x = -this.maskBar.width * 0.5;
+    this.maskBar.x = 0;
     this.innerBar.mask = this.maskBar;
     this.level = 1;
     this.levelInfo = this.game.add.text(
@@ -70,9 +71,9 @@ class LevelBar extends KnGroup {
   }
 
   increaseExp(exp: number) {
-    console.log(this.maskBar.x + 30, this.innerBar.width * 0.5);
-    if (this.maskBar.x + 30 >= this.innerBar.width * 0.5) {
-      this.maskBar.x = - this.maskBar.width * 0.5;
+    const outLevelExp = this.maskBar.x + exp - this.innerBar.width;
+    if (outLevelExp >= 0) {
+      this.maskBar.x = outLevelExp;
       this.level += 1;
       this.levelInfo.text = "Lv." + this.level;
     } else { 

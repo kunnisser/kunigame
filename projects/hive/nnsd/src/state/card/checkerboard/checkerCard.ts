@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-25 22:35:30
+ * @LastEditTime: 2024-02-27 22:06:13
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
@@ -187,7 +187,6 @@ class CheckerCardWrap extends KnGroup {
         this.game.config.half_h,
     });
 
-    console.log(this.parent.visibleCheckerCards);
   }
 }
 
