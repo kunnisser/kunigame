@@ -19,6 +19,7 @@ class KnScrollMenu extends KnGroup {
   public anchorW: number; // 处理 锚点变化引起的this.x 变动
   public interval: number; // 菜单间隔
   public cb?: Function; // 外部传入事件
+  public bootIndex: number; // 当前激活按钮序号
   constructor(
     game: Game,
     parent: Container,
@@ -39,6 +40,7 @@ class KnScrollMenu extends KnGroup {
     this.originW = parent.width * 0.5;
     this.originH = parent.height * 0.5;
     this.interval = interval || 1;
+    this.bootIndex = 1;
     this.cb = cb;
     if (anchor) {
       this.position.set(this.originW, this.originH);
@@ -58,6 +60,8 @@ class KnScrollMenu extends KnGroup {
       .on("pointerupoutside", this.onDragEnd)
       .on("pointermove", this.onDragMove);
     this.menuBg = bg;
+    this.originW = bg.width * 0.5;
+    this.originH = bg.height * 0.5;
     this.appendMenus();
   }
 
@@ -75,10 +79,10 @@ class KnScrollMenu extends KnGroup {
   onDragMove = (e) => {
     if (this.dragAble) {
       // 横向滑动距离
-      this.distance = (e.data.global.x - this.startX) / 5;
+      this.distance = (e.data.global.x - this.startX) * 1.5;
 
       // 滑动过程禁用点击
-      this.clickAble = Math.abs(this.distance) < 0.2 ? !0 : !1;
+      this.clickAble = Math.abs(this.distance) < 0.8 ? !0 : !1;
 
       // 更新菜单显示状态
       this.menusGp.x += this.distance;
@@ -95,8 +99,9 @@ class KnScrollMenu extends KnGroup {
     const currentIndex = Math.abs(
       Math.round((this.menusGp.x * (this.menus.length - 1)) / this.bounds[0])
     );
+    this.bootIndex = currentIndex;
     const tween: any = this.game.add.tween();
-    tween.instance.to(this.menusGp, 0.2, {
+    tween.instance.to(this.menusGp, 0.45, {
       x: -currentIndex * menuBetweenDistance,
       ease: tween.bounce.easeOut,
       onUpdate: () => {
@@ -110,15 +115,19 @@ class KnScrollMenu extends KnGroup {
     this.menusGp = this.game.add.group("menuGp", this);
     this.menusGp.y = 0;
     this.options.forEach((opt: any, index: number) => {
-      const menu = this.buildMenu(opt);
+      const menu = this.buildMenu(opt, index);
       menu.position.set(index * menu.width * this.interval, 0);
       this.menus.push(menu);
     });
     const { length } = this.menus;
     this.bounds = [-this.menusGp.width + this.menus[length - 1].width, 0];
+    const menuBetweenDistance = Math.abs(
+      this.bounds[0] / (this.menus.length - 1)
+    );
+    this.menusGp.x = -menuBetweenDistance;
   }
 
-  buildMenu(opt: any) {
+  buildMenu(opt: any, index: number) {
     const menu: KnGroup = this.game.add.group(`${opt.key}menu`, this.menusGp);
     const menuIcon = this.game.add.button(
       "tipMenu",
@@ -145,7 +154,7 @@ class KnScrollMenu extends KnGroup {
       this.onDragEnd(e);
 
       // 滑动状态不可点击，停止滑动再触发点击事件
-      this.clickAble && opt.callback && opt.callback();
+      this.clickAble && opt.callback && index === this.bootIndex && opt.callback();
     };
 
     menuIcon.cancel = (e) => {
@@ -155,7 +164,7 @@ class KnScrollMenu extends KnGroup {
     const menuName = this.game.add.section(
       opt.name,
       "",
-      Math.round(menuIcon.width / 12),
+      Math.round(menuIcon.width / 6),
       menu,
       {
         padding: 20,
@@ -163,7 +172,7 @@ class KnScrollMenu extends KnGroup {
       }
     );
     menuName.x = -menuName.width * 0.5;
-    menuName.position.y = menuIcon.height * 0.75;
+    menuName.position.y = menuIcon.height * 0.25;
     return menu;
   }
 
@@ -175,14 +184,13 @@ class KnScrollMenu extends KnGroup {
       let currentD_ABS = Math.abs(currentD);
       if (currentD_ABS > this.originW + menu.width * 0.5) {
         // 图片划出边界取消混合叠加渲染
-        menu.children[0]["blendMode"] = PIXI.BLEND_MODES.NORMAL;
         menu.visible = !1;
       } else {
         menu.visible = !0;
-        let scale = 1 - currentD_ABS / (this.originW + 300);
+        let scale = 1 - currentD_ABS / (this.originW + 500);
         menu.scale.set(scale);
-        menu.position.y = (currentD_ABS / menu.width) * 20;
-        menu.angle = (currentD / (this.originW + menu.width)) * 40 * -1;
+        menu.position.y = (currentD_ABS / menu.width) * 10;
+        menu.angle = (currentD / (this.originW + menu.width)) * 20 * -1;
       }
     }
   }

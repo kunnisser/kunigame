@@ -104,7 +104,6 @@ class KnModal extends KnGroup {
       panelModal,
       [0.5, 0.5]
     );
-    bg.scale.set(0.26, 0.36);
     bg.interactive = !0;
 
     // 定义标题框
@@ -115,28 +114,6 @@ class KnModal extends KnGroup {
       [0.5, 0.5]
     );
     title.y = -bg.height * 0.5 + title.height;
-
-    // 定义关闭按钮
-    const close = this.game.add.button(
-      "close",
-      this.options.close,
-      null,
-      panelModal,
-      [0.5, 0.5]
-    );
-    close.position.set(bg.width * 0.38, -bg.height * 0.38);
-    close.scale.set(0.6);
-    close.next = () => {
-      this.closePanel();
-    };
-
-    // 移动端适配
-    if (this.options.ismobile) {
-      bg.width = this.width;
-      bg.height = this.height;
-      title.y = (title.height - bg.height) * 0.5 + 10;
-      close.position.set((close.width - bg.width) * 0.5 + 10, title.y);
-    }
 
     // 定义标题文字
     this.titleText = this.game.add.text(
@@ -161,7 +138,7 @@ class KnModal extends KnGroup {
     const maskWidth = bg.width * 0.7;
     this.overlay = this.game.add
       .graphics()
-      .generateRect(0x0485de, [0, 0, maskWidth, bg.height * 0.5, 10]);
+      .generateRect(0x0485de, [0, 0, maskWidth, bg.height * 0.85, 10]);
     modalWrap.position.set(
       -this.overlay.width * 0.5,
       -this.overlay.height * 0.5
@@ -211,15 +188,36 @@ class KnModal extends KnGroup {
         };
       });
     }
+
+    // 定义关闭按钮
+    const close = this.game.add.button(
+      "close",
+      this.options.close,
+      null,
+      panelModal,
+      [0.5, 0.5]
+    );
+    close.position.set(bg.width * 0.38, -bg.height * 0.38);
+    close.next = () => {
+      this.closePanel();
+    };
+
+    // 移动端适配
+    if (this.options.ismobile) {
+      bg.width = this.width;
+      bg.height = this.height;
+      title.y = (title.height - bg.height) * 0.5 + 10;
+      close.position.set((close.width - bg.width) * 0.5 + 10, title.y);
+    }
   }
 
   // panel切换后的内容重置
   initial(index?: number) {
     const indexType = Object.prototype.toString.call(index);
     const isInitial = indexType === "[object Undefined]";
-    const currenIndex: any = isInitial ? 0 : index;
-    this.options.panels[currenIndex].build &&
-      this.options.panels[currenIndex].build(this);
+    const currentIndex: any = isInitial ? 0 : index;
+    this.options.panels[currentIndex].build &&
+      this.options.panels[currentIndex].build(this);
     this.bindContainerScroll(isInitial);
   }
 

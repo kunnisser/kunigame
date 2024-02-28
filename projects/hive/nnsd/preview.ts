@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-08-02 17:24:15
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-01 17:15:30
+ * @LastEditTime: 2024-02-28 09:51:51
  * @FilePath: /kunigame/projects/hive/nnsd/preview.ts
  * @Description: ----  ----
  */
@@ -26,6 +26,6 @@ const game = new Game({
 const GameHive = StateHive(game);
 game.hive = GameHive;
 game.assetsPath = Config.assetsPath;
-game.entryHive = GameHive['Card'];
+game.entryHive = GameHive['Temp'];
 const previewLoader = game.sceneManager.addScene('global_preloader', Preloader);
 game.sceneManager.changeScene(null, previewLoader);

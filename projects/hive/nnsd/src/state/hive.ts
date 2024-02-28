@@ -3,12 +3,14 @@ import Start from "./start/scene";
 import Welcome from "./welcome/scene";
 import Ast from "./ast/scene";
 import Card from "./card/scene";
+import Temp from "./temp/scene";
 
 const StateHiveKey = {
   Welcome: Welcome,
   Start: Start,
   Ast: Ast,
-  Card
+  Card,
+  Temp
 };
 
 const StateHive = (game) => {

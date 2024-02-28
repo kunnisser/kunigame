@@ -119,7 +119,7 @@ class KnFactory {
       if (this.game.coverMask) {
         return;
       }
-      btn.blendMode = PIXI.BLEND_MODES.ADD_NPM;
+      btn['press'] = PIXI.BLEND_MODES.ADD_NPM;
       btn.start && btn.start(e);
     });
 
@@ -128,7 +128,7 @@ class KnFactory {
     });
 
     btn.on("pointerupoutside", (e) => {
-      btn.blendMode = PIXI.BLEND_MODES.NORMAL;
+      btn['press'] = PIXI.BLEND_MODES.NORMAL;
       btn.outside && btn.outside(e);
     });
 
@@ -136,8 +136,8 @@ class KnFactory {
       if (this.game.coverMask) {
         return;
       }
-      if (btn.blendMode === PIXI.BLEND_MODES.ADD_NPM) {
-        btn.blendMode = PIXI.BLEND_MODES.NORMAL;
+      if (btn['press']  === PIXI.BLEND_MODES.ADD_NPM) {
+        btn['press']  = PIXI.BLEND_MODES.NORMAL;
         if (switchKey) {
           if (btn.status === "on") {
             btn.status = "off";
@@ -228,7 +228,7 @@ class KnFactory {
         fontSize: size,
         fill: "#ffffff",
         stroke: 0x000000,
-        strokeThickness: 6,
+        strokeThickness: 20,
         wordWrap: !0,
         wordWrapWidth: width || 0
       },

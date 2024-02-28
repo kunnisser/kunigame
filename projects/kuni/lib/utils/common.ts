@@ -54,9 +54,9 @@ const math: IMath = {
       : val;
   },
   clamp(v: number, min: number, max: number) {
-    if (v < min) {
+    if (v <= min) {
       return min;
-    } else if (max < v) {
+    } else if (max <= v) {
       return max;
     } else {
       return v;
