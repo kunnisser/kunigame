@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-27 22:06:13
+ * @LastEditTime: 2024-02-28 23:30:40
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
@@ -130,7 +130,7 @@ class CheckerCardWrap extends KnGroup {
     if (!player.isAlive) {
       console.log('game over');
       const scene = this.game.currentScene as Card;
-      scene.gameOverGui.open();
+      scene.gameOverGui.showPanel();
       return;
     }
     const currentIndices = [...this.content.indices];
