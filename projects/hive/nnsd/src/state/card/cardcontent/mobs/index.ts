@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-03 00:30:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-25 22:57:40
+ * @LastEditTime: 2024-02-29 22:36:09
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\mobs\index.ts
  * @Description: ---- 小怪 ----
  */
@@ -26,7 +26,7 @@ class Mobs extends CardContent {
   initial() {
     const role = this.setRole('skullBone', 'skull');
     role.scale.set(1.2);
-    role.y = 50;
+    role.y = 60;
     role.animation.play('stay');
     role.animation.timeScale = 1;
     this.sprite = role;

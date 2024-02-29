@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-28 23:30:40
+ * @LastEditTime: 2024-02-29 22:50:00
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
@@ -28,13 +28,14 @@ class CheckerCardWrap extends KnGroup {
     super(game, 'cardWrap', parent);
     this.parent = parent;
     this.game = game;
-    this.initialWrap();
+    this.initialWrap(type);
     this.setContent(type);
     this.interaction();
   }
 
-  initialWrap() {
-    this.wrap = this.game.add.image('cardWrap', 'cardWrap', this, [0.5, 0.5]);
+  initialWrap(type?: string) {
+    const wrapKey = type && type === "don" ? "playerCardWrap" : "cardWrap";
+    this.wrap = this.game.add.image(wrapKey, wrapKey, this, [0.5, 0.5]);
     this.container = this.game.add.group('cardContainer', this);
   }
 

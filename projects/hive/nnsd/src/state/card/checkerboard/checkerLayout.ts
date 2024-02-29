@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:48:55
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-25 22:33:57
+ * @LastEditTime: 2024-02-29 19:54:09
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerLayout.ts
  * @Description: ---- 棋盘排列布局 ----
  */
@@ -10,7 +10,7 @@
 import Game from 'ts@/kuni/lib/core';
 import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
 import CheckerCardWrap from './checkerCard';
-import { math } from 'ts@/kuni/lib/utils/common';
+import { math, rem } from 'ts@/kuni/lib/utils/common';
 import { KnTween } from 'ts@/kuni/lib/gameobjects/kn_tween';
 import WeightedRandomGenerator from '../cardcontent/combine';
 class CheckerLayout extends KnGroup {
@@ -46,7 +46,7 @@ class CheckerLayout extends KnGroup {
       [0, 1],
       [1, 1],
     ];
-    this.cardSpace = 16;
+    this.cardSpace = rem(16);
     this.originIndices = [0, 0];
     this.moveBehavior = {
       left: [-1, 0],

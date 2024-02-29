@@ -5,12 +5,13 @@ import KnScene from "../gameobjects/kn_scene";
 import { events } from "../utils/common";
 import KnText from "../gameobjects/kn_text";
 
-interface IMODAL_OPTIONS {
+export interface IModalOptions {
   modalBg: String;
   titleBg: String;
   close: String;
-  maskCloseAble: boolean; // 运行点击遮罩关闭
-  ismobile: Boolean;
+  opacity?: number; // 遮罩不透明度
+  maskCloseAble?: boolean; // 运行点击遮罩关闭
+  ismobile?: Boolean;
   panels: Array<{
     title: string;
     build: Function;
@@ -22,7 +23,7 @@ class KnModal extends KnGroup {
   public tween: any;
   public parent: KnGroup | KnScene;
   public content: Container;
-  public options: IMODAL_OPTIONS;
+  public options: IModalOptions;
   public contentWidth: number;
   public overlay: Graphics;
   public titleText: KnText;
@@ -52,7 +53,7 @@ class KnModal extends KnGroup {
   }
 
   // 关闭面板
-  closePanel() {
+  closePanel(cb?: any) {
     const tween: any = this.game.add.tween();
     this.children[1].scale.set(1);
     tween.instance.to(this.children[1].scale, 0.25, {
@@ -61,6 +62,7 @@ class KnModal extends KnGroup {
       ease: tween.back.easeIn,
       onComplete: () => {
         this.visible = !1;
+        cb && cb();
       }
     });
   }
@@ -76,7 +78,7 @@ class KnModal extends KnGroup {
    */
   generateModal() {
     this.visible = !1;
-    this.position.set(this.parent.width * 0.5, this.parent.height * 0.5);
+    this.position.set(this.game.config.width * 0.5, this.game.config.height * 0.5);
 
     // 定义背景遮罩
     const floorBg = this.game.add
@@ -86,7 +88,7 @@ class KnModal extends KnGroup {
         [0, 0, this.parent.width, this.parent.height],
         true
       );
-    floorBg.alpha = 0.48;
+    floorBg.alpha = this.options.opacity || 1;
     floorBg.interactive = true;
     floorBg.on("pointerdown", () => {
       if (this.options.maskCloseAble && panelModal.scale.x === 1) {

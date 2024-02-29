@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-17 22:59:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-25 23:06:15
+ * @LastEditTime: 2024-02-29 22:35:35
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\mobs\druid.ts
  * @Description: ---- 德鲁伊 ----
  */
@@ -34,7 +34,6 @@ class Druid extends CardContent {
 
   initial() {
     const role = this.setRole(this.race + 'Bone', this.race);
-    role.scale.set(1.2);
     role.y = 100;
     role.animation.play('stay');
     role.animation.timeScale = 1;

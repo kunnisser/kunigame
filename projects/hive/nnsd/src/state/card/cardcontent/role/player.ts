@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-18 14:09:21
+ * @LastEditTime: 2024-02-29 22:34:55
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\role\player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -48,7 +48,7 @@ class Don extends CardContent {
 
   initial() {
     const role = this.setRole('tex', 'role');
-    role.scale.set(0.5);
+    role.scale.set(0.4);
     role.y += role.getBounds().height * 0.25;
     role.animation.timeScale = 2;
     role.animation.play('idle');

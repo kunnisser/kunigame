@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 16:06:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-17 23:14:06
+ * @LastEditTime: 2024-02-29 22:40:47
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\content.ts
  * @Description: ---- 卡牌内容 ----
  */
@@ -67,6 +67,7 @@ class CardContent extends KnGroup {
   setHealth(val: number) {
     this.hpValue = val;
     this.hpWrap = this.game.add.image('health', 'health', this, [0.5, 0.5]);
+    this.hpWrap.scale.set(0.8);
     this.hp = this.game.add.bitmapText(
       'hp',
       val + '',
