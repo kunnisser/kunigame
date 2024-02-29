@@ -1,7 +1,7 @@
 import KnGroup from "../gameobjects/kn_group";
 import Game from "../core";
 import { Container, Graphics, Sprite } from "pixi.js";
-import { math } from "../utils/common";
+import { math, rem } from "../utils/common";
 
 class KnScrollMenu extends KnGroup {
   public options: any; // 菜单配置信息
@@ -79,10 +79,7 @@ class KnScrollMenu extends KnGroup {
   onDragMove = (e) => {
     if (this.dragAble) {
       // 横向滑动距离
-      this.distance = (e.data.global.x - this.startX) * 0.75;
-
-
-      
+      this.distance = (e.data.global.x - this.startX);
 
       // 滑动过程禁用点击
       this.clickAble = Math.abs(this.distance) < 0.8 ? !0 : !1;
@@ -170,7 +167,7 @@ class KnScrollMenu extends KnGroup {
       Math.round(menuIcon.width / 6),
       menu,
       {
-        padding: 20,
+        padding: [rem(15), rem(15)],
         bg: 0xe5b240
       }
     );

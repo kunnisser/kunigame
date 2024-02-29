@@ -9,6 +9,7 @@ interface IMODAL_OPTIONS {
   modalBg: String;
   titleBg: String;
   close: String;
+  maskCloseAble: boolean; // 运行点击遮罩关闭
   ismobile: Boolean;
   panels: Array<{
     title: string;
@@ -86,9 +87,9 @@ class KnModal extends KnGroup {
         true
       );
     floorBg.alpha = 0.48;
-    floorBg.interactive = !0;
+    floorBg.interactive = true;
     floorBg.on("pointerdown", () => {
-      if (panelModal.scale.x === 1) {
+      if (this.options.maskCloseAble && panelModal.scale.x === 1) {
         this.closePanel();
       }
     });
@@ -113,22 +114,22 @@ class KnModal extends KnGroup {
       panelModal,
       [0.5, 0.5]
     );
-    title.y = -bg.height * 0.5 + title.height;
+    title.y = -bg.height * 0.5;
 
     // 定义标题文字
     this.titleText = this.game.add.text(
       "",
       this.options.panels[0].title,
       {
-        fontSize: title.height * 0.2,
+        fontSize: title.height * 0.3,
         fill: 0xffffff,
         stroke: 0x000000,
-        strokeThickness: 6,
+        strokeThickness: 20,
         fontWeight: "bold"
       },
       [0.5, 0.5]
     );
-    this.titleText.position.set(title.x, title.y);
+    this.titleText.position.set(title.x, title.y - title.height * 0.05);
     panelModal.addChild(this.titleText);
 
     // 定义内容容器
@@ -138,7 +139,7 @@ class KnModal extends KnGroup {
     const maskWidth = bg.width * 0.7;
     this.overlay = this.game.add
       .graphics()
-      .generateRect(0x0485de, [0, 0, maskWidth, bg.height * 0.85, 10]);
+      .generateRect(0x0485de, [0, 0, maskWidth, bg.height, 10]);
     modalWrap.position.set(
       -this.overlay.width * 0.5,
       -this.overlay.height * 0.5

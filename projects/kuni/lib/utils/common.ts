@@ -1,5 +1,5 @@
 import Game from '../core';
-import { Graphics, Container } from 'pixi.js';
+import { Graphics, Container, Sprite } from 'pixi.js';
 import * as _ from 'lodash';
 // 防抖函数
 const debounce: any = {
@@ -111,7 +111,9 @@ const TransformImage = {
   // 形状转Sprite
   transformToSprite: (game: Game, graphics: Graphics, parent: Container) => {
     const texture = TransformImage.transformToTexture(game, graphics);
-    return game.add.image('', texture, parent);
+    const sprite: Sprite = new Sprite(texture);
+    parent.addChild(sprite);
+    return sprite;
   },
 };
 
@@ -226,6 +228,10 @@ const createFrom = (target: any, game: Game) => {
   return cloneEntity;
 };
 
+const rem = (val: number): number => {
+  return val * window['scale'];
+}
+
 export {
   debounce,
   math,
@@ -236,4 +242,5 @@ export {
   distance,
   rotatePointers,
   createFrom,
+  rem
 };

@@ -19,7 +19,7 @@ import KnText from "../gameobjects/kn_text";
 import KnEmitter from "../gameobjects/kn_emitter";
 import KnTiling from "../gameui/kn_tiling";
 import Game from "../core";
-import { TransformImage } from "../utils/common";
+import { TransformImage, rem } from "../utils/common";
 import { knTweenLine, KnTween } from "../gameobjects/kn_tween";
 import { AnimatedSprite, Ticker, utils } from "pixi.js";
 import KnScene from "./kn_scene";
@@ -58,7 +58,7 @@ class KnFactory {
     align?: Array<number>
   ) => {
     const [imageKey, texture] = this.generateTexture(key);
-    const sprite = new KnSprite(name, imageKey, texture);
+    const sprite = new KnSprite(name, imageKey, texture, this.game);
     align && sprite.anchor.set(...align);
     parent || (parent = this.game.world);
     return parent.addChild(sprite), sprite;
@@ -66,7 +66,7 @@ class KnFactory {
 
   sprite = (name: string, key: any, anchor?: Array<number>) => {
     const [imageKey, texture] = this.generateTexture(key);
-    const sprite = new KnSprite(name, imageKey, texture);
+    const sprite = new KnSprite(name, imageKey, texture, this.game);
     anchor && sprite.anchor.set(...anchor);
     return sprite;
   };
@@ -218,7 +218,7 @@ class KnFactory {
     sectionStyle?: any
   ) {
     const section = this.group(`sect_${new Date().getTime()}`, parent);
-    const { padding = 4, bg = 0xd10311, width = 0 } = sectionStyle;
+    const { padding = [rem(12), rem(4)], bg = 0xd10311, border = rem(10), space = rem(10), width = 0 } = sectionStyle;
 
     // 标签文本
     const labelText = this.text(
@@ -228,7 +228,7 @@ class KnFactory {
         fontSize: size,
         fill: "#ffffff",
         stroke: 0x000000,
-        strokeThickness: 20,
+        strokeThickness: border,
         wordWrap: !0,
         wordWrapWidth: width || 0
       },
@@ -241,17 +241,19 @@ class KnFactory {
       content,
       {
         fontSize: size,
+        stroke: 0xffffff,
+        strokeThickness: border,
         fill: "#000000"
       },
       [0, 0.5]
     );
     const rect = this.graphics().generateRect(
       bg,
-      [0, 0, labelText.width + padding, labelText.height + padding, 8],
+      [0, 0, labelText.width + padding[0], labelText.height + padding[1], 8],
       false
     );
-    labelText.position.set(rect.width * 0.5, padding * 0.5);
-    text.position.set(rect.width + 2, rect.height * 0.5);
+    labelText.position.set(rect.width * 0.5, padding[1] * 0.5);
+    text.position.set(rect.width + space, rect.height * 0.5);
     section.addChild(rect, text, labelText);
     return section;
   }

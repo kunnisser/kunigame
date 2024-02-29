@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-28 17:27:06
+ * @LastEditTime: 2024-02-29 17:26:05
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/temp/scene.ts
  * @Description: ---- 临时文件 ----
  */
@@ -10,11 +10,12 @@ import Game from "ts@/kuni/lib/core";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import KnModal from "ts@/kuni/lib/gameui/kn_modal";
 import KnScrollMenu from "ts@/kuni/lib/gameui/kn_scrollMenu";
-import { TransformImage } from "ts@/kuni/lib/utils/common";
+import { TransformImage, rem } from "ts@/kuni/lib/utils/common";
 
 class Temp extends KnScene {
   game: Game;
   modal: KnModal;
+  restart: any;
 
   constructor(game: Game, key: string) {
     super(game, key);
@@ -22,9 +23,11 @@ class Temp extends KnScene {
     this.resources = {
       "bg": 'assets/images/bg.png',
       "menu": "assets/images/waterPlanet.png",
-      "panelBg": "assets/images/cardBg.png",
-      "weapon_able": "assets/images/weapon_able.png",
+      "panelTitle": "assets/images/modalTitle.png",
+      "panelBg": "assets/images/panelBg.png",
+      "score": "assets/images/score.png",
       "close": "assets/images/close.png",
+      "restart": "assets/images/restart.png"
     };
   }
 
@@ -43,7 +46,10 @@ class Temp extends KnScene {
       },
       {
         key: "menu",
-        name: "先知"
+        name: "先知",
+        callback: () => {
+          this.modal.showPanel()
+        }
       },
       {
         key: "menu",
@@ -66,7 +72,7 @@ class Temp extends KnScene {
       .graphics()
       .generateRect(
         0xd10311,
-        [0, 0, this.game.config.width, 300],
+        [0, 0, this.game.config.width, rem(300)],
         !0
       );
     const menuBg = TransformImage.transformToSprite(
@@ -87,9 +93,10 @@ class Temp extends KnScene {
       modalBg: "panelBg",
       titleBg: "panelTitle",
       close: "close",
+      maskCloseAble: false,
       panels: [
         {
-          title: "武器信息",
+          title: "游戏失败",
           build: this.addInfo
         }
       ]
@@ -99,59 +106,38 @@ class Temp extends KnScene {
   }
 
   addInfo = (modal) => {
-    const thumb = this.game.add.image("", "weapon_able", modal.content);
-    const thumbTitle = this.game.add.section(
-      "奥布莱恩之剑",
-      "",
-      30,
+      this.restart = this.game.add.button(
+        "restart",
+        "restart",
+        null,
+        modal.content,
+        [0.5, 0.5]
+      );
+    this.restart.position.set(modal.overlay.width * 0.5, modal.overlay.height * 0.5);
+
+    const score = this.game.add.image("", "score", modal.content);
+    score.y = modal.overlay.height * 0.81;
+    const scoreTitle = this.game.add.section(
+      "历史最高",
+      "100",
+      rem(30),
       modal.content,
       {
-        padding: 10,
-        bg: 0xe5b240
+        padding: [rem(40), rem(10)],
+        bg: 0xe5b240,
+        border: rem(20),
+        space: rem(20)
       }
     );
-    thumb.height = thumbTitle.height;
-    thumb.width = thumb.height;
-    thumbTitle.position.set(
-      thumb.width + 10,
-      (thumb.height - thumbTitle.height) * 0.5
+    scoreTitle.position.set(
+      score.width + rem(30),
+      score.y + (score.height - scoreTitle.height) * 0.5
     );
-    const size = 24;
-    const attack = this.game.add.section("攻击力", "50-120", size, modal.content, {
-      padding: 6,
-      bg: 0x00a6cc
-    });
-    attack.position.set(thumb.width + 10, thumbTitle.height + 4);
-    const defence = this.game.add.section("防御", "300", size, modal.content, {
-      padding: 6,
-      bg: 0x00a6cc
-    });
-    defence.position.set(thumb.width + 10, attack.y + attack.height + 4);
-    const crit = this.game.add.section("暴击", "14", size, modal.content, {
-      padding: 6,
-      bg: 0x00a6cc
-    });
-    crit.position.set(thumb.width + 10, defence.y + defence.height + 4);
-    const crit1 = this.game.add.section("暴击", "14", size, modal.content, {
-      padding: 6,
-      bg: 0x00a6cc
-    });
-    crit1.position.set(thumb.width + 10, crit.y + crit.height + 4);
-    const crit2 = this.game.add.section("暴击", "14", size, modal.content, {
-      padding: 6,
-      bg: 0x00a6cc
-    });
-    crit2.position.set(thumb.width + 10, crit1.y + crit1.height + 4);
-    const crit3 = this.game.add.section("暴击", "14", size, modal.content, {
-      padding: 6,
-      bg: 0x00a6cc
-    });
-    crit3.position.set(thumb.width + 10, crit2.y + crit2.height + 4);
-    const crit4 = this.game.add.section("暴击", "14", size, modal.content, {
-      padding: 6,
-      bg: 0x00a6cc
-    });
-    crit4.position.set(thumb.width + 10, crit3.y + crit3.height + 4);
+    // const size = 24;
+    // const attack = this.game.add.section("攻击力", "50-120", size, modal.content, {
+    //   padding: 6,
+    //   bg: 0x00a6cc
+    // });
   };
 
   update() { }

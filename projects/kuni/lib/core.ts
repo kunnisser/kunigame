@@ -66,6 +66,7 @@ export default class Game {
   public cursor: KnCursor; // 游戏光标
   public editX: number; // 编辑区的坐标
   public editY: number; // 编辑区的坐标
+  public gameScale: number; // 设备尺寸与设计稿的缩放比
   public size: {
     width: number;
     height: number;
@@ -100,6 +101,8 @@ export default class Game {
       halfEditorWidth: _gameWidth * 0.5,
       halfEditorHeight: _gameHeight * 0.5,
     };
+
+    this.gameScale = this.config.width / 750;
 
     this.app = new Application({
       width: config.width,
