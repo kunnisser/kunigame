@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-29 22:34:55
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\role\player.ts
+ * @LastEditTime: 2024-03-01 14:23:28
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
  * @Description: ---- 玩家角色1 ----
  */
 import CheckerCardWrap from '../../checkerboard/checkerCard';
@@ -13,6 +13,7 @@ import { Point, Texture } from 'pixi.js';
 import dragonBones from '../../module/dragonbones.min';
 import Card from '../../scene';
 import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
+import { rem } from 'ts@/kuni/lib/utils/common';
 class Don extends CardContent {
   game: Game;
   sprite: any;
@@ -48,7 +49,7 @@ class Don extends CardContent {
 
   initial() {
     const role = this.setRole('tex', 'role');
-    role.scale.set(0.4);
+    role.scale.set(rem(0.2));
     role.y += role.getBounds().height * 0.25;
     role.animation.timeScale = 2;
     role.animation.play('idle');

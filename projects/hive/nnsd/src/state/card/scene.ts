@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-29 23:05:58
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\scene.ts
+ * @LastEditTime: 2024-03-01 15:01:21
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/scene.ts
  * @Description: ---- 卡牌 ----
  */
 
@@ -129,14 +129,7 @@ class Card extends KnScene {
   };
 
   start = () => {
-    this.gameOverGui.closePanel(() => { 
-      this.game.sceneManager.changeScene(
-        this.game.currentScene,
-        this.game.hive["Card"]
-      );
-      this.game.hive["Card"].reset().create();
-    });
-
+    this.game.hive["Card"].reset().create();
     // this.game.currentScene.create();
   };
 

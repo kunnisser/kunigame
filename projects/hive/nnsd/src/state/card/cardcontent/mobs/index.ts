@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-03 00:30:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-29 22:36:09
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\mobs\index.ts
+ * @LastEditTime: 2024-03-01 14:34:46
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/mobs/index.ts
  * @Description: ---- 小怪 ----
  */
 import CheckerCardWrap from '../../checkerboard/checkerCard';
@@ -11,6 +11,7 @@ import Game from 'ts@/kuni/lib/core';
 import CardContent from '../content';
 import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
 import Card from '../../scene';
+import { rem } from 'ts@/kuni/lib/utils/common';
 class Mobs extends CardContent {
   game: Game;
   sprite: any;
@@ -25,8 +26,8 @@ class Mobs extends CardContent {
 
   initial() {
     const role = this.setRole('skullBone', 'skull');
-    role.scale.set(1.2);
-    role.y = 60;
+    role.scale.set(rem(0.6));
+    role.y = role.getBounds().height * 0.25;
     role.animation.play('stay');
     role.animation.timeScale = 1;
     this.sprite = role;
