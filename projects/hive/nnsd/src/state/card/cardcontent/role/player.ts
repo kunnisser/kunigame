@@ -2,23 +2,23 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-01 14:23:28
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
+ * @LastEditTime: 2024-03-03 23:48:32
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\role\player.ts
  * @Description: ---- 玩家角色1 ----
  */
 import CheckerCardWrap from '../../checkerboard/checkerCard';
 import Game from 'ts@/kuni/lib/core';
 import CardContent from '../content';
 import { Point, Texture } from 'pixi.js';
-import dragonBones from '../../module/dragonbones.min';
 import Card from '../../scene';
 import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
 import { rem } from 'ts@/kuni/lib/utils/common';
+import DragonBones from '../../module/dragonbones.min';
+import dragonBones from '../../module/dragonBones';
 class Don extends CardContent {
   game: Game;
-  sprite: any;
   parent: CheckerCardWrap;
-
+  sprite: dragonBones.PixiArmatureDisplay;
   // 角色是否存活
   isAlive: Boolean;
 
@@ -48,15 +48,17 @@ class Don extends CardContent {
   }
 
   initial() {
-    const role = this.setRole('tex', 'role');
-    role.scale.set(rem(0.2));
-    role.y += role.getBounds().height * 0.25;
-    role.animation.timeScale = 2;
-    role.animation.play('idle');
-    this.sprite = role;
+    this.sprite = this.setRole(
+      'tex',
+      'role'
+    ) as dragonBones.PixiArmatureDisplay;
+    this.sprite.scale.set(rem(0.35));
+    this.sprite.y += this.sprite.getBounds().height * 0.25;
+    this.sprite.animation.timeScale = 2;
+    this.sprite.animation.play('idle');
     this.currentGlobal = new Point(0, 0);
-    this.setHealth(10);
-    this.setAttack(5);
+    this.setHealth(20);
+    this.setAttack(7);
   }
 
   // 定义角色的技能动画
@@ -91,7 +93,7 @@ class Don extends CardContent {
 
   onClick() {}
 
-  defeat(target: CheckerCardWrap, direct: string): void {
+  defeat(target: CheckerCardWrap, direct: string): boolean {
     const scene = this.game.currentScene as Card;
 
     //执行目标卡牌的触发事件
@@ -104,21 +106,55 @@ class Don extends CardContent {
       this.faceDirect[direct] &&
       (this.sprite.scale.x =
         Math.abs(this.sprite.scale.x) * this.faceDirect[direct]);
-    this.sprite.animation.timeScale = 4;
-    this.sprite.animation.play('attack').playTimes = 1;
-    this.sprite.armature.eventDispatcher.addDBEventListener(
-      dragonBones.EventObject.COMPLETE,
-      () => {
-        this.sprite.animation.timeScale = 2;
-        this.sprite.animation.play('idle');
-      }
-    );
 
-    // 执行技能动画
-    this.skills.attack(this.faceDirect[direct]);
+    if (target.content.attack) {
+      this.sprite.animation.timeScale = 4;
+      const attackAction = this.sprite.animation.play('attack');
+      attackAction && (attackAction.playTimes = 1);
+      this.sprite.armature.eventDispatcher.addDBEventListener(
+        DragonBones.EventObject.COMPLETE,
+        () => {
+          this.sprite.animation.timeScale = 2;
+          this.sprite.animation.play('idle');
+        },
+        this
+      );
 
-    // 更新计分栏数值
-    scene.scoreBar.updateScore(scene.scoreBar.score);
+      // 执行技能动画
+      this.skills.attack(this.faceDirect[direct]);
+    }
+
+    // 没有击败目标
+    if (target.content.hpValue && target.content.hpValue > 0) {
+      this.attacking(direct, target);
+      return false;
+    } else {
+      // 更新计分栏数值
+      scene.scoreBar.score += target.content.score;
+      scene.level.increaseExp(target.content.exp);
+      scene.scoreBar.updateScore(scene.scoreBar.score);
+      return true;
+    }
+  }
+
+  // 攻击动画
+  attacking(direct: string, target: CheckerCardWrap) {
+    const [dx, dy] = this.parent.parent.moveBehavior[direct];
+    this.changeSpriteBlendMode(target.content.sprite, PIXI.BLEND_MODES.SCREEN);
+    this.tween.instance.to(this.parent, 0.1, {
+      x: this.parent.x + dx * rem(40),
+      y: this.parent.y + dy * rem(40),
+      yoyo: true,
+      repeat: 1,
+      ease: this.tween.cubic.easeOut,
+      onComplete: () => {
+        this.changeSpriteTint(this.sprite, 0xffffff);
+        this.changeSpriteBlendMode(
+          target.content.sprite,
+          PIXI.BLEND_MODES.NORMAL
+        );
+      },
+    }).progress;
   }
 
   // 检测当前角色生命值

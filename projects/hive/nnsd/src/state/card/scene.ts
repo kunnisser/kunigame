@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-01 15:01:21
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/scene.ts
+ * @LastEditTime: 2024-03-03 23:39:43
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\scene.ts
  * @Description: ---- 卡牌 ----
  */
 
@@ -57,6 +57,8 @@ class Card extends KnScene {
       panelBg: 'assets/images/panelBg.png',
       score: 'assets/images/score.png',
       close: 'assets/images/close.png',
+      attack: 'assets/images/attack.png',
+      dragon: 'assets/images/dragon.png'
     };
   }
 
@@ -77,7 +79,7 @@ class Card extends KnScene {
     const options: IModalOptions = {
       modalBg: 'panelBg',
       titleBg: 'panelTitle',
-      close: 'close',
+      close: null,
       maskCloseAble: false,
       opacity: 0.9,
       panels: [

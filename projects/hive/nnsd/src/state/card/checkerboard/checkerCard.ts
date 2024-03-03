@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-29 22:50:00
+ * @LastEditTime: 2024-03-03 23:01:10
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
@@ -124,9 +124,9 @@ class CheckerCardWrap extends KnGroup {
     direct: string
   ) {
     // 主卡牌击败目标卡牌逻辑
-    this.content.defeat(targetCard, direct);
-
     const player = this.content as Don;
+    const successBeat: boolean = player.defeat(targetCard, direct);
+
     player.checkPlayerHealth();
     if (!player.isAlive) {
       console.log('game over');
@@ -134,6 +134,12 @@ class CheckerCardWrap extends KnGroup {
       scene.gameOverGui.showPanel();
       return;
     }
+
+    console.log(successBeat, '--');
+    if (!successBeat) { 
+      return;
+    }
+
     const currentIndices = [...this.content.indices];
     const targetIndices = [...targetCard.content.indices];
     const followIndices = [...followCard.content.indices];
@@ -175,6 +181,7 @@ class CheckerCardWrap extends KnGroup {
         );
         targetCard.visible = true;
         generateCardTween(this.parent.tween, targetCard);
+        this.content.changeSpriteTint(this.content.sprite, 0xffffff);
       }
     );
 

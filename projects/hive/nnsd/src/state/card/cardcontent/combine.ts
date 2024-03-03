@@ -2,11 +2,12 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 17:26:23
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-25 22:57:57
+ * @LastEditTime: 2024-03-03 23:50:02
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\combine.ts
  * @Description: ---- 卡牌内容集合 ----
  */
 
+import DragonAoGang from './master/dragon/sprite';
 import Mobs from './mobs';
 import Druid from './mobs/druid';
 import Fruit from './resource/fruit';
@@ -17,6 +18,7 @@ export const CardContentMap = {
   mobs: Mobs,
   fruit: Fruit,
   druid: Druid,
+  dragon: DragonAoGang
 };
 
 // 加权随机生成野怪卡片
@@ -26,9 +28,10 @@ class WeightedRandomGenerator {
   public weightsValues: Array<number>;
   constructor() {
     this.weightsOptions = {
-      mobs: 3,
-      fruit: 3,
-      druid: 1
+      mobs: 10,
+      fruit: 8,
+      druid: 5,
+      dragon: 2
     };
     this.initialSetting();
   }
