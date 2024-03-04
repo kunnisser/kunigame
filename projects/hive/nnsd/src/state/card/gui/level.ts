@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-09-24 21:44:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-27 23:09:16
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\gui\level.ts
+ * @LastEditTime: 2024-03-04 17:24:57
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/gui/level.ts
  * @Description: ---- 等级条 ----
  */
 
@@ -13,6 +13,7 @@ import Game from "ts@/kuni/lib/core";
 import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 import KnText from "ts@/kuni/lib/gameobjects/kn_text";
 import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
+import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
 
 class LevelBar extends KnGroup {
   game: Game;
@@ -21,7 +22,8 @@ class LevelBar extends KnGroup {
   maskBar: KnSprite;
   level: number;
   levelInfo: KnText;
-  tween: KnTween
+  tween: KnTween;
+  emitter: KnEmitter;
   constructor(game: Game, parent: Card) {
     super(game, "levelBar", parent);
     this.parent = parent;
@@ -68,10 +70,41 @@ class LevelBar extends KnGroup {
     );
     this.addChild(this.levelInfo);
     this.position.set(this.game.config.half_w, this.outBar.height);
+    this.emitter = this.game.add.emitter(this.game, 50, "star");
+    this.addChild(this.emitter);
   }
+
+    // 范围连续发射
+    rangeShoot() {
+      this.emitter.multeShootOnce(
+        this.game,
+        this.tween,
+        0,
+        -this.outBar.height * 0.5,
+        {
+          duration: 0.5,
+          count: 10,
+          offsetX: this.outBar.width * 0.5,
+          offsetY: this.outBar.height * 0.5,
+          xRandom: true,
+          yRandom: true,
+          xDirect: true,
+          yDirect: true,
+          ease: 'cubic',
+          inout: 'easInOut',
+          angle: 360,
+          angleRandom: true,
+          angleDirect: true,
+          width: this.outBar.width * 0.5,
+          height: this.outBar.height,
+        },
+        'to'
+      );
+    }
 
   increaseExp(exp: number) {
     const outLevelExp = this.maskBar.x + exp - this.innerBar.width;
+    this.rangeShoot();
     if (outLevelExp >= 0) {
       this.maskBar.x = outLevelExp;
       this.level += 1;
