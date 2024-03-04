@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-03 23:48:32
+ * @LastEditTime: 2024-03-04 21:03:19
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\role\player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -131,7 +131,7 @@ class Don extends CardContent {
     } else {
       // 更新计分栏数值
       scene.scoreBar.score += target.content.score;
-      scene.level.increaseExp(target.content.exp);
+      scene.level.increaseExp(target.content.exp, target);
       scene.scoreBar.updateScore(scene.scoreBar.score);
       return true;
     }

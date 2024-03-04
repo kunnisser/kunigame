@@ -7,15 +7,15 @@
 
 /* 粒子发射器类 */
 
-import { ParticleContainer, Sprite, utils } from "pixi.js";
-import Game from "../core";
+import { ParticleContainer, Sprite, utils } from 'pixi.js';
+import Game from '../core';
 const ParticleConfig: any = {
   scale: true,
   position: true,
   visible: true,
   rotation: true,
   uvs: true,
-  alpha: true
+  alpha: true,
 };
 class KnEmitter extends ParticleContainer {
   public key: string;
@@ -28,7 +28,6 @@ class KnEmitter extends ParticleContainer {
     super(quality, ParticleConfig, void 0, true);
     this.game = game;
     this.key = key;
-    this.alpha = 1;
     this.throtting = KnEmitter.throtting;
     quality && this.create(quality, key);
   }
@@ -37,6 +36,7 @@ class KnEmitter extends ParticleContainer {
     const createdSprite: Array<Sprite> = [];
     for (let i = 0; i < quality; i++) {
       let sprite: Sprite = new Sprite(utils.TextureCache[key]);
+      sprite.visible = false;
       sprite.alpha = 0;
       sprite.anchor.set(0.5);
       // 一次新增的多个对象
@@ -47,7 +47,7 @@ class KnEmitter extends ParticleContainer {
   }
   public getParticle(count?: number) {
     const freeParticles: Array<any> = this.children.filter((particle: any) => {
-      return particle.alpha === 0;
+      return particle.visible === false;
     });
     const bootCount: number = count || 1;
     if (freeParticles.length >= bootCount) {
@@ -60,6 +60,7 @@ class KnEmitter extends ParticleContainer {
   // 单粒子发射 (发射器移动)
   public shoot() {
     let shootParticle: Sprite = this.getParticle(1)[0];
+    shootParticle.visible = true;
     shootParticle.alpha = 1;
     shootParticle.angle = 0;
     return shootParticle;
@@ -73,6 +74,7 @@ class KnEmitter extends ParticleContainer {
   public shootMulite(num: number = 1): Array<Sprite> {
     const shootParticles = this.getParticle(num);
     const bootParticles: Array<Sprite> = shootParticles.map((shootParticle) => {
+      shootParticle.visible = true;
       shootParticle.alpha = 1;
       shootParticle.angle = 0;
       return shootParticle;
@@ -87,7 +89,9 @@ class KnEmitter extends ParticleContainer {
     pointX: number,
     pointY: number,
     options,
-    method?: string
+    method?: string,
+    alpha?: number,
+    callback?: any
   ) => {
     const {
       xDirect,
@@ -104,20 +108,23 @@ class KnEmitter extends ParticleContainer {
       angleRandom,
       angleDirect,
       width,
-      height
+      height,
+      targetX,
+      targetY,
     } = options;
     const particles: Array<Sprite> = this.shootMulite(count);
+    let i = 0;
     for (let particle of particles) {
       particle.x = pointX + game.math.redirect() * Math.random() * width;
       particle.y = pointY + game.math.redirect() * Math.random() * height;
-      tween.instance[method || "to"](particle, duration, {
+      tween.instance[method || 'to'](particle, duration, {
         x:
-          particle.x +
+          (targetX || particle.x) +
           this.particleBooleanDispose(xDirect, game.math.redirect()) *
             this.particleBooleanDispose(xRandom, Math.random()) *
             offsetX,
         y:
-          particle.y +
+          (targetY || particle.y) +
           this.particleBooleanDispose(yDirect, game.math.redirect()) *
             this.particleBooleanDispose(yRandom, Math.random()) *
             offsetY,
@@ -126,9 +133,13 @@ class KnEmitter extends ParticleContainer {
           this.particleBooleanDispose(angleDirect, game.math.redirect()) *
             this.particleBooleanDispose(angleRandom, Math.random()) *
             angle,
-        alpha: 0,
-        ease: tween[ease][inout]
+        alpha: alpha || 0,
+        delay: i * 0.08
+        ,
+        ease: tween[ease][inout],
+        onComplete: () => callback(particle)
       });
+    i++;
     }
   };
 }

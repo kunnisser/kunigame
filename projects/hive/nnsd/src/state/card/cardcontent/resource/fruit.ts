@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-14 21:23:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-29 22:40:27
+ * @LastEditTime: 2024-03-04 22:46:01
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\resource\fruit.ts
  * @Description: ---- 资源 - 水果 ----
  */
@@ -78,7 +78,6 @@ class Fruit extends CardContent {
   }
 
   update(): void {
-    console.log(12);
   }
 }
 

@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-09-24 21:44:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-04 17:24:57
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/gui/level.ts
+ * @LastEditTime: 2024-03-04 22:53:48
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\gui\level.ts
  * @Description: ---- 等级条 ----
  */
 
@@ -14,6 +14,7 @@ import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 import KnText from "ts@/kuni/lib/gameobjects/kn_text";
 import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
 import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
+import CheckerCardWrap from "../checkerboard/checkerCard";
 
 class LevelBar extends KnGroup {
   game: Game;
@@ -70,22 +71,25 @@ class LevelBar extends KnGroup {
     );
     this.addChild(this.levelInfo);
     this.position.set(this.game.config.half_w, this.outBar.height);
-    this.emitter = this.game.add.emitter(this.game, 50, "star");
-    this.addChild(this.emitter);
+    this.emitter = this.game.add.emitter(this.game, 10, "star");
+    this.parent.addChild(this.emitter);
+    this.emitter.position.set(this.position.x, this.position.y);
   }
 
     // 范围连续发射
-    rangeShoot() {
+    rangeShoot(target) {
       this.emitter.multeShootOnce(
         this.game,
         this.tween,
+        0, // 粒子发射器的坐标
         0,
-        -this.outBar.height * 0.5,
         {
           duration: 0.5,
-          count: 10,
-          offsetX: this.outBar.width * 0.5,
-          offsetY: this.outBar.height * 0.5,
+          count: 7,
+          targetX: target.x - this.position.x, // 粒子发射的目标坐标
+          targetY: target.y - this.position.y,
+          offsetX: target.width * 0.35, // 粒子发射的目标范围
+          offsetY: target.height * 0.35,
           xRandom: true,
           yRandom: true,
           xDirect: true,
@@ -95,16 +99,21 @@ class LevelBar extends KnGroup {
           angle: 360,
           angleRandom: true,
           angleDirect: true,
-          width: this.outBar.width * 0.5,
-          height: this.outBar.height,
+          width: 0, // 粒子发生器的尺寸范围
+          height: 0,
         },
-        'to'
+        'from',
+        1,
+        (particle: any) => { 
+          particle.visible = false;
+          particle.alpha = 0;
+        }
       );
     }
 
-  increaseExp(exp: number) {
+  increaseExp(exp: number, target: CheckerCardWrap) {
     const outLevelExp = this.maskBar.x + exp - this.innerBar.width;
-    this.rangeShoot();
+    exp > 0 && this.rangeShoot(target);
     if (outLevelExp >= 0) {
       this.maskBar.x = outLevelExp;
       this.level += 1;
