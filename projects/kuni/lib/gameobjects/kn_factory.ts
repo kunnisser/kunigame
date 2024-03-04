@@ -28,6 +28,17 @@ import KnBitMapText from "./kn_bitmap_text";
 import SpritePool from "./kn_spritepool";
 import KnBackGround from "./kn_bg";
 
+export interface KnButton extends KnSprite { 
+  next: null | ((T: PIXI.InteractionEvent) => void);
+  press: number;
+  status: string;
+  start: ((T: PIXI.InteractionEvent) => void);
+  move: ((T: PIXI.InteractionEvent) => void);
+  outside: ((T: PIXI.InteractionEvent) => void);
+  cancel: ((T: PIXI.InteractionEvent) => void);
+  tip: KnSprite;
+}
+
 class KnFactory {
   public game: Game;
   constructor(game: Game) {
@@ -89,7 +100,6 @@ class KnFactory {
     align?: Array<number>,
     tipkey?: any
   ) => {
-    let btn: any = null;
     if (typeof key === "number") {
       const btnRect = this.graphics().generateRect(
         key,
@@ -100,11 +110,11 @@ class KnFactory {
       key = btnTexture;
     }
 
-    btn = this.image(name || "", key, parent, align);
+   const btn: KnButton = this.image(name || "", key, parent, align) as KnButton;
 
     btn.interactive = true;
 
-    btn["next"] = null;
+    btn.next = null;
 
     btn.status = "on";
 
@@ -115,7 +125,7 @@ class KnFactory {
         : switchKey
     ];
 
-    btn.on("pointerdown", (e) => {
+    btn.on("pointerdown", (e: PIXI.InteractionEvent) => {
       if (this.game.coverMask) {
         return;
       }
@@ -123,16 +133,16 @@ class KnFactory {
       btn.start && btn.start(e);
     });
 
-    btn.on("pointermove", (e) => {
+    btn.on("pointermove", (e: PIXI.InteractionEvent) => {
       btn.move && btn.move(e);
     });
 
-    btn.on("pointerupoutside", (e) => {
+    btn.on("pointerupoutside", (e: PIXI.InteractionEvent) => {
       btn['press'] = PIXI.BLEND_MODES.NORMAL;
       btn.outside && btn.outside(e);
     });
 
-    btn.on("pointerup", (e: Event) => {
+    btn.on("pointerup", (e: PIXI.InteractionEvent) => {
       if (this.game.coverMask) {
         return;
       }

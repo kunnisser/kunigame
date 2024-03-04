@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-03 23:01:10
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\checkerboard\checkerCard.ts
+ * @LastEditTime: 2024-03-04 16:27:15
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/checkerboard/checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
 
@@ -131,7 +131,7 @@ class CheckerCardWrap extends KnGroup {
     if (!player.isAlive) {
       console.log('game over');
       const scene = this.game.currentScene as Card;
-      scene.gameOverGui.showPanel();
+      scene.gameOverGui.modal.showPanel();
       return;
     }
 
