@@ -79,13 +79,16 @@ class KnScrollMenu extends KnGroup {
   onDragMove = (e) => {
     if (this.dragAble) {
       // 横向滑动距离
-      this.distance = (e.data.global.x - this.startX);
+      this.distance = (e.data.global.x - this.startX) * 10;
 
       // 滑动过程禁用点击
       this.clickAble = Math.abs(this.distance) < 0.8 ? !0 : !1;
 
       // 更新菜单显示状态
       this.menusGp.x += this.distance;
+
+      this.startX = e.data.global.x;
+
       this.menusGp.x = math.clamp(this.menusGp.x, ...this.bounds);
       this.updateMenusView();
     }
