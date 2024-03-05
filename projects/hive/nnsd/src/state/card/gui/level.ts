@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-09-24 21:44:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-05 17:32:11
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/gui/level.ts
+ * @LastEditTime: 2024-03-05 22:10:32
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\gui\level.ts
  * @Description: ---- 等级条 ----
  */
 
@@ -76,7 +76,7 @@ class LevelBar extends KnGroup {
     this.emitter.position.set(this.position.x, this.position.y);
   }
 
-    // 范围连续发射
+    // 获取经验的效果
     rangeShoot(target) {
       this.emitter.multiShootOnce(
         this.game,
@@ -84,18 +84,18 @@ class LevelBar extends KnGroup {
         0, // 粒子发射器的坐标
         0,
         {
-          duration: 0.5,
-          count: 7,
+          duration: 0.35,
+          count: 5,
           targetX: target.x - this.position.x, // 粒子发射的目标坐标
           targetY: target.y - this.position.y,
-          offsetX: target.width * 0.35, // 粒子发射的目标范围
-          offsetY: target.height * 0.35,
+          offsetX: target.width * 0.4, // 粒子发射的目标范围
+          offsetY: -target.height * 0.3,
           xRandom: true,
           yRandom: true,
           xDirect: true,
-          yDirect: true,
-          ease: 'cubic',
-          inout: 'easInOut',
+          yDirect: false,
+          ease: 'back',
+          inout: 'easeIn',
           angle: 360,
           angleRandom: true,
           angleDirect: true,

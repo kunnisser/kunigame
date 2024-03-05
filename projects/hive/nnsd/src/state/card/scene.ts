@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-04 17:09:36
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/scene.ts
+ * @LastEditTime: 2024-03-05 22:10:42
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\scene.ts
  * @Description: ---- 卡牌 ----
  */
 
@@ -57,7 +57,7 @@ class Card extends KnScene {
       close: 'assets/images/close.png',
       attack: 'assets/images/attack.png',
       dragon: 'assets/images/dragon.png',
-      star: 'assets/images/star.png'
+      star: "assets/images/star.png"
     };
   }
 
