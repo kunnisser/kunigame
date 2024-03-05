@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-16 01:17:59
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-17 14:21:34
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\particle\index.ts
+ * @LastEditTime: 2024-03-05 17:33:52
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/particle/index.ts
  * @Description: ---- 粒子特效 ----
  */
 
@@ -15,7 +15,7 @@ import Don from '../cardcontent/role/player';
 const cureEffectParticle = (game: Game, tween: KnTween) => {
   const emitter: KnEmitter = game.add.emitter(game, 10, 'treat');
   const cureEffectPlay: any = (target: Don) => {
-    const particles = emitter.shootMulite(10);
+    const particles = emitter.shootMulti(10);
     for (const particle of particles) {
       particle.x = game.math.redirect() * ~~(Math.random() * 10) * 8;
       particle.y = 0;

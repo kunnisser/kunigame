@@ -157,7 +157,7 @@ class CursorDemo extends KnScene {
 
   // 多个粒子单次发射
   multeShootOnce(pointX: number, pointY: number) {
-    const particles: Array<any> = this.emitter.shootMulite(4);
+    const particles: Array<any> = this.emitter.shootMulti(4);
     for (let particle of particles) {
       particle.x = pointX;
       particle.y = pointY;

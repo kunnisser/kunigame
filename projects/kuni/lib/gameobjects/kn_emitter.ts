@@ -71,7 +71,7 @@ class KnEmitter extends ParticleContainer {
   };
 
   // 多粒子发射 (发射器静止)
-  public shootMulite(num: number = 1): Array<Sprite> {
+  public shootMulti(num: number = 1): Array<Sprite> {
     const shootParticles = this.getParticle(num);
     const bootParticles: Array<Sprite> = shootParticles.map((shootParticle) => {
       shootParticle.visible = true;
@@ -83,22 +83,22 @@ class KnEmitter extends ParticleContainer {
   }
 
   // 粒子发射
-  public multeShootOnce = (
+  public multiShootOnce = (
     game,
     tween,
-    pointX: number,
+    pointX: number, // 粒子发射器的自身坐标
     pointY: number,
     options,
-    method?: string,
+    method?: string, // 正反播放
     alpha?: number,
-    callback?: any
+    callback?: any // 到达目的地回调
   ) => {
     const {
       xDirect,
       xRandom,
       yDirect,
       yRandom,
-      offsetX,
+      offsetX, // 粒子发射的目标范围
       offsetY,
       count,
       duration,
@@ -107,12 +107,12 @@ class KnEmitter extends ParticleContainer {
       angle,
       angleRandom,
       angleDirect,
-      width,
+      width, // 粒子发生器的尺寸范围
       height,
-      targetX,
+      targetX, // 粒子发射的目的地坐标
       targetY,
     } = options;
-    const particles: Array<Sprite> = this.shootMulite(count);
+    const particles: Array<Sprite> = this.shootMulti(count);
     let i = 0;
     for (let particle of particles) {
       particle.x = pointX + game.math.redirect() * Math.random() * width;

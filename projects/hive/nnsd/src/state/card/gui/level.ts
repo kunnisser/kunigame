@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-09-24 21:44:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-04 22:53:48
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\gui\level.ts
+ * @LastEditTime: 2024-03-05 17:32:11
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/gui/level.ts
  * @Description: ---- 等级条 ----
  */
 
@@ -78,7 +78,7 @@ class LevelBar extends KnGroup {
 
     // 范围连续发射
     rangeShoot(target) {
-      this.emitter.multeShootOnce(
+      this.emitter.multiShootOnce(
         this.game,
         this.tween,
         0, // 粒子发射器的坐标

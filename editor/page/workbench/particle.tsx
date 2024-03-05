@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-07-07 13:49:58
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-09-13 23:26:44
- * @FilePath: \kunigame\editor\page\workbench\particle.tsx
+ * @LastEditTime: 2024-03-05 17:34:05
+ * @FilePath: /kunigame/editor/page/workbench/particle.tsx
  * @Description: ---- 粒子特效 ----
  */
 
@@ -101,7 +101,7 @@ const ParticleEditor = (props: any) => {
       stats.begin();
       emitter.throtting -= 1;
       if (emitter.throtting < 0) {
-        emitter.multeShootOnce(
+        emitter.multiShootOnce(
           previewGame,
           tween,
           target.x,
