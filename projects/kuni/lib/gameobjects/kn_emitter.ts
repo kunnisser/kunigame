@@ -91,7 +91,7 @@ class KnEmitter extends ParticleContainer {
     options,
     method?: string, // 正反播放
     alpha?: number,
-    callback?: any // 到达目的地回调
+    callback?: any, // 到达目的地回调
   ) => {
     const {
       xDirect,
@@ -111,6 +111,7 @@ class KnEmitter extends ParticleContainer {
       height,
       targetX, // 粒子发射的目的地坐标
       targetY,
+      delay
     } = options;
     const particles: Array<Sprite> = this.shootMulti(count);
     let i = 0;
@@ -134,12 +135,11 @@ class KnEmitter extends ParticleContainer {
             this.particleBooleanDispose(angleRandom, Math.random()) *
             angle,
         alpha: alpha || 0,
-        delay: i * 0.08
-        ,
+        delay: delay ? i * 0.08 : 0,
         ease: tween[ease][inout],
-        onComplete: () => callback(particle)
+        onComplete: () => callback(particle),
       });
-    i++;
+      i++;
     }
   };
 }

@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-09-24 21:44:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-06 15:20:53
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/gui/level.ts
+ * @LastEditTime: 2024-03-06 23:28:25
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\gui\level.ts
  * @Description: ---- 等级条 ----
  */
 
@@ -15,6 +15,7 @@ import KnText from "ts@/kuni/lib/gameobjects/kn_text";
 import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
 import KnEmitter from "ts@/kuni/lib/gameobjects/kn_emitter";
 import CheckerCardWrap from "../checkerboard/checkerCard";
+import { rem } from "ts@/kuni/lib/utils/common";
 
 class LevelBar extends KnGroup {
   game: Game;
@@ -72,12 +73,11 @@ class LevelBar extends KnGroup {
     );
     this.addChild(this.levelInfo);
     this.position.set(this.game.config.half_w, this.outBar.height);
-    this.expEmitter = this.game.add.emitter(this.game, 10, "star");
+    this.expEmitter = this.game.add.emitter(this.game, 10, "exp");
     this.expEmitter.position.set(this.position.x, this.position.y);
-    this.levelEmitter = this.game.add.emitter(this.game, 12, "gas");
-    this.levelEmitter.position.set(this.position.x, this.position.y);
-    this.parent.addChild(this.expEmitter, this.levelEmitter);
-
+    this.levelEmitter = this.game.add.emitter(this.game, 30, "star");
+    this.parent.addChild(this.expEmitter);
+    this.addChildAt(this.levelEmitter, 0);
   }
 
     // 获取经验的效果
@@ -105,6 +105,7 @@ class LevelBar extends KnGroup {
           angleDirect: true,
           width: 0, // 粒子发生器的尺寸范围
           height: 0,
+          delay: true
         },
         'from',
         1,
@@ -119,11 +120,11 @@ class LevelBar extends KnGroup {
   increaseExp(exp: number, target: CheckerCardWrap) {
     const outLevelExp = this.maskBar.x + exp - this.innerBar.width;
     exp > 0 && this.shootExp(target);
-    this.levelUpEffect();
     if (outLevelExp >= 0) {
       this.maskBar.x = outLevelExp;
       this.level += 1;
       this.levelInfo.text = "Lv." + this.level;
+      this.levelUpEffect();
     } else { 
       this.tween.instance.to(this.maskBar, 0.6, {
         x: this.maskBar.x + exp,
@@ -134,7 +135,7 @@ class LevelBar extends KnGroup {
 
   // 升级特效
   levelUpEffect() { 
-    this.tween.instance.to(this, 0.1, {
+    this.tween.instance.to(this.maskBar, 0.1, {
       alpha: 0.55,
       ease: this.tween.cubic.easeOut,
       yoyo: true,
@@ -146,21 +147,22 @@ class LevelBar extends KnGroup {
       0, // 粒子发射器的坐标
       0,
       {
-        duration: 0.35,
-        count: 10,
-        offsetX: 300, // 粒子发射的目标范围
-        offsetY: 300,
+        duration: 1,
+        count: 20,
+        offsetX: rem(30), // 粒子发射的目标范围
+        offsetY: this.outBar.height * 2,
         xRandom: true,
         yRandom: true,
         xDirect: true,
         yDirect: true,
         ease: 'cubic',
-        inout: 'easeInOut',
+        inout: 'easeOut',
         angle: 360,
         angleRandom: true,
         angleDirect: true,
-        width: this.width, // 粒子发生器的尺寸范围
-        height: this.height,
+        width: this.outBar.width * 0.5, // 粒子发生器的尺寸范围
+        height: 0,
+        delay: false
       },
       'to',
       void 0,

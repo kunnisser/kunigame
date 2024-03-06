@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-04 21:03:19
+ * @LastEditTime: 2024-03-06 23:32:47
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\role\player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -140,7 +140,7 @@ class Don extends CardContent {
   // 攻击动画
   attacking(direct: string, target: CheckerCardWrap) {
     const [dx, dy] = this.parent.parent.moveBehavior[direct];
-    this.changeSpriteBlendMode(target.content.sprite, PIXI.BLEND_MODES.SCREEN);
+    this.changeSpriteTint(target.content.sprite, 0xd10311);
     this.tween.instance.to(this.parent, 0.1, {
       x: this.parent.x + dx * rem(40),
       y: this.parent.y + dy * rem(40),
@@ -149,10 +149,7 @@ class Don extends CardContent {
       ease: this.tween.cubic.easeOut,
       onComplete: () => {
         this.changeSpriteTint(this.sprite, 0xffffff);
-        this.changeSpriteBlendMode(
-          target.content.sprite,
-          PIXI.BLEND_MODES.NORMAL
-        );
+        this.changeSpriteTint(target.content.sprite, 0xffffff);
       },
     }).progress;
   }
