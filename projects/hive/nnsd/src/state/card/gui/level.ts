@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-09-24 21:44:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-05 22:10:32
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\gui\level.ts
+ * @LastEditTime: 2024-03-06 15:20:53
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/gui/level.ts
  * @Description: ---- 等级条 ----
  */
 
@@ -24,7 +24,8 @@ class LevelBar extends KnGroup {
   level: number;
   levelInfo: KnText;
   tween: KnTween;
-  emitter: KnEmitter;
+  expEmitter: KnEmitter;
+  levelEmitter: KnEmitter;
   constructor(game: Game, parent: Card) {
     super(game, "levelBar", parent);
     this.parent = parent;
@@ -71,14 +72,17 @@ class LevelBar extends KnGroup {
     );
     this.addChild(this.levelInfo);
     this.position.set(this.game.config.half_w, this.outBar.height);
-    this.emitter = this.game.add.emitter(this.game, 10, "star");
-    this.parent.addChild(this.emitter);
-    this.emitter.position.set(this.position.x, this.position.y);
+    this.expEmitter = this.game.add.emitter(this.game, 10, "star");
+    this.expEmitter.position.set(this.position.x, this.position.y);
+    this.levelEmitter = this.game.add.emitter(this.game, 12, "gas");
+    this.levelEmitter.position.set(this.position.x, this.position.y);
+    this.parent.addChild(this.expEmitter, this.levelEmitter);
+
   }
 
     // 获取经验的效果
-    rangeShoot(target) {
-      this.emitter.multiShootOnce(
+    shootExp(target) {
+      this.expEmitter.multiShootOnce(
         this.game,
         this.tween,
         0, // 粒子发射器的坐标
@@ -110,10 +114,12 @@ class LevelBar extends KnGroup {
         }
       );
     }
-
+  
+  // 经验增加
   increaseExp(exp: number, target: CheckerCardWrap) {
     const outLevelExp = this.maskBar.x + exp - this.innerBar.width;
-    exp > 0 && this.rangeShoot(target);
+    exp > 0 && this.shootExp(target);
+    this.levelUpEffect();
     if (outLevelExp >= 0) {
       this.maskBar.x = outLevelExp;
       this.level += 1;
@@ -124,6 +130,45 @@ class LevelBar extends KnGroup {
         ease: this.tween.bounce.easeOut
       })
     }
+  }
+
+  // 升级特效
+  levelUpEffect() { 
+    this.tween.instance.to(this, 0.1, {
+      alpha: 0.55,
+      ease: this.tween.cubic.easeOut,
+      yoyo: true,
+      repeat: 3
+    });
+    this.levelEmitter.multiShootOnce(
+      this.game,
+      this.tween,
+      0, // 粒子发射器的坐标
+      0,
+      {
+        duration: 0.35,
+        count: 10,
+        offsetX: 300, // 粒子发射的目标范围
+        offsetY: 300,
+        xRandom: true,
+        yRandom: true,
+        xDirect: true,
+        yDirect: true,
+        ease: 'cubic',
+        inout: 'easeInOut',
+        angle: 360,
+        angleRandom: true,
+        angleDirect: true,
+        width: this.width, // 粒子发生器的尺寸范围
+        height: this.height,
+      },
+      'to',
+      void 0,
+      (particle: any) => { 
+        particle.visible = false;
+        particle.alpha = 0;
+      }
+    );
   }
 }
 
