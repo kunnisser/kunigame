@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-06 14:11:01
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/scene.ts
+ * @LastEditTime: 2024-03-17 23:00:41
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\scene.ts
  * @Description: ---- 卡牌 ----
  */
 
@@ -35,9 +35,7 @@ class Card extends KnScene {
       texSke: 'assets/atlas/role_ske.json',
       texData: 'assets/atlas/role_tex.json',
       tex: 'assets/atlas/role_tex.png',
-      skullBoneSke: 'assets/atlas/skull_ske.json',
-      skullBoneData: 'assets/atlas/skull_tex.json',
-      skullBone: 'assets/atlas/skull_tex.png',
+      mob: 'assets/images/mob.png',
       druidBoneSke: 'assets/atlas/deluyi_ske.json',
       druidBoneData: 'assets/atlas/deluyi_tex.json',
       druidBone: 'assets/atlas/deluyi_tex.png',
@@ -58,7 +56,8 @@ class Card extends KnScene {
       attack: 'assets/images/attack.png',
       dragon: 'assets/images/dragon.png',
       exp: "assets/images/exp.png",
-      star: "assets/images/star.png"
+      star: "assets/images/star.png",
+      skillItem: "assets/images/skillItem.png"
     };
   }
 

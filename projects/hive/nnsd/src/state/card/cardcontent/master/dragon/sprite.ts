@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-03-01 14:48:50
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-03 21:49:32
+ * @LastEditTime: 2024-03-17 23:16:32
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\master\dragon\sprite.ts
  * @Description: ---- lv1 敖广 ----
  */
@@ -33,8 +33,8 @@ class DragonAoGang extends CardContent {
   initial() {
     this.sprite = this.game.add.sprite('dragon', 'dragon', [0.5, 0.5]);
     this.addChild(this.sprite);
-    this.setHealth(50);
-    this.setAttack(5);
+    this.setHealth(20);
+    this.setAttack(4);
   }
 
   event(target: CardContent, scene: Card) {

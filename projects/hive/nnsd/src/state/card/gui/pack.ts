@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-03-04 16:32:47
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-04 16:36:32
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/gui/pack.ts
+ * @LastEditTime: 2024-03-17 23:18:44
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\gui\pack.ts
  * @Description: ---- 创建背包界面 ----
  */
 
@@ -15,18 +15,18 @@ import KnScrollMenu from "ts@/kuni/lib/gameui/kn_scrollMenu";
 export const cardPack = (game: Game, card: Card ) => { 
   const options = [
     {
-      key: 'menu',
+      key: 'skillItem',
       name: '富甲天下',
       // callback: () => {
       //   this.modal.showPanel()
       // }
     },
     {
-      key: 'menu',
+      key: 'skillItem',
       name: '先知',
     },
     {
-      key: 'menu',
+      key: 'skillItem',
       name: '段正淳',
       callback: () => {
         console.log('段段小鸡鸡');
@@ -52,13 +52,13 @@ export const cardPack = (game: Game, card: Card ) => {
   const scrollMenu = new KnScrollMenu(game, card, options, !0, 1.6);
   const bgRect = game.add
     .graphics()
-    .generateRect(0xd10311, [0, 0, game.config.width, rem(300)], !0);
+    .generateRect(0xd10311, [0, 0, game.config.width, rem(350)], !0);
   const menuBg = TransformImage.transformToSprite(
     game,
     bgRect,
     scrollMenu
   );
-  menuBg.alpha = 0;
+  menuBg.alpha = 0.2;
   menuBg.anchor.set(0.5);
   scrollMenu.position.set(
     game.config.half_w,

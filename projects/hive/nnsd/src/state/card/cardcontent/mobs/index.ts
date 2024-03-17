@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-03 00:30:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-03 23:01:49
+ * @LastEditTime: 2024-03-17 23:16:22
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\mobs\index.ts
  * @Description: ---- 小怪 ----
  */
@@ -11,7 +11,6 @@ import Game from 'ts@/kuni/lib/core';
 import CardContent from '../content';
 import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
 import Card from '../../scene';
-import { rem } from 'ts@/kuni/lib/utils/common';
 class Mobs extends CardContent {
   game: Game;
   sprite: any;
@@ -27,16 +26,10 @@ class Mobs extends CardContent {
   }
 
   initial() {
-    this.sprite = this.setRole('skullBone', 'skull');
-    if (this.sprite) { 
-      this.sprite.scale.set(rem(0.6));
-      this.sprite.y = this.sprite.getBounds().height * 0.25;
-      this.sprite.animation.play('stay');
-      this.sprite.animation.timeScale = 1;
-      this.addChild(this.sprite);
-      this.setHealth(1);
-      this.setAttack(2);
-    }
+    this.sprite = this.game.add.sprite('mob', 'mob', [0.5, 0.5]);
+    this.addChild(this.sprite);
+    this.setHealth(1);
+    this.setAttack(2);
   }
 
   onClick(): void {

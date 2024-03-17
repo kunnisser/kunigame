@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-14 21:23:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-04 22:46:01
+ * @LastEditTime: 2024-03-17 23:21:35
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\resource\fruit.ts
  * @Description: ---- 资源 - 水果 ----
  */
@@ -27,7 +27,7 @@ class Fruit extends CardContent {
     super(game, parent, card);
     this.game = game;
     this.attribute = 'resource';
-    this.pureVal = 3;
+    this.pureVal = 3 + Math.floor(Math.random() * 4)  ;
     this.initial();
   }
 
@@ -38,7 +38,6 @@ class Fruit extends CardContent {
   }
 
   onClick(): void {
-    console.log('mobs', this);
   }
 
   event(target: Don, scene: Card): void {

@@ -175,7 +175,7 @@ class KnScrollMenu extends KnGroup {
       }
     );
     menuName.x = -menuName.width * 0.5;
-    menuName.position.y = menuIcon.height * 0.25;
+    menuName.position.y = menuIcon.height * 0.5;
     return menu;
   }
 
