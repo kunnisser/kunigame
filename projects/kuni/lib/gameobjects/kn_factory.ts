@@ -27,15 +27,16 @@ import KnSprite from "./kn_sprite";
 import KnBitMapText from "./kn_bitmap_text";
 import SpritePool from "./kn_spritepool";
 import KnBackGround from "./kn_bg";
+import KnPanel from "./kn_panel";
 
-export interface KnButton extends KnSprite { 
+export interface KnButton extends KnSprite {
   next: null | ((T: PIXI.InteractionEvent) => void);
   press: number;
   status: string;
-  start: ((T: PIXI.InteractionEvent) => void);
-  move: ((T: PIXI.InteractionEvent) => void);
-  outside: ((T: PIXI.InteractionEvent) => void);
-  cancel: ((T: PIXI.InteractionEvent) => void);
+  start: (T: PIXI.InteractionEvent) => void;
+  move: (T: PIXI.InteractionEvent) => void;
+  outside: (T: PIXI.InteractionEvent) => void;
+  cancel: (T: PIXI.InteractionEvent) => void;
   tip: KnSprite;
 }
 
@@ -47,6 +48,10 @@ class KnFactory {
 
   group(key: string, parent?: PIXI.Container) {
     return new KnGroup(this.game, key, parent);
+  }
+
+  panel(key: string, parent?: PIXI.Container) {
+    return new KnPanel(this.game, key, parent);
   }
 
   generateTexture = (key: any) => {
@@ -110,7 +115,12 @@ class KnFactory {
       key = btnTexture;
     }
 
-   const btn: KnButton = this.image(name || "", key, parent, align) as KnButton;
+    const btn: KnButton = this.image(
+      name || "",
+      key,
+      parent,
+      align
+    ) as KnButton;
 
     btn.interactive = true;
 
@@ -129,7 +139,7 @@ class KnFactory {
       if (this.game.coverMask) {
         return;
       }
-      btn['press'] = PIXI.BLEND_MODES.ADD_NPM;
+      btn["press"] = PIXI.BLEND_MODES.ADD_NPM;
       btn.start && btn.start(e);
     });
 
@@ -138,7 +148,7 @@ class KnFactory {
     });
 
     btn.on("pointerupoutside", (e: PIXI.InteractionEvent) => {
-      btn['press'] = PIXI.BLEND_MODES.NORMAL;
+      btn["press"] = PIXI.BLEND_MODES.NORMAL;
       btn.outside && btn.outside(e);
     });
 
@@ -146,8 +156,8 @@ class KnFactory {
       if (this.game.coverMask) {
         return;
       }
-      if (btn['press']  === PIXI.BLEND_MODES.ADD_NPM) {
-        btn['press']  = PIXI.BLEND_MODES.NORMAL;
+      if (btn["press"] === PIXI.BLEND_MODES.ADD_NPM) {
+        btn["press"] = PIXI.BLEND_MODES.NORMAL;
         if (switchKey) {
           if (btn.status === "on") {
             btn.status = "off";
@@ -228,7 +238,13 @@ class KnFactory {
     sectionStyle?: any
   ) {
     const section = this.group(`sect_${new Date().getTime()}`, parent);
-    const { padding = [rem(12), rem(4)], bg = 0xd10311, border = rem(10), space = rem(10), width = 0 } = sectionStyle;
+    const {
+      padding = [rem(12), rem(4)],
+      bg = 0xd10311,
+      border = rem(10),
+      space = rem(10),
+      width = 0
+    } = sectionStyle;
 
     // 标签文本
     const labelText = this.text(
