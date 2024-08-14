@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-08-13 11:11:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-13 17:45:32
+ * @LastEditTime: 2024-08-14 15:09:53
  * @FilePath: /kunigame/projects/kuni/lib/gameobjects/kn_panel.ts
  * @Description: ---- 面板容器 ----
  */
@@ -18,7 +18,8 @@ class KnPanel extends Container {
   paddingRight: number;
   paddingTop: number;
   point: PIXI.Point;
-  space: number;
+  paddingBottom: number;
+  maxWidth: number;
   constructor(game: object, name: string, parent?: any) {
     super();
     this.game = game;
@@ -26,6 +27,7 @@ class KnPanel extends Container {
     parent && parent.addChild(this);
     this.x = 0;
     this.y = 0;
+    this.maxWidth = 0;
     this.point = new PIXI.Point(0, 0);
   }
 
@@ -60,21 +62,28 @@ class KnPanel extends Container {
     this.paddingLeft = padding;
     this.paddingRight = this.width - padding;
     this.paddingTop = padding;
-    this.paddingTop = this.height - padding;
+    this.paddingBottom = this.height - padding;
     this.point.y = this.paddingTop;
-  }
-
-  setSpace(space: number) {
-    this.space = space;
+    this.maxWidth = this.width - padding * 2;
   }
 
   // 排版
-  add(children: Array<any>, align: string) {
+  add(children: Array<any>, align: string, space?: number) {
+    const marginSpace = space || 0;
     const alignAction = {
       left: (child: any) => {
+        this.point.y += marginSpace;
         child.x = this.paddingLeft + this.point.x;
         child.y = this.point.y;
-        this.point.y += child.height + this.space;
+        this.point.y += child.height;
+        return child;
+      },
+      center: (child: any) => {
+        this.point.y += marginSpace;
+        child.x = this.width * 0.5;
+        child.anchor.x = 0.5;
+        child.y = this.point.y;
+        this.point.y += child.height;
         return child;
       }
     };

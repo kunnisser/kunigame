@@ -9,13 +9,14 @@ class KnText extends Text {
     game: Game,
     content: string,
     style: object,
-    anchor: Array<number>
+    anchor?: Array<number>
   ) {
     super(content, style);
     this.game = game;
-    this.anchor.set(...anchor);
+    anchor && this.anchor.set(...anchor);
     this.id = id;
     this.name = id;
+    this.resolution = game.dpr;
   }
 }
 

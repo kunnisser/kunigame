@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-13 17:44:22
+ * @LastEditTime: 2024-08-14 16:42:51
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/temp/scene.ts
  * @Description: ---- 临时文件 ----
  */
@@ -44,8 +44,42 @@ class Temp extends KnScene {
       this.game.config.half_h
     );
     this.cardContainer.setPadding(40);
-    const text = this.game.add.text("tmpText", "cams", {}, [0.5, 0.5]);
-    this.cardContainer.add([text], "left");
+    const text = this.game.add.text(
+      "tmpText",
+      "These guides are designed to be a companion to the API documentation",
+      {
+        fontSize: 32,
+        wordWrap: true,
+        wordWrapWidth: this.cardContainer.maxWidth,
+        lineHeight: 54
+      },
+      [0, 0]
+    );
+    const text1 = this.game.add.text(
+      "tmpText",
+      "默认技能：躲避单次技能或者普通伤害并强化累加到下一次普攻伤害，最高叠加3层（30%触发）",
+      {
+        fontSize: 28,
+        wordWrap: true,
+        wordWrapWidth: this.cardContainer.maxWidth,
+        lineHeight: 50,
+        breakWords: true
+      },
+      [0, 0]
+    );
+    const text2 = this.game.add.text(
+      "personScore",
+      "PersonScore",
+      {
+        fontSize: 50,
+        fontWeight: 800
+      },
+      [0, 0]
+    );
+    this.cardContainer.add([text2], "center", 0);
+    this.cardContainer.add([text], "left", 30);
+    this.cardContainer.add([text1], "left", 10);
+
     // const options = [
     //   {
     //     key: "menu",
