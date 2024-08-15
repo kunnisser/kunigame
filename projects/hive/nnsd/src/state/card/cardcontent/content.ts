@@ -2,21 +2,21 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 16:06:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-03 23:46:35
+ * @LastEditTime: 2024-06-10 18:04:37
  * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\content.ts
  * @Description: ---- 卡牌内容 ----
  */
 
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
-import CheckerCardWrap from '../checkerboard/checkerCard';
-import Game from 'ts@/kuni/lib/core';
-import KnSprite from 'ts@/kuni/lib/gameobjects/kn_sprite';
-import * as DragonBones from '../module/dragonbones.min.js';
-import KnBitMapText from 'ts@/kuni/lib/gameobjects/kn_bitmap_text';
-import Card from '../scene';
-import { rem } from 'ts@/kuni/lib/utils/common';
-import { KnTween } from 'ts@/kuni/lib/gameobjects/kn_tween';
-import dragonBones from '../module/dragonBones';
+import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import CheckerCardWrap from "../checkerboard/checkerCard";
+import Game from "ts@/kuni/lib/core";
+import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
+import * as DragonBones from "../module/dragonbones.min.js";
+import KnBitMapText from "ts@/kuni/lib/gameobjects/kn_bitmap_text";
+import Card from "../scene";
+import { rem } from "ts@/kuni/lib/utils/common";
+import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
+import dragonBones from "../module/dragonBones";
 
 class CardContent extends KnGroup {
   game: Game;
@@ -37,39 +37,40 @@ class CardContent extends KnGroup {
   exp: number;
   score: number;
   constructor(game: Game, parent: KnGroup, card: CheckerCardWrap) {
-    super(game, 'cardContent', parent);
+    super(game, "cardContent", parent);
     this.game = game;
     this.parent = card;
     this.tween = game.add.tween();
-    this.race = '';
-    this.attribute = '';
-    this.slotSprite = game.add.sprite('default_content', 'content_empty');
+    this.race = "";
+    this.attribute = "";
+    this.slotSprite = game.add.sprite("default_content", "content_empty");
     this.indices = [0, 0];
     this.exp = 0;
     this.score = 0;
   }
 
   // 初始化
-  initial() { }
+  initial() {}
 
   // 初始化粒子容器
   initialParticle() {
-    this.emitContainer = this.game.add.group('particleEmitter', this);
+    this.emitContainer = this.game.add.group("particleEmitter", this);
   }
   // 卡牌点击事件
-  onClick() { }
+  onClick() {}
 
   // 设置内部角色
   setRole(bonesKey: string, bonesName: string) {
     const loader = this.game.loader;
     const DB = DragonBones.default;
     const factory: dragonBones.PixiFactory = DB.PixiFactory.factory;
-    factory.parseDragonBonesData(loader.resources[bonesKey + 'Ske'].data);
+    factory.parseDragonBonesData(loader.resources[bonesKey + "Ske"].data);
     factory.parseTextureAtlasData(
-      loader.resources[bonesKey + 'Data'].data,
+      loader.resources[bonesKey + "Data"].data,
       PIXI.utils.TextureCache[bonesKey]
     );
-    const sprite: dragonBones.PixiArmatureDisplay | KnSprite = factory.buildArmatureDisplay(bonesName) || this.slotSprite;
+    const sprite: dragonBones.PixiArmatureDisplay | KnSprite =
+      factory.buildArmatureDisplay(bonesName) || this.slotSprite;
     this.addChild(sprite);
     return sprite;
   }
@@ -77,14 +78,14 @@ class CardContent extends KnGroup {
   // 设置卡牌血量
   setHealth(val: number) {
     this.hpValue = val;
-    this.hpWrap = this.game.add.image('health', 'health', this, [0.5, 0.5]);
+    this.hpWrap = this.game.add.image("health", "health", this, [0.5, 0.5]);
     this.hpWrap.scale.set(0.8);
     this.hp = this.game.add.bitmapText(
-      'hp',
-      val + '',
+      "hp",
+      val + "",
       {
-        fontName: 'font_a',
-        fontSize: rem(30),
+        fontName: "font_a",
+        fontSize: rem(30)
       },
       [0.5, 0.5]
     );
@@ -99,14 +100,14 @@ class CardContent extends KnGroup {
   // 设置卡牌攻击力
   setAttack(val: number) {
     this.attackValue = val;
-    this.attackWrap = this.game.add.image('attack', 'attack', this, [0.5, 0.5]);
+    this.attackWrap = this.game.add.image("attack", "attack", this, [0.5, 0.5]);
     this.attackWrap.angle = 45;
     this.attack = this.game.add.bitmapText(
-      'attack',
-      val + '',
+      "attack",
+      val + "",
       {
-        fontName: 'font_b',
-        fontSize: rem(30),
+        fontName: "font_b",
+        fontSize: rem(30)
       },
       [0.5, 0.5]
     );
@@ -119,10 +120,10 @@ class CardContent extends KnGroup {
   }
 
   // 击败其他卡牌的逻辑
-  defeat(target: CheckerCardWrap, direct: string) { }
+  defeat(target: CheckerCardWrap, direct: string) {}
 
   // 卡牌触发事件
-  event(target: CardContent, scene: Card) { }
+  event(target: CardContent, scene: Card) {}
 
   // 设置粒子发射器
   setParticleEmitter(emitter) {
@@ -130,24 +131,29 @@ class CardContent extends KnGroup {
     this.emitContainer.addChild(emitter);
   }
 
-
   // 修改骨骼动画中精灵的blendMode
-  changeSpriteBlendMode(target: dragonBones.PixiArmatureDisplay | KnSprite, blendMode: number) {
+  changeSpriteBlendMode(
+    target: dragonBones.PixiArmatureDisplay | KnSprite,
+    blendMode: number
+  ) {
     if (target.children.length > 0) {
       target.children.map((sp: KnSprite) => {
         sp.blendMode = blendMode;
-      })
+      });
     } else {
       target.blendMode = blendMode;
     }
   }
 
   // 修改精灵的tint
-  changeSpriteTint(target: dragonBones.PixiArmatureDisplay | KnSprite, tint: number) {
+  changeSpriteTint(
+    target: dragonBones.PixiArmatureDisplay | KnSprite,
+    tint: number
+  ) {
     if (target.children.length > 0) {
       target.children.map((sp: KnSprite) => {
         sp.tint = tint;
-      })
+      });
     } else {
       target.tint = tint;
     }
