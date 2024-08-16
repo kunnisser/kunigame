@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-08-13 11:11:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-14 15:09:53
+ * @LastEditTime: 2024-08-16 16:00:56
  * @FilePath: /kunigame/projects/kuni/lib/gameobjects/kn_panel.ts
  * @Description: ---- 面板容器 ----
  */
@@ -64,26 +64,48 @@ class KnPanel extends Container {
     this.paddingTop = padding;
     this.paddingBottom = this.height - padding;
     this.point.y = this.paddingTop;
+    this.point.x = this.paddingLeft;
     this.maxWidth = this.width - padding * 2;
   }
 
-  // 排版
-  add(children: Array<any>, align: string, space?: number) {
+  // 横向排版
+  addRow(children: Array<any>, align: string, space?: number) {
     const marginSpace = space || 0;
     const alignAction = {
       left: (child: any) => {
-        this.point.y += marginSpace;
-        child.x = this.paddingLeft + this.point.x;
+        const childWidth: number = child.width;
+        this.point.x += marginSpace + childWidth * child.anchor.x;
+        child.x = this.point.x;
         child.y = this.point.y;
-        this.point.y += child.height;
+        this.point.x += childWidth * (1 - child.anchor.x);
+        return child;
+      }
+    };
+    const layoutChildren = children.map((child) => {
+      return alignAction[align] && alignAction[align](child);
+    });
+    this.addChild(...layoutChildren);
+  }
+
+  // 纵向排版
+  addColumn(children: Array<any>, align: string, space?: number) {
+    const marginSpace = space || 0;
+    const alignAction = {
+      left: (child: any) => {
+        const childHeight: number = child.height;
+        this.point.y += marginSpace + childHeight * child.anchor.y;
+        child.x = this.paddingLeft;
+        child.y = this.point.y;
+        this.point.y += childHeight * (1 - child.anchor.y);
         return child;
       },
       center: (child: any) => {
-        this.point.y += marginSpace;
+        const childHeight: number = child.height;
+        this.point.y += marginSpace + childHeight * child.anchor.y;
         child.x = this.width * 0.5;
         child.anchor.x = 0.5;
         child.y = this.point.y;
-        this.point.y += child.height;
+        this.point.y += childHeight * (1 - child.anchor.y);
         return child;
       }
     };
