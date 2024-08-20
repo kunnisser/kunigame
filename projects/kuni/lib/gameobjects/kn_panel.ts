@@ -2,16 +2,17 @@
  * @Author: kunnisser
  * @Date: 2024-08-13 11:11:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-16 16:00:56
+ * @LastEditTime: 2024-08-20 17:18:10
  * @FilePath: /kunigame/projects/kuni/lib/gameobjects/kn_panel.ts
  * @Description: ---- 面板容器 ----
  */
 
 import { Container } from "pixi.js";
 import KnSprite from "./kn_sprite";
+import Game from "../core";
 
 class KnPanel extends Container {
-  public game: object;
+  public game: Game;
   public name: string;
   _bg: KnSprite;
   paddingLeft: number;
@@ -20,7 +21,7 @@ class KnPanel extends Container {
   point: PIXI.Point;
   paddingBottom: number;
   maxWidth: number;
-  constructor(game: object, name: string, parent?: any) {
+  constructor(game: Game, name: string, parent?: any) {
     super();
     this.game = game;
     this.name = name;
@@ -59,13 +60,14 @@ class KnPanel extends Container {
    * @return {void}
    */
   setPadding(padding: number) {
-    this.paddingLeft = padding;
-    this.paddingRight = this.width - padding;
-    this.paddingTop = padding;
-    this.paddingBottom = this.height - padding;
+    const scalePadding = padding * this.game.gameScale;
+    this.paddingLeft = scalePadding;
+    this.paddingRight = this.width - scalePadding;
+    this.paddingTop = scalePadding;
+    this.paddingBottom = this.height - scalePadding;
     this.point.y = this.paddingTop;
     this.point.x = this.paddingLeft;
-    this.maxWidth = this.width - padding * 2;
+    this.maxWidth = this.width - scalePadding * 2;
   }
 
   // 横向排版

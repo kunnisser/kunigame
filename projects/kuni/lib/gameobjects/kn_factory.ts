@@ -220,7 +220,10 @@ class KnFactory {
   text(id: string, content: string, style: any, anchor: Array<number>) {
     let entryStyle = Object.assign({}, style);
     // 处理文字模糊
-    // style.fontSize && (entryStyle.fontSize = 10 * style.fontSize);
+    style.fontSize &&
+      (entryStyle.fontSize = this.game?.gameScale * style.fontSize);
+    style.fontSize &&
+      (entryStyle.lineHeight = this.game?.gameScale * style.lineHeight);
     const text = new KnText(id, this.game, content, entryStyle, anchor);
     // text.scale.set(0.1);
     return text;

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-16 17:05:22
+ * @LastEditTime: 2024-08-20 16:45:07
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/temp/scene.ts
  * @Description: ---- 临时文件 ----
  */
@@ -45,7 +45,20 @@ class Temp extends KnScene {
       this.game.config.half_h
     );
     this.cardContainer.setPadding(40);
-
+    const icon = this.game.add.sprite("score", "score", [0, 0.5]);
+    const text4 = this.game.add.text(
+      "weaponPart",
+      "破碎的法杖碎片",
+      {
+        fontSize: 40,
+        fill: fillColor,
+        fontWeight: 800
+      },
+      [0, 0.5]
+    );
+    this.cardContainer.point.y += icon.height * 0.5;
+    this.cardContainer.addRow([icon], "left", 0);
+    this.cardContainer.addRow([text4], "left", 20);
     const text1 = this.game.add.text(
       "tmpText",
       "默认技能：躲避单次技能或者普通伤害并强化累加到下一次普攻伤害，最高叠加3层（30%触发）",
@@ -59,41 +72,7 @@ class Temp extends KnScene {
       },
       [0, 0]
     );
-    const text2 = this.game.add.text(
-      "personScore",
-      "PersonScore",
-      {
-        fontSize: 50,
-        fill: fillColor,
-        fontWeight: 800
-      },
-      [0, 0]
-    );
-    this.cardContainer.addColumn([text2], "center", 0);
-    this.cardContainer.addColumn([text1], "left", 10);
-    const text3 = this.game.add.sprite("score", "score", [0, 0.5]);
-    const text4 = this.game.add.text(
-      "Tow0",
-      "Tow0",
-      {
-        fontSize: 30,
-        fill: fillColor
-      },
-      [0, 0.5]
-    );
-    const text5 = this.game.add.text(
-      "Tow2",
-      "Tow2",
-      {
-        fontSize: 30,
-        fill: fillColor
-      },
-      [0, 0.5]
-    );
-    this.cardContainer.point.y += 50;
-    this.cardContainer.addRow([text3], "left", 0);
-    this.cardContainer.addRow([text4], "left", 20);
-    this.cardContainer.addRow([text5], "left", 20);
+    this.cardContainer.addColumn([text1], "left", icon.height * 0.75);
 
     // const options = [
     //   {
