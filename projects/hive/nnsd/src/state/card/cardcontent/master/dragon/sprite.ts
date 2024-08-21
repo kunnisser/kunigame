@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-03-01 14:48:50
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-17 23:16:32
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\master\dragon\sprite.ts
+ * @LastEditTime: 2024-08-21 17:25:24
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/master/dragon/sprite.ts
  * @Description: ---- lv1 敖广 ----
  */
 
@@ -14,35 +14,73 @@ import CheckerCardWrap from "../../../checkerboard/checkerCard";
 import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
 import Card from "../../../scene";
 
-class DragonAoGang extends CardContent { 
+class DragonAoGang extends CardContent {
   game: Game;
   sprite: KnSprite;
   parent: CheckerCardWrap;
   score: number;
   exp: number;
+  skillStep: number; // 技能触发的步数
   constructor(game: Game, parent: KnGroup, card: CheckerCardWrap) {
     super(game, parent, card);
     this.game = game;
-    this.attribute = 'boss';
-    this.race = 'dragon';
+    this.attribute = "boss";
+    this.race = "dragon";
     this.score = 50;
     this.exp = 500;
+    this.skillStep = 5;
     this.initial();
   }
 
+  /**
+   * @description: 初始化boss属性
+   * @return {*}
+   */
   initial() {
-    this.sprite = this.game.add.sprite('dragon', 'dragon', [0.5, 0.5]);
+    this.sprite = this.game.add.sprite("dragon", "dragon", [0.5, 0.5]);
     this.addChild(this.sprite);
     this.setHealth(20);
     this.setAttack(4);
   }
 
+  /**
+   * @description: 交战触发事件
+   * @param {CardContent} target
+   * @param {Card} scene
+   * @return {*}
+   */
   event(target: CardContent, scene: Card) {
     this.changeSpriteTint(target.sprite, 0xd10311);
     target.hpValue -= this.attackValue;
-    target.hp.text = target.hpValue + '';
+    target.hp.text = target.hpValue + "";
+    this.harmed(target);
+  }
+
+  /**
+   * @description: 受到目标的伤害事件
+   * @param {CardContent} target
+   * @return {*}
+   */
+  harmed(target: CardContent) {
     this.hpValue -= target.attackValue;
-    this.hp.text = this.hpValue + '';
+    this.hp.text = this.hpValue + "";
+  }
+
+  /**
+   * @description: boss技能 【吸血术】
+   * @param {CardContent} target
+   * @return {*}
+   */
+  skill(target: CardContent) {
+    const skillDamageValue = 8;
+    // 伤害
+    target.hpValue -= skillDamageValue;
+    target.hp.text = target.hpValue + "";
+
+    // 恢复
+    this.hpValue += skillDamageValue;
+    this.hp.text = this.hpValue + "";
+    this.harmed(target);
   }
 }
 

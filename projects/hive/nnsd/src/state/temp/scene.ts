@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-20 16:45:07
+ * @LastEditTime: 2024-08-21 16:08:36
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/temp/scene.ts
  * @Description: ---- 临时文件 ----
  */
@@ -10,7 +10,6 @@ import Game from "ts@/kuni/lib/core";
 import KnPanel from "ts@/kuni/lib/gameobjects/kn_panel";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import KnModal from "ts@/kuni/lib/gameui/kn_modal";
-// import KnScrollMenu from "ts@/kuni/lib/gameui/kn_scrollMenu";
 import { rem } from "ts@/kuni/lib/utils/common";
 
 class Temp extends KnScene {
@@ -44,13 +43,13 @@ class Temp extends KnScene {
       this.game.config.half_w,
       this.game.config.half_h
     );
-    this.cardContainer.setPadding(40);
+    this.cardContainer.setPadding(rem(40));
     const icon = this.game.add.sprite("score", "score", [0, 0.5]);
     const text4 = this.game.add.text(
       "weaponPart",
       "破碎的法杖碎片",
       {
-        fontSize: 40,
+        fontSize: rem(40),
         fill: fillColor,
         fontWeight: 800
       },
@@ -58,16 +57,16 @@ class Temp extends KnScene {
     );
     this.cardContainer.point.y += icon.height * 0.5;
     this.cardContainer.addRow([icon], "left", 0);
-    this.cardContainer.addRow([text4], "left", 20);
+    this.cardContainer.addRow([text4], "left", rem(20));
     const text1 = this.game.add.text(
       "tmpText",
       "默认技能：躲避单次技能或者普通伤害并强化累加到下一次普攻伤害，最高叠加3层（30%触发）",
       {
-        fontSize: 28,
+        fontSize: rem(28),
         fill: fillColor,
         wordWrap: true,
         wordWrapWidth: this.cardContainer.maxWidth,
-        lineHeight: 50,
+        lineHeight: rem(50),
         breakWords: true
       },
       [0, 0]

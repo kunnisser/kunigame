@@ -14,6 +14,6 @@ const bossList = [
     name: "dragon",
     content: DragonAoGang
   }
-]
+];
 
 export default bossList;

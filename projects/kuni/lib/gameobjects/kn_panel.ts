@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-08-13 11:11:10
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-20 17:18:10
+ * @LastEditTime: 2024-08-21 16:07:13
  * @FilePath: /kunigame/projects/kuni/lib/gameobjects/kn_panel.ts
  * @Description: ---- 面板容器 ----
  */
@@ -60,14 +60,13 @@ class KnPanel extends Container {
    * @return {void}
    */
   setPadding(padding: number) {
-    const scalePadding = padding * this.game.gameScale;
-    this.paddingLeft = scalePadding;
-    this.paddingRight = this.width - scalePadding;
-    this.paddingTop = scalePadding;
-    this.paddingBottom = this.height - scalePadding;
+    this.paddingLeft = padding;
+    this.paddingRight = this.width - padding;
+    this.paddingTop = padding;
+    this.paddingBottom = this.height - padding;
     this.point.y = this.paddingTop;
     this.point.x = this.paddingLeft;
-    this.maxWidth = this.width - scalePadding * 2;
+    this.maxWidth = this.width - padding * 2;
   }
 
   // 横向排版
