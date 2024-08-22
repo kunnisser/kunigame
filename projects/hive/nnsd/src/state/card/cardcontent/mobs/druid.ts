@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-17 22:59:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-21 16:39:20
+ * @LastEditTime: 2024-08-22 16:54:12
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/mobs/druid.ts
  * @Description: ---- 德鲁伊 ----
  */
@@ -49,6 +49,7 @@ class Druid extends CardContent {
    * @return {*}
    */
   event(target: CardContent, scene: Card) {
+    console.log(target);
     this.changeSpriteTint(target.sprite, 0xfff000);
     target.hpValue -= this.attackValue;
     target.hp.text = target.hpValue + "";

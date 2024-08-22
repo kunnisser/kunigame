@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-09-24 21:44:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-06 23:28:25
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\gui\level.ts
+ * @LastEditTime: 2024-08-22 16:22:26
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/gui/level.ts
  * @Description: ---- 等级条 ----
  */
 
@@ -36,12 +36,7 @@ class LevelBar extends KnGroup {
   }
 
   generator() {
-    this.outBar = this.game.add.image(
-      "outBar",
-      "levelOutbar",
-      this,
-      [0, 0.5]
-    );
+    this.outBar = this.game.add.image("outBar", "levelOutbar", this, [0, 0.5]);
     this.outBar.x = -this.outBar.width * 0.5;
     this.innerBar = this.game.add.image(
       "innerBar",
@@ -63,11 +58,11 @@ class LevelBar extends KnGroup {
       "levelInfo",
       "Lv." + this.level,
       {
-        fontSize: 40,
+        fontSize: rem(30),
         fontWeight: "bold",
         fill: "#ffffff",
         stroke: "#000000",
-        strokeThickness: 20
+        strokeThickness: rem(8)
       },
       [0.5, 0.5]
     );
@@ -80,42 +75,42 @@ class LevelBar extends KnGroup {
     this.addChildAt(this.levelEmitter, 0);
   }
 
-    // 获取经验的效果
-    shootExp(target) {
-      this.expEmitter.multiShootOnce(
-        this.game,
-        this.tween,
-        0, // 粒子发射器的坐标
-        0,
-        {
-          duration: 0.35,
-          count: 5,
-          targetX: target.x - this.position.x, // 粒子发射的目标坐标
-          targetY: target.y - this.position.y,
-          offsetX: target.width * 0.4, // 粒子发射的目标范围
-          offsetY: -target.height * 0.3,
-          xRandom: true,
-          yRandom: true,
-          xDirect: true,
-          yDirect: false,
-          ease: 'back',
-          inout: 'easeIn',
-          angle: 360,
-          angleRandom: true,
-          angleDirect: true,
-          width: 0, // 粒子发生器的尺寸范围
-          height: 0,
-          delay: true
-        },
-        'from',
-        1,
-        (particle: any) => { 
-          particle.visible = false;
-          particle.alpha = 0;
-        }
-      );
-    }
-  
+  // 获取经验的效果
+  shootExp(target) {
+    this.expEmitter.multiShootOnce(
+      this.game,
+      this.tween,
+      0, // 粒子发射器的坐标
+      0,
+      {
+        duration: 0.35,
+        count: 5,
+        targetX: target.x - this.position.x, // 粒子发射的目标坐标
+        targetY: target.y - this.position.y,
+        offsetX: target.width * 0.4, // 粒子发射的目标范围
+        offsetY: -target.height * 0.3,
+        xRandom: true,
+        yRandom: true,
+        xDirect: true,
+        yDirect: false,
+        ease: "back",
+        inout: "easeIn",
+        angle: 360,
+        angleRandom: true,
+        angleDirect: true,
+        width: 0, // 粒子发生器的尺寸范围
+        height: 0,
+        delay: true
+      },
+      "from",
+      1,
+      (particle: any) => {
+        particle.visible = false;
+        particle.alpha = 0;
+      }
+    );
+  }
+
   // 经验增加
   increaseExp(exp: number, target: CheckerCardWrap) {
     const outLevelExp = this.maskBar.x + exp - this.innerBar.width;
@@ -125,16 +120,16 @@ class LevelBar extends KnGroup {
       this.level += 1;
       this.levelInfo.text = "Lv." + this.level;
       this.levelUpEffect();
-    } else { 
+    } else {
       this.tween.instance.to(this.maskBar, 0.6, {
         x: this.maskBar.x + exp,
         ease: this.tween.bounce.easeOut
-      })
+      });
     }
   }
 
   // 升级特效
-  levelUpEffect() { 
+  levelUpEffect() {
     this.tween.instance.to(this.maskBar, 0.1, {
       alpha: 0.55,
       ease: this.tween.cubic.easeOut,
@@ -155,8 +150,8 @@ class LevelBar extends KnGroup {
         yRandom: true,
         xDirect: true,
         yDirect: true,
-        ease: 'cubic',
-        inout: 'easeOut',
+        ease: "cubic",
+        inout: "easeOut",
         angle: 360,
         angleRandom: true,
         angleDirect: true,
@@ -164,9 +159,9 @@ class LevelBar extends KnGroup {
         height: 0,
         delay: false
       },
-      'to',
+      "to",
       void 0,
-      (particle: any) => { 
+      (particle: any) => {
         particle.visible = false;
         particle.alpha = 0;
       }
@@ -175,4 +170,3 @@ class LevelBar extends KnGroup {
 }
 
 export default LevelBar;
-

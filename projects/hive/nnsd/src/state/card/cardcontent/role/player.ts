@@ -2,19 +2,19 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-06 23:32:47
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\role\player.ts
+ * @LastEditTime: 2024-08-22 17:24:41
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
  * @Description: ---- 玩家角色1 ----
  */
-import CheckerCardWrap from '../../checkerboard/checkerCard';
-import Game from 'ts@/kuni/lib/core';
-import CardContent from '../content';
-import { Point, Texture } from 'pixi.js';
-import Card from '../../scene';
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
-import { rem } from 'ts@/kuni/lib/utils/common';
-import DragonBones from '../../module/dragonbones.min';
-import dragonBones from '../../module/dragonBones';
+import CheckerCardWrap from "../../checkerboard/checkerCard";
+import Game from "ts@/kuni/lib/core";
+import CardContent from "../content";
+import { Point, Texture } from "pixi.js";
+import Card from "../../scene";
+import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import { rem } from "ts@/kuni/lib/utils/common";
+import DragonBones from "../../module/dragonbones.min";
+import dragonBones from "../../module/dragonBones";
 class Don extends CardContent {
   game: Game;
   parent: CheckerCardWrap;
@@ -35,11 +35,11 @@ class Don extends CardContent {
   constructor(game: Game, parent: KnGroup, card: CheckerCardWrap) {
     super(game, parent, card);
     this.game = game;
-    this.attribute = 'player';
-    this.race = 'human';
+    this.attribute = "player";
+    this.race = "human";
     this.faceDirect = {
       left: -1,
-      right: 1,
+      right: 1
     };
     this.isAlive = true;
     this.initial();
@@ -49,13 +49,13 @@ class Don extends CardContent {
 
   initial() {
     this.sprite = this.setRole(
-      'tex',
-      'role'
+      "tex",
+      "role"
     ) as dragonBones.PixiArmatureDisplay;
     this.sprite.scale.set(rem(0.35));
     this.sprite.y += this.sprite.getBounds().height * 0.25;
     this.sprite.animation.timeScale = 2;
-    this.sprite.animation.play('idle');
+    this.sprite.animation.play("idle");
     this.currentGlobal = new Point(0, 0);
     this.setHealth(20);
     this.setAttack(7);
@@ -86,7 +86,7 @@ class Don extends CardContent {
         attack.onComplete = () => {
           attack.visible = false;
         };
-      },
+      }
     };
     this.addChild(attack);
   }
@@ -109,13 +109,13 @@ class Don extends CardContent {
 
     if (target.content.attack) {
       this.sprite.animation.timeScale = 4;
-      const attackAction = this.sprite.animation.play('attack');
+      const attackAction = this.sprite.animation.play("attack");
       attackAction && (attackAction.playTimes = 1);
       this.sprite.armature.eventDispatcher.addDBEventListener(
         DragonBones.EventObject.COMPLETE,
         () => {
           this.sprite.animation.timeScale = 2;
-          this.sprite.animation.play('idle');
+          this.sprite.animation.play("idle");
         },
         this
       );
@@ -141,6 +141,13 @@ class Don extends CardContent {
   attacking(direct: string, target: CheckerCardWrap) {
     const [dx, dy] = this.parent.parent.moveBehavior[direct];
     this.changeSpriteTint(target.content.sprite, 0xd10311);
+    this.tween.instance.to(target, 0.1, {
+      x: target.x + -dx * rem(40),
+      y: target.y + -dy * rem(40),
+      yoyo: true,
+      repeat: 1,
+      ease: this.tween.cubic.easeOut
+    });
     this.tween.instance.to(this.parent, 0.1, {
       x: this.parent.x + dx * rem(40),
       y: this.parent.y + dy * rem(40),
@@ -150,7 +157,7 @@ class Don extends CardContent {
       onComplete: () => {
         this.changeSpriteTint(this.sprite, 0xffffff);
         this.changeSpriteTint(target.content.sprite, 0xffffff);
-      },
+      }
     }).progress;
   }
 
