@@ -157,7 +157,10 @@ class KnScrollMenu extends KnGroup {
       this.onDragEnd(e);
 
       // 滑动状态不可点击，停止滑动再触发点击事件
-      this.clickAble && opt.callback && index === this.bootIndex && opt.callback();
+      this.clickAble &&
+        opt.callback &&
+        index === this.bootIndex &&
+        opt.callback();
     };
 
     menuIcon.cancel = (e) => {

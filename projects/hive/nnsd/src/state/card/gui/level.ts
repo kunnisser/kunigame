@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-24 21:44:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-22 16:22:26
+ * @LastEditTime: 2024-08-26 16:56:19
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/gui/level.ts
  * @Description: ---- 等级条 ----
  */
@@ -27,9 +27,10 @@ class LevelBar extends KnGroup {
   tween: KnTween;
   expEmitter: KnEmitter;
   levelEmitter: KnEmitter;
+  scene: Card;
   constructor(game: Game, parent: Card) {
     super(game, "levelBar", parent);
-    this.parent = parent;
+    this.scene = parent;
     this.game = game;
     this.tween = game.add.tween();
     this.generator();
@@ -67,7 +68,11 @@ class LevelBar extends KnGroup {
       [0.5, 0.5]
     );
     this.addChild(this.levelInfo);
-    this.position.set(this.game.config.half_w, this.outBar.height);
+
+    this.position.set(
+      this.game.config.half_w,
+      this.scene.layoutSlideHeight * 0.5
+    );
     this.expEmitter = this.game.add.emitter(this.game, 10, "exp");
     this.expEmitter.position.set(this.position.x, this.position.y);
     this.levelEmitter = this.game.add.emitter(this.game, 30, "star");

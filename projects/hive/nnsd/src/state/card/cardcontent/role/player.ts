@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-22 17:24:41
+ * @LastEditTime: 2024-08-26 17:17:23
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -52,7 +52,7 @@ class Don extends CardContent {
       "tex",
       "role"
     ) as dragonBones.PixiArmatureDisplay;
-    this.sprite.scale.set(rem(0.35));
+    this.sprite.scale.set(rem(0.3));
     this.sprite.y += this.sprite.getBounds().height * 0.25;
     this.sprite.animation.timeScale = 2;
     this.sprite.animation.play("idle");

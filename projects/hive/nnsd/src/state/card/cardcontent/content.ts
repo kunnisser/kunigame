@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 16:06:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-06-10 18:04:37
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\content.ts
+ * @LastEditTime: 2024-08-26 17:31:44
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/content.ts
  * @Description: ---- 卡牌内容 ----
  */
 
@@ -79,19 +79,19 @@ class CardContent extends KnGroup {
   setHealth(val: number) {
     this.hpValue = val;
     this.hpWrap = this.game.add.image("health", "health", this, [0.5, 0.5]);
-    this.hpWrap.scale.set(0.8);
+    this.hpWrap.scale.set(0.6);
     this.hp = this.game.add.bitmapText(
       "hp",
       val + "",
       {
         fontName: "font_a",
-        fontSize: rem(30)
+        fontSize: rem(20)
       },
       [0.5, 0.5]
     );
     this.hp.position.set(
-      this.parent.wrap.width * 0.5 - 50,
-      -this.parent.wrap.height * 0.5 + 50
+      this.parent.wrap.width * 0.5 - rem(20),
+      -this.parent.wrap.height * 0.5 + rem(20)
     );
     this.hpWrap.position.set(this.hp.x, this.hp.y);
     this.addChild(this.hpWrap, this.hp);
@@ -101,21 +101,25 @@ class CardContent extends KnGroup {
   setAttack(val: number) {
     this.attackValue = val;
     this.attackWrap = this.game.add.image("attack", "attack", this, [0.5, 0.5]);
+    this.attackWrap.scale.set(rem(0.4));
     this.attackWrap.angle = 45;
     this.attack = this.game.add.bitmapText(
       "attack",
       val + "",
       {
         fontName: "font_b",
-        fontSize: rem(30)
+        fontSize: rem(20)
       },
       [0.5, 0.5]
     );
-    this.attack.position.set(
-      -this.parent.wrap.width * 0.5 + rem(40),
+    this.attackWrap.position.set(
+      -this.parent.wrap.width * 0.5 + rem(30),
       this.parent.wrap.height * 0.5 - rem(40)
     );
-    this.attackWrap.position.set(this.attack.x, this.attack.y);
+    this.attack.position.set(
+      this.attackWrap.x + this.attackWrap.width + rem(10),
+      this.attackWrap.y
+    );
     this.addChild(this.attack);
   }
 
