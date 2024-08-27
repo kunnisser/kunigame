@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-26 17:17:23
+ * @LastEditTime: 2024-08-27 10:01:21
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -137,10 +137,20 @@ class Don extends CardContent {
     }
   }
 
-  // 攻击动画
+  /**
+   * @description: 攻击
+   * @param {string} direct 面向
+   * @param {CheckerCardWrap} target 攻击目标
+   * @return {*}
+   */
   attacking(direct: string, target: CheckerCardWrap) {
+    // 根据面向获取缓动坐标方向
     const [dx, dy] = this.parent.parent.moveBehavior[direct];
+
+    // 目标变色
     this.changeSpriteTint(target.content.sprite, 0xd10311);
+
+    // 目标缓动
     this.tween.instance.to(target, 0.1, {
       x: target.x + -dx * rem(40),
       y: target.y + -dy * rem(40),
@@ -148,6 +158,8 @@ class Don extends CardContent {
       repeat: 1,
       ease: this.tween.cubic.easeOut
     });
+
+    // 角色缓动
     this.tween.instance.to(this.parent, 0.1, {
       x: this.parent.x + dx * rem(40),
       y: this.parent.y + dy * rem(40),
@@ -155,10 +167,19 @@ class Don extends CardContent {
       repeat: 1,
       ease: this.tween.cubic.easeOut,
       onComplete: () => {
+        // 还原目标和角色变色
         this.changeSpriteTint(this.sprite, 0xffffff);
         this.changeSpriteTint(target.content.sprite, 0xffffff);
       }
     }).progress;
+
+    this.tween.instance.to(this.parent.scale, 0.1, {
+      x: 1.25,
+      y: 0.85,
+      yoyo: true,
+      repeat: 1,
+      ease: this.tween.cubic.easeOut
+    });
   }
 
   // 检测当前角色生命值
