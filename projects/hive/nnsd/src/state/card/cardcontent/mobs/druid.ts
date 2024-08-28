@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-17 22:59:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-22 16:54:12
+ * @LastEditTime: 2024-08-28 17:31:43
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/mobs/druid.ts
  * @Description: ---- 德鲁伊 ----
  */
@@ -30,6 +30,7 @@ class Druid extends CardContent {
    * @return {*}
    */
   initial() {
+    this.trophyAble = true;
     this.sprite = this.setRole(this.race + "Bone", this.race);
     if (this.sprite) {
       this.sprite.animation.play("stay");

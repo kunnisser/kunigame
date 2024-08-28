@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 16:06:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-26 17:31:44
+ * @LastEditTime: 2024-08-28 17:32:11
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/content.ts
  * @Description: ---- 卡牌内容 ----
  */
@@ -36,6 +36,7 @@ class CardContent extends KnGroup {
   emitContainer: KnGroup; // 卡牌的粒子容器，储存粒子发射器
   exp: number;
   score: number;
+  trophyAble: boolean;
   constructor(game: Game, parent: KnGroup, card: CheckerCardWrap) {
     super(game, "cardContent", parent);
     this.game = game;
@@ -47,6 +48,7 @@ class CardContent extends KnGroup {
     this.indices = [0, 0];
     this.exp = 0;
     this.score = 0;
+    this.trophyAble = false;
   }
 
   // 初始化

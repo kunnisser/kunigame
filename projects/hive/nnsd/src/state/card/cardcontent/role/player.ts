@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-27 10:01:21
+ * @LastEditTime: 2024-08-28 17:32:52
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -127,6 +127,8 @@ class Don extends CardContent {
     // 没有击败目标
     if (target.content.hpValue && target.content.hpValue > 0) {
       this.attacking(direct, target);
+      return false;
+    } else if (target.content.trophyAble) {
       return false;
     } else {
       // 更新计分栏数值
