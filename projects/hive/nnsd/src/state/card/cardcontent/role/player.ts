@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-28 17:32:52
+ * @LastEditTime: 2024-08-30 16:53:34
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -128,14 +128,16 @@ class Don extends CardContent {
     if (target.content.hpValue && target.content.hpValue > 0) {
       this.attacking(direct, target);
       return false;
-    } else if (target.content.trophyAble) {
-      return false;
     } else {
       // 更新计分栏数值
       scene.scoreBar.score += target.content.score;
       scene.level.increaseExp(target.content.exp, target);
       scene.scoreBar.updateScore(scene.scoreBar.score);
-      return true;
+      const trophy = target.content.trophyAble;
+      if (trophy) {
+        target.setContent(trophy, target.content.indices);
+      }
+      return !trophy;
     }
   }
 
