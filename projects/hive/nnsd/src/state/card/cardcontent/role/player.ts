@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-30 16:53:34
+ * @LastEditTime: 2024-09-02 17:12:54
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -97,7 +97,7 @@ class Don extends CardContent {
     const scene = this.game.currentScene as Card;
 
     //执行目标卡牌的触发事件
-    target.content.event(this, scene);
+    target.content.event(this, target.content);
 
     // 执行人物骨骼动作
     // 设定方向
@@ -135,7 +135,7 @@ class Don extends CardContent {
       scene.scoreBar.updateScore(scene.scoreBar.score);
       const trophy = target.content.trophyAble;
       if (trophy) {
-        target.setContent(trophy, target.content.indices);
+        target.changeContent(trophy, target.content.indices);
       }
       return !trophy;
     }

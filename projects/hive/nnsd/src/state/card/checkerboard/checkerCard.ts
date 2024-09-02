@@ -2,21 +2,21 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-04 16:27:15
+ * @LastEditTime: 2024-09-02 15:23:10
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/checkerboard/checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
 
-import Game from 'ts@/kuni/lib/core';
-import KnGroup from 'ts@/kuni/lib/gameobjects/kn_group';
-import CheckerLayout from './checkerLayout';
-import KnSprite from 'ts@/kuni/lib/gameobjects/kn_sprite';
-import CardContent from '../cardcontent/content';
-import { CardContentMap } from '../cardcontent/combine';
-import Don from '../cardcontent/role/player';
-import { InteractionEvent, Point } from 'pixi.js';
-import { generateCardTween, moveCardTween } from '../tween';
-import Card from '../scene';
+import Game from "ts@/kuni/lib/core";
+import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
+import CheckerLayout from "./checkerLayout";
+import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
+import CardContent from "../cardcontent/content";
+import { CardContentMap } from "../cardcontent/combine";
+import Don from "../cardcontent/role/player";
+import { InteractionEvent, Point } from "pixi.js";
+import { generateCardTween, moveCardTween } from "../tween";
+import Card from "../scene";
 
 class CheckerCardWrap extends KnGroup {
   game: Game;
@@ -25,7 +25,7 @@ class CheckerCardWrap extends KnGroup {
   parent: CheckerLayout;
   content: CardContent;
   constructor(game: Game, parent: CheckerLayout, type?: string) {
-    super(game, 'cardWrap', parent);
+    super(game, "cardWrap", parent);
     this.parent = parent;
     this.game = game;
     this.initialWrap(type);
@@ -36,7 +36,7 @@ class CheckerCardWrap extends KnGroup {
   initialWrap(type?: string) {
     const wrapKey = type && type === "don" ? "playerCardWrap" : "cardWrap";
     this.wrap = this.game.add.image(wrapKey, wrapKey, this, [0.5, 0.5]);
-    this.container = this.game.add.group('cardContainer', this);
+    this.container = this.game.add.group("cardContainer", this);
   }
 
   // 根据卡片类型 设置卡片内容元素
@@ -48,10 +48,27 @@ class CheckerCardWrap extends KnGroup {
     }
   }
 
+  // 卡牌切换
+  changeContent(type?: string, indices?: Array<number>) {
+    this.parent.tween.instance.to(this.scale, 0.15, {
+      x: 0,
+      y: 0,
+      ease: this.parent.tween.bounce.easeIn,
+      onComplete: () => {
+        this.setContent(type, indices);
+        this.parent.tween.instance.to(this.scale, 0.15, {
+          x: 1,
+          y: 1,
+          ease: this.parent.tween.bounce.easeOut
+        });
+      }
+    });
+  }
+
   // todo 卡牌交互
   interaction() {
     this.wrap.interactive = true;
-    this.wrap.on('pointerdown', (event: InteractionEvent) => {
+    this.wrap.on("pointerdown", (event: InteractionEvent) => {
       const playerCardWrap = this.wrap;
 
       // 判断是否为玩家卡牌
@@ -64,11 +81,11 @@ class CheckerCardWrap extends KnGroup {
         //   content.onMove && content.onMove(this, event);
         // });
         // 抬起手势取消拖动
-        playerCardWrap.once('pointerup', () => {
-          playerCardWrap.off('pointerupoutside');
+        playerCardWrap.once("pointerup", () => {
+          playerCardWrap.off("pointerupoutside");
         });
-        playerCardWrap.once('pointerupoutside', (upEvent: InteractionEvent) => {
-          playerCardWrap.off('pointerup');
+        playerCardWrap.once("pointerupoutside", (upEvent: InteractionEvent) => {
+          playerCardWrap.off("pointerup");
           const direct: string | undefined = this.computedPlayerDirection(
             content.currentGlobal,
             upEvent.data.global
@@ -79,19 +96,19 @@ class CheckerCardWrap extends KnGroup {
       }
 
       // 通用点击事件
-      playerCardWrap.once('pointerup', () => {
-        playerCardWrap.off('pointerupoutside');
+      playerCardWrap.once("pointerup", () => {
+        playerCardWrap.off("pointerupoutside");
         this.content.onClick();
       });
-      playerCardWrap.once('pointerupoutside', () => {
-        playerCardWrap.off('pointerup');
+      playerCardWrap.once("pointerupoutside", () => {
+        playerCardWrap.off("pointerup");
       });
     });
   }
 
   // 判断是否为玩家卡牌
   isPlayerCard() {
-    return this.content.attribute === 'player';
+    return this.content.attribute === "player";
   }
 
   // 判断玩家卡牌的移动方向
@@ -112,7 +129,7 @@ class CheckerCardWrap extends KnGroup {
       right:
         Math.abs(moveTarget.x - currentPointer.x) >
           Math.abs(moveTarget.y - currentPointer.y) &&
-        moveTarget.x - currentPointer.x > 0,
+        moveTarget.x - currentPointer.x > 0
     };
     return Object.keys(directLogicMap).find((key) => directLogicMap[key]);
   }
@@ -129,14 +146,14 @@ class CheckerCardWrap extends KnGroup {
 
     player.checkPlayerHealth();
     if (!player.isAlive) {
-      console.log('game over');
+      console.log("game over");
       const scene = this.game.currentScene as Card;
       scene.gameOverGui.modal.showPanel();
       return;
     }
 
-    console.log(successBeat, '--');
-    if (!successBeat) { 
+    console.log(successBeat, "--");
+    if (!successBeat) {
       return;
     }
 
@@ -164,7 +181,7 @@ class CheckerCardWrap extends KnGroup {
           this.game.config.half_w,
         y:
           targetIndices[1] * (this.wrap.height + this.parent.cardSpace) +
-          this.game.config.half_h,
+          this.game.config.half_h
       },
       () => {
         // 被处理的卡牌重置
@@ -192,9 +209,8 @@ class CheckerCardWrap extends KnGroup {
         this.game.config.half_w,
       y:
         currentIndices[1] * (this.wrap.height + this.parent.cardSpace) +
-        this.game.config.half_h,
+        this.game.config.half_h
     });
-
   }
 }
 

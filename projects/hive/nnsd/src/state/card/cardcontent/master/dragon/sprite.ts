@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-03-01 14:48:50
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-21 17:25:24
+ * @LastEditTime: 2024-09-02 17:13:00
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/master/dragon/sprite.ts
  * @Description: ---- lv1 敖广 ----
  */
@@ -12,7 +12,6 @@ import CardContent from "../../content";
 import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 import CheckerCardWrap from "../../../checkerboard/checkerCard";
 import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
-import Card from "../../../scene";
 
 class DragonAoGang extends CardContent {
   game: Game;
@@ -25,6 +24,7 @@ class DragonAoGang extends CardContent {
     super(game, parent, card);
     this.game = game;
     this.attribute = "boss";
+    this.trophyAble = "mobs";
     this.race = "dragon";
     this.score = 50;
     this.exp = 500;
@@ -49,7 +49,7 @@ class DragonAoGang extends CardContent {
    * @param {Card} scene
    * @return {*}
    */
-  event(target: CardContent, scene: Card) {
+  event(target: CardContent, self: CardContent) {
     this.changeSpriteTint(target.sprite, 0xd10311);
     target.hpValue -= this.attackValue;
     target.hp.text = target.hpValue + "";

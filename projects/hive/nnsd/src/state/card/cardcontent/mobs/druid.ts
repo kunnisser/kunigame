@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-17 22:59:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-30 16:53:12
+ * @LastEditTime: 2024-09-02 17:12:58
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/mobs/druid.ts
  * @Description: ---- 德鲁伊 ----
  */
@@ -10,7 +10,6 @@ import CheckerCardWrap from "../../checkerboard/checkerCard";
 import Game from "ts@/kuni/lib/core";
 import CardContent from "../content";
 import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
-import Card from "../../scene";
 import { rem } from "ts@/kuni/lib/utils/common";
 class Druid extends CardContent {
   game: Game;
@@ -20,6 +19,7 @@ class Druid extends CardContent {
     this.game = game;
     this.attribute = "npc";
     this.race = "druid";
+    this.trophyAble = "fruit";
     this.score = 3;
     this.exp = 200;
     this.initial();
@@ -39,7 +39,6 @@ class Druid extends CardContent {
       this.addChild(this.sprite);
       this.setHealth(10);
       this.setAttack(2);
-      this.trophyAble = "fruit";
     }
   }
 
@@ -49,7 +48,7 @@ class Druid extends CardContent {
    * @param {Card} scene
    * @return {*}
    */
-  event(target: CardContent, scene: Card) {
+  event(target: CardContent, self: CardContent) {
     console.log(target);
     this.changeSpriteTint(target.sprite, 0xfff000);
     target.hpValue -= this.attackValue;

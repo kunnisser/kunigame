@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-14 21:23:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-30 17:34:15
+ * @LastEditTime: 2024-09-02 17:29:39
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/resource/fruit.ts
  * @Description: ---- 资源 - 水果 ----
  */
@@ -12,7 +12,6 @@ import CardContent from "../content";
 import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 import CheckerCardWrap from "../../checkerboard/checkerCard";
 import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
-import Card from "../../scene";
 import Don from "../role/player";
 import { cureEffectParticle } from "../../particle";
 import KnBitMapText from "ts@/kuni/lib/gameobjects/kn_bitmap_text";
@@ -40,7 +39,7 @@ class Fruit extends CardContent {
 
   onClick(): void {}
 
-  event(target: Don, scene: Card): void {
+  event(target: Don, self: Fruit): void {
     target.hpValue += this.pureVal;
     target.hp.text = target.hpValue + "";
     const [emitter, effect] = cureEffectParticle(

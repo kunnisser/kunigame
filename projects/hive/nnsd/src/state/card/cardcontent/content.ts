@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 16:06:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-30 16:52:50
+ * @LastEditTime: 2024-09-02 17:13:41
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/content.ts
  * @Description: ---- 卡牌内容 ----
  */
@@ -13,7 +13,6 @@ import Game from "ts@/kuni/lib/core";
 import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 import * as DragonBones from "../module/dragonbones.min.js";
 import KnBitMapText from "ts@/kuni/lib/gameobjects/kn_bitmap_text";
-import Card from "../scene";
 import { rem } from "ts@/kuni/lib/utils/common";
 import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
 import dragonBones from "../module/dragonBones";
@@ -129,7 +128,7 @@ class CardContent extends KnGroup {
   defeat(target: CheckerCardWrap, direct: string) {}
 
   // 卡牌触发事件
-  event(target: CardContent, scene: Card) {}
+  event(target: CardContent, self: CardContent) {}
 
   // 设置粒子发射器
   setParticleEmitter(emitter) {
