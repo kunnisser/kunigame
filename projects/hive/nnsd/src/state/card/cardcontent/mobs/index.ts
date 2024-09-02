@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-03 00:30:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-02 17:13:24
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/mobs/index.ts
+ * @LastEditTime: 2024-09-02 22:54:06
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\mobs\index.ts
  * @Description: ---- 小怪 ----
  */
 import CheckerCardWrap from "../../checkerboard/checkerCard";

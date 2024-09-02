@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-26 16:55:47
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/scene.ts
+ * @LastEditTime: 2024-09-02 22:58:37
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\scene.ts
  * @Description: ---- 卡牌 ----
  */
 
@@ -36,10 +36,13 @@ class Card extends KnScene {
       texSke: "assets/atlas/role_ske.json",
       texData: "assets/atlas/role_tex.json",
       tex: "assets/atlas/role_tex.png",
-      mob: "assets/images/mob.png",
+      mob: "assets/images/mob_jy.png",
       druidBoneSke: "assets/atlas/deluyi_ske.json",
       druidBoneData: "assets/atlas/deluyi_tex.json",
       druidBone: "assets/atlas/deluyi_tex.png",
+      gdBoneSke: "assets/atlas/gd_ske.json",
+      gdBoneData: "assets/atlas/gd_tex.json",
+      gdBone: "assets/atlas/gd_tex.png",
       font_a: "assets/fonts/font_a.fnt",
       font_b: "assets/fonts/font_b.fnt",
       cureFont: "assets/fonts/cureFont.fnt",

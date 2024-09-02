@@ -18,7 +18,7 @@ class Druid extends CardContent {
     super(game, parent, card);
     this.game = game;
     this.attribute = "npc";
-    this.race = "druid";
+    this.race = "gd";
     this.trophyAble = "fruit";
     this.score = 3;
     this.exp = 200;
@@ -32,10 +32,10 @@ class Druid extends CardContent {
   initial() {
     this.sprite = this.setRole(this.race + "Bone", this.race);
     if (this.sprite) {
-      this.sprite.animation.play("stay");
+      this.sprite.animation.play("idle");
       this.sprite.animation.timeScale = 1;
       this.sprite.scale.set(rem(0.5));
-      this.sprite.y = this.sprite.getBounds().height * 0.4;
+      // this.sprite.y = this.sprite.getBounds().height * 0.4;
       this.addChild(this.sprite);
       this.setHealth(10);
       this.setAttack(2);
