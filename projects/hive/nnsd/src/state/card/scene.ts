@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-01 17:13:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-02 22:58:37
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\scene.ts
+ * @LastEditTime: 2024-09-03 16:41:43
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/scene.ts
  * @Description: ---- 卡牌 ----
  */
 
@@ -14,6 +14,7 @@ import ScoreBar from "./gui/score";
 import LevelBar from "./gui/level";
 import { cardPack } from "./gui/pack";
 import GameOverGui from "./gui/end";
+import PlayProgress from "./progress/player";
 
 class Card extends KnScene {
   game: Game;
@@ -23,6 +24,8 @@ class Card extends KnScene {
   gameOverGui: GameOverGui;
   restart: any;
   layoutSlideHeight: number;
+  playerProgress: PlayProgress;
+  bossProgress: PlayProgress;
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
@@ -32,6 +35,8 @@ class Card extends KnScene {
       playerCardWrap: "assets/images/playerCardWrap.png",
       health: "assets/images/health.png",
       healthPlus: "assets/images/healthPlus.png",
+      progressBar: "assets/images/hp_inner_bar.png",
+      progressBarOut: "assets/images/hp_out_bar.png",
       orange: "assets/images/orange.png",
       texSke: "assets/atlas/role_ske.json",
       texData: "assets/atlas/role_tex.json",
@@ -73,8 +78,16 @@ class Card extends KnScene {
     // 去除棋盘高度，上下间隔
     this.layoutSlideHeight =
       (this.game.config.height - this.layout.height) * 0.5;
+    this.playerProgress = new PlayProgress(this.game, this, 3, -1);
+    this.bossProgress = new PlayProgress(this.game, this, 4, 1);
     this.scoreBar = new ScoreBar(this.game, this);
-    this.addChild(gameBg, this.layout, this.scoreBar);
+    this.addChild(
+      gameBg, // 背景
+      this.layout, // 棋盘
+      this.scoreBar, // 得分
+      this.playerProgress, // 玩家能量槽
+      this.bossProgress // boss能量槽
+    );
     this.level = new LevelBar(this.game, this);
     cardPack(this.game, this);
     this.createGameOverScene();

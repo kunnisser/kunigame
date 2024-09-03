@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-02 17:12:54
+ * @LastEditTime: 2024-09-03 17:40:20
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -126,7 +126,7 @@ class Don extends CardContent {
 
     // 没有击败目标
     if (target.content.hpValue && target.content.hpValue > 0) {
-      this.attacking(direct, target);
+      this.attacking(direct, target, scene);
       return false;
     } else {
       // 更新计分栏数值
@@ -147,7 +147,7 @@ class Don extends CardContent {
    * @param {CheckerCardWrap} target 攻击目标
    * @return {*}
    */
-  attacking(direct: string, target: CheckerCardWrap) {
+  attacking(direct: string, target: CheckerCardWrap, scene: Card) {
     // 根据面向获取缓动坐标方向
     const [dx, dy] = this.parent.parent.moveBehavior[direct];
 
@@ -184,6 +184,9 @@ class Don extends CardContent {
       repeat: 1,
       ease: this.tween.cubic.easeOut
     });
+
+    // 能量积攒
+    scene.playerProgress.step();
   }
 
   // 检测当前角色生命值

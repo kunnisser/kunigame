@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2023-09-24 21:44:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-26 16:56:19
+ * @LastEditTime: 2024-09-03 17:29:00
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/gui/level.ts
  * @Description: ---- 等级条 ----
  */
@@ -121,12 +121,16 @@ class LevelBar extends KnGroup {
     const outLevelExp = this.maskBar.x + exp - this.innerBar.width;
     exp > 0 && this.shootExp(target);
     if (outLevelExp >= 0) {
-      this.maskBar.x = outLevelExp;
+      this.maskBar.x = 0;
       this.level += 1;
       this.levelInfo.text = "Lv." + this.level;
+      this.tween.instance.to(this.maskBar, 0.3, {
+        x: outLevelExp,
+        ease: this.tween.bounce.easeOut
+      });
       this.levelUpEffect();
     } else {
-      this.tween.instance.to(this.maskBar, 0.6, {
+      this.tween.instance.to(this.maskBar, 0.3, {
         x: this.maskBar.x + exp,
         ease: this.tween.bounce.easeOut
       });
@@ -135,7 +139,7 @@ class LevelBar extends KnGroup {
 
   // 升级特效
   levelUpEffect() {
-    this.tween.instance.to(this.maskBar, 0.1, {
+    this.tween.instance.to(this.maskBar, 0.2, {
       alpha: 0.55,
       ease: this.tween.cubic.easeOut,
       yoyo: true,
@@ -147,7 +151,7 @@ class LevelBar extends KnGroup {
       0, // 粒子发射器的坐标
       0,
       {
-        duration: 1,
+        duration: 1.6,
         count: 20,
         offsetX: rem(30), // 粒子发射的目标范围
         offsetY: this.outBar.height * 2,
