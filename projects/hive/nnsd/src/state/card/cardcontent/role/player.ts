@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-03 17:40:20
+ * @LastEditTime: 2024-09-04 17:28:19
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -56,6 +56,15 @@ class Don extends CardContent {
     this.sprite.y += this.sprite.getBounds().height * 0.25;
     this.sprite.animation.timeScale = 2;
     this.sprite.animation.play("idle");
+    // 监听骨骼动画执行完毕
+    this.sprite.armature.eventDispatcher.addDBEventListener(
+      DragonBones.EventObject.COMPLETE,
+      () => {
+        this.sprite.animation.timeScale = 2;
+        this.sprite.animation.play("idle");
+      },
+      this
+    );
     this.currentGlobal = new Point(0, 0);
     this.setHealth(20);
     this.setAttack(7);
@@ -71,20 +80,23 @@ class Don extends CardContent {
     const attack = this.game.add.animation(frames, 0.2);
     attack.position.set(
       this.sprite.getBounds().width * 0.75,
-      this.sprite.getBounds().height * 0.25
+      this.sprite.getBounds().height * 0.1
     );
     attack.visible = false;
     this.skills = {
       attack: (direct: number) => {
         if (direct) {
           attack.x = this.sprite.getBounds().width * 0.25 * direct;
-          attack.scale.x = direct;
+          attack.scale.x = direct * 2;
+          attack.scale.y *= 2;
         }
         attack.visible = true;
         attack.loop = false;
+        this.attackValue += 5;
         attack.gotoAndPlay(0);
         attack.onComplete = () => {
           attack.visible = false;
+          this.attackValue = +this.attack.text;
         };
       }
     };
@@ -95,9 +107,6 @@ class Don extends CardContent {
 
   defeat(target: CheckerCardWrap, direct: string): boolean {
     const scene = this.game.currentScene as Card;
-
-    //执行目标卡牌的触发事件
-    target.content.event(this, target.content);
 
     // 执行人物骨骼动作
     // 设定方向
@@ -111,22 +120,20 @@ class Don extends CardContent {
       this.sprite.animation.timeScale = 4;
       const attackAction = this.sprite.animation.play("attack");
       attackAction && (attackAction.playTimes = 1);
-      this.sprite.armature.eventDispatcher.addDBEventListener(
-        DragonBones.EventObject.COMPLETE,
-        () => {
-          this.sprite.animation.timeScale = 2;
-          this.sprite.animation.play("idle");
-        },
-        this
-      );
 
+      // 能量积攒
+      const isTrigger: boolean = scene.playerProgress.step();
+      console.log(isTrigger);
       // 执行技能动画
-      this.skills.attack(this.faceDirect[direct]);
+      isTrigger && this.skills.attack(this.faceDirect[direct]);
+
+      //执行目标卡牌的触发事件
+      target.content.event(this, target.content);
     }
 
     // 没有击败目标
     if (target.content.hpValue && target.content.hpValue > 0) {
-      this.attacking(direct, target, scene);
+      this.attacking(direct, target);
       return false;
     } else {
       // 更新计分栏数值
@@ -147,7 +154,7 @@ class Don extends CardContent {
    * @param {CheckerCardWrap} target 攻击目标
    * @return {*}
    */
-  attacking(direct: string, target: CheckerCardWrap, scene: Card) {
+  attacking(direct: string, target: CheckerCardWrap) {
     // 根据面向获取缓动坐标方向
     const [dx, dy] = this.parent.parent.moveBehavior[direct];
 
@@ -184,9 +191,6 @@ class Don extends CardContent {
       repeat: 1,
       ease: this.tween.cubic.easeOut
     });
-
-    // 能量积攒
-    scene.playerProgress.step();
   }
 
   // 检测当前角色生命值
