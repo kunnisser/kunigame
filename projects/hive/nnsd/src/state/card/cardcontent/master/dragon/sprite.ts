@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-03-01 14:48:50
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-03 11:03:01
+ * @LastEditTime: 2024-09-05 17:17:01
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/master/dragon/sprite.ts
  * @Description: ---- lv1 敖广 ----
  */
@@ -41,6 +41,7 @@ class DragonAoGang extends CardContent {
     this.addChild(this.sprite);
     this.setHealth(20);
     this.setAttack(4);
+    this.setStatusPop();
   }
 
   /**
@@ -53,6 +54,8 @@ class DragonAoGang extends CardContent {
     // this.changeSpriteTint(target.sprite, 0xd10311);
     target.hpValue -= this.attackValue;
     target.hp.text = target.hpValue + "";
+    target.popValue("-" + this.attackValue);
+
     this.harmed(target);
   }
 
@@ -64,6 +67,7 @@ class DragonAoGang extends CardContent {
   harmed(target: CardContent) {
     this.hpValue -= target.attackValue;
     this.hp.text = this.hpValue + "";
+    this.popValue("-" + target.attackValue);
   }
 
   /**
@@ -80,6 +84,7 @@ class DragonAoGang extends CardContent {
     // 恢复
     this.hpValue += skillDamageValue;
     this.hp.text = this.hpValue + "";
+
     this.harmed(target);
   }
 }

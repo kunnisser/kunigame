@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-17 22:59:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-03 11:03:11
+ * @LastEditTime: 2024-09-05 17:16:07
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/mobs/druid.ts
  * @Description: ---- 德鲁伊 ----
  */
@@ -39,6 +39,7 @@ class Druid extends CardContent {
       this.addChild(this.sprite);
       this.setHealth(10);
       this.setAttack(2);
+      this.setStatusPop();
     }
   }
 
@@ -54,6 +55,10 @@ class Druid extends CardContent {
     target.hp.text = target.hpValue + "";
     this.hpValue -= target.attackValue;
     this.hp.text = this.hpValue + "";
+
+    // 数值显示
+    this.popValue("" + target.attackValue);
+    target.popValue("-" + this.attackValue);
   }
 }
 

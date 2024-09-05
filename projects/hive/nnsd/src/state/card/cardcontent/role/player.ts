@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-04 17:28:19
+ * @LastEditTime: 2024-09-05 17:14:32
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -45,6 +45,8 @@ class Don extends CardContent {
     this.initial();
     this.initialParticle();
     this.initialSkills();
+    this.setStatusPop();
+    this.statusPop.style.fill = "0x000999";
   }
 
   initial() {
@@ -115,7 +117,7 @@ class Don extends CardContent {
       this.faceDirect[direct] &&
       (this.sprite.scale.x =
         Math.abs(this.sprite.scale.x) * this.faceDirect[direct]);
-
+    // 1. 执行攻击前的判定及动画
     if (target.content.attack) {
       this.sprite.animation.timeScale = 4;
       const attackAction = this.sprite.animation.play("attack");
@@ -126,11 +128,12 @@ class Don extends CardContent {
       console.log(isTrigger);
       // 执行技能动画
       isTrigger && this.skills.attack(this.faceDirect[direct]);
-
-      //执行目标卡牌的触发事件
-      target.content.event(this, target.content);
     }
 
+    // 2. 执行目标卡牌的数值变化
+    target.content.event(this, target.content);
+
+    // 3. 更新攻击事件(卡牌撞击)
     // 没有击败目标
     if (target.content.hpValue && target.content.hpValue > 0) {
       this.attacking(direct, target);

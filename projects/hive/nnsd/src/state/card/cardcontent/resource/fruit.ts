@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-14 21:23:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-02 17:29:39
+ * @LastEditTime: 2024-09-05 10:36:11
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/resource/fruit.ts
  * @Description: ---- 资源 - 水果 ----
  */

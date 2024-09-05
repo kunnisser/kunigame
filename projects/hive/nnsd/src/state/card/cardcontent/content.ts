@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 16:06:12
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-02 17:13:41
+ * @LastEditTime: 2024-09-05 17:13:33
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/content.ts
  * @Description: ---- 卡牌内容 ----
  */
@@ -16,6 +16,7 @@ import KnBitMapText from "ts@/kuni/lib/gameobjects/kn_bitmap_text";
 import { rem } from "ts@/kuni/lib/utils/common";
 import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
 import dragonBones from "../module/dragonBones";
+import KnText from "ts@/kuni/lib/gameobjects/kn_text";
 
 class CardContent extends KnGroup {
   game: Game;
@@ -36,6 +37,7 @@ class CardContent extends KnGroup {
   exp: number;
   score: number;
   trophyAble: string | null;
+  statusPop: KnText; // 状态气泡
   constructor(game: Game, parent: KnGroup, card: CheckerCardWrap) {
     super(game, "cardContent", parent);
     this.game = game;
@@ -130,6 +132,20 @@ class CardContent extends KnGroup {
   // 卡牌触发事件
   event(target: CardContent, self: CardContent) {}
 
+  // 状态提示pop
+  setStatusPop() {
+    this.statusPop = this.game.add.text("statusPop", "", {}, [0.5, 0.5]);
+    this.statusPop.visible = false;
+    this.statusPop.style = {
+      fontSize: rem(30),
+      fontWeight: "bold",
+      fill: 0xd10311,
+      stroke: 0xffffff,
+      strokeThickness: rem(4)
+    };
+    this.addChild(this.statusPop);
+  }
+
   // 设置粒子发射器
   setParticleEmitter(emitter) {
     this.emitContainer.removeChildren();
@@ -162,6 +178,20 @@ class CardContent extends KnGroup {
     } else {
       target.tint = tint;
     }
+  }
+
+  // 气泡数值弹出
+  popValue(value: string) {
+    this.statusPop.visible = true;
+    this.statusPop.text = value;
+    this.statusPop.y = 0;
+    this.tween.instance.to(this.statusPop, 0.6, {
+      y: -rem(120),
+      ease: this.tween.cubic.easeOut,
+      onComplete: () => {
+        this.statusPop.visible = false;
+      }
+    });
   }
 }
 
