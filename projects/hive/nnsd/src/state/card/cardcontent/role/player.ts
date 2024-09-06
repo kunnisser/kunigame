@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-05 17:14:32
+ * @LastEditTime: 2024-09-06 17:22:35
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -15,10 +15,12 @@ import KnGroup from "ts@/kuni/lib/gameobjects/kn_group";
 import { rem } from "ts@/kuni/lib/utils/common";
 import DragonBones from "../../module/dragonbones.min";
 import dragonBones from "../../module/dragonBones";
+
 class Don extends CardContent {
   game: Game;
   parent: CheckerCardWrap;
   sprite: dragonBones.PixiArmatureDisplay;
+
   // 角色是否存活
   isAlive: Boolean;
 
@@ -56,17 +58,20 @@ class Don extends CardContent {
     ) as dragonBones.PixiArmatureDisplay;
     this.sprite.scale.set(rem(0.3));
     this.sprite.y += this.sprite.getBounds().height * 0.25;
-    this.sprite.animation.timeScale = 2;
-    this.sprite.animation.play("idle");
+    const idle = this.sprite.animation.play("idle");
+    idle && (idle.timeScale = 2);
     // 监听骨骼动画执行完毕
-    this.sprite.armature.eventDispatcher.addDBEventListener(
-      DragonBones.EventObject.COMPLETE,
-      () => {
-        this.sprite.animation.timeScale = 2;
-        this.sprite.animation.play("idle");
-      },
-      this
-    );
+    if (this.sprite) {
+      this.sprite.armature.eventDispatcher.addDBEventListener(
+        DragonBones.EventObject.COMPLETE,
+        () => {
+          const resetIdle = this.sprite.animation.play("idle");
+          resetIdle && (resetIdle.timeScale = 2);
+        },
+        this
+      );
+    }
+
     this.currentGlobal = new Point(0, 0);
     this.setHealth(20);
     this.setAttack(7);
@@ -119,9 +124,9 @@ class Don extends CardContent {
         Math.abs(this.sprite.scale.x) * this.faceDirect[direct]);
     // 1. 执行攻击前的判定及动画
     if (target.content.attack) {
-      this.sprite.animation.timeScale = 4;
       const attackAction = this.sprite.animation.play("attack");
-      attackAction && (attackAction.playTimes = 1);
+      attackAction &&
+        ((attackAction.timeScale = 4), (attackAction.playTimes = 1));
 
       // 能量积攒
       const isTrigger: boolean = scene.playerProgress.step();

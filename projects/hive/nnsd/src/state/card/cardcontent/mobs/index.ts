@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-03 00:30:29
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-05 17:10:10
+ * @LastEditTime: 2024-09-06 10:59:22
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/mobs/index.ts
  * @Description: ---- 小怪 ----
  */
@@ -41,6 +41,8 @@ class Mobs extends CardContent {
     target.hp.text = target.hpValue + "";
     this.hpValue -= target.attackValue;
     this.hp.text = this.hpValue + "";
+
+    target.statusPop.style.fill = 0xd10311;
     target.popValue("-" + this.attackValue);
   }
 }

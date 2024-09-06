@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-17 22:59:34
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-05 17:16:07
+ * @LastEditTime: 2024-09-06 16:51:19
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/mobs/druid.ts
  * @Description: ---- 德鲁伊 ----
  */
@@ -32,8 +32,7 @@ class Druid extends CardContent {
   initial() {
     this.sprite = this.setRole(this.race + "Bone", this.race);
     if (this.sprite) {
-      this.sprite.animation.play("idle");
-      this.sprite.animation.timeScale = 1;
+      this.sprite.animation.play("idle").timeScale = 1;
       this.sprite.scale.set(rem(0.5));
       // this.sprite.y = this.sprite.getBounds().height * 0.4;
       this.addChild(this.sprite);
@@ -57,7 +56,8 @@ class Druid extends CardContent {
     this.hp.text = this.hpValue + "";
 
     // 数值显示
-    this.popValue("" + target.attackValue);
+    this.popValue("-" + target.attackValue);
+    target.statusPop.style.fill = 0xd10311;
     target.popValue("-" + this.attackValue);
   }
 }

@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-14 21:23:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-05 10:36:11
+ * @LastEditTime: 2024-09-06 16:58:15
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/resource/fruit.ts
  * @Description: ---- 资源 - 水果 ----
  */
@@ -16,7 +16,6 @@ import Don from "../role/player";
 import { cureEffectParticle } from "../../particle";
 import KnBitMapText from "ts@/kuni/lib/gameobjects/kn_bitmap_text";
 import DragonBones from "../../module/dragonbones.min";
-
 class Fruit extends CardContent {
   game: Game;
   sprite: KnSprite;
@@ -49,6 +48,8 @@ class Fruit extends CardContent {
     target.setParticleEmitter(emitter);
     effect && effect(target);
     this.playerRecoverAnimation(target);
+    target.statusPop.style.fill = 0x11b234;
+    target.popValue("+" + this.pureVal);
   }
 
   // 定义玩家血量恢复的动作

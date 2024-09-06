@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-03-01 14:48:50
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-05 17:17:01
+ * @LastEditTime: 2024-09-06 11:00:51
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/master/dragon/sprite.ts
  * @Description: ---- lv1 敖广 ----
  */
@@ -54,6 +54,7 @@ class DragonAoGang extends CardContent {
     // this.changeSpriteTint(target.sprite, 0xd10311);
     target.hpValue -= this.attackValue;
     target.hp.text = target.hpValue + "";
+    target.statusPop.style.fill = 0xd10311;
     target.popValue("-" + this.attackValue);
 
     this.harmed(target);
