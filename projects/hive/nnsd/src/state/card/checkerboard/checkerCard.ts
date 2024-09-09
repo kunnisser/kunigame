@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 13:53:45
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-02 15:23:10
+ * @LastEditTime: 2024-09-09 17:28:51
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/checkerboard/checkerCard.ts
  * @Description: ---- 卡牌外壳 ----
  */
@@ -15,7 +15,7 @@ import CardContent from "../cardcontent/content";
 import { CardContentMap } from "../cardcontent/combine";
 import Don from "../cardcontent/role/player";
 import { InteractionEvent, Point } from "pixi.js";
-import { generateCardTween, moveCardTween } from "../tween";
+import { destroyCardTween, generateCardTween, moveCardTween } from "../tween";
 import Card from "../scene";
 
 class CheckerCardWrap extends KnGroup {
@@ -168,8 +168,7 @@ class CheckerCardWrap extends KnGroup {
 
     /* 执行卡牌动画 */
     // 处理目标卡牌
-    targetCard.scale.set(0);
-    targetCard.visible = false;
+    destroyCardTween(this.parent.tween, targetCard);
 
     // 移动玩家卡牌
     moveCardTween(

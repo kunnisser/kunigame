@@ -2,14 +2,14 @@
  * @Author: kunnisser
  * @Date: 2024-02-05 14:44:41
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-02-14 17:30:31
+ * @LastEditTime: 2024-09-09 17:28:57
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/tween/index.ts
  * @Description: ---- 缓动动画 ----
  */
 
-import { KnTween } from 'ts@/kuni/lib/gameobjects/kn_tween';
-import CheckerCardWrap from '../checkerboard/checkerCard';
-import KnBitMapText from 'ts@/kuni/lib/gameobjects/kn_bitmap_text';
+import { KnTween } from "ts@/kuni/lib/gameobjects/kn_tween";
+import CheckerCardWrap from "../checkerboard/checkerCard";
+import KnBitMapText from "ts@/kuni/lib/gameobjects/kn_bitmap_text";
 
 const moveCardTween = (
   tween: KnTween,
@@ -21,7 +21,7 @@ const moveCardTween = (
     x: pos.x,
     y: pos.y,
     ease: tween.cubic.easeOut,
-    onComplete: cb,
+    onComplete: cb
   });
 };
 
@@ -34,7 +34,7 @@ const generateCardTween = (
     x: 1,
     y: 1,
     ease: tween.back.easeOut,
-    onComplete: cb,
+    onComplete: cb
   });
 };
 
@@ -47,23 +47,22 @@ const textUpdateTween = (tween: KnTween, text: KnBitMapText) => {
       tween.instance.to(text.scale, 0.2, {
         x: 1,
         y: 1,
-        ease: tween.back.easeOut,
+        ease: tween.back.easeOut
       });
-    },
+    }
   });
 };
 
-// const destroyCardTween = (
-//   tween: KnTween,
-//   target: CheckerCardWrap,
-//   cb?: Function
-// ) => {
-//   return tween.instance.to(target.scale, 0.1, {
-//     x: 0,
-//     y: 0,
-//     ease: tween.cubic.easeOut,
-//     onComplete: cb,
-//   });
-// };
+const destroyCardTween = (tween: KnTween, target: CheckerCardWrap) => {
+  return tween.instance.to(target.content.sprite.scale, 0.1, {
+    x: 0,
+    y: 0,
+    ease: tween.bounce.easeIn,
+    onComplete: () => {
+      target.content.sprite.scale.set(1);
+      target.visible = false;
+    }
+  });
+};
 
-export { moveCardTween, generateCardTween, textUpdateTween };
+export { moveCardTween, generateCardTween, textUpdateTween, destroyCardTween };

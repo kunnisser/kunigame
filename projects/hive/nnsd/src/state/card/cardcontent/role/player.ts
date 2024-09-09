@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-02 15:41:11
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-06 17:22:35
+ * @LastEditTime: 2024-09-09 17:20:37
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/role/player.ts
  * @Description: ---- 玩家角色1 ----
  */
@@ -94,8 +94,7 @@ class Don extends CardContent {
       attack: (direct: number) => {
         if (direct) {
           attack.x = this.sprite.getBounds().width * 0.25 * direct;
-          attack.scale.x = direct * 2;
-          attack.scale.y *= 2;
+          attack.scale.x = direct;
         }
         attack.visible = true;
         attack.loop = false;
