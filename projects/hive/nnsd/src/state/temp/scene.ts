@@ -2,10 +2,11 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-08-21 16:08:36
+ * @LastEditTime: 2024-09-10 17:27:50
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/temp/scene.ts
  * @Description: ---- 临时文件 ----
  */
+import { InteractionEvent } from "pixi.js";
 import Game from "ts@/kuni/lib/core";
 import KnPanel from "ts@/kuni/lib/gameobjects/kn_panel";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
@@ -17,6 +18,8 @@ class Temp extends KnScene {
   modal: KnModal;
   restart: any;
   cardContainer: KnPanel;
+  turnPoints: any;
+  laser: import("/Users/qiankun/cams/kunigame/projects/kuni/lib/gameobjects/kn_graphics").default;
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
@@ -27,8 +30,11 @@ class Temp extends KnScene {
       panelBg: "assets/images/tempBg.png",
       score: "assets/images/score.png",
       close: "assets/images/close.png",
-      restart: "assets/images/restart.png"
+      restart: "assets/images/restart.png",
+      laser: "assets/images/hp_inner_bar.png",
+      star: "assets/images/star.png"
     };
+    this.turnPoints = [];
   }
 
   boot() {}
@@ -36,42 +42,83 @@ class Temp extends KnScene {
   create() {
     const gameBg = this.game.add.background("bg", "bg");
     this.addChild(gameBg);
-    this.cardContainer = this.game.add.panel("testCard", this);
-    this.cardContainer.background = this.game.add.sprite("panelBg", "panelBg");
-    const fillColor = 0x6c5d53;
-    this.cardContainer.setPosition(
-      this.game.config.half_w,
-      this.game.config.half_h
-    );
-    this.cardContainer.setPadding(rem(40));
-    const icon = this.game.add.sprite("score", "score", [0, 0.5]);
-    const text4 = this.game.add.text(
-      "weaponPart",
-      "破碎的法杖碎片",
-      {
-        fontSize: rem(40),
-        fill: fillColor,
-        fontWeight: 800
-      },
-      [0, 0.5]
-    );
-    this.cardContainer.point.y += icon.height * 0.5;
-    this.cardContainer.addRow([icon], "left", 0);
-    this.cardContainer.addRow([text4], "left", rem(20));
-    const text1 = this.game.add.text(
-      "tmpText",
-      "默认技能：躲避单次技能或者普通伤害并强化累加到下一次普攻伤害，最高叠加3层（30%触发）",
-      {
-        fontSize: rem(28),
-        fill: fillColor,
-        wordWrap: true,
-        wordWrapWidth: this.cardContainer.maxWidth,
-        lineHeight: rem(50),
-        breakWords: true
-      },
-      [0, 0]
-    );
-    this.cardContainer.addColumn([text1], "left", icon.height * 0.75);
+    // this.cardContainer = this.game.add.panel("testCard", this);
+    // this.cardContainer.background = this.game.add.sprite("panelBg", "panelBg");
+    // const fillColor = 0x6c5d53;
+    // this.cardContainer.setPosition(
+    //   this.game.config.half_w,
+    //   this.game.config.half_h
+    // );
+    // this.cardContainer.setPadding(rem(40));
+    // const icon = this.game.add.sprite("score", "score", [0, 0.5]);
+    // const text4 = this.game.add.text(
+    //   "weaponPart",
+    //   "破碎的法杖碎片",
+    //   {
+    //     fontSize: rem(40),
+    //     fill: fillColor,
+    //     fontWeight: 800
+    //   },
+    //   [0, 0.5]
+    // );
+    // this.cardContainer.point.y += icon.height * 0.5;
+    // this.cardContainer.addRow([icon], "left", 0);
+    // this.cardContainer.addRow([text4], "left", rem(20));
+    // const text1 = this.game.add.text(
+    //   "tmpText",
+    //   "默认技能：躲避单次技能或者普通伤害并强化累加到下一次普攻伤害，最高叠加3层（30%触发）",
+    //   {
+    //     fontSize: rem(28),
+    //     fill: fillColor,
+    //     wordWrap: true,
+    //     wordWrapWidth: this.cardContainer.maxWidth,
+    //     lineHeight: rem(50),
+    //     breakWords: true
+    //   },
+    //   [0, 0]
+    // );
+    // this.cardContainer.addColumn([text1], "left", icon.height * 0.75);
+
+    const startPoint = this.game.add.pointer(100, 100);
+    // const endPoint = this.game.add.pointer(400, 500);
+
+    this.laser = this.game.add.graphics();
+    const laserTexture = PIXI.utils.TextureCache["laser"];
+    // laser.beginTextureFill({ texture: laserTexture });
+    // laser.drawRect(0, -5, length, 10);
+    // this.laser.lineTextureStyle({ width: 10, texture: laserTexture });
+    // this.laser.moveTo(startPoint.x, startPoint.y);
+    // this.laser.lineTo(endPoint.x, endPoint.y);
+    const tween = this.game.add.tween();
+    tween.instance.to(this.laser, 0.05, {
+      alpha: 0.4,
+      ease: tween.cubic.easeOut,
+      yoyo: true,
+      repeat: -1
+    });
+    // laser.endFill();
+    // laser.rotation = angle;
+
+    const star = this.game.add.sprite("star", "star", [0.5, 0.5]);
+    star.position.set(startPoint.x, startPoint.y);
+    this.addChild(this.laser, star);
+
+    gameBg.interactive = true;
+    gameBg.on("pointerdown", (event: InteractionEvent) => {
+      const pos = event.data.getLocalPosition(this.game.currentScene);
+      this.laser.clear();
+      this.laser.lineTextureStyle({ width: 10, texture: laserTexture });
+      this.laser.moveTo(startPoint.x, startPoint.y);
+      this.laser.lineTo(
+        startPoint.x + Math.random() * 120,
+        startPoint.y + Math.random() * 310
+      );
+      this.laser.lineTo(pos.x, pos.y);
+    });
+
+    gameBg.on("pointerup", (event: InteractionEvent) => {
+      this.laser.clear();
+    });
 
     // const options = [
     //   {
