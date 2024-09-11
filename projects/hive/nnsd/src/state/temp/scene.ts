@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-10 17:27:50
+ * @LastEditTime: 2024-09-11 17:31:48
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/temp/scene.ts
  * @Description: ---- 临时文件 ----
  */
@@ -11,7 +11,7 @@ import Game from "ts@/kuni/lib/core";
 import KnPanel from "ts@/kuni/lib/gameobjects/kn_panel";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import KnModal from "ts@/kuni/lib/gameui/kn_modal";
-import { rem } from "ts@/kuni/lib/utils/common";
+import { math, rem } from "ts@/kuni/lib/utils/common";
 
 class Temp extends KnScene {
   game: Game;
@@ -20,6 +20,10 @@ class Temp extends KnScene {
   cardContainer: KnPanel;
   turnPoints: any;
   laser: import("/Users/qiankun/cams/kunigame/projects/kuni/lib/gameobjects/kn_graphics").default;
+  shoot: boolean;
+  pos: PIXI.Point;
+  startPoint: PIXI.Point;
+  laserTexture: any;
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
@@ -32,9 +36,11 @@ class Temp extends KnScene {
       close: "assets/images/close.png",
       restart: "assets/images/restart.png",
       laser: "assets/images/hp_inner_bar.png",
+      beams: "assets/images/beams.png",
       star: "assets/images/star.png"
     };
     this.turnPoints = [];
+    this.shoot = false;
   }
 
   boot() {}
@@ -79,20 +85,22 @@ class Temp extends KnScene {
     // );
     // this.cardContainer.addColumn([text1], "left", icon.height * 0.75);
 
-    const startPoint = this.game.add.pointer(100, 100);
+    this.startPoint = this.game.add.pointer(100, 100);
     // const endPoint = this.game.add.pointer(400, 500);
 
     this.laser = this.game.add.graphics();
-    const laserTexture = PIXI.utils.TextureCache["laser"];
+    this.laserTexture = PIXI.utils.TextureCache["beams"];
+    console.log(this.laserTexture);
+    // const testTexture = PIXI.utils.TextureCache["laser"];
     // laser.beginTextureFill({ texture: laserTexture });
     // laser.drawRect(0, -5, length, 10);
     // this.laser.lineTextureStyle({ width: 10, texture: laserTexture });
     // this.laser.moveTo(startPoint.x, startPoint.y);
     // this.laser.lineTo(endPoint.x, endPoint.y);
     const tween = this.game.add.tween();
-    tween.instance.to(this.laser, 0.05, {
-      alpha: 0.4,
-      ease: tween.cubic.easeOut,
+    tween.instance.to(this.laser, 0.15, {
+      alpha: 0.6,
+      ease: tween.bounce.easeInOut,
       yoyo: true,
       repeat: -1
     });
@@ -100,24 +108,49 @@ class Temp extends KnScene {
     // laser.rotation = angle;
 
     const star = this.game.add.sprite("star", "star", [0.5, 0.5]);
-    star.position.set(startPoint.x, startPoint.y);
+    star.position.set(this.startPoint.x, this.startPoint.y);
     this.addChild(this.laser, star);
 
     gameBg.interactive = true;
     gameBg.on("pointerdown", (event: InteractionEvent) => {
-      const pos = event.data.getLocalPosition(this.game.currentScene);
+      this.pos = event.data.getLocalPosition(this.game.currentScene);
+      this.shoot = true;
       this.laser.clear();
-      this.laser.lineTextureStyle({ width: 10, texture: laserTexture });
-      this.laser.moveTo(startPoint.x, startPoint.y);
-      this.laser.lineTo(
-        startPoint.x + Math.random() * 120,
-        startPoint.y + Math.random() * 310
-      );
-      this.laser.lineTo(pos.x, pos.y);
+      const dx = (this.pos.x - this.startPoint.x) * 0.25;
+      const dy = (this.pos.y - this.startPoint.y) * 0.25;
+      const distance = Math.sqrt(dx * dx + dy * dy) * 0.5;
+      console.log(dy, dx);
+      const rotate = Math.atan2(dy, dx);
+      const matrix = new PIXI.Matrix();
+      matrix.rotate(rotate); // 旋转矩阵
+      this.laserTexture.rotate = 6;
+      this.laser.lineTextureStyle({
+        width: 20,
+        texture: this.laserTexture,
+        matrix: matrix
+      });
+
+      this.laser.moveTo(this.startPoint.x, this.startPoint.y);
+      // for (let i = 1; i < 4; i++) {
+      //   const rx =
+      //     this.startPoint.x +
+      //     math.realInRange(dx * i - distance, dx * i + distance);
+      //   const ry =
+      //     this.startPoint.y +
+      //     math.realInRange(dy * i - distance, dy * i + distance);
+      //   this.laser.lineTo(rx, ry);
+      // }
+      this.laser.lineTo(this.pos.x, this.pos.y);
+      this.laser.closePath();
+    });
+
+    gameBg.on("pointermove", (event: InteractionEvent) => {
+      this.pos = event.data.getLocalPosition(this.game.currentScene);
     });
 
     gameBg.on("pointerup", (event: InteractionEvent) => {
-      this.laser.clear();
+      // this.laser.clear();
+      this.shoot = false;
     });
 
     // const options = [
@@ -227,7 +260,10 @@ class Temp extends KnScene {
     // });
   };
 
-  update() {}
+  update() {
+    if (this.shoot) {
+    }
+  }
 
   reset() {
     if (this.children.length > 1) {

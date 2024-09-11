@@ -1,6 +1,7 @@
-import Game from '../core';
-import { Graphics, Container, Sprite } from 'pixi.js';
-import * as _ from 'lodash';
+import Game from "../core";
+import { Graphics, Container, Sprite } from "pixi.js";
+import * as _ from "lodash";
+import seedrandom from "seedrandom";
 // 防抖函数
 const debounce: any = {
   tick: null,
@@ -11,41 +12,50 @@ const debounce: any = {
     debounce.tick = setTimeout(() => {
       next();
     }, delay || 200);
-  },
+  }
 };
 
 // 节流降帧
 const Throtte = (fps: number, elapsedMS: number, next: Function) => {
-  Throtte['origin'] === void 0 && (Throtte['origin'] = 0);
+  Throtte["origin"] === void 0 && (Throtte["origin"] = 0);
   const bootMs = (60 / fps) * elapsedMS;
-  if (Throtte['origin'] >= bootMs) {
-    Throtte['origin'] = 0;
+  if (Throtte["origin"] >= bootMs) {
+    Throtte["origin"] = 0;
     next();
   } else {
-    Throtte['origin'] += elapsedMS;
+    Throtte["origin"] += elapsedMS;
   }
 };
 
 // 代理事件
 const events: IEvents = {
   reset() {
-    events['valve'] && (events['valve'] = null);
+    events["valve"] && (events["valve"] = null);
   },
   addOnce(next: Function) {
-    if (!events['valve']) {
-      events['valve'] = true;
+    if (!events["valve"]) {
+      events["valve"] = true;
       return next();
     }
-  },
+  }
 };
 
 // 数学函数类
+
+// 0-1之间随机实数
+const frac = () => {
+  // 2^-53
+  return seedrandom()();
+};
 const math: IMath = {
   redirect() {
     return Math.random() * 100 < 50 ? 1 : -1;
   },
   between(range) {
     return range[0] + Math.floor(Math.random() * (range[1] - range[0]));
+  },
+  realInRange(min, max) {
+    return frac() * (max - min) + min;
   },
   crit(val, crit, critVal) {
     // 暂用
@@ -72,7 +82,7 @@ const math: IMath = {
   },
   angleBetweenPoints(point1, point2) {
     return Math.atan2(point2.x - point1.x, point2.y - point1.y);
-  },
+  }
 };
 
 const distance = (point1, point2) => {
@@ -85,7 +95,7 @@ const computedAngleToPointer = (x, y, angle) => {
   const rotate = (Math.PI * angle) / 180;
   return [
     x * Math.cos(rotate) - y * Math.sin(rotate),
-    x * Math.sin(rotate) + y * Math.cos(rotate),
+    x * Math.sin(rotate) + y * Math.cos(rotate)
   ];
 };
 const rotatePointers = (paths, angle) => {
@@ -114,13 +124,13 @@ const TransformImage = {
     const sprite: Sprite = new Sprite(texture);
     parent.addChild(sprite);
     return sprite;
-  },
+  }
 };
 
 // 古代时间转换
 const TransformAncientDate = {
-  generate(prefix: string = '') {
-    let cnStr = ['十', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+  generate(prefix: string = "") {
+    let cnStr = ["十", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
     let days: Array<string> = [];
     for (let i = 1, l = 30; i <= l; i++) {
       if (i <= 10) {
@@ -145,21 +155,21 @@ const TransformAncientDate = {
     return [year, month, rest];
   },
   toString(gameDate, resArr) {
-    const settingString = TransformAncientDate.generate('');
-    const settingStringPrefix = TransformAncientDate.generate('初');
+    const settingString = TransformAncientDate.generate("");
+    const settingStringPrefix = TransformAncientDate.generate("初");
     return [
       `${gameDate.year[0]} ${
-        resArr[0] === 0 ? '元' : settingString[resArr[0] - 1]
+        resArr[0] === 0 ? "元" : settingString[resArr[0] - 1]
       }年`,
       `${settingString[resArr[1]]}月`,
-      `${settingStringPrefix[resArr[2]]}`,
+      `${settingStringPrefix[resArr[2]]}`
     ];
   },
   getSeason(gameDate, month) {
     const seasonType = ~~(month / 3);
     const seasonArr: any[] = [
       seasonType as number,
-      gameDate.season[seasonType] as string,
+      gameDate.season[seasonType] as string
     ];
     return seasonArr;
   },
@@ -168,7 +178,7 @@ const TransformAncientDate = {
     const power = month % 3;
     const weatherTypes = gameDate.weather; // 0: 雨 / 落花瓣， 1：晴 -> 阳光由弱变强， 2： 落叶 3： 小雪 -> 大雪
     return [weatherTypes[seasonIndex], power];
-  },
+  }
 };
 
 // 自定义game对象拷贝
@@ -179,12 +189,12 @@ const createFrom = (target: any, game: Game) => {
     KnText: () =>
       game.add.text(target.id, target.text, target.style, [
         target.anchor.x,
-        target.anchor.y,
+        target.anchor.y
       ]),
     KnSprite: () =>
       game.add.sprite(target.name, target.id, [
         target.anchor.x,
-        target.anchor.y,
+        target.anchor.y
       ]),
     KnBackGround: () => game.add.background(target.name, target.id),
     KnBitMapText: () =>
@@ -193,23 +203,23 @@ const createFrom = (target: any, game: Game) => {
         target.text,
         {
           fontSize: target.fontSize,
-          fontName: target.fontName,
+          fontName: target.fontName
         },
         [target.anchor.x, target.anchor.y]
-      ),
+      )
   };
   const cloneEntity = typeMap[type]();
   const keys = [
-    'alpha',
-    'visible',
-    'renderable',
-    'children',
-    '_width',
-    '_height',
-    'style',
+    "alpha",
+    "visible",
+    "renderable",
+    "children",
+    "_width",
+    "_height",
+    "style"
   ];
   keys.forEach((key) => {
-    if (key !== 'transform') {
+    if (key !== "transform") {
       cloneEntity[key] = target[key];
     }
   });
@@ -229,8 +239,8 @@ const createFrom = (target: any, game: Game) => {
 };
 
 const rem = (val: number): number => {
-  return val * window['scale'];
-}
+  return val * window["scale"];
+};
 
 export {
   debounce,
