@@ -4,7 +4,7 @@ import Config from "./schema/game.json";
 const GameInitial = (view) => {
   const dpr = window.devicePixelRatio;
   const game = new Game({
-    width: view.clientWidth * dpr * 2, // Config.width,
+    width: view.clientWidth * dpr, // Config.width,
     ratio: view.clientWidth / view.clientHeight, // Config.ratio,
     antialias: Config.antialias,
     transparent: Config.transparent,

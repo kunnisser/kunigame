@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-11 17:31:48
+ * @LastEditTime: 2024-09-12 17:48:01
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/temp/scene.ts
  * @Description: ---- 临时文件 ----
  */
@@ -11,7 +11,7 @@ import Game from "ts@/kuni/lib/core";
 import KnPanel from "ts@/kuni/lib/gameobjects/kn_panel";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import KnModal from "ts@/kuni/lib/gameui/kn_modal";
-import { math, rem } from "ts@/kuni/lib/utils/common";
+import { rem } from "ts@/kuni/lib/utils/common";
 
 class Temp extends KnScene {
   game: Game;
@@ -90,44 +90,46 @@ class Temp extends KnScene {
 
     this.laser = this.game.add.graphics();
     this.laserTexture = PIXI.utils.TextureCache["beams"];
-    console.log(this.laserTexture);
-    // const testTexture = PIXI.utils.TextureCache["laser"];
-    // laser.beginTextureFill({ texture: laserTexture });
-    // laser.drawRect(0, -5, length, 10);
-    // this.laser.lineTextureStyle({ width: 10, texture: laserTexture });
-    // this.laser.moveTo(startPoint.x, startPoint.y);
-    // this.laser.lineTo(endPoint.x, endPoint.y);
-    const tween = this.game.add.tween();
-    tween.instance.to(this.laser, 0.15, {
-      alpha: 0.6,
-      ease: tween.bounce.easeInOut,
-      yoyo: true,
-      repeat: -1
-    });
+    this.laserTexture.orig.height *= 1 / this.game.dpr;
+
+    console.log(this.laserTexture, this.game.dpr);
+
+    // const tween = this.game.add.tween();
+    // tween.instance.to(this.laser, 0.15, {
+    //   alpha: 0.6,
+    //   ease: tween.bounce.easeInOut,
+    //   yoyo: true,
+    //   repeat: -1
+    // });
     // laser.endFill();
     // laser.rotation = angle;
 
     const star = this.game.add.sprite("star", "star", [0.5, 0.5]);
     star.position.set(this.startPoint.x, this.startPoint.y);
-    this.addChild(this.laser, star);
+    this.addChild(this.laser);
 
     gameBg.interactive = true;
     gameBg.on("pointerdown", (event: InteractionEvent) => {
       this.pos = event.data.getLocalPosition(this.game.currentScene);
       this.shoot = true;
       this.laser.clear();
-      const dx = (this.pos.x - this.startPoint.x) * 0.25;
-      const dy = (this.pos.y - this.startPoint.y) * 0.25;
-      const distance = Math.sqrt(dx * dx + dy * dy) * 0.5;
+      const dx = this.pos.x - this.startPoint.x;
+      const dy = this.pos.y - this.startPoint.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
       console.log(dy, dx);
       const rotate = Math.atan2(dy, dx);
       const matrix = new PIXI.Matrix();
       matrix.rotate(rotate); // 旋转矩阵
-      this.laserTexture.rotate = 6;
+      console.log(this.laserTexture.orig.height);
+      // this.laser.beginTextureFill({
+      //   texture: this.laserTexture
+      // });
+      // this.laser.drawRect(0, -15, distance, 30);
+      this.laser.position.set(100, 100);
       this.laser.lineTextureStyle({
-        width: 20,
+        width: 30,
         texture: this.laserTexture,
-        matrix: matrix
+        alignment: 0
       });
 
       this.laser.moveTo(this.startPoint.x, this.startPoint.y);
@@ -140,8 +142,7 @@ class Temp extends KnScene {
       //     math.realInRange(dy * i - distance, dy * i + distance);
       //   this.laser.lineTo(rx, ry);
       // }
-      this.laser.lineTo(this.pos.x, this.pos.y);
-      this.laser.closePath();
+      this.laser.lineTo(this.pos.x, this.startPoint.y);
     });
 
     gameBg.on("pointermove", (event: InteractionEvent) => {

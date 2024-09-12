@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-02-14 16:15:56
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-03-03 21:20:14
- * @FilePath: \kunigame\projects\kuni\lib\gameobjects\kn_sprite.ts
+ * @LastEditTime: 2024-09-12 16:37:41
+ * @FilePath: /kunigame/projects/kuni/lib/gameobjects/kn_sprite.ts
  * @Description: ---- sprite类 ----
  */
 import { Sprite, Texture } from "pixi.js";
@@ -19,12 +19,12 @@ class KnSprite extends Sprite {
     this.id = id;
     this.name = key || id;
     this.boot = true;
-    if (game && !this.texture['boot']) {
+    if (game && !this.texture["boot"]) {
       // 如果重复生成多个相同sprite的话，这里的texture纹理原始尺寸会被多次放大，而浏览器没做缩放所以没有此类问题
       // 使用 boot 来判断
       this.texture.orig.width *= game?.gameScale;
       this.texture.orig.height *= game?.gameScale;
-      this.texture['boot'] = 'true';
+      this.texture["boot"] = "true";
     }
   }
 
