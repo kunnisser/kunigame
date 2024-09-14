@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-12 17:48:01
+ * @LastEditTime: 2024-09-14 17:39:40
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/temp/scene.ts
  * @Description: ---- 临时文件 ----
  */
@@ -23,7 +23,7 @@ class Temp extends KnScene {
   shoot: boolean;
   pos: PIXI.Point;
   startPoint: PIXI.Point;
-  laserTexture: any;
+  laserTexture: PIXI.Texture;
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
@@ -89,8 +89,11 @@ class Temp extends KnScene {
     // const endPoint = this.game.add.pointer(400, 500);
 
     this.laser = this.game.add.graphics();
+    this.laser.position.set(0, 0);
     this.laserTexture = PIXI.utils.TextureCache["beams"];
-    this.laserTexture.orig.height *= 1 / this.game.dpr;
+    // const dpr = 1;
+    // this.laserTexture.orig.height /= dpr;
+    // this.laserTexture.orig.width /= dpr;
 
     console.log(this.laserTexture, this.game.dpr);
 
@@ -115,34 +118,49 @@ class Temp extends KnScene {
       this.laser.clear();
       const dx = this.pos.x - this.startPoint.x;
       const dy = this.pos.y - this.startPoint.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+      // const distance = Math.sqrt(dx * dx + dy * dy);
       console.log(dy, dx);
-      const rotate = Math.atan2(dy, dx);
-      const matrix = new PIXI.Matrix();
-      matrix.rotate(rotate); // 旋转矩阵
-      console.log(this.laserTexture.orig.height);
-      // this.laser.beginTextureFill({
-      //   texture: this.laserTexture
-      // });
-      // this.laser.drawRect(0, -15, distance, 30);
-      this.laser.position.set(100, 100);
-      this.laser.lineTextureStyle({
-        width: 30,
-        texture: this.laserTexture,
-        alignment: 0
-      });
 
-      this.laser.moveTo(this.startPoint.x, this.startPoint.y);
-      // for (let i = 1; i < 4; i++) {
-      //   const rx =
-      //     this.startPoint.x +
-      //     math.realInRange(dx * i - distance, dx * i + distance);
-      //   const ry =
-      //     this.startPoint.y +
-      //     math.realInRange(dy * i - distance, dy * i + distance);
-      //   this.laser.lineTo(rx, ry);
-      // }
-      this.laser.lineTo(this.pos.x, this.startPoint.y);
+      const size = 64;
+      // this.laser.drawRect(0, 0, distance, size);
+
+      const vertices = [
+        new PIXI.Point(100, 100),
+        new PIXI.Point(300, 100),
+        new PIXI.Point(500, 100),
+        new PIXI.Point(1200, 500)
+      ];
+
+      // 创建 SimpleRope 实例
+      this.laserTexture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
+
+      const rope = new PIXI.SimpleRope(this.laserTexture, vertices, 1);
+
+      // 设置 rope 的属性（如颜色、宽度等）
+      // 例如设置 rope 线宽
+      // rope.width = 64;
+
+      // 将 rope 添加到舞台
+      this.addChild(rope);
+      // this.laser.lineTextureStyle({
+      //   width: size,
+      //   texture: this.laserTexture,
+      //   matrix
+      // });
+
+      // console.log(this.laser);
+
+      // this.laser.moveTo(this.startPoint.x, this.startPoint.y);
+      // // for (let i = 1; i < 4; i++) {
+      // //   const rx =
+      // //     this.startPoint.x +
+      // //     math.realInRange(dx * i - distance, dx * i + distance);
+      // //   const ry =
+      // //     this.startPoint.y +
+      // //     math.realInRange(dy * i - distance, dy * i + distance);
+      // //   this.laser.lineTo(rx, ry);
+      // // }
+      // this.laser.lineTo(this.pos.x, this.pos.y);
     });
 
     gameBg.on("pointermove", (event: InteractionEvent) => {
