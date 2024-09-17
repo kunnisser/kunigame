@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-05 14:44:41
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-09 17:28:57
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/tween/index.ts
+ * @LastEditTime: 2024-09-17 23:37:54
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\tween\index.ts
  * @Description: ---- 缓动动画 ----
  */
 
@@ -30,6 +30,7 @@ const generateCardTween = (
   target: CheckerCardWrap,
   cb?: Function
 ) => {
+  target.visible = true;
   return tween.instance.to(target.scale, 0.35, {
     x: 1,
     y: 1,
@@ -54,12 +55,11 @@ const textUpdateTween = (tween: KnTween, text: KnBitMapText) => {
 };
 
 const destroyCardTween = (tween: KnTween, target: CheckerCardWrap) => {
-  return tween.instance.to(target.content.sprite.scale, 0.1, {
+  return tween.instance.to(target.scale, 0.2, {
     x: 0,
     y: 0,
     ease: tween.bounce.easeIn,
     onComplete: () => {
-      target.content.sprite.scale.set(1);
       target.visible = false;
     }
   });

@@ -2,21 +2,21 @@
  * @Author: kunnisser
  * @Date: 2023-08-02 17:24:15
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-10 15:03:10
- * @FilePath: /kunigame/projects/hive/nnsd/preview.ts
+ * @LastEditTime: 2024-09-17 23:24:18
+ * @FilePath: \kunigame\projects\hive\nnsd\preview.ts
  * @Description: ----  ----
  */
 import Game from "ts@/kuni/lib/core";
 import StateHive from "./src/state/hive";
 import Config from "./schema/game.json";
 import Preloader from "ts@/kuni/lib/loader/kn_preloader";
-import VConsole from "vconsole";
+// import VConsole from "vconsole";
 
 const view: any = document.getElementById("stage"); // 初始化游戏场景列表
 const dpr = window.devicePixelRatio;
 window["scale"] = (view.clientWidth * dpr) / 750;
-const vConsole = new VConsole();
-console.log(vConsole);
+// const vConsole = new VConsole();
+// console.log(vConsole);
 
 const game = new Game({
   width: view.clientWidth * dpr, // Config.width,
@@ -30,6 +30,6 @@ const game = new Game({
 const GameHive = StateHive(game);
 game.hive = GameHive;
 game.assetsPath = Config.assetsPath;
-game.entryHive = GameHive["Temp"];
+game.entryHive = GameHive["Card"];
 const previewLoader = game.sceneManager.addScene("global_preloader", Preloader);
 game.sceneManager.changeScene(null, previewLoader);

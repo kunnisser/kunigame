@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2024-02-14 21:23:42
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-06 16:58:15
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/card/cardcontent/resource/fruit.ts
+ * @LastEditTime: 2024-09-17 23:33:18
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\card\cardcontent\resource\fruit.ts
  * @Description: ---- 资源 - 水果 ----
  */
 
@@ -31,8 +31,8 @@ class Fruit extends CardContent {
   }
 
   initial() {
-    const sprite = this.game.add.image("orange", "orange", this, [0.5, 0.5]);
-    this.addChild(sprite);
+    this.sprite = this.game.add.image("orange", "orange", this, [0.5, 0.5]);
+    this.addChild(this.sprite);
     this.setHealthPlus();
   }
 

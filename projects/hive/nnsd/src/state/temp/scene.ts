@@ -2,16 +2,16 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-14 17:39:40
- * @FilePath: /kunigame/projects/hive/nnsd/src/state/temp/scene.ts
+ * @LastEditTime: 2024-09-16 23:26:55
+ * @FilePath: \kunigame\projects\hive\nnsd\src\state\temp\scene.ts
  * @Description: ---- 临时文件 ----
  */
-import { InteractionEvent } from "pixi.js";
+import { InteractionEvent, SimpleRope } from "pixi.js";
 import Game from "ts@/kuni/lib/core";
 import KnPanel from "ts@/kuni/lib/gameobjects/kn_panel";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import KnModal from "ts@/kuni/lib/gameui/kn_modal";
-import { rem } from "ts@/kuni/lib/utils/common";
+import { math, rem } from "ts@/kuni/lib/utils/common";
 
 class Temp extends KnScene {
   game: Game;
@@ -19,11 +19,13 @@ class Temp extends KnScene {
   restart: any;
   cardContainer: KnPanel;
   turnPoints: any;
-  laser: import("/Users/qiankun/cams/kunigame/projects/kuni/lib/gameobjects/kn_graphics").default;
+  laser: SimpleRope;
   shoot: boolean;
   pos: PIXI.Point;
   startPoint: PIXI.Point;
   laserTexture: PIXI.Texture;
+  nodes: PIXI.Point[];
+  delta: number;
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
@@ -88,9 +90,11 @@ class Temp extends KnScene {
     this.startPoint = this.game.add.pointer(100, 100);
     // const endPoint = this.game.add.pointer(400, 500);
 
-    this.laser = this.game.add.graphics();
-    this.laser.position.set(0, 0);
+    // this.laser = this.game.add.graphics();
     this.laserTexture = PIXI.utils.TextureCache["beams"];
+
+    // 创建rope纹理平铺
+
     // const dpr = 1;
     // this.laserTexture.orig.height /= dpr;
     // this.laserTexture.orig.width /= dpr;
@@ -109,58 +113,20 @@ class Temp extends KnScene {
 
     const star = this.game.add.sprite("star", "star", [0.5, 0.5]);
     star.position.set(this.startPoint.x, this.startPoint.y);
-    this.addChild(this.laser);
+    this.pos = this.startPoint;
+    this.nodes = [this.startPoint, this.pos, this.pos, this.pos, this.pos];
+    // textureScale > 0 则repeat
+    this.laser = new PIXI.SimpleRope(this.laserTexture, this.nodes, 1);
+    this.laser.position.set(0, 0);
+    this.delta = 0;
+
+    this.addChild(this.laser, star);
 
     gameBg.interactive = true;
     gameBg.on("pointerdown", (event: InteractionEvent) => {
       this.pos = event.data.getLocalPosition(this.game.currentScene);
       this.shoot = true;
-      this.laser.clear();
-      const dx = this.pos.x - this.startPoint.x;
-      const dy = this.pos.y - this.startPoint.y;
-      // const distance = Math.sqrt(dx * dx + dy * dy);
-      console.log(dy, dx);
-
-      const size = 64;
-      // this.laser.drawRect(0, 0, distance, size);
-
-      const vertices = [
-        new PIXI.Point(100, 100),
-        new PIXI.Point(300, 100),
-        new PIXI.Point(500, 100),
-        new PIXI.Point(1200, 500)
-      ];
-
-      // 创建 SimpleRope 实例
-      this.laserTexture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-
-      const rope = new PIXI.SimpleRope(this.laserTexture, vertices, 1);
-
-      // 设置 rope 的属性（如颜色、宽度等）
-      // 例如设置 rope 线宽
-      // rope.width = 64;
-
-      // 将 rope 添加到舞台
-      this.addChild(rope);
-      // this.laser.lineTextureStyle({
-      //   width: size,
-      //   texture: this.laserTexture,
-      //   matrix
-      // });
-
-      // console.log(this.laser);
-
-      // this.laser.moveTo(this.startPoint.x, this.startPoint.y);
-      // // for (let i = 1; i < 4; i++) {
-      // //   const rx =
-      // //     this.startPoint.x +
-      // //     math.realInRange(dx * i - distance, dx * i + distance);
-      // //   const ry =
-      // //     this.startPoint.y +
-      // //     math.realInRange(dy * i - distance, dy * i + distance);
-      // //   this.laser.lineTo(rx, ry);
-      // // }
-      // this.laser.lineTo(this.pos.x, this.pos.y);
+      this.laser.visible = true;
     });
 
     gameBg.on("pointermove", (event: InteractionEvent) => {
@@ -168,8 +134,8 @@ class Temp extends KnScene {
     });
 
     gameBg.on("pointerup", (event: InteractionEvent) => {
-      // this.laser.clear();
       this.shoot = false;
+      this.laser.visible = false;
     });
 
     // const options = [
@@ -281,6 +247,19 @@ class Temp extends KnScene {
 
   update() {
     if (this.shoot) {
+      const dx = (this.pos.x - this.startPoint.x) * 0.25;
+      const dy = (this.pos.y - this.startPoint.y) * 0.25;
+      const distance = Math.sqrt(dx * dx + dy * dy) * 0.12;
+      for (let i = 1; i < 4; i++) {
+        const rx =
+          this.startPoint.x +
+          math.realInRange(dx * i - distance, dx * i + distance);
+        const ry =
+          this.startPoint.y +
+          math.realInRange(dy * i - distance, dy * i + distance);
+        this.nodes[i] = this.game.add.pointer(rx, ry);
+      }
+      this.nodes[4] = this.pos;
     }
   }
 

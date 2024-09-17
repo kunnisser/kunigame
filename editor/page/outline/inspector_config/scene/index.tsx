@@ -2,8 +2,8 @@
  * @Author: kunnisser
  * @Date: 2023-07-15 16:29:40
  * @LastEditors: kunnisser
- * @LastEditTime: 2023-07-17 10:28:42
- * @FilePath: /kunigame/editor/page/outline/inspector_config/scene/index.tsx
+ * @LastEditTime: 2024-09-17 23:23:41
+ * @FilePath: \kunigame\editor\page\outline\inspector_config\scene\index.tsx
  * @Description: ---- 场景对象配置面板 ----
  */
 
