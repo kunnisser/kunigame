@@ -12,12 +12,12 @@ class TweenDemo extends KnScene {
     this.game = game;
     this.shootType = 1;
     this.resources = {
-      "wsjBg": "/projects/kuni/assets/images/wsj_bg.png",
-      "staff": "/projects/kuni/assets/images/titleWeapon_02.png",
-      "glow": "/projects/kuni/assets/shader/frag/glow.frag",
-      "pumpkin": "/projects/kuni/assets/images/pumpkin.png",
-      "cannikin": "/projects/kuni/assets/images/cannikin.png",
-      "start": "/projects/kuni/assets/images/start.png"
+      wsjBg: "/projects/kuni/assets/images/wsj_bg.png",
+      staff: "/projects/kuni/assets/images/titleWeapon_02.png",
+      glow: "/projects/kuni/assets/shader/frag/glow.frag",
+      pumpkin: "/projects/kuni/assets/images/pumpkin.png",
+      cannikin: "/projects/kuni/assets/images/cannikin.png",
+      start: "/projects/kuni/assets/images/start.png"
     };
   }
 
@@ -40,7 +40,7 @@ class TweenDemo extends KnScene {
     }
 
     const dat = {
-        "缓动模式": "均匀"
+        缓动模式: "均匀"
       },
       datArr = ["均匀", "正弦", "定时弹动", "摇摆"];
     this.dat = this.game.gui.add(dat, "缓动模式", datArr);

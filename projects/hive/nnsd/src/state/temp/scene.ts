@@ -2,11 +2,11 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-16 23:26:55
- * @FilePath: \kunigame\projects\hive\nnsd\src\state\temp\scene.ts
+ * @LastEditTime: 2024-09-27 14:49:45
+ * @FilePath: /kunigame/projects/hive/nnsd/src/state/temp/scene.ts
  * @Description: ---- 临时文件 ----
  */
-import { InteractionEvent, SimpleRope } from "pixi.js";
+import { Filter, InteractionEvent, SimpleRope } from "pixi.js";
 import Game from "ts@/kuni/lib/core";
 import KnPanel from "ts@/kuni/lib/gameobjects/kn_panel";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
@@ -14,6 +14,7 @@ import KnModal from "ts@/kuni/lib/gameui/kn_modal";
 import { math, rem } from "ts@/kuni/lib/utils/common";
 
 class Temp extends KnScene {
+  filter: Filter;
   game: Game;
   modal: KnModal;
   restart: any;
@@ -38,8 +39,10 @@ class Temp extends KnScene {
       close: "assets/images/close.png",
       restart: "assets/images/restart.png",
       laser: "assets/images/hp_inner_bar.png",
+      vertex: "assets/shader/vertex/default.vert",
+      glow: "assets/shader/glow.frag",
       beams: "assets/images/beams.png",
-      star: "assets/images/star.png"
+      star: "assets/images/weapon_able.png"
     };
     this.turnPoints = [];
     this.shoot = false;
@@ -114,11 +117,54 @@ class Temp extends KnScene {
     const star = this.game.add.sprite("star", "star", [0.5, 0.5]);
     star.position.set(this.startPoint.x, this.startPoint.y);
     this.pos = this.startPoint;
-    this.nodes = [this.startPoint, this.pos, this.pos, this.pos, this.pos];
+    this.nodes = [this.startPoint, this.pos];
     // textureScale > 0 则repeat
     this.laser = new PIXI.SimpleRope(this.laserTexture, this.nodes, 1);
     this.laser.position.set(0, 0);
     this.delta = 0;
+
+    const frag = `
+    precision mediump float;
+    varying vec2 vTextureCoord;
+    uniform sampler2D uSampler;
+    uniform float iTime;
+    uniform float width;
+    uniform float height;
+  
+    void main() {
+    vec2 uv = vTextureCoord;
+    float w_side = 2. / width;
+    float h_side = 2./ height;
+    vec4 color = texture2D(uSampler, uv);
+    // 从纹理坐标四周嗅探出alpha之和是否为1， 而当前的color.a如果为0.则判定是边界轮廓
+    float ret = 0.0;
+    for (int i = -3; i <= 3; ++i) {
+      for (int j = -3; j <= 3; ++j){
+      float s = texture2D(uSampler, uv + vec2(float(i) * w_side, float(j) * h_side)).a;
+          // float top = texture2D(uSampler, uv + vec2(0., side)).a;
+          // float bottom = texture2D(uSampler, uv + vec2(0., -side)).a;
+          // float right = texture2D(uSampler, uv + vec2(side, 0.)).a;
+          ret += s;
+      }
+    }
+    
+    float res = clamp(ret, 0.0, 1.0);
+
+    res *= (1. - color.a);
+
+    float d = ret;
+
+    float glow = clamp(d / 20., 0., 1.0);
+  
+    gl_FragColor = mix(color, vec4(vec3(glow, 0.0, 0.0), res * glow) * abs(sin(iTime)), res);
+  }
+    `;
+    this.filter = new Filter(void 0, frag, {
+      iTime: this.delta,
+      width: this.laser.width,
+      height: this.laser.height
+    });
+    this.laser.filters = [this.filter];
 
     this.addChild(this.laser, star);
 
@@ -246,20 +292,24 @@ class Temp extends KnScene {
   };
 
   update() {
+    this.delta += 0.025;
+    this.filter.uniforms.iTime = this.delta;
     if (this.shoot) {
-      const dx = (this.pos.x - this.startPoint.x) * 0.25;
-      const dy = (this.pos.y - this.startPoint.y) * 0.25;
-      const distance = Math.sqrt(dx * dx + dy * dy) * 0.12;
-      for (let i = 1; i < 4; i++) {
-        const rx =
-          this.startPoint.x +
-          math.realInRange(dx * i - distance, dx * i + distance);
-        const ry =
-          this.startPoint.y +
-          math.realInRange(dy * i - distance, dy * i + distance);
-        this.nodes[i] = this.game.add.pointer(rx, ry);
-      }
-      this.nodes[4] = this.pos;
+      this.filter.uniforms.width = this.laser.width;
+      this.filter.uniforms.height = this.laser.height;
+      // const dx = (this.pos.x - this.startPoint.x) * 0.25;
+      // const dy = (this.pos.y - this.startPoint.y) * 0.25;
+      // const distance = Math.sqrt(dx * dx + dy * dy) * 0.12;
+      // for (let i = 1; i < 4; i++) {
+      //   const rx =
+      //     this.startPoint.x +
+      //     math.realInRange(dx * i - distance, dx * i + distance);
+      //   const ry =
+      //     this.startPoint.y +
+      //     math.realInRange(dy * i - distance, dy * i + distance);
+      //   this.nodes[i] = this.game.add.pointer(rx, ry);
+      // }
+      this.nodes[1] = this.pos;
     }
   }
 
