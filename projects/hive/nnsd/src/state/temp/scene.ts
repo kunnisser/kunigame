@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-27 14:49:45
+ * @LastEditTime: 2024-09-29 14:34:03
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/temp/scene.ts
  * @Description: ---- 临时文件 ----
  */
@@ -11,10 +11,11 @@ import Game from "ts@/kuni/lib/core";
 import KnPanel from "ts@/kuni/lib/gameobjects/kn_panel";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import KnModal from "ts@/kuni/lib/gameui/kn_modal";
-import { math, rem } from "ts@/kuni/lib/utils/common";
+import { rem } from "ts@/kuni/lib/utils/common";
 
 class Temp extends KnScene {
   filter: Filter;
+  bgFilter: Filter;
   game: Game;
   modal: KnModal;
   restart: any;
@@ -42,7 +43,7 @@ class Temp extends KnScene {
       vertex: "assets/shader/vertex/default.vert",
       glow: "assets/shader/glow.frag",
       beams: "assets/images/beams.png",
-      star: "assets/images/weapon_able.png"
+      star: "assets/images/waterTiled.png"
     };
     this.turnPoints = [];
     this.shoot = false;
@@ -123,6 +124,26 @@ class Temp extends KnScene {
     this.laser.position.set(0, 0);
     this.delta = 0;
 
+    const bgFrag = `
+      precision mediump float;
+      varying vec2 vTextureCoord;
+      uniform sampler2D uSampler;
+      uniform sampler2D tiled;
+      uniform float iTime;
+      void main () {
+        vec2 tiledCoord = fract((vTextureCoord / vec2(2., 1.) + vec2(-0.025, -0.05) * iTime) * 10.0);
+        vec4 color = texture2D(uSampler, vTextureCoord);
+        vec4 tiledColor = texture2D(tiled, tiledCoord);
+        
+        gl_FragColor = mix(color, tiledColor, tiledColor.a);
+      }
+    `;
+    this.bgFilter = new PIXI.Filter(void 0, bgFrag, {
+      tiled: star.texture,
+      iTime: this.delta
+    });
+    gameBg.filters = [this.bgFilter];
+
     const frag = `
     precision mediump float;
     varying vec2 vTextureCoord;
@@ -166,7 +187,7 @@ class Temp extends KnScene {
     });
     this.laser.filters = [this.filter];
 
-    this.addChild(this.laser, star);
+    this.addChild(this.laser);
 
     gameBg.interactive = true;
     gameBg.on("pointerdown", (event: InteractionEvent) => {
@@ -294,6 +315,7 @@ class Temp extends KnScene {
   update() {
     this.delta += 0.025;
     this.filter.uniforms.iTime = this.delta;
+    this.bgFilter.uniforms.iTime = this.delta;
     if (this.shoot) {
       this.filter.uniforms.width = this.laser.width;
       this.filter.uniforms.height = this.laser.height;
