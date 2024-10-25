@@ -3,7 +3,7 @@ import Start from "./start/scene";
 import Welcome from "./welcome/scene";
 import Ast from "./ast/scene";
 import Card from "./card/scene";
-import Temp from "./temp/scene";
+import Temp from "./jps/scene";
 
 const StateHiveKey = {
   Welcome: Welcome,

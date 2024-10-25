@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-09-29 14:34:03
+ * @LastEditTime: 2024-10-23 13:32:50
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/temp/scene.ts
  * @Description: ---- 临时文件 ----
  */
@@ -134,7 +134,7 @@ class Temp extends KnScene {
         vec2 tiledCoord = fract((vTextureCoord / vec2(2., 1.) + vec2(-0.025, -0.05) * iTime) * 10.0);
         vec4 color = texture2D(uSampler, vTextureCoord);
         vec4 tiledColor = texture2D(tiled, tiledCoord);
-        
+        // 背景色 + 叠加+ tiledColor(BG水面蓝色 + 波浪tiled颜色)
         gl_FragColor = mix(color, tiledColor, tiledColor.a);
       }
     `;
@@ -154,14 +154,16 @@ class Temp extends KnScene {
   
     void main() {
     vec2 uv = vTextureCoord;
-    float w_side = 2. / width;
-    float h_side = 2./ height;
+    float dist = 4.;
+    float w_side = dist / width;
+    float h_side = dist / height;
     vec4 color = texture2D(uSampler, uv);
     // 从纹理坐标四周嗅探出alpha之和是否为1， 而当前的color.a如果为0.则判定是边界轮廓
     float ret = 0.0;
     for (int i = -3; i <= 3; ++i) {
       for (int j = -3; j <= 3; ++j){
-      float s = texture2D(uSampler, uv + vec2(float(i) * w_side, float(j) * h_side)).a;
+      
+      float s = texture2D(uSampler, uv + vec2(float(i) * w_side , float(j) * h_side )).a;
           // float top = texture2D(uSampler, uv + vec2(0., side)).a;
           // float bottom = texture2D(uSampler, uv + vec2(0., -side)).a;
           // float right = texture2D(uSampler, uv + vec2(side, 0.)).a;
@@ -313,7 +315,7 @@ class Temp extends KnScene {
   };
 
   update() {
-    this.delta += 0.025;
+    this.delta += 0.045;
     this.filter.uniforms.iTime = this.delta;
     this.bgFilter.uniforms.iTime = this.delta;
     if (this.shoot) {
