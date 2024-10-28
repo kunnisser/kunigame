@@ -2,22 +2,85 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-10-25 17:23:38
+ * @LastEditTime: 2024-10-28 17:11:32
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/jps/scene.ts
  * @Description: ---- 临时文件 ----
  */
-import {
-  Filter,
-  InteractionEvent,
-  ParticleContainer,
-  SimpleRope
-} from "pixi.js";
+import { Filter, ParticleContainer, SimpleRope } from "pixi.js";
 import Game from "ts@/kuni/lib/core";
 import KnPanel from "ts@/kuni/lib/gameobjects/kn_panel";
 import KnScene from "ts@/kuni/lib/gameobjects/kn_scene";
 import KnSprite from "ts@/kuni/lib/gameobjects/kn_sprite";
 import KnModal from "ts@/kuni/lib/gameui/kn_modal";
 import { rem } from "ts@/kuni/lib/utils/common";
+
+class Node {
+  public x: number;
+  public y: number;
+  public parent: null | Node;
+  public g: number; // 已走出的路径数
+  public h: number; // 距离终点的曼哈顿路径数
+  constructor(x: number, y: number, parent = null) {
+    this.x = x;
+    this.y = y;
+    this.parent = parent;
+    this.g = 0;
+    this.h = 0;
+  }
+
+  get f() {
+    return this.g + this.h;
+  }
+
+  // 获取曼哈顿距离 H值（当前节点至终点）
+  estimateH(goal: Node) {
+    return Math.abs(goal.x - this.x) + Math.abs(goal.y - this.y);
+  }
+
+  // 判断节点是否为障碍物
+  isObstacle(transposeMatrix: [[number]]) {
+    return transposeMatrix[this.x][this.y] === 1;
+  }
+
+  // 判断是否为起点
+  isStartNode() {
+    return !!this.parent;
+  }
+
+  // 判断是否为终点
+  isEndNode(end: Node) {
+    return this.x === end.x && this.y === end.y;
+  }
+
+  // 判断当前节点与父节点是否在一条直线上（水平垂直）
+  isStraight() {
+    return (
+      this.parent && (this.x === this.parent.x || this.y === this.parent.y)
+    );
+  }
+
+  // 获取跳点
+  getJumpPointer() {
+    const straightDirection = [
+      {
+        x: -1,
+        y: 0
+      },
+      {
+        x: 1,
+        y: 0
+      },
+      {
+        x: 0,
+        y: -1
+      },
+      {
+        x: 0,
+        y: 1
+      }
+    ];
+  }
+}
 
 class Temp extends KnScene {
   filter: Filter;
@@ -34,6 +97,8 @@ class Temp extends KnScene {
   laserTexture: PIXI.Texture;
   nodes: PIXI.Point[];
   delta: number;
+  openList: never[];
+  closedList: never[];
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
@@ -43,6 +108,8 @@ class Temp extends KnScene {
     };
     this.turnPoints = [];
     this.shoot = false;
+    this.openList = [];
+    this.closedList = [];
   }
 
   boot() {}
@@ -97,8 +164,10 @@ class Temp extends KnScene {
 
   jps(transposeMatrix: Array<Array<number>>) {
     const startIndices = [1, 4];
-    console.log(transposeMatrix[startIndices[0]][startIndices[1]]);
     const endIndices = [8, 4];
+    const startNode = new Node(startIndices[0], startIndices[1]);
+    const endNode = new Node(endIndices[0], endIndices[1]);
+    console.log(startNode, endNode);
   }
 
   reset() {
