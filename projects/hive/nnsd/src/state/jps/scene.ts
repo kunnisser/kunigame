@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-10-28 17:11:32
+ * @LastEditTime: 2024-10-29 17:36:36
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/jps/scene.ts
  * @Description: ---- 临时文件 ----
  */
@@ -20,12 +20,16 @@ class Node {
   public parent: null | Node;
   public g: number; // 已走出的路径数
   public h: number; // 距离终点的曼哈顿路径数
+  jumpX: number;
+  jumpY: number;
   constructor(x: number, y: number, parent = null) {
     this.x = x;
     this.y = y;
     this.parent = parent;
     this.g = 0;
     this.h = 0;
+    this.jumpX = this.x;
+    this.jumpY = this.y;
   }
 
   get f() {
@@ -38,8 +42,8 @@ class Node {
   }
 
   // 判断节点是否为障碍物
-  isObstacle(transposeMatrix: [[number]]) {
-    return transposeMatrix[this.x][this.y] === 1;
+  isObstacle(x: number, y: number, transposeMatrix: Array<Array<number>>) {
+    return transposeMatrix[x][y] === 1;
   }
 
   // 判断是否为起点
@@ -59,8 +63,27 @@ class Node {
     );
   }
 
-  // 获取跳点
-  getJumpPointer() {
+  isOverBoundary(x: number, y: number, transposeMatrix: Array<Array<number>>) {
+    return !(transposeMatrix[x] !== void 0 && transposeMatrix[x][y] !== void 0);
+  }
+
+  straightJump(transposeMatrix, directions) {
+    for (let i = 0; i < directions.length; i++) {
+      const { x: dx, y: dy } = directions[i];
+      this.jumpX = this.x;
+      this.jumpY = this.y;
+      while (
+        !this.isOverBoundary(this.jumpX, this.jumpY, transposeMatrix) &&
+        !this.isObstacle(this.jumpX, this.jumpY, transposeMatrix)
+      ) {
+        this.jumpX += dx;
+        this.jumpY += dy;
+      }
+    }
+    return true;
+  }
+
+  getJumpPointer(transposeMatrix: Array<Array<number>>) {
     const straightDirection = [
       {
         x: -1,
@@ -79,6 +102,25 @@ class Node {
         y: 1
       }
     ];
+    this.straightJump(transposeMatrix, straightDirection);
+    // const slashDirection = [
+    //   { x: -1, y: -1 },
+    //   { x: -1, y: 1 },
+    //   { x: 1, y: -1 },
+    //   { x: 1, y: 1 }
+    // ];
+    // for (let i = 0; i < slashDirection.length; i++) {
+    //   const { x: sx, y: sy } = slashDirection[i];
+    //   this.jumpX = this.x + sx;
+    //   this.jumpY = this.y + sy;
+    //   while (
+    //     !this.isOverBoundary(this.jumpX, this.jumpY, transposeMatrix) &&
+    //     !this.isObstacle(this.jumpX, this.jumpY, transposeMatrix)
+    //   ) {
+    //     this.jumpX += dx;
+    //     this.jumpY += dy;
+    //   }
+    // }
   }
 }
 
@@ -168,6 +210,7 @@ class Temp extends KnScene {
     const startNode = new Node(startIndices[0], startIndices[1]);
     const endNode = new Node(endIndices[0], endIndices[1]);
     console.log(startNode, endNode);
+    startNode.getJumpPointer(transposeMatrix);
   }
 
   reset() {
