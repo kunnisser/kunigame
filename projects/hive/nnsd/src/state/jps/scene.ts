@@ -2,7 +2,7 @@
  * @Author: kunnisser
  * @Date: 2024-02-28 09:50:20
  * @LastEditors: kunnisser
- * @LastEditTime: 2024-10-29 17:36:36
+ * @LastEditTime: 2024-10-30 17:42:40
  * @FilePath: /kunigame/projects/hive/nnsd/src/state/jps/scene.ts
  * @Description: ---- 临时文件 ----
  */
@@ -28,6 +28,11 @@ class Node {
     this.parent = parent;
     this.g = 0;
     this.h = 0;
+    this.jumpX = this.x;
+    this.jumpY = this.y;
+  }
+
+  reset() {
     this.jumpX = this.x;
     this.jumpY = this.y;
   }
@@ -67,60 +72,90 @@ class Node {
     return !(transposeMatrix[x] !== void 0 && transposeMatrix[x][y] !== void 0);
   }
 
-  straightJump(transposeMatrix, directions) {
-    for (let i = 0; i < directions.length; i++) {
-      const { x: dx, y: dy } = directions[i];
-      this.jumpX = this.x;
-      this.jumpY = this.y;
-      while (
-        !this.isOverBoundary(this.jumpX, this.jumpY, transposeMatrix) &&
-        !this.isObstacle(this.jumpX, this.jumpY, transposeMatrix)
-      ) {
-        this.jumpX += dx;
-        this.jumpY += dy;
+  // 基于斜向搜索点的直线查找
+  straightJump(transposeMatrix, directions, slashStep) {
+    // 斜向坐标点
+    const { mx, my } = slashStep;
+    for (const direction of directions) {
+      const { x: dx, y: dy } = direction;
+      let straightStep = 1;
+
+      while (true) {
+        // 横向或竖向查找
+        this.jumpX = mx + straightStep * dx;
+        this.jumpY = my + straightStep * dy;
+        if (
+          this.isOverBoundary(this.jumpX, this.jumpY, transposeMatrix) ||
+          this.isObstacle(this.jumpX, this.jumpY, transposeMatrix)
+        ) {
+          break;
+        }
+        console.log("---", "直线查找点");
+        console.log(this.jumpX, this.jumpY);
+        straightStep++;
       }
     }
-    return true;
+  }
+
+  isJumpPointer(dx, dy, transposeMatrix) {
+    const [x1, y1] = [this.jumpX + dx, this.jumpX];
+    const [x2, y2] = [this.jumpX, this.jumpY + dy];
+    if (
+      (!this.isOverBoundary(x1, y1, transposeMatrix) &&
+        !this.isObstacle(x1, y1, transposeMatrix)) ||
+      (!this.isOverBoundary(x2, y2, transposeMatrix) &&
+        !this.isObstacle(x2, y2, transposeMatrix))
+    ) {
+    }
   }
 
   getJumpPointer(transposeMatrix: Array<Array<number>>) {
-    const straightDirection = [
-      {
-        x: -1,
-        y: 0
-      },
-      {
-        x: 1,
-        y: 0
-      },
-      {
-        x: 0,
-        y: -1
-      },
-      {
-        x: 0,
-        y: 1
-      }
+    const slashDirection = [
+      { x: -1, y: -1 },
+      { x: -1, y: 1 },
+      { x: 1, y: -1 },
+      { x: 1, y: 1 }
     ];
-    this.straightJump(transposeMatrix, straightDirection);
-    // const slashDirection = [
-    //   { x: -1, y: -1 },
-    //   { x: -1, y: 1 },
-    //   { x: 1, y: -1 },
-    //   { x: 1, y: 1 }
-    // ];
-    // for (let i = 0; i < slashDirection.length; i++) {
-    //   const { x: sx, y: sy } = slashDirection[i];
-    //   this.jumpX = this.x + sx;
-    //   this.jumpY = this.y + sy;
-    //   while (
-    //     !this.isOverBoundary(this.jumpX, this.jumpY, transposeMatrix) &&
-    //     !this.isObstacle(this.jumpX, this.jumpY, transposeMatrix)
-    //   ) {
-    //     this.jumpX += dx;
-    //     this.jumpY += dy;
-    //   }
-    // }
+    let slashStep = 0;
+    for (const direction of slashDirection) {
+      const { x: dx, y: dy } = direction;
+
+      this.reset();
+      while (true) {
+        this.jumpX = this.x + slashStep * dx;
+        this.jumpY = this.y + slashStep * dy;
+        if (
+          this.isOverBoundary(this.jumpX, this.jumpY, transposeMatrix) ||
+          this.isObstacle(this.jumpX, this.jumpY, transposeMatrix)
+        ) {
+          break;
+        }
+        console.log("---", "斜向单步初始点");
+        console.log(this.jumpX, this.jumpY);
+
+        // 判断是否为跳点
+        this.isJumpPointer(dx, dy, transposeMatrix);
+
+        // 这里处理斜线前进后的横向查找
+        this.straightJump(
+          transposeMatrix,
+          slashStep === 0
+            ? [
+                { x: 1, y: 0 },
+                { x: -1, y: 0 },
+                { x: 0, y: 1 },
+                { x: 0, y: -1 }
+              ]
+            : [
+                { x: dx, y: 0 },
+                { x: 0, y: dy }
+              ],
+          { mx: this.jumpX, my: this.jumpY }
+        );
+        slashStep += 1;
+      }
+      slashStep = 1;
+    }
   }
 }
 
@@ -139,8 +174,8 @@ class Temp extends KnScene {
   laserTexture: PIXI.Texture;
   nodes: PIXI.Point[];
   delta: number;
-  openList: never[];
-  closedList: never[];
+  openList: any[];
+  closedList: any[];
   constructor(game: Game, key: string) {
     super(game, key);
     this.game = game;
@@ -181,7 +216,6 @@ class Temp extends KnScene {
 
     const tiledSprites: Array<KnSprite> = [];
     for (const [x, lines] of transposeMatrix.entries()) {
-      console.log(x, lines);
       for (const [y, tile] of lines.entries()) {
         const sp = this.game.add.sprite("tiled", "tiled", [0.5, 0.5]);
         tile === 3 && (sp.tint = 0x1123db);
@@ -206,10 +240,7 @@ class Temp extends KnScene {
 
   jps(transposeMatrix: Array<Array<number>>) {
     const startIndices = [1, 4];
-    const endIndices = [8, 4];
     const startNode = new Node(startIndices[0], startIndices[1]);
-    const endNode = new Node(endIndices[0], endIndices[1]);
-    console.log(startNode, endNode);
     startNode.getJumpPointer(transposeMatrix);
   }
 
